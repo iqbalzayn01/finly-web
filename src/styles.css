@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: var(--color-neutral-100);
+  --foreground: var(--color-neutral-900);
+  
+  --card: var(--color-white);
+  --card-foreground: var(--color-neutral-900);
+  
+  --popover: var(--color-white);
+  --popover-foreground: var(--color-neutral-900);
+  
+  --primary: var(--color-blue-600);
+  --primary-foreground: var(--color-white);
+  
+  --secondary: var(--color-neutral-200);
+  --secondary-foreground: var(--color-neutral-900);
+  
+  --muted: var(--color-neutral-200);
+  --muted-foreground: var(--color-neutral-600);
+  
+  --accent: var(--color-blue-200);
+  --accent-foreground: var(--color-blue-900);
+  
+  --destructive: var(--color-red-600);
+  --destructive-foreground: var(--color-white);
+  
+  --border: var(--color-neutral-900);
+  --input: var(--color-neutral-900);
+  
+  --ring: var(--color-blue-600);
+  
+  --chart-1: var(--color-red-500);
+  --chart-2: var(--color-orange-500);
+  --chart-3: var(--color-yellow-500);
+  --chart-4: var(--color-lime-500);
+  --chart-5: var(--color-teal-500);
+  --chart-6: var(--color-blue-500);
+  --chart-7: var(--color-indigo-500);
+  --chart-8: var(--color-purple-500);
+  --chart-9: var(--color-rose-500);
+  
+  --radius: 0px;
+  
+  --sidebar: var(--color-neutral-100);
+  --sidebar-foreground: var(--color-neutral-900);
+  --sidebar-primary: var(--color-blue-600);
+  --sidebar-primary-foreground: var(--color-white);
+  --sidebar-accent: var(--color-blue-200);
+  --sidebar-accent-foreground: var(--color-blue-900);
+  --sidebar-border: var(--color-neutral-900);
+  --sidebar-ring: var(--color-blue-600);
+
+  /* Neo-brutalist custom shadows and borders */
+  --shadow-brutal: 4px 4px 0px 0px var(--color-neutral-900);
+  --shadow-brutal-sm: 2px 2px 0px 0px var(--color-neutral-900);
+  --shadow-brutal-lg: 8px 8px 0px 0px var(--color-neutral-900);
+}
+
+.dark {
+  --background: var(--color-neutral-900);
+  --foreground: var(--color-neutral-100);
+  
+  --card: var(--color-neutral-800);
+  --card-foreground: var(--color-neutral-100);
+  
+  --popover: var(--color-neutral-800);
+  --popover-foreground: var(--color-neutral-100);
+  
+  --primary: var(--color-blue-500);
+  --primary-foreground: var(--color-white);
+  
+  --secondary: var(--color-neutral-700);
+  --secondary-foreground: var(--color-neutral-100);
+  
+  --muted: var(--color-neutral-800);
+  --muted-foreground: var(--color-neutral-400);
+  
+  --accent: var(--color-blue-800);
+  --accent-foreground: var(--color-blue-100);
+  
+  --destructive: var(--color-red-500);
+  --destructive-foreground: var(--color-white);
+  
+  --border: var(--color-black);
+  --input: var(--color-black);
+  
+  --ring: var(--color-blue-500);
+  
+  --chart-1: var(--color-red-700);
+  --chart-2: var(--color-orange-700);
+  --chart-3: var(--color-yellow-700);
+  --chart-4: var(--color-lime-700);
+  --chart-5: var(--color-teal-700);
+  --chart-6: var(--color-blue-700);
+  --chart-7: var(--color-indigo-700);
+  --chart-8: var(--color-purple-700);
+  --chart-9: var(--color-rose-700);
+  
+  --sidebar: var(--color-neutral-900);
+  --sidebar-foreground: var(--color-neutral-100);
+  --sidebar-primary: var(--color-blue-500);
+  --sidebar-primary-foreground: var(--color-white);
+  --sidebar-accent: var(--color-blue-800);
+  --sidebar-accent-foreground: var(--color-blue-100);
+  --sidebar-border: var(--color-black);
+  --sidebar-ring: var(--color-blue-500);
+
+  /* Dark mode brutalist shadows are usually pitch black for contrast against neutral-800 */
+  --shadow-brutal: 4px 4px 0px 0px var(--color-black);
+  --shadow-brutal-sm: 2px 2px 0px 0px var(--color-black);
+  --shadow-brutal-lg: 8px 8px 0px 0px var(--color-black);
+}
+
+@theme inline {
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  
+  --shadow-brutal: var(--shadow-brutal);
+  --shadow-brutal-sm: var(--shadow-brutal-sm);
+  --shadow-brutal-lg: var(--shadow-brutal-lg);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+  --color-chart-9: var(--chart-9);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+html, body, #app { min-height: 100%; }
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+}
