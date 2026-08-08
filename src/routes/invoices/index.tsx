@@ -11,8 +11,8 @@ import {
   Eye,
   Trash2,
 } from 'lucide-react'
-import { motion } from 'motion/react'
-import { useState } from 'react'
+import { useState, useMemo, useDeferredValue } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../../components/ui/button'
 import {
   Select,
@@ -21,6 +21,8 @@ import {
   SelectContent,
   SelectItem,
 } from '../../components/ui/select'
+
+import { useUIStore } from '../../store/ui-store'
 
 export const Route = createFileRoute('/invoices/')({
   component: Invoices,
@@ -98,17 +100,45 @@ const StatusBadge = ({ status }: { status: string }) => {
   }
 }
 
+import { useDebouncedSearch } from '../../hooks/use-debounced-search'
+
 function Invoices() {
   const [openKebab, setOpenKebab] = useState<string | null>(null)
+  const [statusFilter, setStatusFilter] = useState('all')
+
+  const {
+    inputQuery,
+    setInputQuery,
+    isTooShort,
+    results: filteredInvoices,
+  } = useDebouncedSearch({
+    resourceKey: 'invoices-list',
+    data: initialInvoices,
+    extraFilters: { statusFilter },
+    filterFn: (items, query, filters) => {
+      return items.filter((inv) => {
+        const matchesSearch =
+          !query ||
+          inv.id.toLowerCase().includes(query) ||
+          inv.client.toLowerCase().includes(query) ||
+          inv.amount.toString().includes(query) ||
+          inv.date.toLowerCase().includes(query)
+
+        const matchesStatus = filters?.statusFilter === 'all' || inv.status === filters?.statusFilter
+
+        return matchesSearch && matchesStatus
+      })
+    },
+  })
 
   return (
     <div className="space-y-8 pb-12">
       <div className="flex items-end justify-between">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground">
             Invoices
           </h1>
-          <p className="mt-2 text-slate-500 dark:text-slate-400">
+          <p className="mt-2 text-muted-foreground">
             Create and track billing documents.
           </p>
         </div>
@@ -122,15 +152,22 @@ function Invoices() {
       <div className="border-2 border-border bg-card shadow-brutal min-h-[500px] overflow-hidden">
         <div className="p-4 border-b-2 border-border flex flex-col md:flex-row gap-4">
           <div className="relative max-w-md w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground z-10 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search by ID or Client..."
-              className="w-full h-11 border-2 border-border bg-card pl-11 pr-4 text-sm font-bold outline-none shadow-brutal-sm focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] transition-all text-foreground placeholder:text-muted-foreground"
+              value={inputQuery}
+              onChange={(e) => setInputQuery(e.target.value)}
+              placeholder="Search by ID or Client (min 3 chars)..."
+              className="w-full h-11 border-2 border-border bg-card pl-11 pr-24 text-sm font-bold outline-none shadow-brutal-sm focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] transition-all text-foreground placeholder:text-muted-foreground"
             />
+            {isTooShort && (
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded">
+                Min 3 chars
+              </span>
+            )}
           </div>
           <div className="w-40">
-            <Select defaultValue="all">
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full h-11 border-2 border-border shadow-brutal-sm text-sm font-bold bg-card text-foreground">
                 <SelectValue placeholder="All Statuses" />
               </SelectTrigger>
@@ -158,11 +195,22 @@ function Invoices() {
             </tr>
           </thead>
           <tbody className="divide-y-2 divide-border">
-            {initialInvoices.map((inv) => (
-              <tr
-                key={inv.id}
-                className="transition-colors hover:bg-slate-50 dark:hover:bg-white/[0.02]"
-              >
+            {filteredInvoices.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="py-12 text-center text-muted-foreground font-medium">
+                  No invoices found matching criteria.
+                </td>
+              </tr>
+            ) : (
+              filteredInvoices.map((inv, i) => (
+                <motion.tr
+                  key={inv.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.25, delay: i * 0.05 }}
+                  whileHover={{ backgroundColor: 'rgba(70, 60, 255, 0.04)' }}
+                  className="transition-colors"
+                >
                 <td className="px-6 py-4 font-mono font-bold text-foreground flex items-center gap-3">
                   <div className="p-2.5 border-2 border-border bg-accent text-accent-foreground shadow-brutal-sm">
                     <FileText className="h-5 w-5" />
@@ -179,10 +227,10 @@ function Invoices() {
                   {inv.client}
                 </td>
                 <td className="px-6 py-4">
-                  <div className="font-medium text-slate-900 dark:text-white">
+                  <div className="font-medium text-foreground">
                     {inv.date}
                   </div>
-                  <div className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
+                  <div className="text-muted-foreground text-xs mt-0.5">
                     Due: {inv.due}
                   </div>
                 </td>
@@ -201,24 +249,32 @@ function Invoices() {
                   >
                     <MoreVertical className="h-5 w-5" />
                   </button>
-                  {openKebab === inv.id && (
-                    <div className="absolute right-12 top-10 w-40 border-2 border-border bg-card p-1.5 shadow-brutal z-20 flex flex-col gap-1 text-left">
-                      <Link
-                        to={`/invoices/$id`}
-                        params={{ id: inv.id }}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground font-bold border-2 border-transparent hover:border-border transition-all"
+                  <AnimatePresence>
+                    {openKebab === inv.id && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                        transition={{ type: 'spring', stiffness: 450, damping: 28 }}
+                        className="absolute right-12 top-10 w-40 border-2 border-border bg-card p-1.5 shadow-brutal z-20 flex flex-col gap-1 text-left"
                       >
-                        <Eye className="h-4 w-4" /> View Details
-                      </Link>
-                      <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground font-bold border-2 border-transparent hover:border-border transition-all">
-                        <Edit2 className="h-4 w-4" /> Edit
-                      </button>
-                      <div className="my-1 h-px bg-border border-t-2 border-border border-dashed" />
-                      <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground font-bold border-2 border-transparent hover:border-border transition-all">
-                        <Trash2 className="h-4 w-4" /> Void
-                      </button>
-                    </div>
-                  )}
+                        <Link
+                          to={`/invoices/$id`}
+                          params={{ id: inv.id }}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground font-bold border-2 border-transparent hover:border-border transition-all"
+                        >
+                          <Eye className="h-4 w-4" /> View Details
+                        </Link>
+                        <button onClick={() => { alert("Invoice updated successfully"); setOpenKebab(null); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground font-bold border-2 border-transparent hover:border-border transition-all">
+                          <Edit2 className="h-4 w-4" /> Edit
+                        </button>
+                        <div className="my-1 h-px bg-border border-t-2 border-border border-dashed" />
+                        <button onClick={() => { alert("Invoice voided"); setOpenKebab(null); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground font-bold border-2 border-transparent hover:border-border transition-all">
+                          <Trash2 className="h-4 w-4" /> Void
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                   {openKebab === inv.id && (
                     <div
                       className="fixed inset-0 z-10"
@@ -226,12 +282,12 @@ function Invoices() {
                     />
                   )}
                 </td>
-              </tr>
-            ))}
+              </motion.tr>
+            )))}
           </tbody>
           </table>
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }

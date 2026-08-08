@@ -4,7 +4,6 @@ import {
   ArrowDownRight,
   Wallet,
   MoreHorizontal,
-  ChevronRight,
 } from 'lucide-react'
 import { motion } from 'motion/react'
 import {
@@ -26,6 +25,7 @@ import {
   Bar,
   Cell,
 } from 'recharts'
+import { useUIStore } from '../store/ui-store'
 
 export const Route = createFileRoute('/')({ component: Dashboard })
 
@@ -38,6 +38,31 @@ const cashflowData = [
   { name: 'Jun', income: 24500, expense: 10800 },
   { name: 'Jul', income: 28400, expense: 14200 },
 ]
+
+const incomeValues = cashflowData.map(d => d.income);
+const maxIncome = Math.max(...incomeValues);
+const minIncome = Math.min(...incomeValues);
+
+const renderIncomeExtrema = (props: any) => {
+  const { cx, cy, value } = props;
+  if (value === maxIncome) {
+    return (
+      <g>
+        <circle cx={cx} cy={cy} r={5} fill="var(--background)" stroke="var(--primary)" strokeWidth={2.5} />
+        <text x={cx} y={cy - 12} textAnchor="middle" fill="var(--primary)" fontSize={11} fontWeight="bold">MAX ${value/1000}k</text>
+      </g>
+    );
+  }
+  if (value === minIncome) {
+    return (
+      <g>
+        <circle cx={cx} cy={cy} r={5} fill="var(--background)" stroke="var(--primary)" strokeWidth={2.5} />
+        <text x={cx} y={cy + 18} textAnchor="middle" fill="var(--primary)" fontSize={11} fontWeight="bold">MIN ${value/1000}k</text>
+      </g>
+    );
+  }
+  return null;
+};
 
 const categoryData = [
   { name: 'Software', value: 4500 },
@@ -113,6 +138,7 @@ function Dashboard() {
             key={i}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ y: -4, scale: 1.01 }}
             transition={{ ...m3Transition, delay: i * 0.1 }}
             className={`relative overflow-hidden p-6 ${stat.containerClass}`}
           >
@@ -152,7 +178,7 @@ function Dashboard() {
             </div>
             <div className="flex items-center gap-6 text-sm font-medium">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-accent" /> Income
+                <div className="w-3 h-3 rounded-full bg-primary" /> Income
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-muted-foreground/30" /> Expense
@@ -165,8 +191,8 @@ function Dashboard() {
               <AreaChart data={cashflowData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.2} />
-                    <stop offset="95%" stopColor="var(--accent)" stopOpacity={0} />
+                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.15} />
+                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="currentColor" className="text-border" />
@@ -192,17 +218,18 @@ function Dashboard() {
                 <Area 
                   type="monotone" 
                   dataKey="income" 
-                  stroke="var(--accent)" 
-                  strokeWidth={3}
+                  stroke="var(--primary)" 
+                  strokeWidth={2.5}
                   fillOpacity={1} 
                   fill="url(#colorIncome)" 
-                  activeDot={{ r: 6, fill: 'var(--accent)', stroke: 'var(--background)', strokeWidth: 2 }}
+                  dot={renderIncomeExtrema}
+                  activeDot={{ r: 6, fill: 'var(--primary)', stroke: 'var(--background)', strokeWidth: 2 }}
                 />
                 <Area 
                   type="monotone" 
                   dataKey="expense" 
                   stroke="var(--muted-foreground)" 
-                  strokeWidth={3}
+                  strokeWidth={2.5}
                   fill="none" 
                   activeDot={{ r: 6, fill: 'var(--muted-foreground)', stroke: 'var(--background)', strokeWidth: 2 }}
                 />
@@ -297,7 +324,6 @@ function Dashboard() {
           ))}
         </div>
       </motion.div>
-
     </div>
   )
 }
