@@ -10,6 +10,8 @@ import {
   SelectItem,
 } from '../components/ui/select'
 
+import { useUIStore } from '../store/ui-store'
+
 export const Route = createFileRoute('/settings')({
   component: Settings,
 })
@@ -22,28 +24,34 @@ function Settings() {
       className="max-w-4xl space-y-8"
     >
       <div>
-        <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="text-4xl font-bold tracking-tight text-foreground">
           Workspace Settings
         </h1>
-        <p className="mt-2 text-slate-500 dark:text-slate-400">
+        <p className="mt-2 text-muted-foreground">
           Manage your business preferences, branding, and defaults.
         </p>
       </div>
 
-      <div className="border-2 border-border bg-card p-8 shadow-brutal">
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{ y: -2 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.1 }}
+        className="border-2 border-border bg-card p-8 shadow-brutal"
+      >
         <h2 className="text-xl font-bold text-foreground mb-6">
           Business Profile
         </h2>
 
         <div className="flex items-center gap-8 mb-8">
           <div className="h-24 w-24 border-2 border-border bg-accent flex items-center justify-center shadow-brutal-sm">
-            <ImageIcon className="h-8 w-8 text-slate-400" />
+            <ImageIcon className="h-8 w-8 text-muted-foreground" />
           </div>
           <div>
-            <Button variant="outline" className="mb-2">
+            <Button variant="outline" className="mb-2" onClick={() => alert("Upload avatar dialog opened")}>
               Upload Logo
             </Button>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-muted-foreground">
               Suggested: 512x512px. Used on invoices.
             </p>
           </div>
@@ -55,7 +63,7 @@ function Settings() {
               Business Name
             </label>
             <div className="relative mt-1.5">
-              <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground" />
+              <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground z-10 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Workspace Name"
@@ -69,7 +77,7 @@ function Settings() {
               Tax Number / EIN
             </label>
             <div className="relative mt-1.5">
-              <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground" />
+              <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground z-10 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Tax ID"
@@ -79,9 +87,15 @@ function Settings() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="border-2 border-border bg-card p-8 shadow-brutal">
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{ y: -2 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.2 }}
+        className="border-2 border-border bg-card p-8 shadow-brutal"
+      >
         <h2 className="text-xl font-bold text-foreground mb-6">
           Regional & Defaults
         </h2>
@@ -101,7 +115,7 @@ function Settings() {
                 <SelectItem value="EUR">Euro (EUR)</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-muted-foreground">
               Note: Scale 100 is used globally internally.
             </p>
           </div>
@@ -121,11 +135,11 @@ function Settings() {
         </div>
 
         <div className="mt-8 flex justify-end">
-          <Button className="px-6">
+          <Button className="px-6" onClick={() => alert("Settings saved successfully!")}>
             Save Preferences
           </Button>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }

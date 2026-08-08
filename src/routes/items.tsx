@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Plus, Search, Box, MoreVertical, Edit2, Trash2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
-import { useState } from 'react'
+import { useState, useMemo, useDeferredValue } from 'react'
 import { Button } from '../components/ui/button'
 import {
   Select,
@@ -10,6 +10,8 @@ import {
   SelectContent,
   SelectItem,
 } from '../components/ui/select'
+
+import { useUIStore } from '../store/ui-store'
 
 export const Route = createFileRoute('/items')({
   component: Items,
@@ -66,18 +68,48 @@ const initialItems = [
   },
 ]
 
+import { useDebouncedSearch } from '../hooks/use-debounced-search'
+
 function Items() {
   const [showForm, setShowForm] = useState(false)
   const [openKebab, setOpenKebab] = useState<number | null>(null)
+  const [statusFilter, setStatusFilter] = useState('all')
+
+  const {
+    inputQuery,
+    setInputQuery,
+    isTooShort,
+    results: filteredItems,
+  } = useDebouncedSearch({
+    resourceKey: 'items-catalog',
+    data: initialItems,
+    extraFilters: { statusFilter },
+    filterFn: (items, query, filters) => {
+      return items.filter((item) => {
+        const matchesSearch =
+          !query ||
+          item.name.toLowerCase().includes(query) ||
+          item.unit.toLowerCase().includes(query) ||
+          item.price.toString().includes(query)
+
+        const matchesStatus =
+          filters?.statusFilter === 'all' ||
+          (filters?.statusFilter === 'active' && item.active) ||
+          (filters?.statusFilter === 'inactive' && !item.active)
+
+        return matchesSearch && matchesStatus
+      })
+    },
+  })
 
   return (
     <div className="space-y-8 pb-12">
       <div className="flex items-end justify-between">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground">
             Product Catalog
           </h1>
-          <p className="mt-2 text-slate-500 dark:text-slate-400">
+          <p className="mt-2 text-muted-foreground">
             Manage products, services, and default pricing.
           </p>
         </div>
@@ -91,15 +123,22 @@ function Items() {
       <div className="border-2 border-border bg-card shadow-brutal min-h-[600px] overflow-hidden">
         <div className="p-4 border-b-2 border-border flex flex-col md:flex-row gap-4">
           <div className="relative max-w-md w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground z-10 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search catalog..."
-              className="w-full h-11 border-2 border-border bg-card pl-11 pr-4 text-sm font-bold outline-none shadow-brutal-sm focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] transition-all text-foreground placeholder:text-muted-foreground"
+              value={inputQuery}
+              onChange={(e) => setInputQuery(e.target.value)}
+              placeholder="Search catalog (min 3 chars)..."
+              className="w-full h-11 border-2 border-border bg-card pl-11 pr-24 text-sm font-bold outline-none shadow-brutal-sm focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] transition-all text-foreground placeholder:text-muted-foreground"
             />
+            {isTooShort && (
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded">
+                Min 3 chars
+              </span>
+            )}
           </div>
           <div className="w-40">
-            <Select defaultValue="all">
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full h-11 border-2 border-border shadow-brutal-sm text-sm font-bold bg-card text-foreground">
                 <SelectValue placeholder="All Statuses" />
               </SelectTrigger>
@@ -127,17 +166,28 @@ function Items() {
             </tr>
           </thead>
           <tbody className="divide-y-2 divide-border">
-            {initialItems.map((item) => (
-              <tr
-                key={item.id}
-                className="group transition-colors hover:bg-slate-50 dark:hover:bg-white/[0.02]"
-              >
+            {filteredItems.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="py-12 text-center text-muted-foreground font-medium">
+                  No catalog items found matching criteria.
+                </td>
+              </tr>
+            ) : (
+              filteredItems.map((item, i) => (
+                <motion.tr
+                  key={item.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.25, delay: i * 0.05 }}
+                  whileHover={{ backgroundColor: 'rgba(70, 60, 255, 0.04)' }}
+                  className="group transition-colors"
+                >
                 <td className="px-6 py-5">
                   <div className="flex items-center gap-4">
                     <div className="flex h-12 w-12 items-center justify-center border-2 border-border bg-accent text-accent-foreground shadow-brutal-sm group-hover:translate-y-[-2px] transition-all">
                       <Box className="h-5 w-5" />
                     </div>
-                    <span className="font-bold text-base text-slate-900 dark:text-white">
+                    <span className="font-bold text-base text-foreground">
                       {item.name}
                     </span>
                   </div>
@@ -147,10 +197,10 @@ function Items() {
                     {item.unit}
                   </span>
                 </td>
-                <td className="px-6 py-5 text-right font-mono font-bold text-lg text-slate-900 dark:text-white">
+                <td className="px-6 py-5 text-right font-mono font-bold text-lg text-foreground">
                   ${item.price.toLocaleString()}
                 </td>
-                <td className="px-6 py-5 text-right font-medium text-slate-500 dark:text-slate-400">
+                <td className="px-6 py-5 text-right font-medium text-muted-foreground">
                   {item.taxRate}%
                 </td>
                 <td className="px-6 py-5 text-center">
@@ -172,16 +222,24 @@ function Items() {
                   >
                     <MoreVertical className="h-5 w-5" />
                   </button>
-                  {openKebab === item.id && (
-                    <div className="absolute right-12 top-10 w-32 border-2 border-border bg-card p-1.5 shadow-brutal z-20 text-left flex flex-col gap-1">
-                      <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground font-bold border-2 border-transparent hover:border-border transition-all">
-                        <Edit2 className="h-4 w-4" /> Edit
-                      </button>
-                      <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground font-bold border-2 border-transparent hover:border-border transition-all">
-                        <Trash2 className="h-4 w-4" /> Delete
-                      </button>
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {openKebab === item.id && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                        transition={{ type: 'spring', stiffness: 450, damping: 28 }}
+                        className="absolute right-12 top-10 w-32 border-2 border-border bg-card p-1.5 shadow-brutal z-20 text-left flex flex-col gap-1"
+                      >
+                        <button onClick={() => { alert("Item updated successfully"); setOpenKebab(null); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground font-bold border-2 border-transparent hover:border-border transition-all">
+                          <Edit2 className="h-4 w-4" /> Edit
+                        </button>
+                        <button onClick={() => { alert("Item deleted"); setOpenKebab(null); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground font-bold border-2 border-transparent hover:border-border transition-all">
+                          <Trash2 className="h-4 w-4" /> Delete
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                   {openKebab === item.id && (
                     <div
                       className="fixed inset-0 z-10"
@@ -189,10 +247,11 @@ function Items() {
                     />
                   )}
                 </td>
-              </tr>
-            ))}
+              </motion.tr>
+            )))}
           </tbody>
         </table>
+      </div>
       </div>
 
       <AnimatePresence>
@@ -251,7 +310,7 @@ function Items() {
                   <Button variant="ghost" onClick={() => setShowForm(false)}>
                     Cancel
                   </Button>
-                  <Button className="px-6">
+                  <Button className="px-6" onClick={() => { alert("Item saved successfully!"); setShowForm(false); }}>
                     Save Item
                   </Button>
                 </div>

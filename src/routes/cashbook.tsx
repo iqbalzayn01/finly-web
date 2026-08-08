@@ -11,7 +11,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
-import { useState } from 'react'
+import { useState, useMemo, useDeferredValue } from 'react'
 import { Button } from '../components/ui/button'
 import {
   Select,
@@ -23,6 +23,8 @@ import {
   SelectLabel,
 } from '../components/ui/select'
 
+import { useUIStore } from '../store/ui-store'
+
 export const Route = createFileRoute('/cashbook')({
   component: Cashbook,
 })
@@ -30,7 +32,8 @@ export const Route = createFileRoute('/cashbook')({
 const CATEGORIES = [
   {
     group: 'Income',
-    color: 'bg-emerald-500',
+    badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300',
+    dot: 'bg-emerald-500',
     items: [
       'General / Primary Income',
       'Checks, coupons',
@@ -45,56 +48,65 @@ const CATEGORIES = [
   },
   {
     group: 'Communication, PC',
-    color: 'bg-blue-500',
+    badge: 'bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-300',
+    dot: 'bg-blue-500',
     items: ['Internet', 'Phone, cell phone', 'Postal services', 'Software, apps, games']
   },
   {
     group: 'Financial Expenses',
-    color: 'bg-red-500',
+    badge: 'bg-red-100 text-red-800 dark:bg-red-500/20 dark:text-red-300',
+    dot: 'bg-red-500',
     items: ['Advisory', 'Charges, Fees', 'Child Support (Expense)', 'Fines', 'Insurances', 'Loan, interests', 'Taxes']
   },
   {
     group: 'Food & Drinks',
-    color: 'bg-orange-500',
+    badge: 'bg-orange-100 text-orange-800 dark:bg-orange-500/20 dark:text-orange-300',
+    dot: 'bg-orange-500',
     items: ['Bar, cafe', 'Groceries', 'Restaurant, fast-food']
   },
   {
     group: 'Housing',
-    color: 'bg-yellow-500',
+    badge: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/20 dark:text-yellow-300',
+    dot: 'bg-yellow-500',
     items: ['Energy, utilities', 'Maintenance, repairs', 'Mortgage', 'Property insurance', 'Rent', 'Services']
   },
   {
     group: 'Investments',
-    color: 'bg-indigo-500',
+    badge: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/20 dark:text-indigo-300',
+    dot: 'bg-indigo-500',
     items: ['Collections', 'Financial investments', 'Realty', 'Savings', 'Vehicles, chattels']
   },
   {
     group: 'Life & Entertainment',
-    color: 'bg-purple-500',
+    badge: 'bg-purple-100 text-purple-800 dark:bg-purple-500/20 dark:text-purple-300',
+    dot: 'bg-purple-500',
     items: ['Active sport, fitness', 'Alcohol, tobacco', 'Books, audio, subscriptions', 'Charity, gifts', 'Culture, sport events', 'Education, development', 'Health care, doctor', 'Hobbies', 'Holiday, trips, hotels', 'Life events', 'Lottery, gambling', 'TV, Streaming', 'Wellness, beauty']
   },
   {
     group: 'Shopping',
-    color: 'bg-rose-500',
+    badge: 'bg-rose-100 text-rose-800 dark:bg-rose-500/20 dark:text-rose-300',
+    dot: 'bg-rose-500',
     items: ['Clothes & shoes', 'Drug-store, chemist', 'Electronics, accessories', 'Free time', 'Gifts, joy', 'Health and beauty', 'Home, garden', 'Jewels, accessories', 'Kids', 'Pets, animals', 'Stationery, tools']
   },
   {
     group: 'Transportation',
-    color: 'bg-cyan-500',
+    badge: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-500/20 dark:text-cyan-300',
+    dot: 'bg-cyan-500',
     items: ['Business trips', 'Long distance', 'Public transport', 'Taxi', 'Vehicle', 'Fuel', 'Leasing', 'Parking', 'Rentals', 'Vehicle insurance', 'Vehicle maintenance']
   },
   {
     group: 'Others',
-    color: 'bg-slate-500',
+    badge: 'bg-slate-100 text-slate-800 dark:bg-slate-500/20 dark:text-slate-300',
+    dot: 'bg-slate-500',
     items: ['General', 'Missing']
   }
 ];
 
-const getCategoryColor = (categoryName: string) => {
+const getCategoryBadge = (categoryName: string) => {
   for (const group of CATEGORIES) {
-    if (group.items.includes(categoryName)) return group.color;
+    if (group.items.includes(categoryName)) return group.badge;
   }
-  return 'bg-slate-500';
+  return 'bg-slate-100 text-slate-800 dark:bg-slate-500/20 dark:text-slate-300';
 };
 
 const initialTransactions = [
@@ -141,12 +153,12 @@ const initialTransactions = [
   {
     id: 5,
     date: '2026-07-15',
-    desc: 'Office Supplies',
+    desc: 'Office Supplies Depot',
     category: 'Stationery, tools',
     scope: 'Business',
-    amount: 85,
+    amount: 210,
     type: 'expense',
-    receipt: true,
+    receipt: false,
   },
   {
     id: 6,
@@ -160,11 +172,42 @@ const initialTransactions = [
   },
 ]
 
+import { useDebouncedSearch } from '../hooks/use-debounced-search'
+
 function Cashbook() {
   const [showNumpad, setShowNumpad] = useState(false)
   const [entryAmount, setEntryAmount] = useState('0')
   const [txType, setTxType] = useState<'income' | 'expense'>('expense')
   const [openKebab, setOpenKebab] = useState<number | null>(null)
+
+  const [typeFilter, setTypeFilter] = useState('all')
+  const [scopeFilter, setScopeFilter] = useState('all')
+
+  const {
+    inputQuery,
+    setInputQuery,
+    isTooShort,
+    results: filteredTransactions,
+  } = useDebouncedSearch({
+    resourceKey: 'cashbook-transactions',
+    data: initialTransactions,
+    extraFilters: { typeFilter, scopeFilter },
+    filterFn: (items, query, filters) => {
+      return items.filter((tx) => {
+        const matchesSearch =
+          !query ||
+          tx.desc.toLowerCase().includes(query) ||
+          tx.category.toLowerCase().includes(query) ||
+          tx.date.toLowerCase().includes(query) ||
+          tx.amount.toString().includes(query)
+
+        const matchesType = filters?.typeFilter === 'all' || tx.type === filters?.typeFilter
+        const matchesScope = filters?.scopeFilter === 'all' || tx.scope.toLowerCase() === filters?.scopeFilter?.toLowerCase()
+
+        return matchesSearch && matchesType && matchesScope
+      })
+    },
+  })
 
   const handleNumpad = (val: string) => {
     if (val === 'C') {
@@ -187,10 +230,10 @@ function Cashbook() {
       >
         <div className="flex items-end justify-between">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">
               Cashbook
             </h1>
-            <p className="mt-2 text-slate-500 dark:text-slate-400">
+            <p className="mt-2 text-muted-foreground">
               Ledger of all business and personal transactions.
             </p>
           </div>
@@ -204,17 +247,24 @@ function Cashbook() {
         <div className="border-2 border-border bg-card shadow-brutal min-h-[600px]">
           <div className="p-4 border-b-2 border-border flex flex-col md:flex-row gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground z-10 pointer-events-none" />
               <input
                 type="text"
-                placeholder="Search transactions..."
-                className="w-full h-11 border-2 border-border bg-card pl-11 pr-4 text-sm font-bold outline-none shadow-brutal-sm focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] transition-all text-foreground placeholder:text-muted-foreground"
+                value={inputQuery}
+                onChange={(e) => setInputQuery(e.target.value)}
+                placeholder="Search transactions (min 3 chars)..."
+                className="w-full h-11 border-2 border-border bg-card pl-11 pr-24 text-sm font-bold outline-none shadow-brutal-sm focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] transition-all text-foreground placeholder:text-muted-foreground"
               />
+              {isTooShort && (
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded">
+                  Min 3 chars
+                </span>
+              )}
             </div>
             
             <div className="flex items-center gap-3">
               <div className="w-40">
-                <Select defaultValue="all">
+                <Select value={typeFilter} onValueChange={setTypeFilter}>
                   <SelectTrigger className="w-full h-11 border-2 border-border shadow-brutal-sm text-sm font-bold bg-card text-foreground">
                     <SelectValue placeholder="All Types" />
                   </SelectTrigger>
@@ -226,7 +276,7 @@ function Cashbook() {
                 </Select>
               </div>
               <div className="w-40">
-                <Select defaultValue="all">
+                <Select value={scopeFilter} onValueChange={setScopeFilter}>
                   <SelectTrigger className="w-full h-11 border-2 border-border shadow-brutal-sm text-sm font-bold bg-card text-foreground">
                     <SelectValue placeholder="All Scopes" />
                   </SelectTrigger>
@@ -253,30 +303,41 @@ function Cashbook() {
               </tr>
             </thead>
             <tbody className="divide-y-2 divide-border">
-              {initialTransactions.map((tx) => (
-                <tr
-                  key={tx.id}
-                  className="transition-colors hover:bg-slate-50 dark:hover:bg-white/[0.02]"
-                >
+              {filteredTransactions.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-muted-foreground font-medium">
+                    No transactions found matching criteria.
+                  </td>
+                </tr>
+              ) : (
+                filteredTransactions.map((tx, i) => (
+                  <motion.tr
+                    key={tx.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.25, delay: i * 0.05 }}
+                    whileHover={{ backgroundColor: 'rgba(70, 60, 255, 0.04)' }}
+                    className="transition-colors"
+                  >
                   <td className="px-6 py-4">
-                    <p className="font-semibold text-slate-900 dark:text-white">
+                    <p className="font-semibold text-foreground">
                       {tx.desc}
                     </p>
-                    <p className="text-slate-500 dark:text-slate-400 mt-0.5">
+                    <p className="text-muted-foreground mt-0.5">
                       {tx.date}
                     </p>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center border-2 border-border px-3 py-1 text-xs font-bold shadow-brutal-sm text-black ${getCategoryColor(tx.category)}`}>
+                    <span className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${getCategoryBadge(tx.category)}`}>
                       {tx.category}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-slate-500 font-medium dark:text-slate-400">
+                  <td className="px-6 py-4 text-muted-foreground font-medium">
                     {tx.scope}
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div
-                      className={`flex items-center justify-end gap-1.5 font-mono text-base font-semibold ${tx.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white'}`}
+                      className={`flex items-center justify-end gap-1.5 font-mono text-base font-semibold ${tx.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'}`}
                     >
                       {tx.type === 'income' ? (
                         <ArrowUpRight className="h-4 w-4" />
@@ -288,7 +349,7 @@ function Cashbook() {
                   </td>
                   <td className="px-6 py-4 text-center">
                     {tx.receipt ? (
-                      <button className="p-2 border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all hover:bg-accent text-muted-foreground hover:text-accent-foreground">
+                      <button onClick={() => alert("Viewing uploaded receipt")} className="p-2 border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all hover:bg-accent text-muted-foreground hover:text-accent-foreground">
                         <Camera className="h-5 w-5 mx-auto" />
                       </button>
                     ) : (
@@ -307,22 +368,30 @@ function Cashbook() {
                       <MoreVertical className="h-5 w-5" />
                     </button>
 
-                    {openKebab === tx.id && (
-                      <div className="absolute right-12 top-10 w-40 border-2 border-border bg-card p-1.5 shadow-brutal z-20 text-left flex flex-col gap-1">
-                        <button
-                          onClick={() => setOpenKebab(null)}
-                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground font-bold border-2 border-transparent hover:border-border transition-all"
+                    <AnimatePresence>
+                      {openKebab === tx.id && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                          transition={{ type: 'spring', stiffness: 450, damping: 28 }}
+                          className="absolute right-12 top-10 w-40 border-2 border-border bg-card p-1.5 shadow-brutal z-20 text-left flex flex-col gap-1"
                         >
-                          <Edit2 className="h-4 w-4" /> Edit
-                        </button>
-                        <button
-                          onClick={() => setOpenKebab(null)}
-                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground font-bold border-2 border-transparent hover:border-border transition-all"
-                        >
-                          <Trash2 className="h-4 w-4" /> Delete
-                        </button>
-                      </div>
-                    )}
+                          <button
+                            onClick={() => { alert("Transaction updated"); setOpenKebab(null); }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground font-bold border-2 border-transparent hover:border-border transition-all"
+                          >
+                            <Edit2 className="h-4 w-4" /> Edit
+                          </button>
+                          <button
+                            onClick={() => { alert("Transaction deleted"); setOpenKebab(null); }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground font-bold border-2 border-transparent hover:border-border transition-all"
+                          >
+                            <Trash2 className="h-4 w-4" /> Delete
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                     {openKebab === tx.id && (
                       <div
                         className="fixed inset-0 z-10"
@@ -330,8 +399,8 @@ function Cashbook() {
                       />
                     )}
                   </td>
-                </tr>
-              ))}
+                </motion.tr>
+              )))}
             </tbody>
             </table>
           </div>
@@ -349,39 +418,43 @@ function Cashbook() {
           >
             <div className="sticky top-24 border-2 border-border bg-card p-6 shadow-brutal-lg">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="font-bold text-lg text-slate-900 dark:text-white">
+                <h3 className="font-bold text-lg text-foreground">
                   Quick Entry
                 </h3>
                 <button
                   onClick={() => setShowNumpad(false)}
-                  className="text-slate-400 hover:text-slate-600"
+                  className="text-muted-foreground hover:text-slate-600"
                 >
                   Close
                 </button>
               </div>
 
-              <div className="flex gap-2 mb-6 p-1 border-2 border-border bg-card shadow-brutal-sm">
+              <div className="flex gap-2 mb-6 p-1 border-2 border-border bg-card shadow-brutal-sm relative">
                 <button
                   onClick={() => setTxType('expense')}
-                  className={`flex-1 py-2 text-sm font-bold border-2 transition-all ${txType === 'expense' ? 'bg-accent text-accent-foreground border-border shadow-brutal-sm' : 'border-transparent text-muted-foreground hover:border-border hover:shadow-brutal-sm hover:translate-y-[-2px]'}`}
+                  className={`flex-1 py-2 text-sm font-bold border-2 transition-all relative z-10 ${txType === 'expense' ? 'bg-accent text-accent-foreground border-border shadow-brutal-sm' : 'border-transparent text-muted-foreground hover:border-border hover:shadow-brutal-sm'}`}
                 >
                   Expense
                 </button>
                 <button
                   onClick={() => setTxType('income')}
-                  className={`flex-1 py-2 text-sm font-bold border-2 transition-all ${txType === 'income' ? 'bg-accent text-accent-foreground border-border shadow-brutal-sm' : 'border-transparent text-muted-foreground hover:border-border hover:shadow-brutal-sm hover:translate-y-[-2px]'}`}
+                  className={`flex-1 py-2 text-sm font-bold border-2 transition-all relative z-10 ${txType === 'income' ? 'bg-accent text-accent-foreground border-border shadow-brutal-sm' : 'border-transparent text-muted-foreground hover:border-border hover:shadow-brutal-sm'}`}
                 >
                   Income
                 </button>
               </div>
 
               <div className="text-center mb-8">
-                <p className="text-slate-500 font-medium mb-2">Amount (USD)</p>
-                <div
-                  className={`font-mono text-5xl font-bold tracking-tighter ${txType === 'income' ? 'text-emerald-500' : 'text-slate-900 dark:text-white'}`}
+                <p className="text-muted-foreground font-medium mb-2">Amount (USD)</p>
+                <motion.div
+                  key={entryAmount}
+                  initial={{ scale: 0.95, opacity: 0.8 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+                  className={`font-mono text-5xl font-bold tracking-tighter ${txType === 'income' ? 'text-emerald-500' : 'text-foreground'}`}
                 >
                   ${parseInt(entryAmount).toLocaleString()}
-                </div>
+                </motion.div>
               </div>
 
               <div className="grid grid-cols-3 gap-3 mb-6">
@@ -399,13 +472,16 @@ function Cashbook() {
                   '0',
                   'C',
                 ].map((key) => (
-                  <button
+                  <motion.button
                     key={key}
+                    whileHover={{ scale: 1.04, y: -1 }}
+                    whileTap={{ scale: 0.93 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 25 }}
                     onClick={() => handleNumpad(key)}
                     className="h-14 border-2 border-border bg-card text-xl font-bold text-foreground hover:bg-accent hover:text-accent-foreground shadow-brutal-sm active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all"
                   >
                     {key}
-                  </button>
+                  </motion.button>
                 ))}
               </div>
 
@@ -421,7 +497,7 @@ function Cashbook() {
                         {catGroup.items.map((item) => (
                           <SelectItem key={item} value={item.toLowerCase().replace(/[\s,()]+/g, '-')}>
                             <div className="flex items-center gap-2">
-                              <div className={`w-3 h-3 rounded-full border-2 border-border ${catGroup.color}`} />
+                              <div className={`w-3 h-3 rounded-full border-2 border-border ${catGroup.dot}`} />
                               <span>{item}</span>
                             </div>
                           </SelectItem>
@@ -447,7 +523,7 @@ function Cashbook() {
                   className="w-full h-12 border-2 border-border bg-card px-4 font-bold outline-none shadow-brutal-sm focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] transition-all text-foreground placeholder:text-muted-foreground"
                 />
 
-                <Button className="w-full mt-2">
+                <Button className="w-full mt-2" onClick={() => { alert("Transaction saved successfully!"); setShowNumpad(false); }}>
                   Save Transaction
                 </Button>
               </div>

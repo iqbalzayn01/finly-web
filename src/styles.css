@@ -183,3 +183,129 @@ body {
     @apply border-border outline-ring/50;
   }
 }
+
+/* Professional Mode Overrides (Pluang Design System) */
+.professional {
+  --radius: 16px;
+  
+  /* Pluang Backgrounds */
+  --background: #FFFFFF;
+  --sidebar: #FFFFFF;
+  
+  /* Pluang Brand Colors */
+  --primary: #463CFF;
+  --primary-foreground: #FFFFFF;
+  --sidebar-primary: #463CFF;
+  --sidebar-primary-foreground: #FFFFFF;
+  --ring: #463CFF;
+  --sidebar-ring: #463CFF;
+  --accent: #EBEAFF;
+  --accent-foreground: #463CFF;
+  --sidebar-accent: #EBEAFF;
+  --sidebar-accent-foreground: #463CFF;
+  
+  /* Pluang Smooth Diffused Elevations */
+  --shadow-brutal: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-brutal-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-brutal-lg: 0 16px 32px rgba(0, 0, 0, 0.08);
+  --border: var(--color-neutral-200);
+  --sidebar-border: var(--color-neutral-200);
+  
+  font-variant-numeric: tabular-nums;
+}
+
+.dark.professional, .dark .professional {
+  --background: #121212;
+  --sidebar: #121212;
+  --card: #1e1e1e;
+  --card-foreground: #f8fafc;
+  
+  /* Pluang Dark Mode Accent Colors */
+  --primary: #5c52ff;
+  --primary-foreground: #ffffff;
+  --accent: rgba(70, 60, 255, 0.2);
+  --accent-foreground: #a19dff;
+  --sidebar-accent: rgba(70, 60, 255, 0.2);
+  --sidebar-accent-foreground: #a19dff;
+  
+  --shadow-brutal: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-brutal-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-brutal-lg: 0 16px 32px rgba(0, 0, 0, 0.5);
+  --border: rgba(255, 255, 255, 0.08);
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+}
+
+
+@layer utilities {
+  .professional .border-2 {
+    border-width: 1px !important;
+  }
+  .professional .border-b-2 {
+    border-bottom-width: 1px !important;
+  }
+  .professional .border-r-2 {
+    border-right-width: 1px !important;
+  }
+  .professional .border-t-2 {
+    border-top-width: 1px !important;
+  }
+  .professional .border-l-2 {
+    border-left-width: 1px !important;
+  }
+  
+  /* Suppress aggressive translate animations in professional mode */
+  .professional .hover\:translate-y-\[-2px\]:hover {
+    transform: translateY(0px) !important;
+  }
+  .professional .hover\:translate-x-\[2px\]:hover {
+    transform: translateX(0px) !important;
+  }
+  .professional .hover\:translate-y-\[2px\]:hover {
+    transform: translateY(0px) !important;
+  }
+  .professional .shadow-none:hover {
+    box-shadow: var(--shadow-brutal-sm) !important;
+  }
+
+  /* Pluang Design System Shape Rules (v2) */
+  
+  /* Fully rounded for buttons */
+  .professional button {
+    border-radius: 9999px !important;
+  }
+  
+  /* Smooth Rounded (16px) for cards, data containers, and large elements */
+  .professional .bg-card,
+  .professional [role="dialog"],
+  .professional [role="menu"],
+  .professional .shadow-brutal,
+  .professional .shadow-brutal-lg,
+  .professional img {
+    border-radius: 16px !important;
+  }
+  
+  /* Slightly rounded (8px) for inputs, selects, and small active accents */
+  .professional input,
+  .professional select,
+  .professional [role="listbox"],
+  .professional .bg-accent,
+  .professional .shadow-brutal-sm,
+  .professional .border-2:not(.bg-card) {
+    border-radius: 8px !important;
+  }
+  
+  /* Exempt full-bleed structural elements from rounding */
+  .professional aside,
+  .professional header,
+  .professional table,
+  .professional thead,
+  .professional tbody,
+  .professional tr,
+  .professional td,
+  .professional th {
+    border-radius: 0 !important;
+  }
+}
+
+
+

@@ -1,26 +1,31 @@
-import { Link, useLocation } from '@tanstack/react-router'
+import { Link, useLocation, useNavigate } from '@tanstack/react-router'
 import {
   LayoutDashboard,
   Wallet,
   FileText,
   Users,
   Package,
+  Settings,
   Bell,
   Search,
   Menu,
 } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
+import StyleToggle from './StyleToggle'
 import { cn } from '../lib/utils'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { create } from 'zustand'
+import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
 
 export const useSidebarStore = create<{
-  isExpanded: boolean;
-  toggle: () => void;
+  isExpanded: boolean
+  toggle: () => void
+  setExpanded: (val: boolean) => void
 }>((set) => ({
-  isExpanded: true,
+  isExpanded: typeof window !== 'undefined' ? window.innerWidth >= 1024 : true,
   toggle: () => set((state) => ({ isExpanded: !state.isExpanded })),
+  setExpanded: (val) => set({ isExpanded: val }),
 }))
 
 const navItems = [
@@ -30,6 +35,40 @@ const navItems = [
   { icon: Users, label: 'Customers', to: '/customers' },
   { icon: Package, label: 'Items', to: '/items' },
 ]
+
+function V2Tooltip({
+  children,
+  content,
+}: {
+  children: React.ReactNode
+  content: string
+}) {
+  const [isHovered, setIsHovered] = useState(false)
+
+  return (
+    <div
+      className="relative flex items-center justify-center"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {children}
+      <AnimatePresence>
+        {isHovered && (
+          <motion.div
+            initial={{ opacity: 0, x: -6, scale: 0.92 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -4, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+            className="absolute left-full ml-3 px-3 py-1.5 rounded-md bg-foreground text-background text-xs font-bold tracking-wide shadow-brutal-sm whitespace-nowrap pointer-events-none z-50"
+          >
+            {content}
+            <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-foreground" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
 
 export function Sidebar() {
   const location = useLocation()
@@ -41,24 +80,23 @@ export function Sidebar() {
   return (
     <>
       {isExpanded && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden" 
-          onClick={useSidebarStore.getState().toggle} 
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={useSidebarStore.getState().toggle}
         />
       )}
-      <motion.aside 
+      <motion.aside
         initial={false}
-        animate={{ width: isExpanded ? 300 : 96 }}
+        animate={{ width: 80 }}
         transition={m3Transition}
         className={cn(
-          "fixed inset-y-0 left-0 flex flex-col bg-background border-r-2 border-border overflow-hidden z-50 shadow-brutal-lg transition-transform duration-300",
-          "max-lg:!w-[300px] max-lg:-translate-x-full",
-          isExpanded && "max-lg:translate-x-0"
+          'fixed inset-y-0 left-0 flex flex-col items-center justify-between py-6 bg-background border-r-2 border-border overflow-visible z-50 lg:z-0 shadow-brutal-lg transition-transform duration-300 w-20',
+          'max-lg:-translate-x-full',
+          isExpanded && 'max-lg:translate-x-0 max-lg:!w-20',
         )}
       >
-      <div className={cn("flex h-20 items-center relative overflow-hidden transition-all duration-300 border-b-2 border-border bg-card", isExpanded ? "px-6" : "px-0 justify-center")}>
-        <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center bg-primary text-primary-foreground border-2 border-border shadow-brutal-sm">
+        <div className="flex flex-col items-center gap-6 w-full">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center bg-primary text-primary-foreground border-2 border-border shadow-brutal-sm rounded-none">
             <svg
               width="24"
               height="24"
@@ -72,178 +110,319 @@ export function Sidebar() {
               <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
             </svg>
           </div>
-          <AnimatePresence>
-            {isExpanded && (
-              <motion.span 
-                initial={{ opacity: 0, width: 0 }}
-                animate={{ opacity: 1, width: 'auto' }}
-                exit={{ opacity: 0, width: 0 }}
-                transition={m3Transition}
-                className="text-2xl font-medium tracking-tight text-foreground truncate whitespace-nowrap"
-              >
-                Finly
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
 
-      <nav className="flex-1 space-y-2 px-4 py-4 overflow-x-hidden mt-4">
-        {navItems.map((item) => {
-          const isActive =
-            location.pathname === item.to ||
-            (item.to !== '/' && location.pathname.startsWith(item.to))
-          return (
+          <nav className="flex flex-col items-center gap-3 w-full px-2 mt-4">
+            {navItems.map((item) => {
+              const isActive =
+                location.pathname === item.to ||
+                (item.to !== '/' && location.pathname.startsWith(item.to))
+              return (
+                <V2Tooltip key={item.to} content={item.label}>
+                  <Link
+                    to={item.to}
+                    onClick={() => {
+                      if (window.innerWidth < 1024) {
+                        useSidebarStore.getState().setExpanded(false)
+                      }
+                    }}
+                    className={cn(
+                      'relative flex h-12 w-12 items-center justify-center font-bold transition-all border-2 border-transparent',
+                      isActive
+                        ? 'text-foreground'
+                        : 'text-muted-foreground hover:bg-accent hover:border-border hover:shadow-brutal-sm hover:translate-y-[-2px] hover:text-accent-foreground',
+                    )}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="v2-sidebar-active"
+                        className="absolute inset-0 bg-accent border-2 border-border shadow-brutal-sm z-0"
+                        transition={m3Transition}
+                      />
+                    )}
+                    <item.icon
+                      className={cn(
+                        'relative z-10 h-6 w-6 shrink-0 transition-transform duration-300',
+                        isActive ? 'text-accent-foreground' : 'text-foreground',
+                      )}
+                      strokeWidth={isActive ? 2.5 : 2}
+                    />
+                  </Link>
+                </V2Tooltip>
+              )
+            })}
+          </nav>
+        </div>
+
+        <div className="flex flex-col items-center gap-3 w-full px-2">
+          <V2Tooltip content="Settings">
             <Link
-              key={item.to}
-              to={item.to}
-              title={!isExpanded ? item.label : undefined}
+              to="/settings"
+              onClick={() => {
+                if (window.innerWidth < 1024) {
+                  useSidebarStore.getState().setExpanded(false)
+                }
+              }}
               className={cn(
-                'group relative flex items-center gap-4 py-4 font-bold transition-all border-2 border-transparent',
-                isActive
+                'relative flex h-12 w-12 items-center justify-center font-bold transition-all border-2 border-transparent',
+                location.pathname === '/settings' ||
+                  location.pathname.startsWith('/settings')
                   ? 'text-foreground'
-                  : 'text-muted-foreground hover:bg-accent hover:border-border hover:shadow-brutal-sm hover:translate-y-[-2px] hover:text-accent-foreground',
-                isExpanded ? 'px-6 mx-4' : 'px-0 justify-center mx-2'
+                  : 'text-muted-foreground hover:bg-accent hover:border-border hover:shadow-brutal-sm hover:-translate-y-0.5 hover:text-accent-foreground',
               )}
             >
-              {isActive && (
+              {(location.pathname === '/settings' ||
+                location.pathname.startsWith('/settings')) && (
                 <motion.div
-                  layoutId="sidebar-active"
+                  layoutId="v2-sidebar-active"
                   className="absolute inset-0 bg-accent border-2 border-border shadow-brutal-sm z-0"
                   transition={m3Transition}
                 />
               )}
-              <item.icon
+              <Settings
                 className={cn(
                   'relative z-10 h-6 w-6 shrink-0 transition-transform duration-300',
-                  isActive ? 'text-accent-foreground' : 'text-foreground',
+                  location.pathname === '/settings' ||
+                    location.pathname.startsWith('/settings')
+                    ? 'text-accent-foreground'
+                    : 'text-foreground',
                 )}
-                strokeWidth={isActive ? 2.5 : 2}
+                strokeWidth={
+                  location.pathname === '/settings' ||
+                  location.pathname.startsWith('/settings')
+                    ? 2.5
+                    : 2
+                }
               />
-              <AnimatePresence>
-                {isExpanded && (
-                  <motion.span 
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: 'auto' }}
-                    exit={{ opacity: 0, width: 0 }}
-                    transition={m3Transition}
-                    className="relative z-10 truncate whitespace-nowrap text-[15px]"
-                  >
-                    {item.label}
-                  </motion.span>
-                )}
-              </AnimatePresence>
             </Link>
-          )
-        })}
-      </nav>
+          </V2Tooltip>
 
-      <div className="p-4 mb-4">
-        <div className={cn("bg-card p-4 border-2 border-border shadow-brutal-sm flex items-center transition-all", isExpanded ? "justify-between" : "justify-center p-2")}>
-          <div className="flex items-center gap-4">
-            <img
-              src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-              alt="User"
-              className="h-10 w-10 shrink-0 border-2 border-border"
-            />
-            <AnimatePresence>
-              {isExpanded && (
-                <motion.div 
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: 'auto' }}
-                  exit={{ opacity: 0, width: 0 }}
-                  className="flex flex-col truncate"
-                >
-                  <span className="text-sm font-medium text-foreground truncate">
-                    Acme Corp
-                  </span>
-                  <span className="text-xs text-muted-foreground truncate">
-                    Admin
-                  </span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          <V2Tooltip content="Account Profile">
+            <Link to="/account">
+              <Avatar
+                className={cn(
+                  'h-10 w-10 shrink-0 transition-all hover:shadow-brutal-sm',
+                  location.pathname === '/account'
+                    ? 'border-primary ring-2 ring-primary/40 shadow-brutal-sm'
+                    : 'border-border',
+                )}
+              >
+                <AvatarImage
+                  src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                  alt="Admin User"
+                />
+                <AvatarFallback>AU</AvatarFallback>
+              </Avatar>
+            </Link>
+          </V2Tooltip>
         </div>
-      </div>
-    </motion.aside>
+      </motion.aside>
     </>
   )
 }
 
 export function Topbar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [notifOpen, setNotifOpen] = useState(false)
+  const [topbarSearch, setTopbarSearch] = useState('')
   const { toggle } = useSidebarStore()
+  const navigate = useNavigate()
+
+  const notifRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && topbarSearch.trim()) {
+      navigate({ to: '/invoices' })
+    }
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        notifOpen &&
+        notifRef.current &&
+        !notifRef.current.contains(event.target as Node)
+      ) {
+        setNotifOpen(false)
+      }
+      if (
+        menuOpen &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
+        setMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [notifOpen, menuOpen])
 
   return (
     <header className="sticky top-0 z-30 flex h-20 items-center justify-between px-6 bg-background border-b-2 border-border">
       <div className="flex flex-1 items-center gap-4">
-        <button 
+        <button
           onClick={toggle}
           className="flex h-12 w-12 items-center justify-center border-2 border-border bg-card shadow-brutal-sm hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none transition-all outline-none"
         >
           <Menu className="h-6 w-6" />
         </button>
         <div className="relative w-full max-w-2xl hidden md:block">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-foreground" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-foreground z-10 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search"
-            className="h-12 w-full bg-card border-2 border-border shadow-brutal-sm pl-12 pr-6 text-[15px] font-bold outline-none transition-all focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] text-foreground"
+            value={topbarSearch}
+            onChange={(e) => setTopbarSearch(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
+            placeholder="Search invoices, transactions, clients..."
+            className="h-12 w-full bg-card border-2 border-border shadow-brutal-sm pl-12 pr-6 text-[15px] font-bold outline-none transition-all focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] text-foreground placeholder:text-muted-foreground"
           />
         </div>
       </div>
       <div className="flex items-center gap-2 relative z-40">
+        <StyleToggle />
         <ThemeToggle />
-        <button className="relative flex h-12 w-12 items-center justify-center border-2 border-border bg-card shadow-brutal-sm hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none transition-all outline-none">
-          <Bell className="h-6 w-6 text-foreground" />
-          <span className="absolute right-2 top-2 h-3 w-3 border-2 border-border bg-accent shadow-brutal-sm" />
-        </button>
-        <div className="relative ml-2">
+        <div className="relative" ref={notifRef}>
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="h-12 w-12 overflow-hidden border-2 border-border bg-card shadow-brutal-sm hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none transition-all outline-none"
+            onClick={() => {
+              setNotifOpen(!notifOpen)
+              if (menuOpen) setMenuOpen(false)
+            }}
+            className="relative flex h-12 w-12 items-center justify-center border-2 border-border bg-card shadow-brutal-sm hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none transition-all outline-none"
           >
-            <img
-              src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-              alt="User"
-              className="h-full w-full object-cover"
-            />
+            <Bell className="h-6 w-6 text-foreground" />
+            <span className="absolute right-2 top-2 h-3 w-3 border-2 border-border bg-accent shadow-brutal-sm" />
           </button>
 
-          {menuOpen && (
-            <div className="absolute right-0 mt-3 w-64 bg-card border-2 border-border shadow-brutal z-50 flex flex-col">
-              <div className="px-6 py-3 border-b-2 border-border">
-                <p className="font-bold text-foreground">
-                  Admin User
+          {notifOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.95 }}
+              transition={{ type: 'spring', stiffness: 450, damping: 28 }}
+              className="absolute right-0 mt-3 w-80 bg-card border-2 border-border shadow-brutal z-50 flex flex-col"
+            >
+              <div className="px-5 py-4 border-b-2 border-border flex justify-between items-center">
+                <p className="font-bold text-foreground text-[15px]">
+                  Notifications
                 </p>
-                <p className="text-sm font-medium text-foreground truncate">
-                  admin@acmecorp.com
-                </p>
+                <span className="text-[11px] font-bold px-2 py-0.5 bg-primary text-primary-foreground">
+                  2 New
+                </span>
               </div>
-              <div className="py-2 px-3 flex flex-col gap-1">
-                <Link
-                  to="/account"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex w-full items-center gap-4 px-4 py-3 text-[15px] font-bold text-foreground hover:bg-accent border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all"
-                >
-                  <Users className="h-5 w-5" /> Account
-                </Link>
-                <Link
-                  to="/settings"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex w-full items-center gap-4 px-4 py-3 text-[15px] font-bold text-foreground hover:bg-accent border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all"
-                >
-                  <LayoutDashboard className="h-5 w-5" /> Settings
-                </Link>
+              <div className="flex flex-col">
+                <div className="p-4 border-b-2 border-border hover:bg-accent cursor-pointer transition-colors">
+                  <p className="text-[15px] font-bold text-foreground">
+                    Invoice #INV-2023-001 Paid
+                  </p>
+                  <p className="text-sm font-medium text-muted-foreground mt-1">
+                    Acme Corp has paid $4,500.00
+                  </p>
+                  <p className="text-xs font-bold text-primary mt-2">
+                    10 minutes ago
+                  </p>
+                </div>
+                <div className="p-4 border-b-2 border-border hover:bg-accent cursor-pointer transition-colors">
+                  <p className="text-[15px] font-bold text-foreground">
+                    New Team Member
+                  </p>
+                  <p className="text-sm font-medium text-muted-foreground mt-1">
+                    Sarah joined as Editor
+                  </p>
+                  <p className="text-xs font-bold text-primary mt-2">
+                    2 hours ago
+                  </p>
+                </div>
               </div>
-              <div className="border-t-2 border-border p-3">
-                <button className="flex w-full items-center gap-4 px-4 py-3 text-[15px] font-bold text-destructive hover:bg-destructive hover:text-destructive-foreground border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all">
-                  Log Out
+              <div className="p-2">
+                <button
+                  onClick={() => {
+                    setNotifOpen(false)
+                    navigate({ to: '/cashbook' })
+                  }}
+                  className="w-full py-2 text-sm font-bold text-center text-foreground hover:bg-accent border-2 border-transparent hover:border-border transition-all"
+                >
+                  View All Activity
                 </button>
               </div>
-            </div>
+            </motion.div>
           )}
+        </div>
+        <div className="relative ml-2" ref={menuRef}>
+          <button
+            onClick={() => {
+              setMenuOpen(!menuOpen)
+              if (notifOpen) setNotifOpen(false)
+            }}
+            className="flex items-center justify-center hover:translate-y-[2px] hover:translate-x-[2px] transition-all outline-none"
+          >
+            <Avatar className="h-12 w-12 border-2 border-border shadow-brutal-sm hover:shadow-none transition-all">
+              <AvatarImage
+                src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                alt="Admin User"
+              />
+              <AvatarFallback>AU</AvatarFallback>
+            </Avatar>
+          </button>
+
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 450, damping: 28 }}
+                className="absolute right-0 mt-3 w-64 bg-card border-2 border-border shadow-brutal z-50 flex flex-col"
+              >
+                <div className="px-5 py-3.5 border-b-2 border-border flex items-center gap-3">
+                  <Avatar className="h-10 w-10 border-2 border-border shadow-brutal-sm">
+                    <AvatarImage
+                      src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                      alt="Admin User"
+                    />
+                    <AvatarFallback>AU</AvatarFallback>
+                  </Avatar>
+                  <div className="overflow-hidden">
+                    <p className="font-bold text-foreground truncate text-sm">
+                      Admin User
+                    </p>
+                    <p className="text-xs font-semibold text-muted-foreground truncate">
+                      admin@acmecorp.com
+                    </p>
+                  </div>
+                </div>
+                <div className="py-2 px-3 flex flex-col gap-1">
+                  <Link
+                    to="/account"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex w-full items-center gap-4 px-4 py-3 text-[15px] font-bold text-foreground hover:bg-accent border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all"
+                  >
+                    <Users className="h-5 w-5" /> Account
+                  </Link>
+                  <Link
+                    to="/settings"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex w-full items-center gap-4 px-4 py-3 text-[15px] font-bold text-foreground hover:bg-accent border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all"
+                  >
+                    <Settings className="h-5 w-5" /> Settings
+                  </Link>
+                </div>
+                <div className="border-t-2 border-border p-3">
+                  <button
+                    onClick={() => {
+                      alert('Logged out successfully')
+                      setMenuOpen(false)
+                    }}
+                    className="flex w-full items-center gap-4 px-4 py-3 text-[15px] font-bold text-destructive hover:bg-destructive hover:text-destructive-foreground border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all"
+                  >
+                    Log Out
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           {menuOpen && (
             <div
               className="fixed inset-0 z-40"
@@ -257,21 +436,26 @@ export function Topbar() {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { isExpanded } = useSidebarStore()
-  
   const m3Transition = { type: 'tween', ease: [0.2, 0, 0, 1], duration: 0.4 }
 
   return (
     <div className="min-h-screen bg-background font-sans text-foreground selection:bg-accent/30">
       <Sidebar />
-      <motion.main 
+      <motion.main
         initial={false}
-        animate={{ marginLeft: isExpanded ? 300 : 96 }}
+        animate={{ marginLeft: 80 }}
         transition={m3Transition}
         className="relative z-10 min-h-screen flex flex-col max-lg:!ml-0"
       >
         <Topbar />
-        <div className="flex-1 p-4 md:p-6 lg:p-10 max-w-[1600px] mx-auto w-full">{children}</div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}
+          className="flex-1 p-4 md:p-6 lg:p-10 max-w-[1600px] mx-auto w-full"
+        >
+          {children}
+        </motion.div>
       </motion.main>
     </div>
   )

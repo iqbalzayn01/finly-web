@@ -11,7 +11,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
-import { useState } from 'react'
+import { useState, useMemo, useDeferredValue } from 'react'
 import { Button } from '../components/ui/button'
 import {
   Select,
@@ -20,6 +20,8 @@ import {
   SelectContent,
   SelectItem,
 } from '../components/ui/select'
+
+import { useUIStore } from '../store/ui-store'
 
 export const Route = createFileRoute('/customers')({
   component: Customers,
@@ -73,18 +75,46 @@ const initialCustomers = [
   },
 ]
 
+import { useDebouncedSearch } from '../hooks/use-debounced-search'
+
 function Customers() {
   const [showForm, setShowForm] = useState(false)
   const [openKebab, setOpenKebab] = useState<number | null>(null)
+  const [termFilter, setTermFilter] = useState('all')
+
+  const {
+    inputQuery,
+    setInputQuery,
+    isTooShort,
+    results: filteredCustomers,
+  } = useDebouncedSearch({
+    resourceKey: 'customers-list',
+    data: initialCustomers,
+    extraFilters: { termFilter },
+    filterFn: (items, query, filters) => {
+      return items.filter((c) => {
+        const matchesSearch =
+          !query ||
+          c.name.toLowerCase().includes(query) ||
+          c.email.toLowerCase().includes(query) ||
+          c.phone.toLowerCase().includes(query) ||
+          c.address.toLowerCase().includes(query)
+
+        const matchesTerm = filters?.termFilter === 'all' || c.term.toString() === filters?.termFilter
+
+        return matchesSearch && matchesTerm
+      })
+    },
+  })
 
   return (
     <div className="space-y-8 pb-12">
       <div className="flex items-end justify-between">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground">
             Customers
           </h1>
-          <p className="mt-2 text-slate-500 dark:text-slate-400">
+          <p className="mt-2 text-muted-foreground">
             Manage client profiles and billing terms.
           </p>
         </div>
@@ -97,16 +127,23 @@ function Customers() {
 
       <div className="flex flex-col sm:flex-row gap-4 max-w-2xl">
         <div className="relative flex-1">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-foreground" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-foreground z-10 pointer-events-none" />
           <input
             type="text"
-            placeholder="Search by name or email..."
-            className="w-full h-14 border-2 border-border bg-card pl-14 pr-6 text-base font-bold outline-none shadow-brutal-sm focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] transition-all text-foreground placeholder:text-muted-foreground"
+            value={inputQuery}
+            onChange={(e) => setInputQuery(e.target.value)}
+            placeholder="Search by name or email (min 3 chars)..."
+            className="w-full h-12 border-2 border-border bg-card pl-12 pr-24 text-[15px] font-bold outline-none shadow-brutal-sm focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] transition-all text-foreground placeholder:text-muted-foreground"
           />
+          {isTooShort && (
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded">
+              Min 3 chars
+            </span>
+          )}
         </div>
         <div className="w-48">
-          <Select defaultValue="all">
-            <SelectTrigger className="w-full h-14 border-2 border-border shadow-brutal-sm text-base font-bold bg-card text-foreground">
+          <Select value={termFilter} onValueChange={setTermFilter}>
+            <SelectTrigger className="w-full h-12 border-2 border-border shadow-brutal-sm text-[15px] font-bold bg-card text-foreground">
               <SelectValue placeholder="Payment Terms" />
             </SelectTrigger>
             <SelectContent>
@@ -119,17 +156,24 @@ function Customers() {
         </div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
-        {initialCustomers.map((c) => (
+      {filteredCustomers.length === 0 ? (
+        <div className="border-2 border-border bg-card p-12 text-center text-muted-foreground font-medium shadow-brutal">
+          No customers found matching search criteria.
+        </div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {filteredCustomers.map((c, i) => (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            whileHover={{ y: -4, scale: 1.01 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 25, delay: i * 0.06 }}
             key={c.id}
-            className="group relative border-2 border-border bg-card p-8 shadow-brutal transition-all hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none"
+            className="group relative border-2 border-border bg-card p-8 shadow-brutal transition-all"
           >
             <div className="flex items-start justify-between">
               <div className="flex h-14 w-14 items-center justify-center border-2 border-border bg-accent text-accent-foreground text-xl font-bold shadow-brutal-sm">
@@ -148,16 +192,24 @@ function Customers() {
                   >
                     <MoreVertical className="h-5 w-5" />
                   </button>
-                  {openKebab === c.id && (
-                    <div className="absolute right-0 top-12 w-32 border-2 border-border bg-card p-1.5 shadow-brutal z-20 flex flex-col gap-1">
-                      <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground font-bold border-2 border-transparent hover:border-border transition-all">
-                        <Edit2 className="h-4 w-4" /> Edit
-                      </button>
-                      <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground font-bold border-2 border-transparent hover:border-border transition-all">
-                        <Trash2 className="h-4 w-4" /> Delete
-                      </button>
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {openKebab === c.id && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                        transition={{ type: 'spring', stiffness: 450, damping: 28 }}
+                        className="absolute right-0 top-12 w-32 border-2 border-border bg-card p-1.5 shadow-brutal z-20 flex flex-col gap-1"
+                      >
+                        <button onClick={() => { alert("Customer updated successfully"); setOpenKebab(null); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground font-bold border-2 border-transparent hover:border-border transition-all">
+                          <Edit2 className="h-4 w-4" /> Edit
+                        </button>
+                        <button onClick={() => { alert("Customer deleted"); setOpenKebab(null); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground font-bold border-2 border-transparent hover:border-border transition-all">
+                          <Trash2 className="h-4 w-4" /> Delete
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
@@ -167,15 +219,15 @@ function Customers() {
             </h3>
 
             <div className="mt-6 space-y-3">
-              <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
+              <div className="flex items-center gap-3 text-muted-foreground">
                 <Mail className="h-4 w-4 shrink-0" />
                 <span className="text-sm font-medium">{c.email}</span>
               </div>
-              <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
+              <div className="flex items-center gap-3 text-muted-foreground">
                 <Phone className="h-4 w-4 shrink-0" />
                 <span className="text-sm font-medium">{c.phone}</span>
               </div>
-              <div className="flex items-start gap-3 text-slate-500 dark:text-slate-400">
+              <div className="flex items-start gap-3 text-muted-foreground">
                 <MapPin className="h-4 w-4 shrink-0 mt-0.5" />
                 <span className="text-sm font-medium leading-tight">
                   {c.address}
@@ -185,6 +237,7 @@ function Customers() {
           </motion.div>
         ))}
       </motion.div>
+      )}
 
       <AnimatePresence>
         {showForm && (
@@ -249,7 +302,7 @@ function Customers() {
                   <Button variant="ghost" onClick={() => setShowForm(false)}>
                     Cancel
                   </Button>
-                  <Button className="px-6">
+                  <Button className="px-6" onClick={() => { alert("Customer saved successfully!"); setShowForm(false); }}>
                     Save Customer
                   </Button>
                 </div>
