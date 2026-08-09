@@ -71,7 +71,7 @@ const categoryData = [
 ]
 
 function Dashboard() {
-  const m3Transition = { type: 'tween', ease: [0.2, 0, 0, 1], duration: 0.5 }
+  const m3Transition = { type: 'tween' as const, ease: [0.2, 0, 0, 1] as [number, number, number, number], duration: 0.5 }
 
   return (
     <div className="space-y-6 pb-12">
@@ -268,7 +268,7 @@ function Dashboard() {
                   formatter={(value: any) => [`$${Number(value || 0).toLocaleString()}`, 'Amount']}
                 />
                 <Bar dataKey="value" radius={0} barSize={28}>
-                  {categoryData.map((entry, index) => (
+                  {categoryData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={`var(--chart-${(index % 9) + 1})`} />
                   ))}
                 </Bar>

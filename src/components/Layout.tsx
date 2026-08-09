@@ -75,7 +75,7 @@ export function Sidebar() {
   const { isExpanded } = useSidebarStore()
 
   // Material Design 3 easing
-  const m3Transition = { type: 'tween', ease: [0.2, 0, 0, 1], duration: 0.4 }
+  const m3Transition = { type: 'tween' as const, ease: [0.2, 0, 0, 1] as [number, number, number, number], duration: 0.4 }
 
   return (
     <>
@@ -436,7 +436,7 @@ export function Topbar() {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const m3Transition = { type: 'tween', ease: [0.2, 0, 0, 1], duration: 0.4 }
+  const m3Transition = { type: 'tween' as const, ease: [0.2, 0, 0, 1] as [number, number, number, number], duration: 0.4 }
 
   return (
     <div className="min-h-screen bg-background font-sans text-foreground selection:bg-accent/30">

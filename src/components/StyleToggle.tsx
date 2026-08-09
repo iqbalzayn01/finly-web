@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { Paintbrush, Hexagon, Circle, Square, Sparkles } from 'lucide-react'
+import { Paintbrush, Circle, Square } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { useUIStore } from '../store/ui-store'
 
