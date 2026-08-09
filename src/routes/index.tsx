@@ -118,17 +118,23 @@ function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={m3Transition}
         >
-          <h1 className="text-4xl md:text-[44px] font-medium tracking-tight text-foreground">
-            Analytics
-          </h1>
-          <p className="mt-2 text-muted-foreground text-[15px]">
-            Your business performance and cashflow stability.
+          <div className="flex items-center gap-2 mb-1">
+            <h1 className="text-4xl md:text-[44px] font-medium tracking-tight text-foreground">
+              Analytics & Cashflow
+            </h1>
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
+              Live OS
+            </span>
+          </div>
+          <p className="text-muted-foreground text-[15px]">
+            Real-time business health, operating cashflow, and AI forecast.
           </p>
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...m3Transition, delay: 0.1 }}
+          className="flex items-center gap-3"
         >
           <Select defaultValue="this_year">
             <SelectTrigger className="w-[180px] h-11 rounded-xl border border-border bg-card shadow-sm text-foreground font-semibold">
@@ -153,19 +159,22 @@ function Dashboard() {
       </div>
 
       {/* Top Metrics Cards - M3 Tonal Surfaces */}
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {[
           {
-            title: 'Total Balance',
+            title: 'Total Net Balance',
             value: '$148,250.00',
             trend: '+12.5%',
             isUp: true,
             icon: Wallet,
             containerClass:
-              'bg-primary text-primary-foreground border border-primary/20 shadow-sm rounded-2xl',
+              'bg-primary text-primary-foreground border border-primary/20 shadow-md rounded-2xl',
             iconClass: 'bg-white/20 text-white rounded-xl',
             trendClass:
               'bg-white/20 text-white rounded-full',
+            progress: 82,
+            progressBg: 'bg-white/20',
+            progressFill: 'bg-white',
           },
           {
             title: 'Total Income',
@@ -176,9 +185,12 @@ function Dashboard() {
             containerClass:
               'bg-card text-foreground border border-border shadow-sm rounded-2xl',
             iconClass:
-              'bg-accent text-accent-foreground border border-accent/20 rounded-xl',
+              'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-xl',
             trendClass:
-              'bg-accent text-accent-foreground rounded-full',
+              'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full',
+            progress: 68,
+            progressBg: 'bg-muted',
+            progressFill: 'bg-emerald-500',
           },
           {
             title: 'Total Expenses',
@@ -189,9 +201,28 @@ function Dashboard() {
             containerClass:
               'bg-card text-foreground border border-border shadow-sm rounded-2xl',
             iconClass:
-              'bg-destructive/10 text-destructive border border-destructive/20 rounded-xl',
+              'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-xl',
             trendClass:
-              'bg-destructive/10 text-destructive rounded-full',
+              'bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-full',
+            progress: 35,
+            progressBg: 'bg-muted',
+            progressFill: 'bg-rose-500',
+          },
+          {
+            title: 'Net Cash Runway',
+            value: '14.2 Months',
+            trend: '+1.5 mo',
+            isUp: true,
+            icon: ArrowUpRight,
+            containerClass:
+              'bg-card text-foreground border border-border shadow-sm rounded-2xl',
+            iconClass:
+              'bg-primary/10 text-primary border border-primary/20 rounded-xl',
+            trendClass:
+              'bg-primary/10 text-primary rounded-full',
+            progress: 74,
+            progressBg: 'bg-muted',
+            progressFill: 'bg-primary',
           },
         ].map((stat, i) => (
           <motion.div
@@ -199,38 +230,48 @@ function Dashboard() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ y: -4, scale: 1.01 }}
-            transition={{ ...m3Transition, delay: i * 0.1 }}
+            transition={{ ...m3Transition, delay: i * 0.08 }}
             className={`relative overflow-hidden p-6 ${stat.containerClass}`}
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-[15px] font-medium opacity-80 mb-2">
+                <p className="text-[14px] font-medium opacity-80 mb-1.5">
                   {stat.title}
                 </p>
-                <h3 className="font-mono text-3xl font-bold tracking-tight">
+                <h3 className="font-mono text-2xl lg:text-3xl font-bold tracking-tight">
                   {stat.value}
                 </h3>
               </div>
               <div
-                className={`flex h-14 w-14 shrink-0 items-center justify-center ${stat.iconClass}`}
+                className={`flex h-12 w-12 shrink-0 items-center justify-center ${stat.iconClass}`}
               >
-                <stat.icon className="h-6 w-6" />
+                <stat.icon className="h-5 w-5" />
               </div>
             </div>
-            <div className="mt-8 flex items-center gap-2">
-              <span
-                className={`flex items-center gap-1 px-3 py-1 text-xs font-semibold ${stat.trendClass}`}
-              >
-                {stat.isUp ? (
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                ) : (
-                  <ArrowDownRight className="h-3.5 w-3.5" />
-                )}
-                {stat.trend}
-              </span>
-              <span className="text-xs font-medium opacity-60">
-                vs last month
-              </span>
+
+            {/* Progress bar */}
+            <div className="mt-5 space-y-2">
+              <div className={`h-1.5 w-full rounded-full ${stat.progressBg} overflow-hidden`}>
+                <div
+                  className={`h-full rounded-full ${stat.progressFill}`}
+                  style={{ width: `${stat.progress}%` }}
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <span
+                  className={`flex items-center gap-1 px-2.5 py-0.5 text-xs font-semibold ${stat.trendClass}`}
+                >
+                  {stat.isUp ? (
+                    <ArrowUpRight className="h-3 w-3" />
+                  ) : (
+                    <ArrowDownRight className="h-3 w-3" />
+                  )}
+                  {stat.trend}
+                </span>
+                <span className="text-[11px] font-medium opacity-70">
+                  Target: 100%
+                </span>
+              </div>
             </div>
           </motion.div>
         ))}

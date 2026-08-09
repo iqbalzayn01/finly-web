@@ -131,20 +131,39 @@ function Invoices() {
 
   return (
     <div className="space-y-8 pb-12">
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
         <div>
           <h1 className="text-4xl font-bold tracking-tight text-foreground">
-            Invoices
+            Invoices & Billing
           </h1>
-          <p className="mt-2 text-muted-foreground">
-            Create and track billing documents.
+          <p className="mt-2 text-muted-foreground text-[15px]">
+            Manage client billing, draft invoices, and automatic receivables.
           </p>
         </div>
         <Link to="/invoices/builder">
-          <Button>
+          <Button className="h-11 px-6 rounded-full font-semibold shadow-md">
             <Plus className="h-5 w-5 mr-2" /> New Invoice
           </Button>
         </Link>
+      </div>
+
+      {/* Invoice Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="border border-border bg-card p-5 rounded-2xl shadow-xs">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Receivables</p>
+          <p className="font-mono text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">$17,000.00</p>
+          <p className="text-xs text-muted-foreground mt-1">2 Unpaid Invoices</p>
+        </div>
+        <div className="border border-border bg-card p-5 rounded-2xl shadow-xs">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Paid This Month</p>
+          <p className="font-mono text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">$3,500.00</p>
+          <p className="text-xs text-muted-foreground mt-1">1 Settled Invoice</p>
+        </div>
+        <div className="border border-border bg-card p-5 rounded-2xl shadow-xs">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Draft Invoices</p>
+          <p className="font-mono text-2xl font-bold text-primary mt-1">$200.00</p>
+          <p className="text-xs text-muted-foreground mt-1">1 Pending Review</p>
+        </div>
       </div>
 
       <div className="border border-border bg-card shadow-sm rounded-2xl min-h-[500px] overflow-hidden">
