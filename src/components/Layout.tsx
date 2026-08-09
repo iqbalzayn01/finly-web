@@ -8,7 +8,10 @@ import {
   Settings,
   Bell,
   Search,
-  Menu,
+  PanelLeft,
+  PanelLeftClose,
+  Sparkles,
+  CheckCircle2,
 } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
 import { AiChatAssistant } from './AiChatAssistant'
@@ -63,6 +66,58 @@ function V2Tooltip({
           >
             {content}
             <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-foreground" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+function ProHoverCard() {
+  const [isHovered, setIsHovered] = useState(false)
+
+  return (
+    <div
+      className="relative flex items-center justify-center"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <button className="relative flex h-11 w-11 items-center justify-center font-semibold transition-all rounded-full bg-gradient-to-tr from-amber-500/20 to-primary/20 text-amber-500 hover:scale-105 border border-amber-500/30 shadow-xs outline-none">
+        <Sparkles className="h-5 w-5 text-amber-500 animate-pulse" />
+      </button>
+      <AnimatePresence>
+        {isHovered && (
+          <motion.div
+            initial={{ opacity: 0, x: -10, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -6, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+            className="absolute left-full ml-3 w-64 p-4 rounded-2xl bg-card border border-amber-500/30 text-foreground shadow-2xl z-50 pointer-events-auto"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500 text-white font-bold text-xs">
+                PRO
+              </div>
+              <h4 className="font-bold text-sm text-foreground">Upgrade to Finly Pro</h4>
+            </div>
+            <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
+              Supercharge your agency cashflow with advanced features.
+            </p>
+            <ul className="space-y-1.5 text-xs text-foreground font-medium mb-4">
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="h-3.5 w-3.5 text-amber-500 shrink-0" /> Unlimited AI Parse & Drafts
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="h-3.5 w-3.5 text-amber-500 shrink-0" /> Live FX Multi-Currency Engine
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="h-3.5 w-3.5 text-amber-500 shrink-0" /> Multi-Tenant Role Governance
+              </li>
+            </ul>
+            <button className="w-full py-2 bg-gradient-to-r from-amber-500 to-primary text-white text-xs font-bold rounded-xl shadow-md hover:opacity-95 transition-all">
+              Upgrade Now • $29/mo
+            </button>
+            <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 bg-card border-l border-b border-amber-500/30" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -157,6 +212,9 @@ export function Sidebar() {
         </div>
 
         <div className="flex flex-col items-center gap-3 w-full px-2">
+          {/* Pro Upgrade Hover Card */}
+          <ProHoverCard />
+
           <V2Tooltip content="Settings">
             <Link
               to="/settings"
@@ -224,7 +282,7 @@ export function Sidebar() {
 }
 
 export function Topbar() {
-  const { toggle } = useSidebarStore()
+  const { isExpanded, toggle } = useSidebarStore()
   const [topbarSearch, setTopbarSearch] = useState('')
   const [notifOpen, setNotifOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -267,12 +325,20 @@ export function Topbar() {
   return (
     <header className="sticky top-0 z-30 flex h-20 items-center justify-between px-6 bg-card border-b border-border shadow-xs">
       <div className="flex flex-1 items-center gap-4">
-        <button
-          onClick={toggle}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card shadow-xs hover:border-primary/50 transition-all outline-none"
-        >
-          <Menu className="h-5 w-5 text-foreground" />
-        </button>
+        {/* Best UX Sidebar Panel Toggle Button */}
+        <V2Tooltip content={isExpanded ? 'Collapse Sidebar' : 'Expand Sidebar'}>
+          <button
+            onClick={toggle}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card shadow-xs hover:border-primary/50 hover:bg-accent/40 text-foreground transition-all outline-none"
+            aria-label="Toggle Sidebar"
+          >
+            {isExpanded ? (
+              <PanelLeftClose className="h-5 w-5" />
+            ) : (
+              <PanelLeft className="h-5 w-5" />
+            )}
+          </button>
+        </V2Tooltip>
         <div className="relative w-full max-w-2xl hidden md:block">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
           <input

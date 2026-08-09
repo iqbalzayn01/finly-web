@@ -3,7 +3,6 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Wallet,
-  MoreHorizontal,
   RefreshCw,
   TrendingUp,
   Globe,
@@ -21,8 +20,6 @@ import {
   SelectItem,
 } from '../components/ui/select'
 import {
-  AreaChart,
-  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -30,7 +27,9 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
-  Cell,
+  RadialBarChart,
+  RadialBar,
+  PolarAngleAxis,
 } from 'recharts'
 
 export const Route = createFileRoute('/')({ component: Dashboard })
@@ -45,72 +44,16 @@ const cashflowData = [
   { name: 'Jul', income: 28400, expense: 14200 },
 ]
 
-const incomeValues = cashflowData.map((d) => d.income)
-const maxIncome = Math.max(...incomeValues)
-const minIncome = Math.min(...incomeValues)
-
-const renderIncomeExtrema = (props: any) => {
-  const { cx, cy, value } = props
-  if (value === maxIncome) {
-    return (
-      <g>
-        <circle
-          cx={cx}
-          cy={cy}
-          r={5}
-          fill="var(--background)"
-          stroke="var(--primary)"
-          strokeWidth={2.5}
-        />
-        <text
-          x={cx}
-          y={cy - 12}
-          textAnchor="middle"
-          fill="var(--primary)"
-          fontSize={11}
-          fontWeight="bold"
-        >
-          MAX ${value / 1000}k
-        </text>
-      </g>
-    )
-  }
-  if (value === minIncome) {
-    return (
-      <g>
-        <circle
-          cx={cx}
-          cy={cy}
-          r={5}
-          fill="var(--background)"
-          stroke="var(--primary)"
-          strokeWidth={2.5}
-        />
-        <text
-          x={cx}
-          y={cy + 18}
-          textAnchor="middle"
-          fill="var(--primary)"
-          fontSize={11}
-          fontWeight="bold"
-        >
-          MIN ${value / 1000}k
-        </text>
-      </g>
-    )
-  }
-  return null
-}
-
-const categoryData = [
-  { name: 'Software', value: 4500 },
-  { name: 'Marketing', value: 3200 },
-  { name: 'Office', value: 1800 },
-  { name: 'Travel', value: 1300 },
+const financeScoreRadialData = [
+  { name: 'Income Growth', value: 85, fill: 'var(--primary)' },
+  { name: 'Savings Rate', value: 72, fill: '#10b981' },
+  { name: 'Budget Control', value: 90, fill: '#f59e0b' },
+  { name: 'Cash Runway', value: 94, fill: '#6366f1' },
 ]
 
 function Dashboard() {
   const [recentTxFilter, setRecentTxFilter] = useState<'all' | 'income' | 'expense'>('all')
+  const [fxInput, setFxInput] = useState<number>(100)
 
   const m3Transition = {
     type: 'tween' as const,
@@ -342,7 +285,7 @@ function Dashboard() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Main Chart Area */}
+        {/* Main Chart Area: Dual Bar Chart (Income vs Expense) with Smooth Rounded Bars */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -360,7 +303,7 @@ function Dashboard() {
                 <div className="w-3 h-3 rounded-full bg-primary" /> Income
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-muted-foreground/30" />{' '}
+                <div className="w-3 h-3 rounded-full bg-muted-foreground/40" />{' '}
                 Expense
               </div>
             </div>
@@ -368,24 +311,10 @@ function Dashboard() {
 
           <div className="h-[340px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
+              <BarChart
                 data={cashflowData}
                 margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
               >
-                <defs>
-                  <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor="var(--primary)"
-                      stopOpacity={0.15}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="var(--primary)"
-                      stopOpacity={0}
-                    />
-                  </linearGradient>
-                </defs>
                 <CartesianGrid
                   strokeDasharray="4 4"
                   vertical={false}
@@ -401,7 +330,7 @@ function Dashboard() {
                     fontSize: 13,
                     fontWeight: 500,
                   }}
-                  dy={15}
+                  dy={10}
                 />
                 <YAxis
                   axisLine={false}
@@ -412,7 +341,7 @@ function Dashboard() {
                     fontWeight: 500,
                   }}
                   tickFormatter={(val) => `$${val / 1000}k`}
-                  dx={-15}
+                  dx={-10}
                 />
                 <Tooltip
                   contentStyle={{
@@ -425,11 +354,8 @@ function Dashboard() {
                     fontWeight: 'bold',
                   }}
                   itemStyle={{ color: 'var(--foreground)', fontWeight: 700 }}
-                  cursor={{
-                    stroke: 'var(--muted-foreground)',
-                    strokeWidth: 1,
-                    strokeDasharray: '4 4',
-                  }}
+                  cursor={{ fill: 'var(--accent)', opacity: 0.15 }}
+                  labelFormatter={(label) => `Month: ${label}`}
                   formatter={(value: any, name: any) => [
                     `$${Number(value || 0).toLocaleString()}`,
                     String(name || '')
@@ -437,110 +363,94 @@ function Dashboard() {
                       .toUpperCase() + String(name || '').slice(1),
                   ]}
                 />
-                <Area
-                  type="monotone"
+                <Bar
                   dataKey="income"
-                  stroke="var(--primary)"
-                  strokeWidth={2.5}
-                  fillOpacity={1}
-                  fill="url(#colorIncome)"
-                  dot={renderIncomeExtrema}
-                  activeDot={{
-                    r: 6,
-                    fill: 'var(--primary)',
-                    stroke: 'var(--background)',
-                    strokeWidth: 2,
-                  }}
+                  name="Income"
+                  fill="var(--primary)"
+                  radius={[8, 8, 0, 0]}
+                  barSize={18}
                 />
-                <Area
-                  type="monotone"
+                <Bar
                   dataKey="expense"
-                  stroke="var(--muted-foreground)"
-                  strokeWidth={2.5}
-                  fill="none"
-                  activeDot={{
-                    r: 6,
-                    fill: 'var(--muted-foreground)',
-                    stroke: 'var(--background)',
-                    strokeWidth: 2,
-                  }}
+                  name="Expense"
+                  fill="var(--muted-foreground)"
+                  radius={[8, 8, 0, 0]}
+                  barSize={18}
                 />
-              </AreaChart>
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </motion.div>
 
-        {/* Breakdown Card */}
+        {/* Finance Score Card: Radial Bar Chart (Stacked) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...m3Transition, delay: 0.3 }}
-          className="bg-card border border-border shadow-sm rounded-2xl p-6 flex flex-col"
+          className="bg-card border border-border shadow-sm rounded-2xl p-6 flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-xl font-semibold text-foreground">Expenses</h2>
+              <h2 className="text-xl font-semibold text-foreground">Finance Health</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Overall Health Rating</p>
             </div>
-            <button className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card hover:bg-accent transition-all">
-              <MoreHorizontal className="h-4 w-4" />
-            </button>
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+              94% Excellent
+            </span>
           </div>
 
-          <div className="flex-1 min-h-[220px]">
+          <div className="relative h-[220px] w-full flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={categoryData}
-                layout="vertical"
-                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+              <RadialBarChart
+                cx="50%"
+                cy="50%"
+                innerRadius="30%"
+                outerRadius="95%"
+                barSize={10}
+                data={financeScoreRadialData}
+                startAngle={180}
+                endAngle={0}
               >
-                <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" hide />
+                <PolarAngleAxis
+                  type="number"
+                  domain={[0, 100]}
+                  angleAxisId={0}
+                  tick={false}
+                />
+                <RadialBar
+                  background={{ fill: 'var(--muted)' }}
+                  dataKey="value"
+                  cornerRadius={10}
+                />
                 <Tooltip
-                  cursor={{ fill: 'var(--accent)', opacity: 0.2 }}
                   contentStyle={{
                     borderRadius: '12px',
                     border: '1px solid var(--border)',
                     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
                     backgroundColor: 'var(--card)',
                     color: 'var(--foreground)',
-                    padding: '12px',
+                    padding: '10px 14px',
                     fontWeight: 'bold',
                   }}
-                  formatter={(value: any) => [
-                    `$${Number(value || 0).toLocaleString()}`,
-                    'Amount',
-                  ]}
+                  labelFormatter={(label) => `Metric: ${label}`}
+                  formatter={(val: any) => [`${val}%`, 'Score']}
                 />
-                <Bar dataKey="value" radius={8} barSize={28}>
-                  {categoryData.map((_, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={`var(--chart-${(index % 9) + 1})`}
-                    />
-                  ))}
-                </Bar>
-              </BarChart>
+              </RadialBarChart>
             </ResponsiveContainer>
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-center pointer-events-none">
+              <span className="font-mono text-3xl font-bold text-foreground">94</span>
+              <span className="text-xs text-muted-foreground block font-semibold uppercase tracking-wider">Health Index</span>
+            </div>
           </div>
 
-          <div className="mt-4 space-y-2">
-            {categoryData.map((cat, i) => (
-              <div
-                key={cat.name}
-                className="flex items-center justify-between py-2"
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="h-3 w-3 rounded-full border border-border"
-                    style={{ backgroundColor: `var(--chart-${(i % 9) + 1})` }}
-                  />
-                  <span className="text-[15px] font-medium text-muted-foreground">
-                    {cat.name}
-                  </span>
+          <div className="mt-2 space-y-2 pt-2 border-t border-border">
+            {financeScoreRadialData.map((item) => (
+              <div key={item.name} className="flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.fill }} />
+                  <span className="font-medium text-muted-foreground">{item.name}</span>
                 </div>
-                <span className="font-mono text-[15px] font-medium text-foreground">
-                  ${cat.value.toLocaleString()}
-                </span>
+                <span className="font-mono font-bold text-foreground">{item.value}%</span>
               </div>
             ))}
           </div>
@@ -612,7 +522,7 @@ function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Card 2: Live FX Currency Exchange Rates */}
+        {/* Card 2: Interactive FX Currency Converter */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -620,13 +530,13 @@ function Dashboard() {
           className="bg-card border border-border shadow-sm rounded-2xl p-6 flex flex-col justify-between"
         >
           <div>
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
                   <Globe className="h-4 w-4" />
                 </div>
                 <h2 className="text-lg font-semibold text-foreground">
-                  FX Currency Rates
+                  FX Currency Converter
                 </h2>
               </div>
               <span className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
@@ -634,28 +544,36 @@ function Dashboard() {
               </span>
             </div>
 
-            <div className="space-y-3">
+            {/* Interactive Amount Converter Input */}
+            <div className="relative mb-4">
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">$</span>
+              <input
+                type="number"
+                value={fxInput || ''}
+                onChange={(e) => setFxInput(Math.max(0, parseFloat(e.target.value) || 0))}
+                className="w-full h-10 bg-background border border-border rounded-xl pl-8 pr-16 text-sm font-bold font-mono outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground"
+                placeholder="Enter USD amount..."
+              />
+              <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-primary">USD</span>
+            </div>
+
+            <div className="space-y-2.5">
               {[
-                { pair: 'USD / IDR', rate: 'Rp 16,250.00', change: '+0.12%', isUp: true },
-                { pair: 'EUR / USD', rate: '$1.0920', change: '+0.05%', isUp: true },
-                { pair: 'GBP / USD', rate: '$1.2840', change: '-0.08%', isUp: false },
-                { pair: 'SGD / IDR', rate: 'Rp 12,180.00', change: '+0.15%', isUp: true },
+                { pair: 'USD / IDR', label: 'Indonesian Rupiah', rate: `Rp ${(fxInput * 16250).toLocaleString()}` },
+                { pair: 'EUR / USD', label: 'Euro', rate: `€ ${(fxInput * 0.915).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+                { pair: 'GBP / USD', label: 'British Pound', rate: `£ ${(fxInput * 0.780).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+                { pair: 'SGD / IDR', label: 'Singapore Dollar', rate: `S$ ${(fxInput * 1.340).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
               ].map((fx, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-3 rounded-xl hover:bg-accent/40 transition-colors"
+                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-accent/40 transition-colors"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-7 w-7 rounded-full bg-accent flex items-center justify-center text-xs font-bold text-accent-foreground">
-                      {fx.pair.slice(0, 3)}
-                    </div>
-                    <span className="text-sm font-semibold text-foreground">{fx.pair}</span>
+                  <div>
+                    <span className="text-xs font-semibold text-foreground block">{fx.pair}</span>
+                    <span className="text-[10px] text-muted-foreground">{fx.label}</span>
                   </div>
                   <div className="text-right">
                     <p className="font-mono text-sm font-bold text-foreground">{fx.rate}</p>
-                    <span className={`text-[11px] font-semibold ${fx.isUp ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}`}>
-                      {fx.change}
-                    </span>
                   </div>
                 </div>
               ))}
