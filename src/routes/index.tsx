@@ -231,46 +231,48 @@ function Dashboard() {
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ y: -4, scale: 1.01 }}
             transition={{ ...m3Transition, delay: i * 0.08 }}
-            className={`relative overflow-hidden p-6 ${stat.containerClass}`}
+            className={`relative flex flex-col justify-between overflow-hidden p-6 ${stat.containerClass}`}
           >
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-[14px] font-medium opacity-80 mb-1.5">
-                  {stat.title}
-                </p>
-                <h3 className="font-mono text-2xl lg:text-3xl font-bold tracking-tight">
-                  {stat.value}
-                </h3>
-              </div>
+            {/* Top Bar: Icon on Left, Trend Badge on Right */}
+            <div className="flex items-center justify-between">
               <div
-                className={`flex h-12 w-12 shrink-0 items-center justify-center ${stat.iconClass}`}
+                className={`flex h-11 w-11 shrink-0 items-center justify-center ${stat.iconClass}`}
               >
                 <stat.icon className="h-5 w-5" />
               </div>
+              <span
+                className={`flex items-center gap-1 px-3 py-1 text-xs font-semibold ${stat.trendClass}`}
+              >
+                {stat.isUp ? (
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                ) : (
+                  <ArrowDownRight className="h-3.5 w-3.5" />
+                )}
+                {stat.trend}
+              </span>
             </div>
 
-            {/* Progress bar */}
-            <div className="mt-5 space-y-2">
+            {/* Middle Content: Big Value and Title */}
+            <div className="mt-6 mb-4">
+              <h3 className="font-mono text-2xl lg:text-3xl font-bold tracking-tight">
+                {stat.value}
+              </h3>
+              <p className="text-[13px] font-semibold opacity-75 mt-1 tracking-wide">
+                {stat.title}
+              </p>
+            </div>
+
+            {/* Bottom Progress Bar */}
+            <div className="space-y-1.5">
               <div className={`h-1.5 w-full rounded-full ${stat.progressBg} overflow-hidden`}>
                 <div
-                  className={`h-full rounded-full ${stat.progressFill}`}
+                  className={`h-full rounded-full ${stat.progressFill} transition-all duration-500`}
                   style={{ width: `${stat.progress}%` }}
                 />
               </div>
-              <div className="flex items-center justify-between">
-                <span
-                  className={`flex items-center gap-1 px-2.5 py-0.5 text-xs font-semibold ${stat.trendClass}`}
-                >
-                  {stat.isUp ? (
-                    <ArrowUpRight className="h-3 w-3" />
-                  ) : (
-                    <ArrowDownRight className="h-3 w-3" />
-                  )}
-                  {stat.trend}
-                </span>
-                <span className="text-[11px] font-medium opacity-70">
-                  Target: 100%
-                </span>
+              <div className="flex items-center justify-between text-[11px] font-medium opacity-75">
+                <span>{stat.progress}% of monthly target</span>
+                <span>vs last month</span>
               </div>
             </div>
           </motion.div>
