@@ -213,6 +213,10 @@ function Dashboard() {
                   contentStyle={{ borderRadius: '0', border: '2px solid var(--border)', boxShadow: '4px 4px 0px 0px var(--border)', backgroundColor: 'var(--card)', color: 'var(--foreground)', padding: '12px 16px', fontWeight: 'bold' }}
                   itemStyle={{ color: 'var(--foreground)', fontWeight: 700 }}
                   cursor={{ stroke: 'var(--muted-foreground)', strokeWidth: 1, strokeDasharray: '4 4' }}
+                  formatter={(value: any, name: any) => [
+                    `$${Number(value || 0).toLocaleString()}`,
+                    String(name || '').charAt(0).toUpperCase() + String(name || '').slice(1),
+                  ]}
                 />
                 <Area 
                   type="monotone" 
@@ -261,7 +265,7 @@ function Dashboard() {
                 <Tooltip 
                   cursor={{ fill: 'var(--accent)', opacity: 0.2 }}
                   contentStyle={{ borderRadius: '0', border: '2px solid var(--border)', boxShadow: '4px 4px 0px 0px var(--border)', backgroundColor: 'var(--card)', color: 'var(--foreground)', padding: '12px', fontWeight: 'bold' }}
-                  formatter={(value: number) => [`$${value.toLocaleString()}`, 'Amount']}
+                  formatter={(value: any) => [`$${Number(value || 0).toLocaleString()}`, 'Amount']}
                 />
                 <Bar dataKey="value" radius={0} barSize={28}>
                   {categoryData.map((entry, index) => (
