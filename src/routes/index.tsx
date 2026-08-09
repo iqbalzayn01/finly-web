@@ -4,7 +4,14 @@ import {
   ArrowDownRight,
   Wallet,
   MoreHorizontal,
+  RefreshCw,
+  TrendingUp,
+  Globe,
+  Activity,
+  ShieldCheck,
+  Receipt,
 } from 'lucide-react'
+import { useState } from 'react'
 import { motion } from 'motion/react'
 import {
   Select,
@@ -103,11 +110,66 @@ const categoryData = [
 ]
 
 function Dashboard() {
+  const [recentTxFilter, setRecentTxFilter] = useState<'all' | 'income' | 'expense'>('all')
+
   const m3Transition = {
     type: 'tween' as const,
     ease: [0.2, 0, 0, 1] as [number, number, number, number],
     duration: 0.5,
   }
+
+  const allRecentTx = [
+    {
+      name: 'Acme Corp Web Dev',
+      category: 'Income / Services',
+      date: 'Today, 2:45 PM',
+      amount: 5000,
+      type: 'income',
+      icon: ArrowUpRight,
+      color: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    },
+    {
+      name: 'AWS Infrastructure',
+      category: 'Software & Hosting',
+      date: 'Yesterday, 10:20 AM',
+      amount: 120,
+      type: 'expense',
+      icon: ArrowDownRight,
+      color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    },
+    {
+      name: 'Q3 Retainer GlobalTech',
+      category: 'Income / Retainer',
+      date: 'Jul 28, 2026',
+      amount: 3500,
+      type: 'income',
+      icon: ArrowUpRight,
+      color: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    },
+    {
+      name: 'Facebook Ads Campaign',
+      category: 'Marketing & Ads',
+      date: 'Jul 26, 2026',
+      amount: 450,
+      type: 'expense',
+      icon: ArrowDownRight,
+      color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    },
+    {
+      name: 'Slack Team Subscription',
+      category: 'Software & SaaS',
+      date: 'Jul 24, 2026',
+      amount: 85,
+      type: 'expense',
+      icon: ArrowDownRight,
+      color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    },
+  ]
+
+  const filteredTx = allRecentTx.filter((tx) => {
+    if (recentTxFilter === 'all') return true
+    return tx.type === recentTxFilter
+  })
 
   return (
     <div className="space-y-6 pb-12">
@@ -485,83 +547,219 @@ function Dashboard() {
         </motion.div>
       </div>
 
-      {/* Recent Transactions List */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ ...m3Transition, delay: 0.4 }}
-        className="bg-card border border-border shadow-sm rounded-2xl p-6"
-      >
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-foreground">
-            Recent Transactions
-          </h2>
-          <Link
-            to="/cashbook"
-            className="flex h-9 items-center justify-center rounded-full border border-border bg-accent text-accent-foreground px-4 text-xs font-semibold hover:bg-accent/80 transition-all"
-          >
-            View All
-          </Link>
-        </div>
-
-        <div className="space-y-1">
-          {[
-            {
-              name: 'Acme Corp Web Dev',
-              date: 'Today, 2:45 PM',
-              amount: 5000,
-              type: 'income',
-              icon: ArrowUpRight,
-              color: 'bg-accent/20 text-accent-foreground',
-            },
-            {
-              name: 'AWS Hosting',
-              date: 'Yesterday, 10:20 AM',
-              amount: -120,
-              type: 'expense',
-              icon: ArrowDownRight,
-              color: 'bg-muted text-muted-foreground',
-            },
-            {
-              name: 'Q3 Retainer GlobalTech',
-              date: 'Jul 28, 2026',
-              amount: 3500,
-              type: 'income',
-              icon: ArrowUpRight,
-              color: 'bg-accent/20 text-accent-foreground',
-            },
-          ].map((tx, i) => (
-            <div
-              key={i}
-              className="flex items-center justify-between p-3.5 rounded-xl hover:bg-accent/40 transition-colors cursor-pointer group"
-            >
-              <div className="flex items-center gap-4">
-                <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-full border border-border ${tx.color}`}
-                >
-                  <tx.icon className="h-5 w-5" />
+      {/* 3-Column Bottom Grid: Financial Statistics | FX Exchange | Recent Transactions with Filter */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Card 1: Financial Statistics & Health */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...m3Transition, delay: 0.4 }}
+          className="bg-card border border-border shadow-sm rounded-2xl p-6 flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+                  <Activity className="h-4 w-4" />
                 </div>
-                <div>
-                  <h4 className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">
-                    {tx.name}
-                  </h4>
-                  <p className="text-xs text-muted-foreground">{tx.date}</p>
-                </div>
+                <h2 className="text-lg font-semibold text-foreground">
+                  Financial Statistics
+                </h2>
               </div>
-              <div
-                className={`font-mono text-base font-semibold ${tx.type === 'income' ? 'text-foreground' : 'text-muted-foreground'}`}
-              >
-                {tx.type === 'income' ? '+' : ''}
-                {tx.amount.toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-                  maximumFractionDigits: 0,
-                })}
+              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                Score: 94/100
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground font-medium">Operating Profit Margin</p>
+                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">63.4%</p>
+                </div>
+                <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                  <TrendingUp className="h-3 w-3" /> +4.1%
+                </span>
+              </div>
+
+              <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground font-medium">Avg. Invoice Settled</p>
+                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">$4,250.00</p>
+                </div>
+                <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                  Net 14 Avg
+                </span>
+              </div>
+
+              <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground font-medium">On-Time Payment Rate</p>
+                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">96.5%</p>
+                </div>
+                <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                  High Reliability
+                </span>
               </div>
             </div>
-          ))}
-        </div>
-      </motion.div>
+          </div>
+
+          <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Audit Ledger Verified
+            </span>
+            <span className="font-mono">v5.0 Ledger</span>
+          </div>
+        </motion.div>
+
+        {/* Card 2: Live FX Currency Exchange Rates */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...m3Transition, delay: 0.45 }}
+          className="bg-card border border-border shadow-sm rounded-2xl p-6 flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+                  <Globe className="h-4 w-4" />
+                </div>
+                <h2 className="text-lg font-semibold text-foreground">
+                  FX Currency Rates
+                </h2>
+              </div>
+              <span className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live FX
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              {[
+                { pair: 'USD / IDR', rate: 'Rp 16,250.00', change: '+0.12%', isUp: true },
+                { pair: 'EUR / USD', rate: '$1.0920', change: '+0.05%', isUp: true },
+                { pair: 'GBP / USD', rate: '$1.2840', change: '-0.08%', isUp: false },
+                { pair: 'SGD / IDR', rate: 'Rp 12,180.00', change: '+0.15%', isUp: true },
+              ].map((fx, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-accent/40 transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-7 w-7 rounded-full bg-accent flex items-center justify-center text-xs font-bold text-accent-foreground">
+                      {fx.pair.slice(0, 3)}
+                    </div>
+                    <span className="text-sm font-semibold text-foreground">{fx.pair}</span>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-mono text-sm font-bold text-foreground">{fx.rate}</p>
+                    <span className={`text-[11px] font-semibold ${fx.isUp ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}`}>
+                      {fx.change}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <RefreshCw className="h-3 w-3" /> Auto-updates every 60s
+            </span>
+            <span className="font-mono text-primary font-semibold">1 USD = 16,250 IDR</span>
+          </div>
+        </motion.div>
+
+        {/* Card 3: Recent Transactions with Filter */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...m3Transition, delay: 0.5 }}
+          className="bg-card border border-border shadow-sm rounded-2xl p-6 flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+                  <Receipt className="h-4 w-4" />
+                </div>
+                <h2 className="text-lg font-semibold text-foreground">
+                  Recent Activity
+                </h2>
+              </div>
+              <Link
+                to="/cashbook"
+                className="text-xs font-semibold text-primary hover:underline"
+              >
+                View All
+              </Link>
+            </div>
+
+            {/* Filter Pills Header */}
+            <div className="flex items-center gap-1.5 p-1 bg-muted/50 rounded-xl mb-4">
+              {(['all', 'income', 'expense'] as const).map((filterType) => (
+                <button
+                  key={filterType}
+                  onClick={() => setRecentTxFilter(filterType)}
+                  className={`flex-1 py-1 text-xs font-semibold rounded-lg capitalize transition-all ${
+                    recentTxFilter === filterType
+                      ? 'bg-card text-foreground shadow-xs'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {filterType}
+                </button>
+              ))}
+            </div>
+
+            {/* Filtered Transaction List */}
+            <div className="space-y-2">
+              {filteredTx.length === 0 ? (
+                <p className="py-8 text-center text-xs text-muted-foreground font-medium">
+                  No {recentTxFilter} transactions recorded.
+                </p>
+              ) : (
+                filteredTx.map((tx, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between p-3 rounded-xl hover:bg-accent/40 transition-colors cursor-pointer group border border-transparent hover:border-border"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border ${tx.color}`}
+                      >
+                        <tx.icon className="h-4 w-4" />
+                      </div>
+                      <div className="overflow-hidden">
+                        <h4 className="font-semibold text-xs text-foreground truncate group-hover:text-primary transition-colors">
+                          {tx.name}
+                        </h4>
+                        <p className="text-[11px] text-muted-foreground truncate">{tx.category}</p>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p
+                        className={`font-mono text-sm font-semibold ${tx.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'}`}
+                      >
+                        {tx.type === 'income' ? '+' : '-'}
+                        ${tx.amount.toLocaleString()}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground">{tx.date.split(',')[0]}</p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          <div className="pt-3 border-t border-border mt-4 flex items-center justify-between text-xs">
+            <span className="text-muted-foreground">Showing {filteredTx.length} of {allRecentTx.length} entries</span>
+            <Link to="/cashbook" className="font-semibold text-primary flex items-center gap-1 hover:underline">
+              Open Cashbook <ArrowUpRight className="h-3 w-3" />
+            </Link>
+          </div>
+        </motion.div>
+      </div>
     </div>
   )
 }
