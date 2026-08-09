@@ -106,6 +106,13 @@ const getCategoryBadge = (categoryName: string) => {
   return 'bg-slate-100 text-slate-800 dark:bg-slate-500/20 dark:text-slate-300';
 };
 
+const getCategoryDot = (categoryName: string) => {
+  for (const group of CATEGORIES) {
+    if (group.items.includes(categoryName)) return group.dot;
+  }
+  return 'bg-slate-500';
+};
+
 const initialTransactions = [
   {
     id: 1,
@@ -325,12 +332,15 @@ function Cashbook() {
                     </p>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full ${getCategoryBadge(tx.category)}`}>
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full ${getCategoryBadge(tx.category)}`}>
+                      <span className={`w-2 h-2 rounded-full ${getCategoryDot(tx.category)}`} />
                       {tx.category}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-muted-foreground font-medium text-xs">
-                    {tx.scope}
+                  <td className="px-6 py-4 font-medium text-xs">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${tx.scope === 'Business' ? 'bg-primary/10 text-primary border-primary/20' : 'bg-muted text-muted-foreground border-border'}`}>
+                      {tx.scope}
+                    </span>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div
