@@ -27,6 +27,7 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  Legend,
   RadialBarChart,
   RadialBar,
   PolarAngleAxis,
@@ -363,19 +364,33 @@ function Dashboard() {
                       .toUpperCase() + String(name || '').slice(1),
                   ]}
                 />
-                <Bar
-                  dataKey="income"
-                  name="Income"
-                  fill="var(--primary)"
-                  radius={[8, 8, 0, 0]}
-                  barSize={18}
+                <Legend
+                  verticalAlign="top"
+                  align="right"
+                  height={36}
+                  iconType="circle"
+                  iconSize={8}
+                  wrapperStyle={{
+                    paddingBottom: '12px',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                  }}
                 />
                 <Bar
                   dataKey="expense"
                   name="Expense"
+                  stackId="cashflowStack"
                   fill="var(--muted-foreground)"
-                  radius={[8, 8, 0, 0]}
-                  barSize={18}
+                  radius={[0, 0, 4, 4]}
+                  barSize={24}
+                />
+                <Bar
+                  dataKey="income"
+                  name="Income"
+                  stackId="cashflowStack"
+                  fill="var(--primary)"
+                  radius={[6, 6, 0, 0]}
+                  barSize={24}
                 />
               </BarChart>
             </ResponsiveContainer>
