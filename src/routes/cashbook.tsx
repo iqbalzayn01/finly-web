@@ -2,7 +2,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import {
   Plus,
   Search,
-  Filter,
   Camera,
   ArrowUpRight,
   ArrowDownRight,
@@ -11,7 +10,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
-import { useState, useMemo, useDeferredValue } from 'react'
+import { useState } from 'react'
 import { Button } from '../components/ui/button'
 import {
   Select,
@@ -22,8 +21,6 @@ import {
   SelectGroup,
   SelectLabel,
 } from '../components/ui/select'
-
-import { useUIStore } from '../store/ui-store'
 
 export const Route = createFileRoute('/cashbook')({
   component: Cashbook,
@@ -107,6 +104,13 @@ const getCategoryBadge = (categoryName: string) => {
     if (group.items.includes(categoryName)) return group.badge;
   }
   return 'bg-slate-100 text-slate-800 dark:bg-slate-500/20 dark:text-slate-300';
+};
+
+const getCategoryDot = (categoryName: string) => {
+  for (const group of CATEGORIES) {
+    if (group.items.includes(categoryName)) return group.dot;
+  }
+  return 'bg-slate-500';
 };
 
 const initialTransactions = [
@@ -244,19 +248,19 @@ function Cashbook() {
           </Button>
         </div>
 
-        <div className="border-2 border-border bg-card shadow-brutal min-h-[600px]">
-          <div className="p-4 border-b-2 border-border flex flex-col md:flex-row gap-4">
+        <div className="border border-border bg-card shadow-sm rounded-2xl min-h-[600px]">
+          <div className="p-4 border-b border-border flex flex-col md:flex-row gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground z-10 pointer-events-none" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
               <input
                 type="text"
                 value={inputQuery}
                 onChange={(e) => setInputQuery(e.target.value)}
                 placeholder="Search transactions (min 3 chars)..."
-                className="w-full h-11 border-2 border-border bg-card pl-11 pr-24 text-sm font-bold outline-none shadow-brutal-sm focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] transition-all text-foreground placeholder:text-muted-foreground"
+                className="w-full h-11 border border-border bg-background rounded-full pl-11 pr-24 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
               />
               {isTooShort && (
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded">
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
                   Min 3 chars
                 </span>
               )}
@@ -265,10 +269,10 @@ function Cashbook() {
             <div className="flex items-center gap-3">
               <div className="w-40">
                 <Select value={typeFilter} onValueChange={setTypeFilter}>
-                  <SelectTrigger className="w-full h-11 border-2 border-border shadow-brutal-sm text-sm font-bold bg-card text-foreground">
+                  <SelectTrigger className="w-full h-11 border border-border shadow-xs text-sm font-medium bg-card text-foreground rounded-xl">
                     <SelectValue placeholder="All Types" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-xl">
                     <SelectItem value="all">All Types</SelectItem>
                     <SelectItem value="income">Income</SelectItem>
                     <SelectItem value="expense">Expense</SelectItem>
@@ -277,10 +281,10 @@ function Cashbook() {
               </div>
               <div className="w-40">
                 <Select value={scopeFilter} onValueChange={setScopeFilter}>
-                  <SelectTrigger className="w-full h-11 border-2 border-border shadow-brutal-sm text-sm font-bold bg-card text-foreground">
+                  <SelectTrigger className="w-full h-11 border border-border shadow-xs text-sm font-medium bg-card text-foreground rounded-xl">
                     <SelectValue placeholder="All Scopes" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-xl">
                     <SelectItem value="all">All Scopes</SelectItem>
                     <SelectItem value="business">Business</SelectItem>
                     <SelectItem value="personal">Personal</SelectItem>
@@ -292,17 +296,17 @@ function Cashbook() {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap min-w-[800px]">
-            <thead className="bg-muted text-muted-foreground border-b-2 border-border">
+            <thead className="bg-muted/40 text-muted-foreground border-b border-border">
               <tr>
-                <th className="px-6 py-4 font-semibold">Date & Desc</th>
-                <th className="px-6 py-4 font-semibold">Category</th>
-                <th className="px-6 py-4 font-semibold">Scope</th>
-                <th className="px-6 py-4 font-semibold text-right">Amount</th>
-                <th className="px-6 py-4 font-semibold text-center">Receipt</th>
+                <th className="px-6 py-4 font-semibold text-xs">Date & Desc</th>
+                <th className="px-6 py-4 font-semibold text-xs">Category</th>
+                <th className="px-6 py-4 font-semibold text-xs">Scope</th>
+                <th className="px-6 py-4 font-semibold text-xs text-right">Amount</th>
+                <th className="px-6 py-4 font-semibold text-xs text-center">Receipt</th>
                 <th className="px-6 py-4"></th>
               </tr>
             </thead>
-            <tbody className="divide-y-2 divide-border">
+            <tbody className="divide-y divide-border">
               {filteredTransactions.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-12 text-center text-muted-foreground font-medium">
@@ -320,20 +324,23 @@ function Cashbook() {
                     className="transition-colors"
                   >
                   <td className="px-6 py-4">
-                    <p className="font-semibold text-foreground">
+                    <p className="font-semibold text-foreground text-sm">
                       {tx.desc}
                     </p>
-                    <p className="text-muted-foreground mt-0.5">
+                    <p className="text-muted-foreground text-xs mt-0.5">
                       {tx.date}
                     </p>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center px-3 py-1 text-xs font-bold rounded-full ${getCategoryBadge(tx.category)}`}>
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full ${getCategoryBadge(tx.category)}`}>
+                      <span className={`w-2 h-2 rounded-full ${getCategoryDot(tx.category)}`} />
                       {tx.category}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-muted-foreground font-medium">
-                    {tx.scope}
+                  <td className="px-6 py-4 font-medium text-xs">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${tx.scope === 'Business' ? 'bg-primary/10 text-primary border-primary/20' : 'bg-muted text-muted-foreground border-border'}`}>
+                      {tx.scope}
+                    </span>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div
@@ -349,8 +356,8 @@ function Cashbook() {
                   </td>
                   <td className="px-6 py-4 text-center">
                     {tx.receipt ? (
-                      <button onClick={() => alert("Viewing uploaded receipt")} className="p-2 border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all hover:bg-accent text-muted-foreground hover:text-accent-foreground">
-                        <Camera className="h-5 w-5 mx-auto" />
+                      <button onClick={() => alert("Viewing uploaded receipt")} className="p-1.5 border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all">
+                        <Camera className="h-4 w-4 mx-auto" />
                       </button>
                     ) : (
                       <span className="text-slate-300 dark:text-slate-600">
@@ -363,9 +370,9 @@ function Cashbook() {
                       onClick={() =>
                         setOpenKebab(openKebab === tx.id ? null : tx.id)
                       }
-                      className="p-2 border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all hover:bg-accent text-muted-foreground hover:text-accent-foreground"
+                      className="p-1.5 border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all"
                     >
-                      <MoreVertical className="h-5 w-5" />
+                      <MoreVertical className="h-4 w-4" />
                     </button>
 
                     <AnimatePresence>
@@ -375,19 +382,19 @@ function Cashbook() {
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95, y: -5 }}
                           transition={{ type: 'spring', stiffness: 450, damping: 28 }}
-                          className="absolute right-12 top-10 w-40 border-2 border-border bg-card p-1.5 shadow-brutal z-20 text-left flex flex-col gap-1"
+                          className="absolute right-12 top-10 w-36 border border-border bg-card p-1.5 rounded-xl shadow-lg z-20 text-left flex flex-col gap-0.5"
                         >
                           <button
                             onClick={() => { alert("Transaction updated"); setOpenKebab(null); }}
-                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground font-bold border-2 border-transparent hover:border-border transition-all"
+                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-accent/50 font-medium rounded-lg transition-all"
                           >
-                            <Edit2 className="h-4 w-4" /> Edit
+                            <Edit2 className="h-3.5 w-3.5" /> Edit
                           </button>
                           <button
                             onClick={() => { alert("Transaction deleted"); setOpenKebab(null); }}
-                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive hover:text-destructive-foreground font-bold border-2 border-transparent hover:border-border transition-all"
+                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-destructive hover:bg-destructive/10 font-medium rounded-lg transition-all"
                           >
-                            <Trash2 className="h-4 w-4" /> Delete
+                            <Trash2 className="h-3.5 w-3.5" /> Delete
                           </button>
                         </motion.div>
                       )}
@@ -416,48 +423,48 @@ function Cashbook() {
             transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
             className="w-full xl:w-[360px] shrink-0"
           >
-            <div className="sticky top-24 border-2 border-border bg-card p-6 shadow-brutal-lg">
+            <div className="sticky top-24 border border-border bg-card p-6 rounded-2xl shadow-sm">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="font-bold text-lg text-foreground">
+                <h3 className="font-semibold text-base text-foreground">
                   Quick Entry
                 </h3>
                 <button
                   onClick={() => setShowNumpad(false)}
-                  className="text-muted-foreground hover:text-slate-600"
+                  className="text-xs font-semibold text-muted-foreground hover:text-foreground"
                 >
                   Close
                 </button>
               </div>
 
-              <div className="flex gap-2 mb-6 p-1 border-2 border-border bg-card shadow-brutal-sm relative">
+              <div className="flex gap-2 mb-6 p-1 border border-border bg-muted/30 rounded-xl relative">
                 <button
                   onClick={() => setTxType('expense')}
-                  className={`flex-1 py-2 text-sm font-bold border-2 transition-all relative z-10 ${txType === 'expense' ? 'bg-accent text-accent-foreground border-border shadow-brutal-sm' : 'border-transparent text-muted-foreground hover:border-border hover:shadow-brutal-sm'}`}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all relative z-10 ${txType === 'expense' ? 'bg-card text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground'}`}
                 >
                   Expense
                 </button>
                 <button
                   onClick={() => setTxType('income')}
-                  className={`flex-1 py-2 text-sm font-bold border-2 transition-all relative z-10 ${txType === 'income' ? 'bg-accent text-accent-foreground border-border shadow-brutal-sm' : 'border-transparent text-muted-foreground hover:border-border hover:shadow-brutal-sm'}`}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all relative z-10 ${txType === 'income' ? 'bg-card text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground'}`}
                 >
                   Income
                 </button>
               </div>
 
               <div className="text-center mb-8">
-                <p className="text-muted-foreground font-medium mb-2">Amount (USD)</p>
+                <p className="text-muted-foreground text-xs font-medium mb-1.5">Amount (USD)</p>
                 <motion.div
                   key={entryAmount}
                   initial={{ scale: 0.95, opacity: 0.8 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-                  className={`font-mono text-5xl font-bold tracking-tighter ${txType === 'income' ? 'text-emerald-500' : 'text-foreground'}`}
+                  className={`font-mono text-4xl font-bold tracking-tight ${txType === 'income' ? 'text-emerald-500' : 'text-foreground'}`}
                 >
                   ${parseInt(entryAmount).toLocaleString()}
                 </motion.div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 mb-6">
+              <div className="grid grid-cols-3 gap-2.5 mb-6">
                 {[
                   '1',
                   '2',
@@ -478,26 +485,26 @@ function Cashbook() {
                     whileTap={{ scale: 0.93 }}
                     transition={{ type: 'spring', stiffness: 500, damping: 25 }}
                     onClick={() => handleNumpad(key)}
-                    className="h-14 border-2 border-border bg-card text-xl font-bold text-foreground hover:bg-accent hover:text-accent-foreground shadow-brutal-sm active:translate-y-[2px] active:translate-x-[2px] active:shadow-none transition-all"
+                    className="h-12 border border-border bg-card text-base font-semibold text-foreground hover:bg-accent/50 rounded-xl shadow-xs transition-all"
                   >
                     {key}
                   </motion.button>
                 ))}
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <Select>
-                  <SelectTrigger className="w-full h-12 border-2 border-border shadow-brutal-sm text-base font-bold bg-card text-foreground">
+                  <SelectTrigger className="w-full h-11 border border-border shadow-xs text-sm font-medium bg-card text-foreground rounded-xl">
                     <SelectValue placeholder="Select Category..." />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-xl">
                     {CATEGORIES.map((catGroup) => (
                       <SelectGroup key={catGroup.group}>
-                        <SelectLabel className="font-bold text-muted-foreground">{catGroup.group}</SelectLabel>
+                        <SelectLabel className="font-semibold text-xs text-muted-foreground">{catGroup.group}</SelectLabel>
                         {catGroup.items.map((item) => (
                           <SelectItem key={item} value={item.toLowerCase().replace(/[\s,()]+/g, '-')}>
                             <div className="flex items-center gap-2">
-                              <div className={`w-3 h-3 rounded-full border-2 border-border ${catGroup.dot}`} />
+                              <div className={`w-2.5 h-2.5 rounded-full border border-border ${catGroup.dot}`} />
                               <span>{item}</span>
                             </div>
                           </SelectItem>
@@ -508,10 +515,10 @@ function Cashbook() {
                 </Select>
 
                 <Select>
-                  <SelectTrigger className="w-full h-12 border-2 border-border shadow-brutal-sm text-base font-bold bg-card text-foreground">
+                  <SelectTrigger className="w-full h-11 border border-border shadow-xs text-sm font-medium bg-card text-foreground rounded-xl">
                     <SelectValue placeholder="Select Scope..." />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-xl">
                     <SelectItem value="business">Business</SelectItem>
                     <SelectItem value="personal">Personal</SelectItem>
                   </SelectContent>
@@ -520,7 +527,7 @@ function Cashbook() {
                 <input
                   type="text"
                   placeholder="Description (Optional)"
-                  className="w-full h-12 border-2 border-border bg-card px-4 font-bold outline-none shadow-brutal-sm focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] transition-all text-foreground placeholder:text-muted-foreground"
+                  className="w-full h-11 border border-border bg-background rounded-xl px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
                 />
 
                 <Button className="w-full mt-2" onClick={() => { alert("Transaction saved successfully!"); setShowNumpad(false); }}>
