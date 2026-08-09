@@ -11,6 +11,7 @@ import {
   Menu,
 } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
+import { AiChatAssistant } from './AiChatAssistant'
 import { cn } from '../lib/utils'
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
@@ -451,6 +452,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </motion.main>
+      <AiChatAssistant />
     </div>
   )
 }
