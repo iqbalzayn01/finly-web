@@ -1,61 +1,47 @@
-import { useEffect, useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Sun, Moon, Monitor } from 'lucide-react'
-import { cn } from '../lib/utils'
 import { motion, AnimatePresence } from 'motion/react'
+import { cn } from '../lib/utils'
 
-type ThemeMode = 'light' | 'dark' | 'auto'
+export type ThemeMode = 'light' | 'dark' | 'auto'
 
-function getInitialMode(): ThemeMode {
-  if (typeof window === 'undefined') return 'auto'
-  const stored = window.localStorage.getItem('theme')
-  if (stored === 'light' || stored === 'dark' || stored === 'auto')
-    return stored
-  return 'auto'
-}
-
-function applyThemeMode(mode: ThemeMode) {
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  const resolved = mode === 'auto' ? (prefersDark ? 'dark' : 'light') : mode
-  document.documentElement.classList.remove('light', 'dark')
-  document.documentElement.classList.add(resolved)
-  if (mode === 'auto') document.documentElement.removeAttribute('data-theme')
-  else document.documentElement.setAttribute('data-theme', mode)
-  document.documentElement.style.colorScheme = resolved
-}
-
-export default function ThemeToggle() {
+export function ThemeToggle() {
   const [mode, setMode] = useState<ThemeMode>('auto')
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isOpen && menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
-      }
-    }
-    
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isOpen])
-
-  useEffect(() => {
-    const initialMode = getInitialMode()
-    setMode(initialMode)
-    applyThemeMode(initialMode)
+    const savedTheme = (window.localStorage.getItem('theme') as ThemeMode) || 'auto'
+    setMode(savedTheme)
+    applyThemeMode(savedTheme)
   }, [])
 
   useEffect(() => {
-    if (mode !== 'auto') return
-    const media = window.matchMedia('(prefers-color-scheme: dark)')
-    const onChange = () => applyThemeMode('auto')
-    media.addEventListener('change', onChange)
-    return () => media.removeEventListener('change', onChange)
-  }, [mode])
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
-  function selectMode(nextMode: ThemeMode) {
+  const applyThemeMode = (newMode: ThemeMode) => {
+    if (newMode === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else if (newMode === 'light') {
+      document.documentElement.classList.remove('dark')
+    } else {
+      // Auto / System
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    }
+  }
+
+  const selectMode = (nextMode: ThemeMode) => {
     setMode(nextMode)
     applyThemeMode(nextMode)
     window.localStorage.setItem('theme', nextMode)
@@ -66,14 +52,14 @@ export default function ThemeToggle() {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-12 w-12 items-center justify-center border-2 border-border bg-card shadow-brutal-sm hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none transition-all outline-none"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-xs hover:bg-accent transition-all outline-none"
       >
         {mode === 'light' ? (
-          <Sun className="h-5 w-5" />
+          <Sun className="h-4 w-4" />
         ) : mode === 'dark' ? (
-          <Moon className="h-5 w-5" />
+          <Moon className="h-4 w-4" />
         ) : (
-          <Monitor className="h-5 w-5" />
+          <Monitor className="h-4 w-4" />
         )}
       </button>
       <AnimatePresence>
@@ -83,40 +69,40 @@ export default function ThemeToggle() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 450, damping: 28 }}
-            className="absolute right-0 mt-2 w-32 border-2 border-border bg-card shadow-brutal p-1 z-50 flex flex-col gap-1"
+            className="absolute right-0 mt-2 w-36 border border-border bg-card rounded-xl shadow-lg p-1 z-50 flex flex-col gap-0.5"
           >
             <button
               onClick={() => selectMode('light')}
               className={cn(
-                'flex w-full items-center gap-2 px-3 py-2 text-sm font-bold transition-all border-2',
+                'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all',
                 mode === 'light'
-                  ? 'bg-accent text-accent-foreground border-border shadow-brutal-sm'
-                  : 'border-transparent hover:border-border hover:shadow-brutal-sm'
+                  ? 'bg-primary text-primary-foreground font-semibold'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
               )}
             >
-              <Sun className="h-4 w-4" /> Light
+              <Sun className="h-3.5 w-3.5" /> Light
             </button>
             <button
               onClick={() => selectMode('dark')}
               className={cn(
-                'flex w-full items-center gap-2 px-3 py-2 text-sm font-bold transition-all border-2',
+                'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all',
                 mode === 'dark'
-                  ? 'bg-accent text-accent-foreground border-border shadow-brutal-sm'
-                  : 'border-transparent hover:border-border hover:shadow-brutal-sm'
+                  ? 'bg-primary text-primary-foreground font-semibold'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
               )}
             >
-              <Moon className="h-4 w-4" /> Dark
+              <Moon className="h-3.5 w-3.5" /> Dark
             </button>
             <button
               onClick={() => selectMode('auto')}
               className={cn(
-                'flex w-full items-center gap-2 px-3 py-2 text-sm font-bold transition-all border-2',
+                'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all',
                 mode === 'auto'
-                  ? 'bg-accent text-accent-foreground border-border shadow-brutal-sm'
-                  : 'border-transparent hover:border-border hover:shadow-brutal-sm'
+                  ? 'bg-primary text-primary-foreground font-semibold'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
               )}
             >
-              <Monitor className="h-4 w-4" /> System
+              <Monitor className="h-3.5 w-3.5" /> System
             </button>
           </motion.div>
         )}

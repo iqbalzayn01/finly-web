@@ -10,8 +10,7 @@ import {
   Search,
   Menu,
 } from 'lucide-react'
-import ThemeToggle from './ThemeToggle'
-import StyleToggle from './StyleToggle'
+import { ThemeToggle } from './ThemeToggle'
 import { cn } from '../lib/utils'
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
@@ -59,7 +58,7 @@ function V2Tooltip({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -4, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-            className="absolute left-full ml-3 px-3 py-1.5 rounded-md bg-foreground text-background text-xs font-bold tracking-wide shadow-brutal-sm whitespace-nowrap pointer-events-none z-50"
+            className="absolute left-full ml-3 px-3 py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold tracking-wide shadow-md whitespace-nowrap pointer-events-none z-50"
           >
             {content}
             <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-foreground" />
@@ -74,14 +73,17 @@ export function Sidebar() {
   const location = useLocation()
   const { isExpanded } = useSidebarStore()
 
-  // Material Design 3 easing
-  const m3Transition = { type: 'tween' as const, ease: [0.2, 0, 0, 1] as [number, number, number, number], duration: 0.4 }
+  const m3Transition = {
+    type: 'tween' as const,
+    ease: [0.2, 0, 0, 1] as [number, number, number, number],
+    duration: 0.4,
+  }
 
   return (
     <>
       {isExpanded && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-xs"
           onClick={useSidebarStore.getState().toggle}
         />
       )}
@@ -90,13 +92,13 @@ export function Sidebar() {
         animate={{ width: 80 }}
         transition={m3Transition}
         className={cn(
-          'fixed inset-y-0 left-0 flex flex-col items-center justify-between py-6 bg-background border-r-2 border-border overflow-visible z-50 lg:z-0 shadow-brutal-lg transition-transform duration-300 w-20',
+          'fixed inset-y-0 left-0 flex flex-col items-center justify-between py-6 bg-card border-r border-border overflow-visible z-50 lg:z-0 shadow-sm transition-transform duration-300 w-20',
           'max-lg:-translate-x-full',
           isExpanded && 'max-lg:translate-x-0 max-lg:!w-20',
         )}
       >
         <div className="flex flex-col items-center gap-6 w-full">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center bg-primary text-primary-foreground border-2 border-border shadow-brutal-sm rounded-none">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-sm">
             <svg
               width="24"
               height="24"
@@ -126,23 +128,23 @@ export function Sidebar() {
                       }
                     }}
                     className={cn(
-                      'relative flex h-12 w-12 items-center justify-center font-bold transition-all border-2 border-transparent',
+                      'relative flex h-12 w-12 items-center justify-center font-semibold transition-all rounded-full',
                       isActive
-                        ? 'text-foreground'
-                        : 'text-muted-foreground hover:bg-accent hover:border-border hover:shadow-brutal-sm hover:translate-y-[-2px] hover:text-accent-foreground',
+                        ? 'text-accent-foreground'
+                        : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground',
                     )}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="v2-sidebar-active"
-                        className="absolute inset-0 bg-accent border-2 border-border shadow-brutal-sm z-0"
+                        className="absolute inset-0 bg-accent rounded-full z-0"
                         transition={m3Transition}
                       />
                     )}
                     <item.icon
                       className={cn(
-                        'relative z-10 h-6 w-6 shrink-0 transition-transform duration-300',
-                        isActive ? 'text-accent-foreground' : 'text-foreground',
+                        'relative z-10 h-5 w-5 shrink-0 transition-transform duration-300',
+                        isActive ? 'text-accent-foreground' : 'text-muted-foreground',
                       )}
                       strokeWidth={isActive ? 2.5 : 2}
                     />
@@ -163,28 +165,28 @@ export function Sidebar() {
                 }
               }}
               className={cn(
-                'relative flex h-12 w-12 items-center justify-center font-bold transition-all border-2 border-transparent',
+                'relative flex h-12 w-12 items-center justify-center font-semibold transition-all rounded-full',
                 location.pathname === '/settings' ||
                   location.pathname.startsWith('/settings')
-                  ? 'text-foreground'
-                  : 'text-muted-foreground hover:bg-accent hover:border-border hover:shadow-brutal-sm hover:-translate-y-0.5 hover:text-accent-foreground',
+                  ? 'text-accent-foreground'
+                  : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground',
               )}
             >
               {(location.pathname === '/settings' ||
                 location.pathname.startsWith('/settings')) && (
                 <motion.div
                   layoutId="v2-sidebar-active"
-                  className="absolute inset-0 bg-accent border-2 border-border shadow-brutal-sm z-0"
+                  className="absolute inset-0 bg-accent rounded-full z-0"
                   transition={m3Transition}
                 />
               )}
               <Settings
                 className={cn(
-                  'relative z-10 h-6 w-6 shrink-0 transition-transform duration-300',
+                  'relative z-10 h-5 w-5 shrink-0 transition-transform duration-300',
                   location.pathname === '/settings' ||
                     location.pathname.startsWith('/settings')
                     ? 'text-accent-foreground'
-                    : 'text-foreground',
+                    : 'text-muted-foreground',
                 )}
                 strokeWidth={
                   location.pathname === '/settings' ||
@@ -200,10 +202,10 @@ export function Sidebar() {
             <Link to="/account">
               <Avatar
                 className={cn(
-                  'h-10 w-10 shrink-0 transition-all hover:shadow-brutal-sm',
+                  'h-10 w-10 shrink-0 transition-all hover:opacity-90',
                   location.pathname === '/account'
-                    ? 'border-primary ring-2 ring-primary/40 shadow-brutal-sm'
-                    : 'border-border',
+                    ? 'border-2 border-primary ring-2 ring-primary/20 shadow-sm'
+                    : 'border border-border',
                 )}
               >
                 <AvatarImage
@@ -221,18 +223,19 @@ export function Sidebar() {
 }
 
 export function Topbar() {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [notifOpen, setNotifOpen] = useState(false)
-  const [topbarSearch, setTopbarSearch] = useState('')
   const { toggle } = useSidebarStore()
-  const navigate = useNavigate()
-
+  const [topbarSearch, setTopbarSearch] = useState('')
+  const [notifOpen, setNotifOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const notifRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && topbarSearch.trim()) {
-      navigate({ to: '/invoices' })
+    if (e.key === 'Enter' && topbarSearch.trim().length >= 3) {
+      navigate({
+        to: '/cashbook',
+      })
     }
   }
 
@@ -261,28 +264,27 @@ export function Topbar() {
   }, [notifOpen, menuOpen])
 
   return (
-    <header className="sticky top-0 z-30 flex h-20 items-center justify-between px-6 bg-background border-b-2 border-border">
+    <header className="sticky top-0 z-30 flex h-20 items-center justify-between px-6 bg-card border-b border-border shadow-xs">
       <div className="flex flex-1 items-center gap-4">
         <button
           onClick={toggle}
-          className="flex h-12 w-12 items-center justify-center border-2 border-border bg-card shadow-brutal-sm hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none transition-all outline-none"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card shadow-xs hover:border-primary/50 transition-all outline-none"
         >
-          <Menu className="h-6 w-6" />
+          <Menu className="h-5 w-5 text-foreground" />
         </button>
         <div className="relative w-full max-w-2xl hidden md:block">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-foreground z-10 pointer-events-none" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
           <input
             type="text"
             value={topbarSearch}
             onChange={(e) => setTopbarSearch(e.target.value)}
             onKeyDown={handleSearchKeyDown}
             placeholder="Search invoices, transactions, clients..."
-            className="h-12 w-full bg-card border-2 border-border shadow-brutal-sm pl-12 pr-6 text-[15px] font-bold outline-none transition-all focus:shadow-none focus:translate-y-[2px] focus:translate-x-[2px] text-foreground placeholder:text-muted-foreground"
+            className="h-11 w-full bg-background border border-border rounded-full pl-11 pr-6 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
           />
         </div>
       </div>
-      <div className="flex items-center gap-2 relative z-40">
-        <StyleToggle />
+      <div className="flex items-center gap-3 relative z-40">
         <ThemeToggle />
         <div className="relative" ref={notifRef}>
           <button
@@ -290,10 +292,10 @@ export function Topbar() {
               setNotifOpen(!notifOpen)
               if (menuOpen) setMenuOpen(false)
             }}
-            className="relative flex h-12 w-12 items-center justify-center border-2 border-border bg-card shadow-brutal-sm hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none transition-all outline-none"
+            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card shadow-xs hover:border-primary/50 transition-all outline-none"
           >
-            <Bell className="h-6 w-6 text-foreground" />
-            <span className="absolute right-2 top-2 h-3 w-3 border-2 border-border bg-accent shadow-brutal-sm" />
+            <Bell className="h-5 w-5 text-foreground" />
+            <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-card" />
           </button>
 
           {notifOpen && (
@@ -302,47 +304,47 @@ export function Topbar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 450, damping: 28 }}
-              className="absolute right-0 mt-3 w-80 bg-card border-2 border-border shadow-brutal z-50 flex flex-col"
+              className="absolute right-0 mt-3 w-80 bg-card border border-border rounded-2xl shadow-xl z-50 flex flex-col overflow-hidden"
             >
-              <div className="px-5 py-4 border-b-2 border-border flex justify-between items-center">
-                <p className="font-bold text-foreground text-[15px]">
+              <div className="px-5 py-4 border-b border-border flex justify-between items-center bg-muted/40">
+                <p className="font-semibold text-foreground text-sm">
                   Notifications
                 </p>
-                <span className="text-[11px] font-bold px-2 py-0.5 bg-primary text-primary-foreground">
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-primary text-primary-foreground">
                   2 New
                 </span>
               </div>
-              <div className="flex flex-col">
-                <div className="p-4 border-b-2 border-border hover:bg-accent cursor-pointer transition-colors">
-                  <p className="text-[15px] font-bold text-foreground">
+              <div className="flex flex-col divide-y divide-border">
+                <div className="p-4 hover:bg-accent/40 cursor-pointer transition-colors">
+                  <p className="text-sm font-semibold text-foreground">
                     Invoice #INV-2023-001 Paid
                   </p>
-                  <p className="text-sm font-medium text-muted-foreground mt-1">
+                  <p className="text-xs font-normal text-muted-foreground mt-1">
                     Acme Corp has paid $4,500.00
                   </p>
-                  <p className="text-xs font-bold text-primary mt-2">
+                  <p className="text-xs font-medium text-primary mt-2">
                     10 minutes ago
                   </p>
                 </div>
-                <div className="p-4 border-b-2 border-border hover:bg-accent cursor-pointer transition-colors">
-                  <p className="text-[15px] font-bold text-foreground">
+                <div className="p-4 hover:bg-accent/40 cursor-pointer transition-colors">
+                  <p className="text-sm font-semibold text-foreground">
                     New Team Member
                   </p>
-                  <p className="text-sm font-medium text-muted-foreground mt-1">
+                  <p className="text-xs font-normal text-muted-foreground mt-1">
                     Sarah joined as Editor
                   </p>
-                  <p className="text-xs font-bold text-primary mt-2">
+                  <p className="text-xs font-medium text-primary mt-2">
                     2 hours ago
                   </p>
                 </div>
               </div>
-              <div className="p-2">
+              <div className="p-2 border-t border-border">
                 <button
                   onClick={() => {
                     setNotifOpen(false)
                     navigate({ to: '/cashbook' })
                   }}
-                  className="w-full py-2 text-sm font-bold text-center text-foreground hover:bg-accent border-2 border-transparent hover:border-border transition-all"
+                  className="w-full py-2 text-xs font-semibold text-center text-foreground hover:bg-accent/50 rounded-xl transition-all"
                 >
                   View All Activity
                 </button>
@@ -356,9 +358,9 @@ export function Topbar() {
               setMenuOpen(!menuOpen)
               if (notifOpen) setNotifOpen(false)
             }}
-            className="flex items-center justify-center hover:translate-y-[2px] hover:translate-x-[2px] transition-all outline-none"
+            className="flex items-center justify-center transition-all outline-none"
           >
-            <Avatar className="h-12 w-12 border-2 border-border shadow-brutal-sm hover:shadow-none transition-all">
+            <Avatar className="h-10 w-10 border border-border shadow-xs hover:border-primary/50 transition-all">
               <AvatarImage
                 src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
                 alt="Admin User"
@@ -374,10 +376,10 @@ export function Topbar() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.95 }}
                 transition={{ type: 'spring', stiffness: 450, damping: 28 }}
-                className="absolute right-0 mt-3 w-64 bg-card border-2 border-border shadow-brutal z-50 flex flex-col"
+                className="absolute right-0 mt-3 w-64 bg-card border border-border rounded-2xl shadow-xl z-50 flex flex-col overflow-hidden"
               >
-                <div className="px-5 py-3.5 border-b-2 border-border flex items-center gap-3">
-                  <Avatar className="h-10 w-10 border-2 border-border shadow-brutal-sm">
+                <div className="px-5 py-3.5 border-b border-border flex items-center gap-3 bg-muted/40">
+                  <Avatar className="h-9 w-9 border border-border">
                     <AvatarImage
                       src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
                       alt="Admin User"
@@ -385,50 +387,43 @@ export function Topbar() {
                     <AvatarFallback>AU</AvatarFallback>
                   </Avatar>
                   <div className="overflow-hidden">
-                    <p className="font-bold text-foreground truncate text-sm">
+                    <p className="font-semibold text-foreground truncate text-sm">
                       Admin User
                     </p>
-                    <p className="text-xs font-semibold text-muted-foreground truncate">
+                    <p className="text-xs font-normal text-muted-foreground truncate">
                       admin@acmecorp.com
                     </p>
                   </div>
                 </div>
-                <div className="py-2 px-3 flex flex-col gap-1">
+                <div className="py-2 px-2 flex flex-col gap-0.5">
                   <Link
                     to="/account"
                     onClick={() => setMenuOpen(false)}
-                    className="flex w-full items-center gap-4 px-4 py-3 text-[15px] font-bold text-foreground hover:bg-accent border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all"
+                    className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-foreground hover:bg-accent/50 rounded-xl transition-all"
                   >
-                    <Users className="h-5 w-5" /> Account
+                    <Settings className="h-4 w-4 text-muted-foreground" />
+                    Account Settings
                   </Link>
                   <Link
                     to="/settings"
                     onClick={() => setMenuOpen(false)}
-                    className="flex w-full items-center gap-4 px-4 py-3 text-[15px] font-bold text-foreground hover:bg-accent border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all"
+                    className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-foreground hover:bg-accent/50 rounded-xl transition-all"
                   >
-                    <Settings className="h-5 w-5" /> Settings
+                    <Settings className="h-4 w-4 text-muted-foreground" />
+                    Business Profile
                   </Link>
                 </div>
-                <div className="border-t-2 border-border p-3">
+                <div className="p-2 border-t border-border">
                   <button
-                    onClick={() => {
-                      alert('Logged out successfully')
-                      setMenuOpen(false)
-                    }}
-                    className="flex w-full items-center gap-4 px-4 py-3 text-[15px] font-bold text-destructive hover:bg-destructive hover:text-destructive-foreground border-2 border-transparent hover:border-border hover:shadow-brutal-sm transition-all"
+                    onClick={() => setMenuOpen(false)}
+                    className="w-full text-left px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-xl transition-all"
                   >
-                    Log Out
+                    Sign Out
                   </button>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
-          {menuOpen && (
-            <div
-              className="fixed inset-0 z-40"
-              onClick={() => setMenuOpen(false)}
-            />
-          )}
         </div>
       </div>
     </header>
@@ -436,10 +431,14 @@ export function Topbar() {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const m3Transition = { type: 'tween' as const, ease: [0.2, 0, 0, 1] as [number, number, number, number], duration: 0.4 }
+  const m3Transition = {
+    type: 'tween' as const,
+    ease: [0.2, 0, 0, 1] as [number, number, number, number],
+    duration: 0.4,
+  }
 
   return (
-    <div className="min-h-screen bg-background font-sans text-foreground selection:bg-accent/30">
+    <div className="min-h-screen bg-background font-sans text-foreground selection:bg-primary/20">
       <Sidebar />
       <motion.main
         initial={false}
@@ -448,14 +447,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         className="relative z-10 min-h-screen flex flex-col max-lg:!ml-0"
       >
         <Topbar />
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}
-          className="flex-1 p-4 md:p-6 lg:p-10 max-w-[1600px] mx-auto w-full"
-        >
+        <div className="flex-1 p-6 md:p-8 max-w-7xl w-full mx-auto">
           {children}
-        </motion.div>
+        </div>
       </motion.main>
     </div>
   )

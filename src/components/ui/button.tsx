@@ -6,19 +6,19 @@ import { Slot } from 'radix-ui'
 import { cn } from '#/lib/utils.ts'
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-none border-2 border-transparent text-sm font-bold whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-0 focus-visible:shadow-none focus-visible:translate-y-[2px] focus-visible:translate-x-[2px] disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-transparent text-sm font-semibold whitespace-nowrap transition-all outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground border-border shadow-brutal hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none',
+        default: 'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90',
         destructive:
-          'bg-destructive text-white border-border shadow-brutal hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none focus-visible:ring-0 dark:bg-destructive dark:focus-visible:ring-0',
+          'bg-destructive text-white shadow-sm hover:bg-destructive/90 focus-visible:ring-destructive',
         outline:
-          'border-border bg-background shadow-brutal hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none hover:bg-accent hover:text-accent-foreground dark:bg-card dark:hover:bg-accent',
+          'border-border bg-card text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground',
         secondary:
-          'bg-secondary text-secondary-foreground border-border shadow-brutal hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost:
-          'hover:bg-accent hover:border-border hover:shadow-brutal hover:text-accent-foreground dark:hover:bg-accent hover:translate-y-[-2px]',
+          'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline border-transparent',
       },
       size: {
