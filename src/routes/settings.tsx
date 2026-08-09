@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Building2, Globe, FileText, Image as ImageIcon } from 'lucide-react'
+import { Building2, FileText, Image as ImageIcon } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { motion } from 'motion/react'
 import {
@@ -9,8 +9,6 @@ import {
   SelectContent,
   SelectItem,
 } from '../components/ui/select'
-
-import { useUIStore } from '../store/ui-store'
 
 export const Route = createFileRoute('/settings')({
   component: Settings,

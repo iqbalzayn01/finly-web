@@ -2,7 +2,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import {
   Plus,
   Search,
-  Filter,
   Camera,
   ArrowUpRight,
   ArrowDownRight,
@@ -11,7 +10,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
-import { useState, useMemo, useDeferredValue } from 'react'
+import { useState } from 'react'
 import { Button } from '../components/ui/button'
 import {
   Select,
@@ -19,11 +18,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-  SelectGroup,
-  SelectLabel,
 } from '../components/ui/select'
-
-import { useUIStore } from '../store/ui-store'
 
 export const Route = createFileRoute('/cashbook')({
   component: Cashbook,

@@ -3,8 +3,6 @@ import { User, Mail, Shield, Key } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { motion } from 'motion/react'
 
-import { useUIStore } from '../store/ui-store'
-
 export const Route = createFileRoute('/account')({
   component: Account,
 })

@@ -5,13 +5,12 @@ import {
   Mail,
   Phone,
   MapPin,
-  ExternalLink,
   MoreVertical,
   Edit2,
   Trash2,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
-import { useState, useMemo, useDeferredValue } from 'react'
+import { useState } from 'react'
 import { Button } from '../components/ui/button'
 import {
   Select,
@@ -20,8 +19,6 @@ import {
   SelectContent,
   SelectItem,
 } from '../components/ui/select'
-
-import { useUIStore } from '../store/ui-store'
 
 export const Route = createFileRoute('/customers')({
   component: Customers,

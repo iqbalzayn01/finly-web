@@ -11,7 +11,7 @@ import {
   Eye,
   Trash2,
 } from 'lucide-react'
-import { useState, useMemo, useDeferredValue } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../../components/ui/button'
 import {
@@ -21,8 +21,6 @@ import {
   SelectContent,
   SelectItem,
 } from '../../components/ui/select'
-
-import { useUIStore } from '../../store/ui-store'
 
 export const Route = createFileRoute('/invoices/')({
   component: Invoices,

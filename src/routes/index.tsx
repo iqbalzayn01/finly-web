@@ -25,7 +25,6 @@ import {
   Bar,
   Cell,
 } from 'recharts'
-import { useUIStore } from '../store/ui-store'
 
 export const Route = createFileRoute('/')({ component: Dashboard })
 
