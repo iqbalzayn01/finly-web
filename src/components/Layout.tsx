@@ -166,9 +166,12 @@ function ProHoverCard() {
                 <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" /> Multi-Tenant Role Governance
               </li>
             </ul>
-            <button className="w-full py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer">
+            <Link
+              to="/pricing"
+              className="w-full py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center"
+            >
               Upgrade Now • $29/mo
-            </button>
+            </Link>
             <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 bg-card border-l border-b border-border" />
           </motion.div>
         )}
@@ -312,9 +315,17 @@ export function Sidebar() {
               <p className="text-[11px] text-muted-foreground mb-3 leading-relaxed">
                 Unlock AI Assistant & Live FX Engine
               </p>
-              <button className="w-full py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer">
+              <Link
+                to="/pricing"
+                onClick={() => {
+                  if (window.innerWidth < 1024) {
+                    useSidebarStore.getState().setExpanded(false)
+                  }
+                }}
+                className="w-full py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center"
+              >
                 Upgrade • $29/mo
-              </button>
+              </Link>
             </div>
           ) : (
             <ProHoverCard />
