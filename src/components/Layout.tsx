@@ -134,8 +134,8 @@ function ProHoverCard() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <button className="relative flex h-11 w-11 items-center justify-center font-semibold transition-all rounded-full bg-gradient-to-tr from-amber-500/20 to-primary/20 text-amber-500 hover:scale-105 border border-amber-500/30 shadow-xs outline-none">
-        <Sparkles className="h-5 w-5 text-amber-500 animate-pulse" />
+      <button className="relative flex h-11 w-11 items-center justify-center font-semibold transition-all rounded-full bg-muted/60 hover:bg-accent border border-border text-foreground shadow-xs outline-none cursor-pointer">
+        <Sparkles className="h-5 w-5 text-primary" />
       </button>
       <AnimatePresence>
         {isHovered && (
@@ -143,33 +143,33 @@ function ProHoverCard() {
             initial={{ opacity: 0, x: -10, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -6, scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-            className="absolute left-full ml-3 w-64 p-4 rounded-2xl bg-card border border-amber-500/30 text-foreground shadow-2xl z-50 pointer-events-auto"
+            transition={{ type: 'spring', stiffness: 450, damping: 28 }}
+            className="absolute left-full ml-3 w-64 p-4 rounded-2xl bg-card border border-border text-foreground shadow-2xl z-50 pointer-events-auto"
           >
-            <div className="flex items-center gap-2 mb-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500 text-white font-bold text-xs">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-bold text-foreground">Finly Pro</span>
+              <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-primary/10 text-primary border border-primary/20">
                 PRO
-              </div>
-              <h4 className="font-bold text-sm text-foreground">Upgrade to Finly Pro</h4>
+              </span>
             </div>
             <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
               Supercharge your agency cashflow with advanced features.
             </p>
-            <ul className="space-y-1.5 text-xs text-foreground font-medium mb-4">
+            <ul className="space-y-2 text-xs text-foreground font-medium mb-4">
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-amber-500 shrink-0" /> Unlimited AI Parse & Drafts
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" /> Unlimited AI Parse & Drafts
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-amber-500 shrink-0" /> Live FX Multi-Currency Engine
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" /> Live FX Multi-Currency Engine
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-amber-500 shrink-0" /> Multi-Tenant Role Governance
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" /> Multi-Tenant Role Governance
               </li>
             </ul>
-            <button className="w-full py-2 bg-gradient-to-r from-amber-500 to-primary text-white text-xs font-bold rounded-xl shadow-md hover:opacity-95 transition-all">
+            <button className="w-full py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer">
               Upgrade Now • $29/mo
             </button>
-            <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 bg-card border-l border-b border-amber-500/30" />
+            <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 bg-card border-l border-b border-border" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -299,16 +299,21 @@ export function Sidebar() {
         <div className="flex flex-col gap-3 w-full px-3">
           {/* Pro Upgrade Card */}
           {isExpanded ? (
-            <div className="p-3.5 rounded-2xl bg-gradient-to-tr from-amber-500/10 via-primary/5 to-amber-500/15 border border-amber-500/30 text-foreground">
-              <div className="flex items-center gap-2 mb-1.5">
-                <Sparkles className="h-4 w-4 text-amber-500 shrink-0 animate-pulse" />
-                <span className="font-bold text-xs text-foreground">Finly Pro</span>
+            <div className="p-3.5 rounded-2xl bg-muted/40 border border-border text-foreground">
+              <div className="flex items-center justify-between mb-1.5">
+                <div className="flex items-center gap-1.5">
+                  <Sparkles className="h-4 w-4 text-primary shrink-0" />
+                  <span className="font-bold text-xs text-foreground">Finly Pro</span>
+                </div>
+                <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-primary/10 text-primary border border-primary/20">
+                  PRO
+                </span>
               </div>
-              <p className="text-[11px] text-muted-foreground mb-2.5 leading-snug">
-                Unlock AI Parse & Live FX
+              <p className="text-[11px] text-muted-foreground mb-3 leading-relaxed">
+                Unlock AI Assistant & Live FX Engine
               </p>
-              <button className="w-full py-1.5 bg-gradient-to-r from-amber-500 to-primary text-white text-xs font-bold rounded-xl shadow-xs hover:opacity-95 transition-all">
-                Upgrade $29/mo
+              <button className="w-full py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer">
+                Upgrade • $29/mo
               </button>
             </div>
           ) : (
