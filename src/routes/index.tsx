@@ -27,7 +27,6 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
-  Legend,
   RadialBarChart,
   RadialBar,
   PolarAngleAxis,
@@ -381,18 +380,6 @@ function Dashboard() {
                     )
                   }}
                   cursor={{ fill: 'var(--accent)', opacity: 0.15 }}
-                />
-                <Legend
-                  verticalAlign="top"
-                  align="right"
-                  height={36}
-                  iconType="circle"
-                  iconSize={8}
-                  wrapperStyle={{
-                    paddingBottom: '12px',
-                    fontSize: '13px',
-                    fontWeight: 600,
-                  }}
                 />
                 <Bar
                   dataKey="expense"
