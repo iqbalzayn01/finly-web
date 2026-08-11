@@ -347,6 +347,7 @@ function Dashboard() {
                 />
                 <Tooltip
                   wrapperStyle={{ zIndex: 100 }}
+                  allowEscapeViewBox={{ x: false, y: false }}
                   content={({ active, payload, label }) => {
                     if (!active || !payload || !payload.length) return null
                     const incomeItem = payload.find((p) => p.dataKey === 'income')

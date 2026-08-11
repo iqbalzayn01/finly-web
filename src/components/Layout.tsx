@@ -42,14 +42,51 @@ const navItems = [
 function V2Tooltip({
   children,
   content,
+  preferredSide = 'auto',
 }: {
   children: React.ReactNode
   content: string
+  preferredSide?: 'auto' | 'right' | 'left' | 'top' | 'bottom'
 }) {
   const [isHovered, setIsHovered] = useState(false)
+  const [adjustedSide, setAdjustedSide] = useState<'right' | 'left' | 'top' | 'bottom'>('right')
+  const containerRef = useRef<HTMLDivElement>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (isHovered && containerRef.current && tooltipRef.current) {
+      const containerRect = containerRef.current.getBoundingClientRect()
+      const tooltipRect = tooltipRef.current.getBoundingClientRect()
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const padding = 12
+
+      let side: 'right' | 'left' | 'top' | 'bottom' = preferredSide === 'auto' ? 'right' : preferredSide
+
+      // Collision checks
+      if ((side === 'right' || preferredSide === 'auto') && containerRect.right + tooltipRect.width + padding > vw) {
+        if (containerRect.left - tooltipRect.width - padding >= 0) {
+          side = 'left'
+        } else {
+          side = containerRect.top > vh / 2 ? 'top' : 'bottom'
+        }
+      } else if (side === 'left' && containerRect.left - tooltipRect.width - padding < 0) {
+        side = 'right'
+      }
+
+      if (side === 'top' && containerRect.top - tooltipRect.height - padding < 0) {
+        side = 'bottom'
+      } else if (side === 'bottom' && containerRect.bottom + tooltipRect.height + padding > vh) {
+        side = 'top'
+      }
+
+      setAdjustedSide(side)
+    }
+  }, [isHovered, preferredSide])
 
   return (
     <div
+      ref={containerRef}
       className="relative flex items-center justify-center"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -58,14 +95,29 @@ function V2Tooltip({
       <AnimatePresence>
         {isHovered && (
           <motion.div
-            initial={{ opacity: 0, x: -6, scale: 0.92 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -4, scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-            className="absolute left-full ml-3 px-3 py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold tracking-wide shadow-md whitespace-nowrap pointer-events-none z-50"
+            ref={tooltipRef}
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 450, damping: 28 }}
+            className={cn(
+              'absolute px-3 py-1.5 rounded-lg bg-foreground text-background text-xs font-semibold tracking-wide shadow-md whitespace-nowrap pointer-events-none z-50',
+              adjustedSide === 'right' && 'left-full ml-3 top-1/2 -translate-y-1/2',
+              adjustedSide === 'left' && 'right-full mr-3 top-1/2 -translate-y-1/2',
+              adjustedSide === 'top' && 'bottom-full mb-3 left-1/2 -translate-x-1/2',
+              adjustedSide === 'bottom' && 'top-full mt-3 left-1/2 -translate-x-1/2',
+            )}
           >
             {content}
-            <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-foreground" />
+            <div
+              className={cn(
+                'absolute w-2 h-2 rotate-45 bg-foreground',
+                adjustedSide === 'right' && '-left-1 top-1/2 -translate-y-1/2',
+                adjustedSide === 'left' && '-right-1 top-1/2 -translate-y-1/2',
+                adjustedSide === 'top' && '-bottom-1 left-1/2 -translate-x-1/2',
+                adjustedSide === 'bottom' && '-top-1 left-1/2 -translate-x-1/2',
+              )}
+            />
           </motion.div>
         )}
       </AnimatePresence>
