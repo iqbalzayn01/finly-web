@@ -313,14 +313,14 @@ function Dashboard() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={cashflowData}
-                barCategoryGap={10}
-                margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
+                barCategoryGap="12%"
+                margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
               >
                 <CartesianGrid
                   strokeDasharray="4 4"
                   vertical={false}
                   stroke="currentColor"
-                  className="text-border"
+                  className="text-border opacity-50"
                 />
                 <XAxis
                   dataKey="name"
@@ -338,13 +338,14 @@ function Dashboard() {
                   tickLine={false}
                   tick={{
                     fill: 'var(--muted-foreground)',
-                    fontSize: 13,
+                    fontSize: 12,
                     fontWeight: 500,
                   }}
                   tickFormatter={(val) => `$${val / 1000}k`}
-                  dx={-10}
+                  dx={-5}
                 />
                 <Tooltip
+                  wrapperStyle={{ zIndex: 100 }}
                   content={({ active, payload, label }) => {
                     if (!active || !payload || !payload.length) return null
                     const incomeItem = payload.find((p) => p.dataKey === 'income')
@@ -387,7 +388,7 @@ function Dashboard() {
                   stackId="cashflowStack"
                   fill="var(--muted-foreground)"
                   radius={[0, 0, 4, 4]}
-                  barSize={80}
+                  maxBarSize={72}
                 />
                 <Bar
                   dataKey="income"
@@ -395,7 +396,7 @@ function Dashboard() {
                   stackId="cashflowStack"
                   fill="var(--primary)"
                   radius={[6, 6, 0, 0]}
-                  barSize={80}
+                  maxBarSize={72}
                 />
               </BarChart>
             </ResponsiveContainer>
