@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Sun, Moon, Monitor } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { cn } from '../lib/utils'
+import { V2Tooltip } from './Layout'
 
 export type ThemeMode = 'light' | 'dark' | 'auto'
 
@@ -48,20 +49,31 @@ export function ThemeToggle() {
     setIsOpen(false)
   }
 
+  const toggleButton = (
+    <button
+      onClick={() => setIsOpen(!isOpen)}
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-xs hover:bg-accent transition-all outline-none cursor-pointer"
+      aria-label="Toggle Theme"
+    >
+      {mode === 'light' ? (
+        <Sun className="h-4 w-4" />
+      ) : mode === 'dark' ? (
+        <Moon className="h-4 w-4" />
+      ) : (
+        <Monitor className="h-4 w-4" />
+      )}
+    </button>
+  )
+
+  const tooltipLabel = `Theme: ${mode === 'light' ? 'Light' : mode === 'dark' ? 'Dark' : 'System'}`
+
   return (
     <div className="relative" ref={menuRef}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-xs hover:bg-accent transition-all outline-none"
-      >
-        {mode === 'light' ? (
-          <Sun className="h-4 w-4" />
-        ) : mode === 'dark' ? (
-          <Moon className="h-4 w-4" />
-        ) : (
-          <Monitor className="h-4 w-4" />
-        )}
-      </button>
+      {!isOpen ? (
+        <V2Tooltip content={tooltipLabel}>{toggleButton}</V2Tooltip>
+      ) : (
+        toggleButton
+      )}
       <AnimatePresence>
         {isOpen && (
           <motion.div
