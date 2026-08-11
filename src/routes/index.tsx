@@ -10,8 +10,9 @@ import {
   ShieldCheck,
   Receipt,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion } from 'motion/react'
+import { cn } from '../lib/utils'
 import {
   Select,
   SelectTrigger,
@@ -34,14 +35,19 @@ import {
 
 export const Route = createFileRoute('/')({ component: Dashboard })
 
-const cashflowData = [
-  { name: 'Jan', income: 12400, expense: 8200 },
-  { name: 'Feb', income: 15600, expense: 9400 },
-  { name: 'Mar', income: 14200, expense: 11000 },
-  { name: 'Apr', income: 21800, expense: 13500 },
-  { name: 'May', income: 18900, expense: 12100 },
-  { name: 'Jun', income: 24500, expense: 10800 },
-  { name: 'Jul', income: 28400, expense: 14200 },
+const fullCashflowData = [
+  { name: 'Aug', income: 14500, expense: 9100, year: 2025 },
+  { name: 'Sep', income: 16200, expense: 9800, year: 2025 },
+  { name: 'Oct', income: 18400, expense: 11200, year: 2025 },
+  { name: 'Nov', income: 15100, expense: 8900, year: 2025 },
+  { name: 'Dec', income: 22400, expense: 14500, year: 2025 },
+  { name: 'Jan', income: 12400, expense: 8200, year: 2026 },
+  { name: 'Feb', income: 15600, expense: 9400, year: 2026 },
+  { name: 'Mar', income: 14200, expense: 11000, year: 2026 },
+  { name: 'Apr', income: 21800, expense: 13500, year: 2026 },
+  { name: 'May', income: 18900, expense: 12100, year: 2026 },
+  { name: 'Jun', income: 24500, expense: 10800, year: 2026 },
+  { name: 'Jul', income: 28400, expense: 14200, year: 2026 },
 ]
 
 const financeScoreRadialData = [
@@ -52,8 +58,19 @@ const financeScoreRadialData = [
 ]
 
 function Dashboard() {
+  const [cashflowTimeframe, setCashflowTimeframe] = useState<'6m' | 'ytd' | '1y'>('6m')
   const [recentTxFilter, setRecentTxFilter] = useState<'all' | 'income' | 'expense'>('all')
   const [fxInput, setFxInput] = useState<number>(100)
+
+  const filteredCashflowData = useMemo(() => {
+    if (cashflowTimeframe === '6m') {
+      return fullCashflowData.slice(-6)
+    }
+    if (cashflowTimeframe === 'ytd') {
+      return fullCashflowData.filter((d) => d.year === 2026)
+    }
+    return fullCashflowData
+  }, [cashflowTimeframe])
 
   const m3Transition = {
     type: 'tween' as const,
@@ -291,19 +308,40 @@ function Dashboard() {
           transition={{ ...m3Transition, delay: 0.2 }}
           className="lg:col-span-2 bg-card border border-border shadow-sm rounded-2xl p-6"
         >
-          <div className="flex items-center justify-between mb-8 px-2">
+          <div className="flex items-center justify-between mb-8 px-2 flex-wrap gap-4">
             <div>
               <h2 className="text-xl font-semibold text-foreground">
                 Cashflow Dynamics
               </h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Stacked Income & Expense Breakdown</p>
             </div>
-            <div className="flex items-center gap-6 text-sm font-medium">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-primary" /> Income
+            <div className="flex items-center gap-4 flex-wrap">
+              {/* Income / Expense Legend Dots */}
+              <div className="flex items-center gap-4 text-xs font-semibold mr-1">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-primary" /> Income
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-muted-foreground/40" /> Expense
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-muted-foreground/40" />{' '}
-                Expense
+
+              {/* Timeframe Filter Pills */}
+              <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-xl border border-border">
+                {(['6m', 'ytd', '1y'] as const).map((tf) => (
+                  <button
+                    key={tf}
+                    onClick={() => setCashflowTimeframe(tf)}
+                    className={cn(
+                      'px-3 py-1 text-xs font-bold rounded-lg uppercase transition-all cursor-pointer outline-none',
+                      cashflowTimeframe === tf
+                        ? 'bg-card text-foreground shadow-xs'
+                        : 'text-muted-foreground hover:text-foreground'
+                    )}
+                  >
+                    {tf}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
@@ -311,7 +349,7 @@ function Dashboard() {
           <div className="h-[340px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={cashflowData}
+                data={filteredCashflowData}
                 barCategoryGap="12%"
                 margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
               >
