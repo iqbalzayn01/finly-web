@@ -346,24 +346,41 @@ function Dashboard() {
                   dx={-10}
                 />
                 <Tooltip
-                  contentStyle={{
-                    borderRadius: '12px',
-                    border: '1px solid var(--border)',
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
-                    backgroundColor: 'var(--card)',
-                    color: 'var(--foreground)',
-                    padding: '12px 16px',
-                    fontWeight: 'bold',
+                  content={({ active, payload, label }) => {
+                    if (!active || !payload || !payload.length) return null
+                    const incomeItem = payload.find((p) => p.dataKey === 'income')
+                    const expenseItem = payload.find((p) => p.dataKey === 'expense')
+                    const incomeVal = Number(incomeItem?.value || 0)
+                    const expenseVal = Number(expenseItem?.value || 0)
+                    const netVal = incomeVal - expenseVal
+
+                    return (
+                      <div className="rounded-xl border border-border bg-card p-3.5 shadow-xl text-foreground text-xs space-y-1.5 min-w-[180px]">
+                        <p className="font-semibold text-muted-foreground border-b border-border pb-1">
+                          Month: <span className="text-foreground font-bold">{label}</span>
+                        </p>
+                        <div className="flex justify-between items-center pt-0.5">
+                          <span className="font-semibold text-primary flex items-center gap-1.5">
+                            <span className="h-2 w-2 rounded-full bg-primary" /> Income:
+                          </span>
+                          <span className="font-mono font-bold">${incomeVal.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="font-semibold text-muted-foreground flex items-center gap-1.5">
+                            <span className="h-2 w-2 rounded-full bg-muted-foreground" /> Expense:
+                          </span>
+                          <span className="font-mono font-bold">${expenseVal.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-t border-border pt-1.5 mt-1 text-[11px]">
+                          <span className="font-medium text-muted-foreground">Net Cashflow:</span>
+                          <span className={`font-mono font-bold ${netVal >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}`}>
+                            {netVal >= 0 ? '+' : ''}${netVal.toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    )
                   }}
-                  itemStyle={{ color: 'var(--foreground)', fontWeight: 700 }}
                   cursor={{ fill: 'var(--accent)', opacity: 0.15 }}
-                  labelFormatter={(label) => `Month: ${label}`}
-                  formatter={(value: any, name: any) => [
-                    `$${Number(value || 0).toLocaleString()}`,
-                    String(name || '')
-                      .charAt(0)
-                      .toUpperCase() + String(name || '').slice(1),
-                  ]}
                 />
                 <Legend
                   verticalAlign="top"
@@ -383,7 +400,7 @@ function Dashboard() {
                   stackId="cashflowStack"
                   fill="var(--muted-foreground)"
                   radius={[0, 0, 4, 4]}
-                  barSize={40}
+                  barSize={80}
                 />
                 <Bar
                   dataKey="income"
@@ -391,7 +408,7 @@ function Dashboard() {
                   stackId="cashflowStack"
                   fill="var(--primary)"
                   radius={[6, 6, 0, 0]}
-                  barSize={40}
+                  barSize={80}
                 />
               </BarChart>
             </ResponsiveContainer>
