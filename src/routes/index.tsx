@@ -322,7 +322,7 @@ function Dashboard() {
                   <div className="w-2.5 h-2.5 rounded-full bg-primary" /> Income
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-rose-500" /> <span className="text-rose-500 font-semibold">Expense</span>
+                  <div className="w-2.5 h-2.5 rounded-full bg-black/25 dark:bg-white/25" /> <span className="text-black/25 dark:text-white/25 font-semibold">Expense</span>
                 </div>
               </div>
 
@@ -405,8 +405,8 @@ function Dashboard() {
                           <span className="font-mono font-bold">${incomeVal.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="font-semibold text-rose-500 flex items-center gap-1.5">
-                            <span className="h-2 w-2 rounded-full bg-rose-500" /> Expense:
+                          <span className="font-semibold text-black/25 dark:text-white/25 flex items-center gap-1.5">
+                            <span className="h-2 w-2 rounded-full bg-black/25 dark:bg-white/25" /> Expense:
                           </span>
                           <span className="font-mono font-bold">${expenseVal.toLocaleString()}</span>
                         </div>
@@ -425,7 +425,7 @@ function Dashboard() {
                   dataKey="expense"
                   name="Expense"
                   stackId="cashflowStack"
-                  fill="#f43f5e"
+                  className="text-black/25 dark:text-white/25 fill-current"
                   radius={[0, 0, 4, 4]}
                   maxBarSize={72}
                 />
