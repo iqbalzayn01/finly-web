@@ -234,7 +234,6 @@ function Dashboard() {
             key={i}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ y: -4, scale: 1.01 }}
             transition={{ ...m3Transition, delay: i * 0.08 }}
             className={`relative flex flex-col justify-between overflow-hidden p-6 ${stat.containerClass}`}
           >
