@@ -148,7 +148,7 @@ export function Sidebar() {
         animate={{ width: isExpanded ? 240 : 80 }}
         transition={m3Transition}
         className={cn(
-          'fixed inset-y-0 left-0 flex flex-col justify-between py-6 bg-card border-r border-border overflow-hidden z-50 shadow-sm transition-transform duration-300',
+          'fixed inset-y-0 left-0 flex flex-col justify-between py-6 bg-card border-r border-border overflow-visible z-50 shadow-sm transition-transform duration-300',
           'max-lg:-translate-x-full max-lg:!w-60',
           isExpanded && 'max-lg:translate-x-0',
         )}
