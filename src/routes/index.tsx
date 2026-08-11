@@ -299,15 +299,6 @@ function Dashboard() {
                 Cashflow Dynamics
               </h2>
             </div>
-            <div className="flex items-center gap-6 text-sm font-medium">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-primary" /> Income
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-muted-foreground/40" />{' '}
-                Expense
-              </div>
-            </div>
           </div>
 
           <div className="h-[340px] w-full">
@@ -355,25 +346,19 @@ function Dashboard() {
                     const netVal = incomeVal - expenseVal
 
                     return (
-                      <div className="rounded-xl border border-border bg-card p-3.5 shadow-xl text-foreground text-xs space-y-1.5 min-w-[180px]">
-                        <p className="font-semibold text-muted-foreground border-b border-border pb-1">
-                          Month: <span className="text-foreground font-bold">{label}</span>
-                        </p>
-                        <div className="flex justify-between items-center pt-0.5">
-                          <span className="font-semibold text-primary flex items-center gap-1.5">
-                            <span className="h-2 w-2 rounded-full bg-primary" /> Income:
-                          </span>
-                          <span className="font-mono font-bold">${incomeVal.toLocaleString()}</span>
+                      <div className="rounded-xl border border-border bg-card p-3 shadow-xl text-foreground text-xs space-y-1.5 min-w-[140px]">
+                        <p className="font-bold border-b border-border pb-1 text-center">{label}</p>
+                        <div className="flex items-center justify-between gap-4 font-mono font-bold">
+                          <span className="h-2.5 w-2.5 rounded-full bg-primary shrink-0" />
+                          <span className="text-primary">${incomeVal.toLocaleString()}</span>
                         </div>
-                        <div className="flex justify-between items-center">
-                          <span className="font-semibold text-muted-foreground flex items-center gap-1.5">
-                            <span className="h-2 w-2 rounded-full bg-muted-foreground" /> Expense:
-                          </span>
-                          <span className="font-mono font-bold">${expenseVal.toLocaleString()}</span>
+                        <div className="flex items-center justify-between gap-4 font-mono font-bold">
+                          <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground shrink-0" />
+                          <span className="text-muted-foreground">${expenseVal.toLocaleString()}</span>
                         </div>
-                        <div className="flex justify-between items-center border-t border-border pt-1.5 mt-1 text-[11px]">
-                          <span className="font-medium text-muted-foreground">Net Cashflow:</span>
-                          <span className={`font-mono font-bold ${netVal >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}`}>
+                        <div className="flex items-center justify-between gap-4 border-t border-border pt-1.5 mt-1 text-[11px] font-mono font-bold">
+                          <span className="text-muted-foreground font-sans font-medium">Net</span>
+                          <span className={netVal >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}>
                             {netVal >= 0 ? '+' : ''}${netVal.toLocaleString()}
                           </span>
                         </div>
