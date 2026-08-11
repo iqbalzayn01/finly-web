@@ -39,7 +39,7 @@ const navItems = [
   { icon: Package, label: 'Items', to: '/items' },
 ]
 
-function V2Tooltip({
+export function V2Tooltip({
   children,
   content,
   preferredSide = 'auto',
