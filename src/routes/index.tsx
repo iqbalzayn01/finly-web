@@ -318,6 +318,7 @@ function Dashboard() {
               >
                 <CartesianGrid
                   strokeDasharray="4 4"
+                  strokeWidth={1.1}
                   vertical={false}
                   stroke="currentColor"
                   className="text-border opacity-50"
