@@ -167,10 +167,9 @@ function Customers() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -4, scale: 1.01 }}
             transition={{ type: 'spring', stiffness: 350, damping: 25, delay: i * 0.06 }}
             key={c.id}
-            className="group relative border border-border bg-card p-6 rounded-2xl shadow-sm hover:border-primary/50 transition-all"
+            className="group relative border border-border bg-card p-6 rounded-2xl shadow-sm"
           >
             <div className="flex items-start justify-between">
               <div className="flex h-12 w-12 items-center justify-center border border-border bg-accent/40 text-accent-foreground text-lg font-bold rounded-2xl">
