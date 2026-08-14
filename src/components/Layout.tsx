@@ -12,6 +12,8 @@ import {
   PanelLeftClose,
   Sparkles,
   CheckCircle2,
+  Globe,
+  Tag,
 } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
 import { AiChatAssistant } from './AiChatAssistant'
@@ -33,10 +35,12 @@ export const useSidebarStore = create<{
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', to: '/' },
+  { icon: Globe, label: 'Landing', to: '/landing' },
   { icon: Wallet, label: 'Cashbook', to: '/cashbook' },
   { icon: FileText, label: 'Invoices', to: '/invoices' },
   { icon: Users, label: 'Customers', to: '/customers' },
   { icon: Package, label: 'Items', to: '/items' },
+  { icon: Tag, label: 'Pricing', to: '/pricing' },
 ]
 
 export function V2Tooltip({
