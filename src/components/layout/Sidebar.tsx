@@ -83,10 +83,10 @@ export function Sidebar() {
         initial={false}
         animate={{ width: isExpanded ? 240 : 80 }}
         transition={m3Transition}
-        className="fixed left-0 top-0 z-40 h-screen border-r border-border bg-card flex flex-col justify-between py-5 overflow-visible select-none shadow-xs max-lg:hidden relative"
+        className="fixed left-0 top-0 z-40 h-screen border-r border-border bg-card flex flex-col justify-between pb-5 overflow-visible select-none shadow-xs max-lg:hidden relative"
       >
         {/* Floating Sidebar Toggle Button on Margin Border */}
-        <div className="absolute -right-3.5 top-6 z-50">
+        <div className="absolute -right-3.5 top-[22px] z-50">
           <V2Tooltip
             content={isExpanded ? 'Collapse Sidebar' : 'Expand Sidebar'}
             preferredSide="right"
@@ -105,9 +105,9 @@ export function Sidebar() {
           </V2Tooltip>
         </div>
 
-        <div className="flex flex-col gap-6 w-full">
-          {/* Brand Header */}
-          <div className="flex items-center px-4">
+        <div className="flex flex-col gap-5 w-full">
+          {/* Brand Header (aligned with Topbar height h-18) */}
+          <div className="flex h-18 shrink-0 items-center px-4 border-b border-border/50">
             <Link
               to="/landing"
               className={cn(
