@@ -83,30 +83,53 @@ export function Sidebar() {
         initial={false}
         animate={{ width: isExpanded ? 240 : 80 }}
         transition={m3Transition}
-        className="fixed left-0 top-0 z-40 h-screen border-r border-border bg-card flex flex-col justify-between py-5 overflow-visible select-none shadow-xs max-lg:hidden"
+        className="fixed left-0 top-0 z-40 h-screen border-r border-border bg-card flex flex-col justify-between py-5 overflow-visible select-none shadow-xs max-lg:hidden relative"
       >
+        {/* Floating Sidebar Toggle Button on Margin Border */}
+        <div className="absolute -right-3.5 top-6 z-50">
+          <V2Tooltip
+            content={isExpanded ? 'Collapse Sidebar' : 'Expand Sidebar'}
+            preferredSide="right"
+          >
+            <button
+              onClick={toggle}
+              className="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:text-foreground hover:bg-accent shadow-md transition-all cursor-pointer outline-none hover:scale-110"
+              aria-label={isExpanded ? 'Collapse Sidebar' : 'Expand Sidebar'}
+            >
+              {isExpanded ? (
+                <PanelLeftClose className="h-3.5 w-3.5" />
+              ) : (
+                <PanelLeft className="h-3.5 w-3.5" />
+              )}
+            </button>
+          </V2Tooltip>
+        </div>
+
         <div className="flex flex-col gap-6 w-full">
-          {/* Brand Header & Integrated Sidebar Toggle Button */}
-          {isExpanded ? (
-            <div className="flex items-center justify-between px-4">
-              <Link
-                to="/landing"
-                className="flex items-center gap-3 overflow-hidden"
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-xs transition-all">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                  </svg>
-                </div>
+          {/* Brand Header */}
+          <div className="flex items-center px-4">
+            <Link
+              to="/landing"
+              className={cn(
+                'flex items-center gap-3 overflow-hidden',
+                !isExpanded && 'mx-auto'
+              )}
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-xs transition-all">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+              </div>
+              {isExpanded && (
                 <motion.div
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -120,44 +143,9 @@ export function Sidebar() {
                     B2B Cashflow OS
                   </span>
                 </motion.div>
-              </Link>
-
-              <V2Tooltip content="Collapse Sidebar" preferredSide="right">
-                <button
-                  onClick={toggle}
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-border bg-background text-muted-foreground hover:text-foreground hover:bg-accent transition-all cursor-pointer outline-none shadow-xs"
-                  aria-label="Collapse Sidebar"
-                >
-                  <PanelLeftClose className="h-4 w-4" />
-                </button>
-              </V2Tooltip>
-            </div>
-          ) : (
-            <div className="flex items-center justify-center w-full">
-              <V2Tooltip content="Expand Sidebar" preferredSide="right">
-                <button
-                  onClick={toggle}
-                  className="relative group flex h-11 w-11 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-xs transition-all outline-none cursor-pointer hover:opacity-95"
-                  aria-label="Expand Sidebar"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="group-hover:opacity-0 transition-opacity absolute"
-                  >
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                  </svg>
-                  <PanelLeft className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity absolute text-primary-foreground" />
-                </button>
-              </V2Tooltip>
-            </div>
-          )}
+              )}
+            </Link>
+          </div>
 
           {/* Integrated Search Input in Sidebar */}
           <div className="px-3">
