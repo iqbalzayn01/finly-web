@@ -83,7 +83,7 @@ export function Sidebar() {
         initial={false}
         animate={{ width: isExpanded ? 240 : 80 }}
         transition={m3Transition}
-        className="fixed left-0 top-0 z-40 h-screen border-r border-border bg-card flex flex-col justify-between pb-5 overflow-visible select-none shadow-xs max-lg:hidden relative"
+        className="fixed left-0 top-0 z-40 h-screen border-r border-border bg-card flex flex-col justify-between pb-5 overflow-visible select-none shadow-xs max-lg:hidden"
       >
         {/* Floating Sidebar Toggle Button on Margin Border */}
         <div className="absolute -right-3.5 top-[22px] z-50">
