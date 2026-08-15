@@ -184,6 +184,9 @@ body {
   *, ::before, ::after {
     box-shadow: none !important;
   }
+  button, [role="button"], input[type="submit"], input[type="button"], input[type="reset"] {
+    cursor: pointer;
+  }
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
