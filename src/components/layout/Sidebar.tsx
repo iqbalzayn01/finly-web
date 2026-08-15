@@ -158,9 +158,9 @@ export function Sidebar() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search... (Ctrl+K)"
-                  className="h-10 w-full border border-border bg-background rounded-xl pl-9 pr-12 text-xs font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                  className="h-11 w-full border border-border bg-background rounded-2xl pl-10 pr-12 text-xs font-semibold outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
                 />
-                <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none hidden sm:inline-flex h-5 select-none items-center gap-0.5 rounded border border-border bg-muted/60 px-1.5 font-mono text-[10px] font-bold text-muted-foreground opacity-80">
+                <kbd className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none hidden sm:inline-flex h-5 select-none items-center gap-0.5 rounded-md border border-border bg-muted/60 px-1.5 font-mono text-[10px] font-bold text-muted-foreground opacity-80">
                   ⌘K
                 </kbd>
               </div>
@@ -173,7 +173,7 @@ export function Sidebar() {
                       document.getElementById('sidebar-search-input')?.focus()
                     }, 150)
                   }}
-                  className="flex h-11 w-full items-center justify-center rounded-xl border border-border bg-background text-muted-foreground hover:text-foreground hover:bg-accent transition-all cursor-pointer outline-none shadow-xs"
+                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-background text-muted-foreground hover:text-foreground hover:bg-accent transition-all cursor-pointer outline-none shadow-xs mx-auto"
                 >
                   <Search className="h-4 w-4" />
                 </button>
@@ -352,7 +352,7 @@ export function Sidebar() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search in Finly..."
-                    className="h-10 w-full border border-border bg-background rounded-xl pl-9 pr-4 text-xs font-medium outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                    className="h-11 w-full border border-border bg-background rounded-2xl pl-10 pr-4 text-xs font-semibold outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
 
