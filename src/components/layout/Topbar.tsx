@@ -81,7 +81,7 @@ export function Topbar() {
     }
 
   return (
-    <header className="sticky top-0 z-30 flex h-20 w-full items-center justify-between border-b border-border bg-card/80 px-6 backdrop-blur-md transition-all shadow-xs">
+    <header className="sticky top-0 z-30 flex h-16 md:h-18 w-full items-center justify-between border-b border-border bg-card/80 px-6 md:px-8 backdrop-blur-md transition-all shadow-xs">
       {/* Left Section: Active Page Title & Subtitle */}
       <div className="flex items-center gap-4">
         {/* Mobile Hamburger Toggle */}
