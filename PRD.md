@@ -1,7 +1,8 @@
 # Finly Web — Frontend Product Requirements Document (PRD)
 
 ## 1. Overview & Vision
-Finly is a B2B cashflow operating system (OS) designed for agencies, consultants, freelancers, solopreneurs, and micro-SMEs.
+Finly is a B2B cashflow operating system (OS) engineered specifically for **non-accountants** (agencies, consultants, freelancers, solopreneurs, and micro-SMEs) to manage their money professionally without needing complex accounting degrees or debit/credit double-entry bookkeeping.
+
 This document outlines the complete product requirements, technical architecture, visual design system, and feature specifications for the **finly-web** application (`app.finly.io`).
 
 ---
@@ -45,26 +46,26 @@ This document outlines the complete product requirements, technical architecture
 
 ---
 
-## 4. Feature Modules & Route Specifications
+## 4. Non-Accountant Usability & Feature Specifications
 
 ### 4.1 Authentication & Onboarding (`/auth/login`)
 * **Auth**: Session cookie-based authentication with CSRF token re-fetching post-login.
 * **RBAC**: Support for 4 roles (`viewer`, `editor`, `admin`, `owner`).
 
 ### 4.2 Executive Dashboard (`/`)
-* **Metrics Cards**: Total Income, Total Expenses, Net Profit, Operating Expense Ratio (OER).
+* **5-Second Snapshot Metrics**: Total Income, Total Expenses, Net Profit, Operating Expense Ratio (OER).
 * **Visualizations**: Interactive income vs expense area chart using TanStack Charts.
-* **Recent Activity**: Recent cashbook transactions and unpaid invoices card.
+* **Actionable Cards**: Unpaid invoices urgency card and recent cashbook transactions.
 
-### 4.3 Cashbook (`/cashbook`)
-* **Ledger Data Table**: Transaction table with multi-criteria filtering (date, type, scope).
-* **Entry Creation**: Quick-add side drawer form.
+### 4.3 Jargon-Free Cashbook (`/cashbook`)
+* **Ledger Data Table**: Color-coded Income (`+ $4,000.00`) vs Expense (`- $500.00`) transaction table without debits/credits.
+* **Entry Creation**: Quick-add side drawer form (3-second rule).
 * **Receipts**: Signed URL rendering (`receipt_path`).
 
 ### 4.4 Invoices (`/invoices`, `/invoices/$id`, `/invoices/builder`)
 * **Live Builder**: Real-time preview math: `line_total = round(unit_price × quantity_milli / 1000)`.
 * **Snapshot Totals**: Immutable calculated totals written at issue time (`subtotal_in_cents`, `discount_in_cents`, `tax_amount_in_cents`, `total_in_cents`).
-* **Detail View (`$id`)**: Static document card view with print, PDF download, email dispatch, mark as paid, and copy link functionality.
+* **Detail View (`$id`)**: Static document card view with print, PDF download, email dispatch, mark as paid (cashbook sync), and copy link functionality.
 
 ### 4.5 Customers & Items (`/customers`, `/items`)
 * **Customers Directory**: Client list, search, and side-drawer mini-history.
@@ -84,6 +85,6 @@ This document outlines the complete product requirements, technical architecture
 
 ## 5. Non-Negotiable Core Rules
 
-1. **Minor Unit Money**: All money stored and handled as minor cents (`*_in_cents`) with a fixed scale of 100.
+1. **Minor Unit Money**: All money stored and handled as minor cents (`*_in_cents`) with a fixed scale of 100. Zero floating-point calculation drift.
 2. **Tenant Isolation**: `businessId` derived strictly from server session context.
 3. **No Decorative Fluff**: Border-first flat architecture (`shadow-none`) with high legibility.

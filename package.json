@@ -1,6 +1,7 @@
 {
   "name": "finly-web",
   "version": "2.1.0",
+  "description": "Finly Web — B2B Cashflow & Financial Operating System (OS) for agencies, consultants, freelancers, and micro-SMEs",
   "private": true,
   "type": "module",
   "imports": {
@@ -57,13 +58,6 @@
     "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9.20.0",
     "prettier": "^3.8.1",
-    "typescript": "^6.0.2",
-    "vite": "^8.0.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss"
-    ]
+    "typescript": "^6.0.2"
   }
 }
