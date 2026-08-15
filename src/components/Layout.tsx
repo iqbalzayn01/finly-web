@@ -53,7 +53,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         className="relative z-10 min-h-screen flex flex-col max-lg:!ml-0"
       >
         <Topbar />
-        <div className="flex-1 p-6 md:p-8 w-full space-y-8">
+        <div className="flex-1 p-6 md:p-8 w-full max-w-7xl space-y-8">
           {children}
         </div>
       </motion.main>
