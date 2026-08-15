@@ -52,7 +52,7 @@ const PAGE_TITLES: Record<string, { title: string; subtitle: string } | undefine
 
 export function Topbar() {
   const location = useLocation()
-  const { toggle } = useSidebarStore()
+  const { toggleMobile } = useSidebarStore()
   const [notifOpen, setNotifOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -86,7 +86,7 @@ export function Topbar() {
       <div className="flex items-center gap-4">
         {/* Mobile Hamburger Toggle */}
         <button
-          onClick={toggle}
+          onClick={toggleMobile}
           className="lg:hidden flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-foreground shadow-xs hover:bg-accent transition-all outline-none cursor-pointer"
           aria-label="Toggle Sidebar"
         >
