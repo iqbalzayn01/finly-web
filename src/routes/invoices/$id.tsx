@@ -80,7 +80,7 @@ function InvoiceDetail() {
               whileHover={{ scale: 1.05, x: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-              className="flex h-10 w-10 items-center justify-center border border-border bg-card rounded-full text-foreground transition-all hover:bg-accent shadow-xs"
+              className="flex h-10 w-10 items-center justify-center border border-border bg-card rounded-full text-foreground transition-all hover:bg-accent shadow-none"
             >
               <ArrowLeft className="h-4 w-4" />
             </motion.div>
@@ -145,7 +145,7 @@ function InvoiceDetail() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.15 }}
-          className="md:col-span-2 border border-border bg-card p-8 md:p-10 rounded-2xl shadow-sm"
+          className="md:col-span-2 border border-border bg-card p-8 md:p-10 rounded-2xl shadow-none"
         >
           <div className="grid grid-cols-2 gap-12 pb-10 border-b border-border">
             <motion.div
@@ -240,7 +240,7 @@ function InvoiceDetail() {
                 animate={{ opacity: 1, scale: 1 }}
                 whileHover={{ y: -2 }}
                 transition={{ type: 'spring', stiffness: 350, damping: 25, delay: 0.35 }}
-                className="w-[300px] border border-border bg-background p-6 rounded-2xl shadow-xs"
+                className="w-[300px] border border-border bg-background p-6 rounded-2xl shadow-none"
               >
                 <div className="space-y-3">
                   <div className="flex justify-between text-xs font-medium text-muted-foreground">
@@ -276,7 +276,7 @@ function InvoiceDetail() {
             animate={{ opacity: 1, x: 0 }}
             whileHover={{ y: -2 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.25 }}
-            className="border border-border bg-card p-6 rounded-2xl shadow-sm"
+            className="border border-border bg-card p-6 rounded-2xl shadow-none"
           >
             <h3 className="font-semibold text-sm text-foreground mb-4">
               Invoice Details
@@ -306,7 +306,7 @@ function InvoiceDetail() {
             animate={{ opacity: 1, x: 0 }}
             whileHover={{ y: -2 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.35 }}
-            className="border border-border bg-card p-6 rounded-2xl shadow-sm"
+            className="border border-border bg-card p-6 rounded-2xl shadow-none"
           >
             <h3 className="font-semibold text-sm text-foreground mb-4">
               Actions
@@ -319,7 +319,7 @@ function InvoiceDetail() {
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.98 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }}>
-                <Button variant="outline" className="w-full" onClick={() => { navigator.clipboard?.writeText(window.location.href); alert("Invoice link copied to clipboard!"); }}>
+                <Button variant="outline" className="w-full" onClick={() => { navigator.clipboard.writeText(window.location.href); alert("Invoice link copied to clipboard!"); }}>
                   <Share2 className="w-4 h-4 mr-2" /> Copy Link
                 </Button>
               </motion.div>

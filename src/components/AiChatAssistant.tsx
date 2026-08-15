@@ -198,7 +198,7 @@ export function AiChatAssistant() {
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all outline-none"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-none shadow-primary/30 hover:bg-primary/90 transition-all outline-none"
         aria-label="Toggle AI Assistant"
       >
         <Sparkles className="h-6 w-6 animate-pulse" />
@@ -225,12 +225,12 @@ export function AiChatAssistant() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 350 }}
-              className="relative w-full max-w-md h-full bg-card border-l border-border shadow-2xl flex flex-col z-10"
+              className="relative w-full max-w-md h-full bg-card border-l border-border shadow-none flex flex-col z-10"
             >
               {/* Panel Header */}
               <div className="p-4 border-b border-border flex items-center justify-between bg-muted/30">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-xs">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-none">
                     <Sparkles className="h-5 w-5" />
                   </div>
                   <div>
@@ -287,7 +287,7 @@ export function AiChatAssistant() {
                         <motion.div
                           initial={{ scale: 0.95, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
-                          className="border border-border bg-background p-4 rounded-2xl shadow-sm space-y-3 mt-2"
+                          className="border border-border bg-background p-4 rounded-2xl shadow-none space-y-3 mt-2"
                         >
                           <div className="flex items-center justify-between border-b border-border pb-2.5">
                             <span className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">

@@ -2,6 +2,7 @@ import * as React from 'react'
 import { cva } from 'class-variance-authority'
 import type { VariantProps } from 'class-variance-authority'
 import { Slot } from 'radix-ui'
+import { motion } from 'motion/react'
 
 import { cn } from '#/lib/utils.ts'
 
@@ -10,11 +11,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90',
+        default: 'bg-primary text-primary-foreground shadow-none hover:bg-primary/90',
         destructive:
-          'bg-destructive text-white shadow-sm hover:bg-destructive/90 focus-visible:ring-destructive',
+          'bg-destructive text-white shadow-none hover:bg-destructive/90 focus-visible:ring-destructive',
         outline:
-          'border-border bg-card text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground',
+          'border-border bg-card text-foreground shadow-none hover:bg-accent hover:text-accent-foreground',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost:
@@ -38,8 +39,6 @@ const buttonVariants = cva(
     },
   },
 )
-
-import { motion } from 'motion/react'
 
 function Button({
   className,

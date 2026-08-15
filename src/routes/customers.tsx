@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
 import {
   Plus,
   Search,
@@ -10,7 +11,6 @@ import {
   Trash2,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
-import { useState } from 'react'
 import { Button } from '../components/ui/button'
 import {
   Select,
@@ -19,6 +19,7 @@ import {
   SelectContent,
   SelectItem,
 } from '../components/ui/select'
+import { useDebouncedSearch } from '../hooks/use-debounced-search'
 
 export const Route = createFileRoute('/customers')({
   component: Customers,
@@ -72,8 +73,6 @@ const initialCustomers = [
   },
 ]
 
-import { useDebouncedSearch } from '../hooks/use-debounced-search'
-
 function Customers() {
   const [showForm, setShowForm] = useState(false)
   const [openKebab, setOpenKebab] = useState<number | null>(null)
@@ -97,7 +96,9 @@ function Customers() {
           c.phone.toLowerCase().includes(query) ||
           c.address.toLowerCase().includes(query)
 
-        const matchesTerm = filters?.termFilter === 'all' || c.term.toString() === filters?.termFilter
+        const matchesTerm =
+          filters?.termFilter === 'all' ||
+          c.term.toString() === filters?.termFilter
 
         return matchesSearch && matchesTerm
       })
@@ -115,9 +116,7 @@ function Customers() {
             Manage client profiles and billing terms.
           </p>
         </div>
-        <Button
-          onClick={() => setShowForm(true)}
-        >
+        <Button onClick={() => setShowForm(true)}>
           <Plus className="h-5 w-5 mr-2" /> Add Customer
         </Button>
       </div>
@@ -130,7 +129,7 @@ function Customers() {
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             placeholder="Search by name or email (min 3 chars)..."
-            className="w-full h-11 border border-border bg-background rounded-full pl-11 pr-24 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+            className="w-full h-full border border-border bg-background rounded-full pl-11 pr-24 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
           />
           {isTooShort && (
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
@@ -140,21 +139,29 @@ function Customers() {
         </div>
         <div className="w-48">
           <Select value={termFilter} onValueChange={setTermFilter}>
-            <SelectTrigger className="w-full h-11 border border-border shadow-xs text-sm font-medium bg-card text-foreground rounded-xl">
+            <SelectTrigger className="w-full h-11 border border-border text-sm shadow-none font-medium bg-card text-foreground rounded-full">
               <SelectValue placeholder="Payment Terms" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="all">All Terms</SelectItem>
-              <SelectItem value="7">Net 7</SelectItem>
-              <SelectItem value="14">Net 14</SelectItem>
-              <SelectItem value="30">Net 30</SelectItem>
+              <SelectItem value="all" className="rounded-full">
+                All Terms
+              </SelectItem>
+              <SelectItem value="7" className="rounded-full">
+                Net 7
+              </SelectItem>
+              <SelectItem value="14" className="rounded-full">
+                Net 14
+              </SelectItem>
+              <SelectItem value="30" className="rounded-full">
+                Net 30
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
       {filteredCustomers.length === 0 ? (
-        <div className="border border-border bg-card p-12 text-center text-muted-foreground font-medium rounded-2xl shadow-xs">
+        <div className="border border-border bg-card p-12 text-center text-muted-foreground font-medium rounded-2xl shadow-none">
           No customers found matching search criteria.
         </div>
       ) : (
@@ -164,75 +171,96 @@ function Customers() {
           className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {filteredCustomers.map((c, i) => (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring', stiffness: 350, damping: 25, delay: i * 0.06 }}
-            key={c.id}
-            className="group relative border border-border bg-card p-6 rounded-2xl shadow-sm"
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex h-12 w-12 items-center justify-center border border-border bg-accent/40 text-accent-foreground text-lg font-bold rounded-2xl">
-                {c.name.charAt(0)}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="flex items-center gap-1.5 border border-border bg-accent/40 px-3 py-1 text-xs font-semibold text-accent-foreground rounded-full">
-                  Net {c.term}
-                </span>
-                <div className="relative">
-                  <button
-                    onClick={() =>
-                      setOpenKebab(openKebab === c.id ? null : c.id)
-                    }
-                    className="p-1.5 border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all"
-                  >
-                    <MoreVertical className="h-4 w-4" />
-                  </button>
-                  <AnimatePresence>
-                    {openKebab === c.id && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: -5 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: -5 }}
-                        transition={{ type: 'spring', stiffness: 450, damping: 28 }}
-                        className="absolute right-0 top-10 w-36 border border-border bg-card p-1.5 rounded-xl shadow-lg z-20 flex flex-col gap-0.5"
-                      >
-                        <button onClick={() => { alert("Customer updated successfully"); setOpenKebab(null); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-accent/50 font-medium rounded-lg transition-all">
-                          <Edit2 className="h-3.5 w-3.5" /> Edit
-                        </button>
-                        <button onClick={() => { alert("Customer deleted"); setOpenKebab(null); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-destructive hover:bg-destructive/10 font-medium rounded-lg transition-all">
-                          <Trash2 className="h-3.5 w-3.5" /> Delete
-                        </button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                type: 'spring',
+                stiffness: 350,
+                damping: 25,
+                delay: i * 0.06,
+              }}
+              key={c.id}
+              className="group relative border border-border bg-card p-6 rounded-2xl shadow-none"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex h-12 w-12 items-center justify-center border border-border bg-accent/40 text-accent-foreground text-lg font-bold rounded-2xl">
+                  {c.name.charAt(0)}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="flex items-center gap-1.5 border border-border bg-accent/40 px-3 py-1 text-xs font-semibold text-accent-foreground rounded-full">
+                    Net {c.term}
+                  </span>
+                  <div className="relative">
+                    <button
+                      onClick={() =>
+                        setOpenKebab(openKebab === c.id ? null : c.id)
+                      }
+                      className="p-1.5 border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all"
+                    >
+                      <MoreVertical className="h-4 w-4" />
+                    </button>
+                    <AnimatePresence>
+                      {openKebab === c.id && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                          transition={{
+                            type: 'spring',
+                            stiffness: 450,
+                            damping: 28,
+                          }}
+                          className="absolute right-0 top-10 w-36 border border-border bg-card p-1.5 rounded-xl shadow-none z-20 flex flex-col gap-0.5"
+                        >
+                          <button
+                            onClick={() => {
+                              alert('Customer updated successfully')
+                              setOpenKebab(null)
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-accent/50 font-medium rounded-lg transition-all"
+                          >
+                            <Edit2 className="h-3.5 w-3.5" /> Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              alert('Customer deleted')
+                              setOpenKebab(null)
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-destructive hover:bg-destructive/10 font-medium rounded-lg transition-all"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" /> Delete
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <h3 className="mt-5 text-xl font-bold tracking-tight text-foreground transition-colors">
-              {c.name}
-            </h3>
+              <h3 className="mt-5 text-xl font-bold tracking-tight text-foreground transition-colors">
+                {c.name}
+              </h3>
 
-            <div className="mt-5 space-y-2.5">
-              <div className="flex items-center gap-2.5 text-muted-foreground">
-                <Mail className="h-4 w-4 shrink-0" />
-                <span className="text-xs font-medium">{c.email}</span>
+              <div className="mt-5 space-y-2.5">
+                <div className="flex items-center gap-2.5 text-muted-foreground">
+                  <Mail className="h-4 w-4 shrink-0" />
+                  <span className="text-xs font-medium">{c.email}</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-muted-foreground">
+                  <Phone className="h-4 w-4 shrink-0" />
+                  <span className="text-xs font-medium">{c.phone}</span>
+                </div>
+                <div className="flex items-start gap-2.5 text-muted-foreground">
+                  <MapPin className="h-4 w-4 shrink-0 mt-0.5" />
+                  <span className="text-xs font-medium leading-tight">
+                    {c.address}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-2.5 text-muted-foreground">
-                <Phone className="h-4 w-4 shrink-0" />
-                <span className="text-xs font-medium">{c.phone}</span>
-              </div>
-              <div className="flex items-start gap-2.5 text-muted-foreground">
-                <MapPin className="h-4 w-4 shrink-0 mt-0.5" />
-                <span className="text-xs font-medium leading-tight">
-                  {c.address}
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+            </motion.div>
+          ))}
+        </motion.div>
       )}
 
       <AnimatePresence>
@@ -249,7 +277,7 @@ function Customers() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-lg border border-border bg-card p-8 rounded-2xl shadow-xl"
+              className="relative w-full max-w-lg border border-border bg-card p-8 rounded-2xl shadow-none"
             >
               <h2 className="text-xl font-bold text-foreground mb-6">
                 New Customer
@@ -282,7 +310,7 @@ function Customers() {
                     </label>
                     <div className="mt-1.5">
                       <Select defaultValue="net30">
-                        <SelectTrigger className="w-full h-11 border border-border shadow-xs text-sm font-medium bg-background text-foreground rounded-xl">
+                        <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-background text-foreground rounded-xl">
                           <SelectValue placeholder="Select terms" />
                         </SelectTrigger>
                         <SelectContent className="rounded-xl">
@@ -316,10 +344,7 @@ function Customers() {
                 </div>
               </div>
               <div className="mt-8 flex justify-end gap-3">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowForm(false)}
-                >
+                <Button variant="outline" onClick={() => setShowForm(false)}>
                   Cancel
                 </Button>
                 <Button

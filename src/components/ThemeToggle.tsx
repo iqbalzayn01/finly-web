@@ -12,7 +12,9 @@ export function ThemeToggle() {
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const savedTheme = (window.localStorage.getItem('theme') as ThemeMode) || 'auto'
+    const stored = window.localStorage.getItem('theme')
+    const savedTheme: ThemeMode =
+      stored === 'light' || stored === 'dark' || stored === 'auto' ? stored : 'auto'
     setMode(savedTheme)
     applyThemeMode(savedTheme)
   }, [])
@@ -52,7 +54,7 @@ export function ThemeToggle() {
   const toggleButton = (
     <button
       onClick={() => setIsOpen(!isOpen)}
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-xs hover:bg-accent transition-all outline-none cursor-pointer"
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-none hover:bg-accent transition-all outline-none cursor-pointer"
       aria-label="Toggle Theme"
     >
       {mode === 'light' ? (
@@ -81,7 +83,7 @@ export function ThemeToggle() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 450, damping: 28 }}
-            className="absolute right-0 mt-2 w-36 border border-border bg-card rounded-xl shadow-lg p-1 z-50 flex flex-col gap-0.5"
+            className="absolute right-0 mt-2 w-36 border border-border bg-card rounded-xl shadow-none p-1 z-50 flex flex-col gap-0.5"
           >
             <button
               onClick={() => selectMode('light')}

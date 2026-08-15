@@ -14,6 +14,7 @@ import { Route as AccountRouteImport } from './routes/account'
 import { Route as CashbookRouteImport } from './routes/cashbook'
 import { Route as CustomersRouteImport } from './routes/customers'
 import { Route as ItemsRouteImport } from './routes/items'
+import { Route as LandingRouteImport } from './routes/landing'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as InvoicesIndexRouteImport } from './routes/invoices/index'
@@ -43,6 +44,11 @@ const CustomersRoute = CustomersRouteImport.update({
 const ItemsRoute = ItemsRouteImport.update({
   id: '/items',
   path: '/items',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LandingRoute = LandingRouteImport.update({
+  id: '/landing',
+  path: '/landing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/cashbook': typeof CashbookRoute
   '/customers': typeof CustomersRoute
   '/items': typeof ItemsRoute
+  '/landing': typeof LandingRoute
   '/pricing': typeof PricingRoute
   '/settings': typeof SettingsRoute
   '/invoices/$id': typeof InvoicesIdRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/cashbook': typeof CashbookRoute
   '/customers': typeof CustomersRoute
   '/items': typeof ItemsRoute
+  '/landing': typeof LandingRoute
   '/pricing': typeof PricingRoute
   '/settings': typeof SettingsRoute
   '/invoices/$id': typeof InvoicesIdRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/cashbook': typeof CashbookRoute
   '/customers': typeof CustomersRoute
   '/items': typeof ItemsRoute
+  '/landing': typeof LandingRoute
   '/pricing': typeof PricingRoute
   '/settings': typeof SettingsRoute
   '/invoices/$id': typeof InvoicesIdRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/cashbook'
     | '/customers'
     | '/items'
+    | '/landing'
     | '/pricing'
     | '/settings'
     | '/invoices/$id'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/cashbook'
     | '/customers'
     | '/items'
+    | '/landing'
     | '/pricing'
     | '/settings'
     | '/invoices/$id'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/cashbook'
     | '/customers'
     | '/items'
+    | '/landing'
     | '/pricing'
     | '/settings'
     | '/invoices/$id'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   CashbookRoute: typeof CashbookRoute
   CustomersRoute: typeof CustomersRoute
   ItemsRoute: typeof ItemsRoute
+  LandingRoute: typeof LandingRoute
   PricingRoute: typeof PricingRoute
   SettingsRoute: typeof SettingsRoute
   InvoicesIdRoute: typeof InvoicesIdRoute
@@ -195,6 +208,13 @@ declare module '@tanstack/react-router' {
       path: '/items'
       fullPath: '/items'
       preLoaderRoute: typeof ItemsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/landing': {
+      id: '/landing'
+      path: '/landing'
+      fullPath: '/landing'
+      preLoaderRoute: typeof LandingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -241,6 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   CashbookRoute: CashbookRoute,
   CustomersRoute: CustomersRoute,
   ItemsRoute: ItemsRoute,
+  LandingRoute: LandingRoute,
   PricingRoute: PricingRoute,
   SettingsRoute: SettingsRoute,
   InvoicesIdRoute: InvoicesIdRoute,

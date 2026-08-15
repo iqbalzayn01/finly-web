@@ -122,7 +122,7 @@ function PricingPage() {
             <motion.div
               animate={{ x: billingCycle === 'annual' ? 24 : 0 }}
               transition={m3Transition}
-              className="h-5 w-5 rounded-full bg-primary shadow-xs"
+              className="h-5 w-5 rounded-full bg-primary shadow-none"
             />
           </button>
           <div className="flex items-center gap-1.5">
@@ -149,12 +149,12 @@ function PricingPage() {
               className={cn(
                 'relative flex flex-col justify-between p-7 rounded-3xl bg-card border transition-all duration-300',
                 plan.popular
-                  ? 'border-primary ring-2 ring-primary/20 shadow-xl lg:-translate-y-2'
-                  : 'border-border shadow-xs hover:border-border/80'
+                  ? 'border-primary ring-2 ring-primary/20 shadow-none lg:-translate-y-2'
+                  : 'border-border shadow-none hover:border-border/80'
               )}
             >
               {plan.popular && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[11px] font-bold shadow-md tracking-wider uppercase flex items-center gap-1">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[11px] font-bold shadow-none tracking-wider uppercase flex items-center gap-1">
                   <Zap className="h-3 w-3 fill-current" /> Most Popular
                 </div>
               )}
@@ -203,9 +203,9 @@ function PricingPage() {
                   }
                 }}
                 className={cn(
-                  'w-full py-3 rounded-xl text-xs font-bold transition-all shadow-xs outline-none cursor-pointer flex items-center justify-center gap-2',
+                  'w-full py-3 rounded-xl text-xs font-bold transition-all shadow-none outline-none cursor-pointer flex items-center justify-center gap-2',
                   plan.buttonVariant === 'primary'
-                    ? 'bg-primary text-primary-foreground hover:opacity-95 shadow-md'
+                    ? 'bg-primary text-primary-foreground hover:opacity-95 shadow-none'
                     : 'bg-muted/60 hover:bg-accent text-foreground border border-border'
                 )}
               >
@@ -222,7 +222,7 @@ function PricingPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-md mx-auto p-4 rounded-2xl bg-card border border-primary/30 shadow-lg text-center space-y-2"
+          className="max-w-md mx-auto p-4 rounded-2xl bg-card border border-primary/30 shadow-none text-center space-y-2"
         >
           <p className="text-xs font-bold text-foreground">
             Selected <span className="text-primary">{selectedPlan} Plan</span> ({billingCycle})
@@ -236,7 +236,7 @@ function PricingPage() {
       {/* Security Trust Banner */}
       <div className="max-w-4xl mx-auto p-6 rounded-2xl bg-muted/40 border border-border flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-card border border-border shadow-xs text-primary">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-card border border-border shadow-none text-primary">
             <Shield className="h-5 w-5" />
           </div>
           <div>
@@ -267,7 +267,7 @@ function PricingPage() {
             return (
               <div
                 key={index}
-                className="rounded-2xl bg-card border border-border overflow-hidden shadow-xs transition-colors"
+                className="rounded-2xl bg-card border border-border overflow-hidden shadow-none transition-colors"
               >
                 <button
                   onClick={() => setOpenFaqIndex(isOpen ? null : index)}

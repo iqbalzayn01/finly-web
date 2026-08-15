@@ -29,14 +29,14 @@ function Account() {
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ y: -2 }}
         transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.1 }}
-        className="border border-border bg-card p-8 rounded-2xl shadow-sm"
+        className="border border-border bg-card p-8 rounded-2xl shadow-none"
       >
         <h2 className="text-xl font-semibold text-foreground mb-6">
           Profile Information
         </h2>
 
         <div className="flex items-center gap-6 mb-8">
-          <Avatar className="h-20 w-20 border border-border shadow-xs">
+          <Avatar className="h-20 w-20 border border-border shadow-none">
             <AvatarImage
               src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
               alt="Avatar"
@@ -94,7 +94,7 @@ function Account() {
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ y: -2 }}
         transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.2 }}
-        className="border border-border bg-card p-8 rounded-2xl shadow-sm"
+        className="border border-border bg-card p-8 rounded-2xl shadow-none"
       >
         <h2 className="text-xl font-semibold text-foreground mb-6">
           Security
