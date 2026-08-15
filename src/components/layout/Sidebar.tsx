@@ -10,7 +10,6 @@ import {
   PanelLeft,
   PanelLeftClose,
   Sparkles,
-  Tag,
   X,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
@@ -42,7 +41,6 @@ const navItems = [
   { icon: FileText, label: 'Invoices', to: '/invoices' },
   { icon: Users, label: 'Customers', to: '/customers' },
   { icon: Package, label: 'Items', to: '/items' },
-  { icon: Tag, label: 'Pricing', to: '/pricing' },
 ]
 
 export function Sidebar() {
@@ -112,7 +110,7 @@ export function Sidebar() {
               to="/landing"
               className={cn(
                 'flex items-center gap-3 overflow-hidden',
-                !isExpanded && 'mx-auto'
+                !isExpanded && 'mx-auto',
               )}
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-xs transition-all">
@@ -193,13 +191,20 @@ export function Sidebar() {
                   to={item.to}
                   className={cn(
                     'flex items-center gap-3.5 h-11 rounded-2xl text-xs font-semibold transition-all relative outline-none',
-                    isExpanded ? 'px-3.5 w-full' : 'justify-center w-11 mx-auto',
+                    isExpanded
+                      ? 'px-3.5 w-full'
+                      : 'justify-center w-11 mx-auto',
                     isActive
                       ? 'bg-primary text-primary-foreground shadow-xs font-bold'
-                      : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground'
+                      : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
                   )}
                 >
-                  <Icon className={cn('h-4 w-4 shrink-0', isActive && 'text-primary-foreground')} />
+                  <Icon
+                    className={cn(
+                      'h-4 w-4 shrink-0',
+                      isActive && 'text-primary-foreground',
+                    )}
+                  />
                   {isExpanded && (
                     <span className="whitespace-nowrap overflow-hidden text-ellipsis">
                       {item.label}
@@ -210,7 +215,11 @@ export function Sidebar() {
 
               if (!isExpanded) {
                 return (
-                  <V2Tooltip key={item.to} content={item.label} preferredSide="right">
+                  <V2Tooltip
+                    key={item.to}
+                    content={item.label}
+                    preferredSide="right"
+                  >
                     {linkContent}
                   </V2Tooltip>
                 )
@@ -229,7 +238,9 @@ export function Sidebar() {
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-1.5">
                   <Sparkles className="h-4 w-4 text-primary shrink-0" />
-                  <span className="font-bold text-xs text-foreground">Finly Pro</span>
+                  <span className="font-bold text-xs text-foreground">
+                    Finly Pro
+                  </span>
                 </div>
                 <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-primary/10 text-primary border border-primary/20">
                   PRO
@@ -257,7 +268,7 @@ export function Sidebar() {
                 'flex items-center gap-3.5 h-11 px-3.5 rounded-2xl text-xs font-semibold transition-all outline-none',
                 location.pathname === '/settings'
                   ? 'bg-primary text-primary-foreground font-bold shadow-xs'
-                  : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground'
+                  : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
               )}
             >
               <Settings className="h-4 w-4 shrink-0" />
@@ -271,7 +282,7 @@ export function Sidebar() {
                   'flex h-11 w-11 items-center justify-center rounded-2xl text-xs font-semibold transition-all outline-none',
                   location.pathname === '/settings'
                     ? 'bg-primary text-primary-foreground font-bold shadow-xs'
-                    : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground'
+                    : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
                 )}
               >
                 <Settings className="h-4 w-4 shrink-0" />
@@ -371,7 +382,7 @@ export function Sidebar() {
                           'flex items-center gap-3.5 h-11 px-3.5 rounded-2xl text-xs font-semibold transition-all outline-none',
                           isActive
                             ? 'bg-primary text-primary-foreground font-bold shadow-xs'
-                            : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground'
+                            : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
                         )}
                       >
                         <Icon className="h-4 w-4 shrink-0" />
@@ -388,7 +399,9 @@ export function Sidebar() {
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-1.5">
                       <Sparkles className="h-4 w-4 text-primary shrink-0" />
-                      <span className="font-bold text-xs text-foreground">Finly Pro</span>
+                      <span className="font-bold text-xs text-foreground">
+                        Finly Pro
+                      </span>
                     </div>
                     <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-primary/10 text-primary border border-primary/20">
                       PRO
@@ -413,7 +426,7 @@ export function Sidebar() {
                     'flex items-center gap-3.5 h-11 px-3.5 rounded-2xl text-xs font-semibold transition-all outline-none',
                     location.pathname === '/settings'
                       ? 'bg-primary text-primary-foreground font-bold shadow-xs'
-                      : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground'
+                      : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
                   )}
                 >
                   <Settings className="h-4 w-4 shrink-0" />

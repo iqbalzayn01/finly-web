@@ -39,6 +39,12 @@ export function PublicNavbar() {
         >
           Overview
         </Link>
+        <a
+          href="/landing#features-section"
+          className="text-muted-foreground hover:text-foreground transition-colors"
+        >
+          Features
+        </a>
         <Link
           to="/pricing"
           className={cn(
