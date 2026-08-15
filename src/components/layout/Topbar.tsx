@@ -81,18 +81,17 @@ export function Topbar() {
     }
 
   return (
-    <header className="sticky top-0 z-30 flex h-18 w-full border-b border-border bg-card/80 backdrop-blur-md transition-all shadow-xs">
-      <div className="flex h-full w-full max-w-[1400px] mx-auto px-6 md:px-8 items-center justify-between">
-        {/* Left Section: Active Page Title & Subtitle */}
-        <div className="flex items-center gap-4">
-          {/* Mobile Hamburger Toggle */}
-          <button
-            onClick={toggleMobile}
-            className="lg:hidden flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-foreground shadow-xs hover:bg-accent transition-all outline-none cursor-pointer"
-            aria-label="Toggle Sidebar"
-          >
-            <PanelLeft className="h-5 w-5" />
-          </button>
+    <header className="sticky top-0 z-30 flex h-18 w-full items-center justify-between border-b border-border bg-card/80 px-6 md:px-8 backdrop-blur-md transition-all shadow-xs">
+      {/* Left Section: Active Page Title & Subtitle */}
+      <div className="flex items-center gap-4">
+        {/* Mobile Hamburger Toggle */}
+        <button
+          onClick={toggleMobile}
+          className="lg:hidden flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-foreground shadow-xs hover:bg-accent transition-all outline-none cursor-pointer"
+          aria-label="Toggle Sidebar"
+        >
+          <PanelLeft className="h-5 w-5" />
+        </button>
 
           <div className="flex flex-col justify-center">
             <h1 className="text-lg md:text-xl font-bold tracking-tight text-foreground leading-tight">
@@ -260,7 +259,6 @@ export function Topbar() {
           </AnimatePresence>
         </div>
       </div>
-    </div>
     </header>
   )
 }
