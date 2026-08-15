@@ -1,92 +1,89 @@
 # Finly Web — Frontend Product Requirements Document (PRD)
 
-## 1. Overview
-Finly is a B2B cashflow OS designed for agencies, consultants, freelancers, and micro-SMEs.
-This document outlines the product requirements and technical specifications specifically for the **frontend** web application (`app.finly.io`).
+## 1. Overview & Vision
+Finly is a B2B cashflow operating system (OS) designed for agencies, consultants, freelancers, solopreneurs, and micro-SMEs.
+This document outlines the complete product requirements, technical architecture, visual design system, and feature specifications for the **finly-web** application (`app.finly.io`).
 
-## 2. Tech Stack & Aesthetics
+---
 
-### 2.1 Core Technologies
-*   **Framework**: React 18 (Vite)
-*   **Routing**: TanStack Router
-*   **Data Fetching & Server State**: TanStack Query
-*   **Local State**: Zustand
-*   **Data Handling**: TanStack Table (data grids), TanStack Form (form management), TanStack Charts (visualizations)
-*   **API Client**: Axios or native fetch, configured for session cookies (`credentials: true`) and CSRF token handling.
+## 2. Tech Stack & Engineering Architecture
 
-### 2.2 UI, Styling, and Animations
-*   **Styling**: Tailwind CSS
-*   **Component Libraries**: shadcn/ui, 21st.dev
-*   **Design System**: Material Design 3 (M3)
-*   **Animations**: Motion (Framer Motion)
-*   **Typography**: IBM Plex
+### 2.1 Core Framework & Runtime
+* **Framework & Bundler**: React 18 + Vite 8 + TypeScript (Strict Mode).
+* **Full-stack SSR & Routing**: TanStack Start / TanStack Router with type-safe file routing.
+* **Data Synchronization**: TanStack Query v5 with SSR Query Integration and optimistic updates.
+* **Global State**: Zustand for layout state, sidebar expansion, and theme preferences (`light` | `dark` | `auto`).
+* **Form & Table Handling**: TanStack Table (datagrids & sorting) and TanStack Form (validation).
+* **Charts & Analytics**: TanStack Charts / Recharts.
+* **Router Error & 404 Handling**: Custom `NotFound` component (`src/components/NotFound.tsx`) registered on `createRootRouteWithContext` and `createTanStackRouter`.
 
-### 2.3 Aesthetics
-*   **Vibe**: Premium modern finance app (Dribbble-inspired). 
-*   **Visual Excellence**: Avoid basic MVP looks. Utilize curated harmonious color palettes, sleek dark mode, smooth gradients, and subtle micro-animations for interactions.
-*   **Typography**: IBM Plex for clean, professional data presentation.
+### 2.2 Styling, Design System & Aesthetics
+* **Primary Brand Palette**: Pluang V2 `#463CFF` (Brand Blue/Violet).
+* **Dark Mode**: 100% OLED Pitch Black (`#000000`) for all background (`--background`), card (`--card`), popover (`--popover`), and sidebar (`--sidebar`) surfaces with high-contrast `rgba(255, 255, 255, 0.12)` borders.
+* **Shadow Architecture**: Flat 0px shadow (`shadow-none`) paired with crisp 1px borders for maximum visual clarity.
+* **Typography**: *IBM Plex Sans* for UI body/headings and *IBM Plex Mono* (`font-mono`) for tabular currency and financial numbers.
+* **Cursor Standard**: `cursor: pointer` explicitly enforced across all `<button>`, `Button` components, and `role="button"` elements.
+* **Design Guidelines**: Material Design 3 (M3) cubic-bezier easing (`[0.2, 0, 0, 1]`) and Motion (Framer Motion) micro-interactions.
 
-## 3. Core Features (Scope)
+---
 
-### 3.1 Authentication & Onboarding
-*   **Auth Mechanism**: Session cookie-based authentication with a CSRF layer. The frontend must re-fetch the CSRF token immediately after a successful login (as the session ID changes).
-*   **Login Flow**: Standard email/password login.
-*   **Onboarding**: Setup initial business profile (tenant creation) and essential initial data.
-*   **RBAC**: Support for 4 roles: `viewer`, `editor`, `admin`, `owner`. The UI must conditionally render actions based on the active user's role in the current business.
+## 3. Layout & Structure Specifications
 
-### 3.2 Dashboard
-*   **Cashflow Overview**: Visual summary of income and expenses.
-*   **Metrics**: Receivables, Operating Expense Ratio (OER - filtered by `scope = 'business'`).
-*   **Charts**: Interactive charts using TanStack Charts to visualize financial health.
+### 3.1 Sidebar Navigation (`Sidebar.tsx`)
+* **Width States**: Expanded (240px) vs Collapsed (80px) with synchronized M3 transitions.
+* **Search Input**: Sized to `h-11 rounded-2xl` matching navigation item pills.
+* **Floating Toggle Button**: Floating right-margin button positioned at `absolute -right-3.5 top-[22px] z-50`.
+* **Collapsed Logo Header**: Centered 44px brand logo button with expand indicator.
+* **Mobile Drawer**: Responsive mobile slide-in drawer with dark backdrop blur overlay.
 
-### 3.3 Cashbook (Transactions)
-*   **Ledger View**: Comprehensive list of transactions using TanStack Table with filtering (date, category, type, scope) and sorting.
-*   **Entry Creation**: Form to record income and expenses (TanStack Form).
-*   **Receipts**: Ability to upload receipts. The backend returns a short-lived signed URL for rendering the receipt image (`receipt_path`).
-*   **Money Handling**: All money inputs must be converted to minor units (cents) before sending to the backend, and all money displays must correctly format cents to standard currency.
+### 3.2 Topbar Header (`Topbar.tsx`)
+* **Layout**: Sticky header (`h-18`), page title/subtitle matching active route.
+* **Controls**: Mobile hamburger drawer toggle, theme switcher (`Light`, `Dark`, `Auto`), notification bell modal, and user account dropdown.
 
-### 3.4 Invoices
-*   **Invoice Builder**: Dynamic form to create invoices, add line items, apply discounts (basis points), and calculate taxes.
-*   **Calculation Logic**: The frontend should preview the exact calculation order defined by the backend:
-    *   `line_total = round(unit_price × quantity_milli / 1000)`
-    *   `subtotal = Σ line_total`
-    *   `discount = round(subtotal × discount_bps / 10_000)`
-    *   `taxable_base = subtotal − discount`
-    *   `tax_amount = round(taxable_base × tax_bps / 10_000)`
-    *   `total = taxable_base + tax_amount`
-*   **Status Tracking**: Display derived status (Draft, Unpaid, Paid, Void, Overdue [Unpaid + past due date]).
-*   **Actions**: Download PDF, Send via Email, Mark as Paid (triggers cashbook sync), Void.
+### 3.3 Main Layout Container (`Layout.tsx`)
+* **Max Width**: Centered `max-w-[1920px] mx-auto` container for widescreen displays.
 
-### 3.5 Catalog (Items & Categories)
-*   **Products/Services (Items)**: Manage standard catalog items, including `default_price_in_cents` and `default_tax_bps`.
-*   **Categories**: Manage transaction categories for the business.
+---
 
-### 3.6 Customers
-*   **Directory**: Manage client details (name, email, tax number).
+## 4. Feature Modules & Route Specifications
 
-### 3.7 Settings & Team Management
-*   **Business Profile**: Edit company details and upload logo (`logo_path`).
-*   **Members**: Interface to invite team members and assign roles (requires `admin` or `owner` role). Ensure partial unique constraints are respected (e.g., only one active owner).
-*   **Audit Log**: Read-only view of the business's immutable audit history.
+### 4.1 Authentication & Onboarding (`/auth/login`)
+* **Auth**: Session cookie-based authentication with CSRF token re-fetching post-login.
+* **RBAC**: Support for 4 roles (`viewer`, `editor`, `admin`, `owner`).
 
-## 4. Engineering Standards & Rules
+### 4.2 Executive Dashboard (`/`)
+* **Metrics Cards**: Total Income, Total Expenses, Net Profit, Operating Expense Ratio (OER).
+* **Visualizations**: Interactive income vs expense area chart using TanStack Charts.
+* **Recent Activity**: Recent cashbook transactions and unpaid invoices card.
 
-### 4.1 Data Formatting
-*   **Never parse floats**: Use a dedicated `Money` utility for formatting cents to string for display. Do not use `Number()` or `parseFloat()` on currency values from the API.
+### 4.3 Cashbook (`/cashbook`)
+* **Ledger Data Table**: Transaction table with multi-criteria filtering (date, type, scope).
+* **Entry Creation**: Quick-add side drawer form.
+* **Receipts**: Signed URL rendering (`receipt_path`).
 
-### 4.2 Security
-*   **Cross-Site Request Forgery (CSRF)**: Must integrate smoothly with the backend's `csrf-csrf` middleware.
+### 4.4 Invoices (`/invoices`, `/invoices/$id`, `/invoices/builder`)
+* **Live Builder**: Real-time preview math: `line_total = round(unit_price × quantity_milli / 1000)`.
+* **Snapshot Totals**: Immutable calculated totals written at issue time (`subtotal_in_cents`, `discount_in_cents`, `tax_amount_in_cents`, `total_in_cents`).
+* **Detail View (`$id`)**: Static document card view with print, PDF download, email dispatch, mark as paid, and copy link functionality.
 
-### 4.3 Architecture
-*   **Component Structure**: Build reusable components reflecting M3 guidelines.
-*   **Feature-First Organization**: Group code by feature (e.g., `features/invoices`, `features/cashbook`) rather than by type (e.g., all components, all hooks).
+### 4.5 Customers & Items (`/customers`, `/items`)
+* **Customers Directory**: Client list, search, and side-drawer mini-history.
+* **Items Catalog**: Catalog products/services with default prices and tax basis points.
 
-## 5. Out of Scope (Phase 2 Deferred)
-Do **not** build the following features unless explicitly requested to move them to Phase 1:
-*   AI assistant
-*   Multi-currency per business
-*   Recurring invoices
-*   Payment gateways
-*   Receipt OCR
-*   Bank feeds
-*   Field-level encryption of tax number
+### 4.6 Settings & AI Agent Connections (`/settings`)
+* **Profile & Workspace Tab**: Business name, tax ID/EIN, logo upload, base currency (Scale 100 minor units), and invoice prefix settings.
+* **AI Agent Connections Tab**: Multi-provider LLM API engine selector (Google Gemini, OpenAI ChatGPT, Anthropic Claude, DeepSeek AI, and Custom/Local Ollama), secret API key input with show/hide toggle, base endpoint URL, model selection dropdown, temperature preset controls (`Precise 0.1`, `Balanced 0.4`, `Creative 0.8`), and connection ping test with latency verification.
+
+### 4.7 User Account (`/account`)
+* **Account**: User profile, password security, session management, and RBAC role indicators (`owner`, `admin`, `editor`, `viewer`).
+
+### 4.8 Landing Page (`/landing`)
+* **Public Showcase**: Public landing page featuring hero showcase, feature highlights (`#features-section`), pricing table, and header/footer navigation.
+
+---
+
+## 5. Non-Negotiable Core Rules
+
+1. **Minor Unit Money**: All money stored and handled as minor cents (`*_in_cents`) with a fixed scale of 100.
+2. **Tenant Isolation**: `businessId` derived strictly from server session context.
+3. **No Decorative Fluff**: Border-first flat architecture (`shadow-none`) with high legibility.
