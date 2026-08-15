@@ -386,7 +386,7 @@ function Dashboard() {
                   wrapperStyle={{ zIndex: 100 }}
                   allowEscapeViewBox={{ x: false, y: false }}
                   content={({ active, payload, label }) => {
-                    if (!active || !payload || !payload.length) return null
+                    if (!active || payload.length === 0) return null
                     const incomeItem = payload.find((p) => p.dataKey === 'income')
                     const expenseItem = payload.find((p) => p.dataKey === 'expense')
                     const incomeVal = Number(incomeItem?.value || 0)

@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useState } from 'react'
 import {
   Plus,
   Search,
@@ -10,7 +11,6 @@ import {
   Trash2,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
-import { useState } from 'react'
 import { Button } from '../components/ui/button'
 import {
   Select,
@@ -19,6 +19,7 @@ import {
   SelectContent,
   SelectItem,
 } from '../components/ui/select'
+import { useDebouncedSearch } from '../hooks/use-debounced-search'
 
 export const Route = createFileRoute('/customers')({
   component: Customers,
@@ -71,8 +72,6 @@ const initialCustomers = [
     spent: 25000,
   },
 ]
-
-import { useDebouncedSearch } from '../hooks/use-debounced-search'
 
 function Customers() {
   const [showForm, setShowForm] = useState(false)

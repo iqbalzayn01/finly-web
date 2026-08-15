@@ -1,4 +1,5 @@
 import { createFileRoute, Link  } from '@tanstack/react-router'
+import { useState } from 'react'
 import {
   Plus,
   Search,
@@ -11,7 +12,6 @@ import {
   Eye,
   Trash2,
 } from 'lucide-react'
-import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../../components/ui/button'
 import {
@@ -21,6 +21,7 @@ import {
   SelectContent,
   SelectItem,
 } from '../../components/ui/select'
+import { useDebouncedSearch } from '../../hooks/use-debounced-search'
 
 export const Route = createFileRoute('/invoices/')({
   component: Invoices,
@@ -97,8 +98,6 @@ const StatusBadge = ({ status }: { status: string }) => {
     </span>
   )
 }
-
-import { useDebouncedSearch } from '../../hooks/use-debounced-search'
 
 function Invoices() {
   const [openKebab, setOpenKebab] = useState<string | null>(null)

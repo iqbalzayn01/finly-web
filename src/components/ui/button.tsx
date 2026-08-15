@@ -2,6 +2,7 @@ import * as React from 'react'
 import { cva } from 'class-variance-authority'
 import type { VariantProps } from 'class-variance-authority'
 import { Slot } from 'radix-ui'
+import { motion } from 'motion/react'
 
 import { cn } from '#/lib/utils.ts'
 
@@ -38,8 +39,6 @@ const buttonVariants = cva(
     },
   },
 )
-
-import { motion } from 'motion/react'
 
 function Button({
   className,

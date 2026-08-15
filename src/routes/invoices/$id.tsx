@@ -319,7 +319,7 @@ function InvoiceDetail() {
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.98 }} transition={{ type: 'spring', stiffness: 400, damping: 25 }}>
-                <Button variant="outline" className="w-full" onClick={() => { navigator.clipboard?.writeText(window.location.href); alert("Invoice link copied to clipboard!"); }}>
+                <Button variant="outline" className="w-full" onClick={() => { navigator.clipboard.writeText(window.location.href); alert("Invoice link copied to clipboard!"); }}>
                   <Share2 className="w-4 h-4 mr-2" /> Copy Link
                 </Button>
               </motion.div>

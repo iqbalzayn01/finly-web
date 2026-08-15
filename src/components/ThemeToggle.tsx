@@ -12,7 +12,9 @@ export function ThemeToggle() {
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const savedTheme = (window.localStorage.getItem('theme') as ThemeMode) || 'auto'
+    const stored = window.localStorage.getItem('theme')
+    const savedTheme: ThemeMode =
+      stored === 'light' || stored === 'dark' || stored === 'auto' ? stored : 'auto'
     setMode(savedTheme)
     applyThemeMode(savedTheme)
   }, [])
