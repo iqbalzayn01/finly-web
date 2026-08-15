@@ -159,10 +159,10 @@ function Dashboard() {
           className="flex items-center gap-3"
         >
           <Select defaultValue="this_year">
-            <SelectTrigger className="w-[180px] h-11 rounded-xl border border-border bg-card shadow-sm text-foreground font-semibold">
+            <SelectTrigger className="w-[180px] h-11 rounded-xl border border-border bg-card shadow-none text-foreground font-semibold">
               <SelectValue placeholder="Select Period" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border border-border shadow-lg">
+            <SelectContent className="rounded-xl border border-border shadow-none">
               <SelectItem value="this_month" className="font-medium rounded-lg">
                 This Month
               </SelectItem>
@@ -190,7 +190,7 @@ function Dashboard() {
             isUp: true,
             icon: Wallet,
             containerClass:
-              'bg-primary text-primary-foreground border border-primary/20 shadow-md rounded-2xl',
+              'bg-primary text-primary-foreground border border-primary/20 shadow-none rounded-2xl',
             iconClass: 'bg-white/20 text-white rounded-xl',
             trendClass:
               'bg-white/20 text-white rounded-full',
@@ -205,7 +205,7 @@ function Dashboard() {
             isUp: true,
             icon: ArrowUpRight,
             containerClass:
-              'bg-card text-foreground border border-border shadow-sm rounded-2xl',
+              'bg-card text-foreground border border-border shadow-none rounded-2xl',
             iconClass:
               'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-xl',
             trendClass:
@@ -221,7 +221,7 @@ function Dashboard() {
             isUp: false,
             icon: ArrowDownRight,
             containerClass:
-              'bg-card text-foreground border border-border shadow-sm rounded-2xl',
+              'bg-card text-foreground border border-border shadow-none rounded-2xl',
             iconClass:
               'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-xl',
             trendClass:
@@ -237,7 +237,7 @@ function Dashboard() {
             isUp: true,
             icon: ArrowUpRight,
             containerClass:
-              'bg-card text-foreground border border-border shadow-sm rounded-2xl',
+              'bg-card text-foreground border border-border shadow-none rounded-2xl',
             iconClass:
               'bg-primary/10 text-primary border border-primary/20 rounded-xl',
             trendClass:
@@ -306,7 +306,7 @@ function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...m3Transition, delay: 0.2 }}
-          className="lg:col-span-2 bg-card border border-border shadow-sm rounded-2xl p-6"
+          className="lg:col-span-2 bg-card border border-border shadow-none rounded-2xl p-6"
         >
           <div className="flex items-center justify-between mb-8 px-2 flex-wrap gap-4">
             <div>
@@ -335,7 +335,7 @@ function Dashboard() {
                     className={cn(
                       'px-3 py-1 text-xs font-bold rounded-lg uppercase transition-all cursor-pointer outline-none',
                       cashflowTimeframe === tf
-                        ? 'bg-card text-foreground shadow-xs'
+                        ? 'bg-card text-foreground shadow-none'
                         : 'text-muted-foreground hover:text-foreground'
                     )}
                   >
@@ -394,7 +394,7 @@ function Dashboard() {
                     const netVal = incomeVal - expenseVal
 
                     return (
-                      <div className="rounded-xl border border-border bg-card p-3.5 shadow-xl text-foreground text-xs space-y-1.5 min-w-[180px]">
+                      <div className="rounded-xl border border-border bg-card p-3.5 shadow-none text-foreground text-xs space-y-1.5 min-w-[180px]">
                         <p className="font-semibold text-muted-foreground border-b border-border pb-1">
                           Month: <span className="text-foreground font-bold">{label}</span>
                         </p>
@@ -447,7 +447,7 @@ function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...m3Transition, delay: 0.3 }}
-          className="bg-card border border-border shadow-sm rounded-2xl p-6 flex flex-col justify-between"
+          className="bg-card border border-border shadow-none rounded-2xl p-6 flex flex-col justify-between"
         >
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -524,7 +524,7 @@ function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...m3Transition, delay: 0.4 }}
-          className="bg-card border border-border shadow-sm rounded-2xl p-6 flex flex-col justify-between"
+          className="bg-card border border-border shadow-none rounded-2xl p-6 flex flex-col justify-between"
         >
           <div>
             <div className="flex items-center justify-between mb-6">
@@ -587,7 +587,7 @@ function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...m3Transition, delay: 0.45 }}
-          className="bg-card border border-border shadow-sm rounded-2xl p-6 flex flex-col justify-between"
+          className="bg-card border border-border shadow-none rounded-2xl p-6 flex flex-col justify-between"
         >
           <div>
             <div className="flex items-center justify-between mb-4">
@@ -653,7 +653,7 @@ function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...m3Transition, delay: 0.5 }}
-          className="bg-card border border-border shadow-sm rounded-2xl p-6 flex flex-col justify-between"
+          className="bg-card border border-border shadow-none rounded-2xl p-6 flex flex-col justify-between"
         >
           <div>
             <div className="flex items-center justify-between mb-4">
@@ -681,7 +681,7 @@ function Dashboard() {
                   onClick={() => setRecentTxFilter(filterType)}
                   className={`flex-1 py-1 text-xs font-semibold rounded-lg capitalize transition-all ${
                     recentTxFilter === filterType
-                      ? 'bg-card text-foreground shadow-xs'
+                      ? 'bg-card text-foreground shadow-none'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >

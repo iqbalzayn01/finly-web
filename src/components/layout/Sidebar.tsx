@@ -81,7 +81,7 @@ export function Sidebar() {
         initial={false}
         animate={{ width: isExpanded ? 240 : 80 }}
         transition={m3Transition}
-        className="fixed left-0 top-0 z-40 h-screen border-r border-border bg-card flex flex-col justify-between pb-5 overflow-visible select-none shadow-xs max-lg:hidden"
+        className="fixed left-0 top-0 z-40 h-screen border-r border-border bg-card flex flex-col justify-between pb-5 overflow-visible select-none shadow-none max-lg:hidden"
       >
         {/* Floating Sidebar Toggle Button on Margin Border */}
         <div className="absolute -right-3.5 top-[22px] z-50">
@@ -91,7 +91,7 @@ export function Sidebar() {
           >
             <button
               onClick={toggle}
-              className="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:text-foreground hover:bg-accent shadow-md transition-all cursor-pointer outline-none hover:scale-110"
+              className="flex h-7 w-7 items-center justify-center rounded-full border border-border bg-card text-muted-foreground hover:text-foreground hover:bg-accent shadow-none transition-all cursor-pointer outline-none hover:scale-110"
               aria-label={isExpanded ? 'Collapse Sidebar' : 'Expand Sidebar'}
             >
               {isExpanded ? (
@@ -113,7 +113,7 @@ export function Sidebar() {
                 !isExpanded && 'mx-auto',
               )}
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-xs transition-all">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-none transition-all">
                 <svg
                   width="20"
                   height="20"
@@ -171,7 +171,7 @@ export function Sidebar() {
                       document.getElementById('sidebar-search-input')?.focus()
                     }, 150)
                   }}
-                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-background text-muted-foreground hover:text-foreground hover:bg-accent transition-all cursor-pointer outline-none shadow-xs mx-auto"
+                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-background text-muted-foreground hover:text-foreground hover:bg-accent transition-all cursor-pointer outline-none shadow-none mx-auto"
                 >
                   <Search className="h-4 w-4" />
                 </button>
@@ -195,7 +195,7 @@ export function Sidebar() {
                       ? 'px-3.5 w-full'
                       : 'justify-center w-11 mx-auto',
                     isActive
-                      ? 'bg-primary text-primary-foreground shadow-xs font-bold'
+                      ? 'bg-primary text-primary-foreground shadow-none font-bold'
                       : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
                   )}
                 >
@@ -251,7 +251,7 @@ export function Sidebar() {
               </p>
               <Link
                 to="/pricing"
-                className="w-full py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center"
+                className="w-full py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-none transition-all cursor-pointer flex items-center justify-center"
               >
                 Upgrade • $29/mo
               </Link>
@@ -267,7 +267,7 @@ export function Sidebar() {
               className={cn(
                 'flex items-center gap-3.5 h-11 px-3.5 rounded-2xl text-xs font-semibold transition-all outline-none',
                 location.pathname === '/settings'
-                  ? 'bg-primary text-primary-foreground font-bold shadow-xs'
+                  ? 'bg-primary text-primary-foreground font-bold shadow-none'
                   : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
               )}
             >
@@ -281,7 +281,7 @@ export function Sidebar() {
                 className={cn(
                   'flex h-11 w-11 items-center justify-center rounded-2xl text-xs font-semibold transition-all outline-none',
                   location.pathname === '/settings'
-                    ? 'bg-primary text-primary-foreground font-bold shadow-xs'
+                    ? 'bg-primary text-primary-foreground font-bold shadow-none'
                     : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
                 )}
               >
@@ -312,7 +312,7 @@ export function Sidebar() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-              className="absolute left-0 top-0 bottom-0 w-72 max-w-[80vw] bg-card border-r border-border p-5 flex flex-col justify-between shadow-2xl z-50 overflow-y-auto"
+              className="absolute left-0 top-0 bottom-0 w-72 max-w-[80vw] bg-card border-r border-border p-5 flex flex-col justify-between shadow-none z-50 overflow-y-auto"
             >
               <div className="flex flex-col gap-6 w-full">
                 {/* Mobile Brand Header */}
@@ -322,7 +322,7 @@ export function Sidebar() {
                     onClick={() => setMobileOpen(false)}
                     className="flex items-center gap-3"
                   >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-xs">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-none">
                       <svg
                         width="20"
                         height="20"
@@ -381,7 +381,7 @@ export function Sidebar() {
                         className={cn(
                           'flex items-center gap-3.5 h-11 px-3.5 rounded-2xl text-xs font-semibold transition-all outline-none',
                           isActive
-                            ? 'bg-primary text-primary-foreground font-bold shadow-xs'
+                            ? 'bg-primary text-primary-foreground font-bold shadow-none'
                             : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
                         )}
                       >
@@ -413,7 +413,7 @@ export function Sidebar() {
                   <Link
                     to="/pricing"
                     onClick={() => setMobileOpen(false)}
-                    className="w-full py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center"
+                    className="w-full py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-none transition-all cursor-pointer flex items-center justify-center"
                   >
                     Upgrade • $29/mo
                   </Link>
@@ -425,7 +425,7 @@ export function Sidebar() {
                   className={cn(
                     'flex items-center gap-3.5 h-11 px-3.5 rounded-2xl text-xs font-semibold transition-all outline-none',
                     location.pathname === '/settings'
-                      ? 'bg-primary text-primary-foreground font-bold shadow-xs'
+                      ? 'bg-primary text-primary-foreground font-bold shadow-none'
                       : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
                   )}
                 >

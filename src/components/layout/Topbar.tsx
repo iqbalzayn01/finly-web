@@ -81,14 +81,14 @@ export function Topbar() {
     }
 
   return (
-    <header className="sticky top-0 z-30 flex h-18 w-full border-b border-border bg-card/80 backdrop-blur-md transition-all shadow-xs">
+    <header className="sticky top-0 z-30 flex h-18 w-full border-b border-border bg-card/80 backdrop-blur-md transition-all shadow-none">
       <div className="flex h-full w-full max-w-[1920px] mx-auto px-6 md:px-8 items-center justify-between">
         {/* Left Section: Active Page Title & Subtitle */}
         <div className="flex items-center gap-4">
           {/* Mobile Hamburger Toggle */}
           <button
             onClick={toggleMobile}
-            className="lg:hidden flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-foreground shadow-xs hover:bg-accent transition-all outline-none cursor-pointer"
+            className="lg:hidden flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-foreground shadow-none hover:bg-accent transition-all outline-none cursor-pointer"
             aria-label="Toggle Sidebar"
           >
             <PanelLeft className="h-5 w-5" />
@@ -117,7 +117,7 @@ export function Topbar() {
                 setNotifOpen(!notifOpen)
                 if (menuOpen) setMenuOpen(false)
               }}
-              className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-xs hover:border-primary/50 hover:bg-accent/40 transition-all outline-none cursor-pointer"
+              className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-none hover:border-primary/50 hover:bg-accent/40 transition-all outline-none cursor-pointer"
             >
               <Bell className="h-4 w-4" />
               <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary ring-2 ring-card" />
@@ -131,7 +131,7 @@ export function Topbar() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.95 }}
                 transition={{ type: 'spring', stiffness: 450, damping: 28 }}
-                className="absolute right-0 mt-3 w-80 bg-card border border-border rounded-2xl shadow-xl z-50 flex flex-col overflow-hidden"
+                className="absolute right-0 mt-3 w-80 bg-card border border-border rounded-2xl shadow-none z-50 flex flex-col overflow-hidden"
               >
                 <div className="px-5 py-3.5 border-b border-border flex items-center justify-between bg-muted/40">
                   <h3 className="font-semibold text-foreground text-sm">
@@ -194,7 +194,7 @@ export function Topbar() {
               setMenuOpen(!menuOpen)
               if (notifOpen) setNotifOpen(false)
             }}
-            className="flex items-center gap-2 rounded-full border border-border bg-card p-1 pr-2.5 shadow-xs hover:border-primary/50 transition-all outline-none cursor-pointer"
+            className="flex items-center gap-2 rounded-full border border-border bg-card p-1 pr-2.5 shadow-none hover:border-primary/50 transition-all outline-none cursor-pointer"
           >
             <Avatar className="h-8 w-8">
               <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
@@ -220,7 +220,7 @@ export function Topbar() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.95 }}
                 transition={{ type: 'spring', stiffness: 450, damping: 28 }}
-                className="absolute right-0 mt-3 w-56 bg-card border border-border rounded-2xl shadow-xl z-50 p-2 flex flex-col gap-1"
+                className="absolute right-0 mt-3 w-56 bg-card border border-border rounded-2xl shadow-none z-50 p-2 flex flex-col gap-1"
               >
                 <div className="px-3 py-2 border-b border-border mb-1">
                   <p className="text-xs font-bold text-foreground">

@@ -57,9 +57,9 @@
   --sidebar-border: #e2e8f0;
   --sidebar-ring: #463CFF;
 
-  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.06);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.08);
+  --shadow-card: none;
+  --shadow-sm: none;
+  --shadow-lg: none;
 }
 
 .dark {
@@ -111,9 +111,9 @@
   --sidebar-border: rgba(255, 255, 255, 0.08);
   --sidebar-ring: #5c52ff;
 
-  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.5);
+  --shadow-card: none;
+  --shadow-sm: none;
+  --shadow-lg: none;
 }
 
 @theme inline {
@@ -179,6 +179,12 @@ body {
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+  }
+  *, ::before, ::after {
+    box-shadow: none !important;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
   }
 }

@@ -57,7 +57,7 @@ function InvoiceBuilder() {
         <div className="flex items-center gap-4">
           <Link
             to="/invoices"
-            className="flex h-10 w-10 items-center justify-center border border-border bg-card rounded-full text-foreground transition-all hover:bg-accent shadow-xs"
+            className="flex h-10 w-10 items-center justify-center border border-border bg-card rounded-full text-foreground transition-all hover:bg-accent shadow-none"
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
@@ -79,7 +79,7 @@ function InvoiceBuilder() {
         </div>
       </div>
 
-      <div className="border border-border bg-card shadow-sm rounded-2xl overflow-hidden">
+      <div className="border border-border bg-card shadow-none rounded-2xl overflow-hidden">
         {/* Document Header */}
         <div className="p-8 md:p-10 border-b border-border">
           <div className="grid grid-cols-2 gap-12">
@@ -87,7 +87,7 @@ function InvoiceBuilder() {
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                 From
               </p>
-              <div className="border border-border bg-background p-6 rounded-2xl shadow-xs">
+              <div className="border border-border bg-background p-6 rounded-2xl shadow-none">
                 <h3 className="font-semibold text-base text-foreground">
                   Finly HQ
                 </h3>
@@ -106,7 +106,7 @@ function InvoiceBuilder() {
                 To
               </p>
               <Select>
-                <SelectTrigger className="w-full h-12 border border-border bg-background px-4 font-semibold text-base rounded-xl shadow-xs">
+                <SelectTrigger className="w-full h-12 border border-border bg-background px-4 font-semibold text-base rounded-xl shadow-none">
                   <SelectValue placeholder="Select a Customer..." />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
@@ -228,7 +228,7 @@ function InvoiceBuilder() {
 
           {/* Totals */}
           <div className="mt-12 flex justify-end">
-            <div className="w-[300px] border border-border bg-background p-6 rounded-2xl shadow-xs">
+            <div className="w-[300px] border border-border bg-background p-6 rounded-2xl shadow-none">
               <div className="space-y-3">
                 <div className="flex justify-between text-xs font-medium text-muted-foreground">
                   <span>Subtotal</span>

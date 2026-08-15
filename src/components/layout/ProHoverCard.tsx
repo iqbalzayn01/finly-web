@@ -12,7 +12,7 @@ export function ProHoverCard() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <button className="relative flex h-11 w-11 items-center justify-center font-semibold transition-all rounded-full bg-muted/60 hover:bg-accent border border-border text-foreground shadow-xs outline-none cursor-pointer">
+      <button className="relative flex h-11 w-11 items-center justify-center font-semibold transition-all rounded-full bg-muted/60 hover:bg-accent border border-border text-foreground shadow-none outline-none cursor-pointer">
         <Sparkles className="h-5 w-5 text-primary" />
       </button>
       <AnimatePresence>
@@ -22,7 +22,7 @@ export function ProHoverCard() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -6, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 450, damping: 28 }}
-            className="absolute left-full ml-3 w-64 p-4 rounded-2xl bg-card border border-border text-foreground shadow-2xl z-50 pointer-events-auto"
+            className="absolute left-full ml-3 w-64 p-4 rounded-2xl bg-card border border-border text-foreground shadow-none z-50 pointer-events-auto"
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-foreground">Finly Pro</span>
@@ -46,7 +46,7 @@ export function ProHoverCard() {
             </ul>
             <Link
               to="/pricing"
-              className="w-full py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center"
+              className="w-full py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl shadow-none transition-all cursor-pointer flex items-center justify-center"
             >
               Upgrade Now • $29/mo
             </Link>

@@ -110,14 +110,14 @@ function LandingPage() {
         >
           <Link
             to="/pricing"
-            className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 outline-none cursor-pointer"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-sm shadow-none hover:shadow-none transition-all flex items-center justify-center gap-2 outline-none cursor-pointer"
           >
             Start 14-Day Free Trial
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             to="/"
-            className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-card border border-border hover:bg-accent/60 text-foreground font-bold text-sm transition-all flex items-center justify-center gap-2 outline-none cursor-pointer shadow-xs"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-card border border-border hover:bg-accent/60 text-foreground font-bold text-sm transition-all flex items-center justify-center gap-2 outline-none cursor-pointer shadow-none"
           >
             <Play className="h-4 w-4 fill-current text-primary" />
             Explore Live App
@@ -131,7 +131,7 @@ function LandingPage() {
           transition={{ ...m3Transition, delay: 0.4 }}
           className="pt-8 max-w-5xl mx-auto"
         >
-          <div className="rounded-3xl border border-border bg-card shadow-2xl overflow-hidden text-left">
+          <div className="rounded-3xl border border-border bg-card shadow-none overflow-hidden text-left">
             {/* Mac Browser Window Header */}
             <div className="px-5 py-3.5 border-b border-border bg-muted/40 flex items-center justify-between flex-wrap gap-3">
               <div className="flex items-center gap-2">
@@ -150,7 +150,7 @@ function LandingPage() {
                     className={cn(
                       'px-3 py-1 text-xs font-bold rounded-lg uppercase transition-all cursor-pointer outline-none',
                       activeTab === tab
-                        ? 'bg-primary text-primary-foreground shadow-xs'
+                        ? 'bg-primary text-primary-foreground shadow-none'
                         : 'text-muted-foreground hover:text-foreground'
                     )}
                   >
@@ -290,7 +290,7 @@ function LandingPage() {
 
       {/* Interactive Cashflow ROI & Time Savings Calculator */}
       <section id="calculator-section" aria-labelledby="calculator-heading" className="max-w-5xl mx-auto px-6">
-        <div className="p-8 md:p-10 rounded-3xl bg-card border border-border shadow-lg space-y-8">
+        <div className="p-8 md:p-10 rounded-3xl bg-card border border-border shadow-none space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20">
               <Calculator className="h-3.5 w-3.5" /> Interactive ROI Calculator
@@ -345,7 +345,7 @@ function LandingPage() {
 
         {/* 3-Cell Asymmetric Bento Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-7 rounded-3xl bg-card border border-border shadow-xs space-y-4">
+          <div className="p-7 rounded-3xl bg-card border border-border shadow-none space-y-4">
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Zap className="h-5 w-5" />
             </div>
@@ -355,7 +355,7 @@ function LandingPage() {
             </p>
           </div>
 
-          <div className="p-7 rounded-3xl bg-card border border-border shadow-xs space-y-4 md:col-span-2">
+          <div className="p-7 rounded-3xl bg-card border border-border shadow-none space-y-4 md:col-span-2">
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Bot className="h-5 w-5" />
             </div>
@@ -368,7 +368,7 @@ function LandingPage() {
 
         {/* 2-Cell Equal Bento Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-7 rounded-3xl bg-card border border-border shadow-xs space-y-4">
+          <div className="p-7 rounded-3xl bg-card border border-border shadow-none space-y-4">
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Globe className="h-5 w-5" />
             </div>
@@ -378,7 +378,7 @@ function LandingPage() {
             </p>
           </div>
 
-          <div className="p-7 rounded-3xl bg-card border border-border shadow-xs space-y-4">
+          <div className="p-7 rounded-3xl bg-card border border-border shadow-none space-y-4">
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Lock className="h-5 w-5" />
             </div>
@@ -416,7 +416,7 @@ function LandingPage() {
               role: 'CTO @ Stark Media',
             },
           ].map((t, i) => (
-            <div key={i} className="p-6 rounded-2xl bg-card border border-border shadow-xs space-y-4">
+            <div key={i} className="p-6 rounded-2xl bg-card border border-border shadow-none space-y-4">
               <div className="flex gap-1 text-amber-500">
                 {[...Array(5)].map((_, s) => (
                   <Star key={s} className="h-4 w-4 fill-current" />
@@ -434,7 +434,7 @@ function LandingPage() {
 
       {/* Bottom CTA Banner */}
       <section className="max-w-5xl mx-auto px-6">
-        <div className="p-10 md:p-14 rounded-3xl bg-primary text-primary-foreground text-center space-y-6 shadow-xl relative overflow-hidden">
+        <div className="p-10 md:p-14 rounded-3xl bg-primary text-primary-foreground text-center space-y-6 shadow-none relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
           <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
             Ready to streamline your agency cashflow?
@@ -445,7 +445,7 @@ function LandingPage() {
           <div className="flex justify-center gap-4 pt-2">
             <Link
               to="/pricing"
-              className="px-8 py-3.5 rounded-xl bg-background text-foreground hover:bg-background/90 font-bold text-sm shadow-md transition-all outline-none cursor-pointer"
+              className="px-8 py-3.5 rounded-xl bg-background text-foreground hover:bg-background/90 font-bold text-sm shadow-none transition-all outline-none cursor-pointer"
             >
               Start Free 14-Day Trial
             </Link>

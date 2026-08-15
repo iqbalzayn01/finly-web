@@ -7,9 +7,9 @@ export function PublicNavbar() {
   const location = useLocation()
 
   return (
-    <header className="sticky top-0 z-40 flex h-20 items-center justify-between px-6 md:px-12 bg-card/80 backdrop-blur-md border-b border-border shadow-xs">
+    <header className="sticky top-0 z-40 flex h-20 items-center justify-between px-6 md:px-12 bg-card/80 backdrop-blur-md border-b border-border shadow-none">
       <Link to="/landing" className="flex items-center gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-sm">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-none">
           <svg
             width="22"
             height="22"
@@ -60,7 +60,7 @@ export function PublicNavbar() {
         <ThemeToggle />
         <Link
           to="/"
-          className="px-4 py-2 text-xs font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-xs flex items-center gap-1.5"
+          className="px-4 py-2 text-xs font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-none flex items-center gap-1.5"
         >
           Open Dashboard
           <ArrowRight className="h-3.5 w-3.5" />

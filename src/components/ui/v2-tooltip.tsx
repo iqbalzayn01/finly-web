@@ -121,7 +121,7 @@ export function V2Tooltip({
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 450, damping: 28 }}
             className={cn(
-              'absolute px-2.5 py-1.5 rounded-lg bg-card border border-border text-foreground text-[11px] font-semibold shadow-xl whitespace-nowrap z-50 pointer-events-none',
+              'absolute px-2.5 py-1.5 rounded-lg bg-card border border-border text-foreground text-[11px] font-semibold shadow-none whitespace-nowrap z-50 pointer-events-none',
               getPositionClasses()
             )}
           >

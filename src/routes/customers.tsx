@@ -139,7 +139,7 @@ function Customers() {
         </div>
         <div className="w-48">
           <Select value={termFilter} onValueChange={setTermFilter}>
-            <SelectTrigger className="w-full h-11 border border-border shadow-xs text-sm font-medium bg-card text-foreground rounded-full">
+            <SelectTrigger className="w-full h-11 border border-border text-sm shadow-none font-medium bg-card text-foreground rounded-full">
               <SelectValue placeholder="Payment Terms" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
@@ -161,7 +161,7 @@ function Customers() {
       </div>
 
       {filteredCustomers.length === 0 ? (
-        <div className="border border-border bg-card p-12 text-center text-muted-foreground font-medium rounded-2xl shadow-xs">
+        <div className="border border-border bg-card p-12 text-center text-muted-foreground font-medium rounded-2xl shadow-none">
           No customers found matching search criteria.
         </div>
       ) : (
@@ -181,7 +181,7 @@ function Customers() {
                 delay: i * 0.06,
               }}
               key={c.id}
-              className="group relative border border-border bg-card p-6 rounded-2xl shadow-sm"
+              className="group relative border border-border bg-card p-6 rounded-2xl shadow-none"
             >
               <div className="flex items-start justify-between">
                 <div className="flex h-12 w-12 items-center justify-center border border-border bg-accent/40 text-accent-foreground text-lg font-bold rounded-2xl">
@@ -211,7 +211,7 @@ function Customers() {
                             stiffness: 450,
                             damping: 28,
                           }}
-                          className="absolute right-0 top-10 w-36 border border-border bg-card p-1.5 rounded-xl shadow-lg z-20 flex flex-col gap-0.5"
+                          className="absolute right-0 top-10 w-36 border border-border bg-card p-1.5 rounded-xl shadow-none z-20 flex flex-col gap-0.5"
                         >
                           <button
                             onClick={() => {
@@ -277,7 +277,7 @@ function Customers() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-lg border border-border bg-card p-8 rounded-2xl shadow-xl"
+              className="relative w-full max-w-lg border border-border bg-card p-8 rounded-2xl shadow-none"
             >
               <h2 className="text-xl font-bold text-foreground mb-6">
                 New Customer
@@ -310,7 +310,7 @@ function Customers() {
                     </label>
                     <div className="mt-1.5">
                       <Select defaultValue="net30">
-                        <SelectTrigger className="w-full h-11 border border-border shadow-xs text-sm font-medium bg-background text-foreground rounded-xl">
+                        <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-background text-foreground rounded-xl">
                           <SelectValue placeholder="Select terms" />
                         </SelectTrigger>
                         <SelectContent className="rounded-xl">

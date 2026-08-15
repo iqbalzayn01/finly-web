@@ -210,7 +210,7 @@ function Settings() {
       </div>
 
       {/* AI Agent Connection Settings Section */}
-      <div className="border border-border bg-card p-8 rounded-2xl shadow-sm space-y-6">
+      <div className="border border-border bg-card p-8 rounded-2xl shadow-none space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
@@ -247,7 +247,7 @@ function Settings() {
                   className={cn(
                     'relative text-left p-4 rounded-xl border transition-all cursor-pointer outline-none flex flex-col justify-between',
                     isSelected
-                      ? 'border-primary ring-2 ring-primary/20 bg-primary/5 shadow-xs'
+                      ? 'border-primary ring-2 ring-primary/20 bg-primary/5 shadow-none'
                       : 'border-border bg-card hover:bg-accent/40'
                   )}
                 >
@@ -355,7 +355,7 @@ function Settings() {
                 <Globe className="h-3.5 w-3.5 text-muted-foreground" /> Model Selection
               </label>
               <Select value={selectedModel} onValueChange={setSelectedModel}>
-                <SelectTrigger className="w-full h-11 border border-border rounded-xl shadow-xs bg-background text-foreground text-sm font-medium">
+                <SelectTrigger className="w-full h-11 border border-border rounded-xl shadow-none bg-background text-foreground text-sm font-medium">
                   <SelectValue placeholder="Select Model" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
@@ -389,7 +389,7 @@ function Settings() {
                     className={cn(
                       'flex-1 py-2 text-xs font-semibold rounded-lg border transition-all cursor-pointer outline-none',
                       temperature === t.val
-                        ? 'bg-card text-foreground border-primary shadow-xs font-bold'
+                        ? 'bg-card text-foreground border-primary shadow-none font-bold'
                         : 'bg-background text-muted-foreground border-border hover:text-foreground'
                     )}
                   >
@@ -436,13 +436,13 @@ function Settings() {
       </div>
 
       {/* Workspace Settings: Business Profile Card */}
-      <div className="border border-border bg-card p-8 rounded-2xl shadow-sm">
+      <div className="border border-border bg-card p-8 rounded-2xl shadow-none">
         <h2 className="text-xl font-semibold text-foreground mb-6">
           Business Profile
         </h2>
 
         <div className="flex items-center gap-6 mb-8">
-          <div className="h-20 w-20 border border-border bg-accent/40 rounded-2xl flex items-center justify-center shadow-xs">
+          <div className="h-20 w-20 border border-border bg-accent/40 rounded-2xl flex items-center justify-center shadow-none">
             <ImageIcon className="h-7 w-7 text-muted-foreground" />
           </div>
           <div>
@@ -488,7 +488,7 @@ function Settings() {
       </div>
 
       {/* Workspace Settings: Regional & Defaults Card */}
-      <div className="border border-border bg-card p-8 rounded-2xl shadow-sm">
+      <div className="border border-border bg-card p-8 rounded-2xl shadow-none">
         <h2 className="text-xl font-semibold text-foreground mb-6">
           Regional & Defaults
         </h2>
@@ -499,7 +499,7 @@ function Settings() {
               Base Currency
             </label>
             <Select defaultValue="IDR">
-              <SelectTrigger className="w-full h-11 border border-border rounded-xl shadow-xs">
+              <SelectTrigger className="w-full h-11 border border-border rounded-xl shadow-none">
                 <SelectValue placeholder="Select currency" />
               </SelectTrigger>
               <SelectContent className="rounded-xl">
