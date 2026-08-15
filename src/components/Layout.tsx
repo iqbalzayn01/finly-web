@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   Globe,
   Tag,
+  ArrowRight,
 } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
 import { AiChatAssistant } from './AiChatAssistant'
@@ -648,12 +649,97 @@ export function Topbar() {
   )
 }
 
+function PublicNavbar() {
+  const location = useLocation()
+
+  return (
+    <header className="sticky top-0 z-40 flex h-20 items-center justify-between px-6 md:px-12 bg-card/80 backdrop-blur-md border-b border-border shadow-xs">
+      <Link to="/landing" className="flex items-center gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-sm">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+        </div>
+        <div>
+          <h1 className="font-bold text-lg text-foreground tracking-tight leading-none">Finly</h1>
+          <p className="text-[10px] font-semibold text-muted-foreground mt-0.5">Cashflow OS</p>
+        </div>
+      </Link>
+
+      <nav className="hidden md:flex items-center gap-8 text-sm font-semibold">
+        <Link
+          to="/landing"
+          className={cn(
+            'transition-colors',
+            location.pathname === '/landing' ? 'text-primary font-bold' : 'text-muted-foreground hover:text-foreground'
+          )}
+        >
+          Overview
+        </Link>
+        <Link
+          to="/pricing"
+          className={cn(
+            'transition-colors',
+            location.pathname === '/pricing' ? 'text-primary font-bold' : 'text-muted-foreground hover:text-foreground'
+          )}
+        >
+          Pricing
+        </Link>
+      </nav>
+
+      <div className="flex items-center gap-3">
+        <ThemeToggle />
+        <Link
+          to="/"
+          className="px-4 py-2 text-xs font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-xs flex items-center gap-1.5"
+        >
+          Open Dashboard
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      </div>
+    </header>
+  )
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const location = useLocation()
   const { isExpanded } = useSidebarStore()
+  const isPublicPage = location.pathname === '/landing' || location.pathname === '/pricing'
+
   const m3Transition = {
     type: 'tween' as const,
     ease: [0.2, 0, 0, 1] as [number, number, number, number],
     duration: 0.35,
+  }
+
+  if (isPublicPage) {
+    return (
+      <div className="min-h-screen bg-background font-sans text-foreground selection:bg-primary/20 flex flex-col">
+        <PublicNavbar />
+        <main className="flex-1 p-6 md:p-10 max-w-7xl w-full mx-auto">
+          {children}
+        </main>
+        <footer className="border-t border-border bg-card py-8 text-center text-xs text-muted-foreground">
+          <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>© 2026 Finly Inc. All rights reserved. B2B Cashflow Operating System.</p>
+            <div className="flex items-center gap-6 font-semibold">
+              <Link to="/landing" className="hover:text-foreground">Home</Link>
+              <Link to="/pricing" className="hover:text-foreground">Pricing</Link>
+              <Link to="/" className="hover:text-foreground">Dashboard</Link>
+            </div>
+          </div>
+        </footer>
+      </div>
+    )
   }
 
   return (
