@@ -187,8 +187,6 @@ function Dashboard() {
             progress: 82,
             progressBg: 'bg-white/20',
             progressFill: 'bg-white',
-            progressLabel: '82% of monthly target',
-            progressSub: 'vs last month',
           },
           {
             title: 'Total Income',
@@ -205,8 +203,6 @@ function Dashboard() {
             progress: 68,
             progressBg: 'bg-muted',
             progressFill: 'bg-emerald-500',
-            progressLabel: '68% of monthly target',
-            progressSub: 'vs last month',
           },
           {
             title: 'Total Expenses',
@@ -223,26 +219,6 @@ function Dashboard() {
             progress: 35,
             progressBg: 'bg-muted',
             progressFill: 'bg-rose-500',
-            progressLabel: '35% of budget cap',
-            progressSub: 'vs last month',
-          },
-          {
-            title: 'Cash Health & Runway',
-            value: '14.2 Months',
-            trend: '+1.5 mo',
-            isUp: true,
-            icon: ShieldCheck,
-            containerClass:
-              'bg-card text-foreground border border-border shadow-none rounded-2xl',
-            iconClass:
-              'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-xl',
-            trendClass:
-              'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full',
-            progress: 74,
-            progressBg: 'bg-muted',
-            progressFill: 'bg-gradient-to-r from-emerald-500 to-indigo-500',
-            progressLabel: 'Fortress Zone (>6 Mo)',
-            progressSub: '94/100 Healthy',
           },
         ].map((stat, i) => (
           <motion.div
@@ -290,12 +266,73 @@ function Dashboard() {
                 />
               </div>
               <div className="flex items-center justify-between text-[11px] font-medium opacity-75">
-                <span>{stat.progressLabel}</span>
-                <span>{stat.progressSub}</span>
+                <span>{stat.progress}% of monthly target</span>
+                <span>vs last month</span>
               </div>
             </div>
           </motion.div>
         ))}
+
+        {/* 4th Metric Card: Cash Health & Runway */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ ...m3Transition, delay: 0.24 }}
+          className="relative flex flex-col justify-between overflow-hidden p-6 bg-card text-foreground border border-border shadow-none rounded-2xl hover:border-foreground/20 active:scale-[0.98] transition-all cursor-pointer"
+        >
+          {/* Header: Left Icon + Label, Right Status Pill */}
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
+              <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
+                Cash Health & Runway
+              </span>
+            </div>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              🟢 Healthy (94/100)
+            </span>
+          </div>
+
+          {/* Main Metric */}
+          <div className="mt-4 mb-2">
+            <h3 className="font-mono text-2xl lg:text-3xl font-bold tracking-tight text-foreground">
+              14.2 Months
+            </h3>
+            <p className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+              <ArrowUpRight className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">↗ +1.5 mo</span> vs last month
+            </p>
+          </div>
+
+          {/* Visual Safety Gauge */}
+          <div className="space-y-1.5 my-1">
+            <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-indigo-500 transition-all duration-500"
+                style={{ width: '74%' }}
+              />
+            </div>
+            <div className="flex items-center justify-between text-[11px] text-muted-foreground font-medium">
+              <span>Fortress Zone (&gt;6 Mo Runway)</span>
+              <span className="font-mono">74% of target</span>
+            </div>
+          </div>
+
+          {/* Footer Breakdown (2-Column Micro Grid) */}
+          <div className="pt-3 border-t border-border mt-3 grid grid-cols-2 gap-3 text-xs">
+            <div className="space-y-0.5">
+              <p className="text-[11px] text-muted-foreground font-medium">Avg Monthly Burn</p>
+              <p className="font-mono text-xs font-bold text-foreground">$12,450.00</p>
+            </div>
+            <div className="space-y-0.5 text-right">
+              <p className="text-[11px] text-muted-foreground font-medium">Liquid Cash</p>
+              <p className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">$148,250.00</p>
+            </div>
+          </div>
+        </motion.div>
       </div>
 
       {/* Main Chart Area: Dual Bar Chart (Income vs Expense) with Smooth Rounded Bars */}
