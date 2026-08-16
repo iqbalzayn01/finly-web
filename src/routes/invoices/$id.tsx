@@ -109,8 +109,8 @@ function InvoiceDetail() {
 
       <div className="grid md:grid-cols-3 gap-8">
         {/* Main Document Paper */}
-        <div className="md:col-span-2 border border-border bg-card p-8 md:p-10 rounded-2xl shadow-none">
-          <div className="grid grid-cols-2 gap-12 pb-10 border-b border-border">
+        <div className="md:col-span-2 border border-border bg-card p-6 md:p-10 rounded-2xl shadow-none">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 pb-10 border-b border-border">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                 From
@@ -145,45 +145,47 @@ function InvoiceDetail() {
           </div>
 
           <div className="py-8">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
-                  <th className="pb-3 font-semibold w-1/2">
-                    Description
-                  </th>
-                  <th className="pb-3 font-semibold text-right">
-                    Qty
-                  </th>
-                  <th className="pb-3 font-semibold text-right">
-                    Price
-                  </th>
-                  <th className="pb-3 font-semibold text-right">
-                    Total
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {invoice.items.map((item, i) => (
-                  <tr 
-                    key={i}
-                    className="transition-colors"
-                  >
-                    <td className="py-4 text-sm font-semibold text-foreground">
-                      {item.desc}
-                    </td>
-                    <td className="py-4 text-right font-mono text-sm text-muted-foreground">
-                      {item.qty}
-                    </td>
-                    <td className="py-4 text-right font-mono text-sm text-muted-foreground">
-                      ${item.price.toLocaleString()}
-                    </td>
-                    <td className="py-4 text-right font-mono font-semibold text-sm text-foreground">
-                      ${item.total.toLocaleString()}
-                    </td>
+            <div className="overflow-x-auto w-full">
+              <table className="w-full text-left min-w-[500px]">
+                <thead>
+                  <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
+                    <th className="pb-3 font-semibold w-1/2">
+                      Description
+                    </th>
+                    <th className="pb-3 font-semibold text-right">
+                      Qty
+                    </th>
+                    <th className="pb-3 font-semibold text-right">
+                      Price
+                    </th>
+                    <th className="pb-3 font-semibold text-right">
+                      Total
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {invoice.items.map((item, i) => (
+                    <tr 
+                      key={i}
+                      className="transition-colors"
+                    >
+                      <td className="py-4 text-sm font-semibold text-foreground">
+                        {item.desc}
+                      </td>
+                      <td className="py-4 text-right font-mono text-sm text-muted-foreground">
+                        {item.qty}
+                      </td>
+                      <td className="py-4 text-right font-mono text-sm text-muted-foreground">
+                        ${item.price.toLocaleString()}
+                      </td>
+                      <td className="py-4 text-right font-mono font-semibold text-sm text-foreground">
+                        ${item.total.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
             <div className="mt-8 flex justify-end">
               <div className="w-[300px] border border-border bg-background p-6 rounded-2xl shadow-none">
