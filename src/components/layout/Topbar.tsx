@@ -100,13 +100,13 @@ export function Topbar() {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  'flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer outline-none',
+                  'flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs transition-all cursor-pointer outline-none',
                   isActive
-                    ? 'bg-card text-foreground border border-border shadow-none'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                    ? 'bg-primary text-primary-foreground font-extrabold border border-primary/30 shadow-none ring-2 ring-primary/20'
+                    : 'text-muted-foreground font-semibold hover:text-foreground hover:bg-accent/60'
                 )}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className={cn('h-4 w-4', isActive ? 'text-primary-foreground' : 'text-muted-foreground')} />
                 <span>{item.label}</span>
               </Link>
             )
@@ -295,13 +295,13 @@ export function Topbar() {
                     to={item.to}
                     onClick={() => setMobileNavOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-colors',
+                      'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all',
                       isActive
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-foreground hover:bg-accent'
+                        ? 'bg-primary text-primary-foreground font-extrabold border border-primary/30 shadow-none ring-2 ring-primary/20'
+                        : 'text-foreground hover:bg-accent font-medium'
                     )}
                   >
-                    <Icon className="h-5 w-5" />
+                    <Icon className={cn('h-5 w-5', isActive ? 'text-primary-foreground' : 'text-muted-foreground')} />
                     <span>{item.label}</span>
                   </Link>
                 )
