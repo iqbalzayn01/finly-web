@@ -3,12 +3,14 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Check, Sparkles, Zap, Shield, HelpCircle, ChevronDown, ArrowRight } from 'lucide-react'
 import { cn } from '../lib/utils'
+import { useSubscription } from '../lib/subscription'
 
 export const Route = createFileRoute('/pricing')({
   component: PricingPage,
 })
 
 function PricingPage() {
+  const { plan: currentPlan, isPro, upgradeToPro, downgradeToStarter } = useSubscription()
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('annual')
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
@@ -195,23 +197,40 @@ function PricingPage() {
                 </div>
               </div>
 
-              <button
-                onClick={() => {
-                  setSelectedPlan(plan.name)
-                  if (plan.id === 'pro') {
-                    navigate({ to: '/' })
-                  }
-                }}
-                className={cn(
-                  'w-full py-3 rounded-xl text-xs font-bold transition-all shadow-none outline-none cursor-pointer flex items-center justify-center gap-2',
-                  plan.buttonVariant === 'primary'
-                    ? 'bg-primary text-primary-foreground hover:opacity-95 shadow-none'
-                    : 'bg-muted/60 hover:bg-accent text-foreground border border-border'
-                )}
-              >
-                {plan.buttonText}
-                <ArrowRight className="h-3.5 w-3.5" />
-              </button>
+              {/* Plan Action Button */}
+              {plan.id === currentPlan ? (
+                <button
+                  disabled
+                  className="w-full py-3 rounded-xl text-xs font-bold transition-all shadow-none outline-none flex items-center justify-center gap-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 cursor-default"
+                >
+                  <Check className="h-3.5 w-3.5" /> Current Plan
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setSelectedPlan(plan.name)
+                    if (plan.id === 'pro') {
+                      upgradeToPro()
+                      setTimeout(() => {
+                        navigate({ to: '/' })
+                      }, 400)
+                    } else if (plan.id === 'starter') {
+                      downgradeToStarter()
+                    } else {
+                      alert('Enterprise sales inquiry requested. Our team will contact you!')
+                    }
+                  }}
+                  className={cn(
+                    'w-full py-3 rounded-xl text-xs font-bold transition-all shadow-none outline-none cursor-pointer flex items-center justify-center gap-2 active:scale-[0.98]',
+                    plan.id === 'pro'
+                      ? 'bg-primary text-primary-foreground hover:opacity-95 shadow-none'
+                      : 'bg-muted/60 hover:bg-accent text-foreground border border-border'
+                  )}
+                >
+                  {plan.id === 'pro' ? 'Upgrade to Pro' : plan.buttonText}
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              )}
             </motion.div>
           )
         })}

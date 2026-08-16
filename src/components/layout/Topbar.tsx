@@ -20,6 +20,7 @@ import { ThemeToggle } from '../ThemeToggle'
 import { V2Tooltip } from '../ui/v2-tooltip'
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
 import { cn } from '../../lib/utils'
+import { useSubscription } from '../../lib/subscription'
 
 const NAV_ITEMS = [
   { icon: LayoutDashboard, label: 'Dashboard', to: '/' },
@@ -32,6 +33,7 @@ const NAV_ITEMS = [
 
 export function Topbar() {
   const location = useLocation()
+  const { isPro } = useSubscription()
   const [notifOpen, setNotifOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
@@ -61,7 +63,7 @@ export function Topbar() {
   return (
     <header className="sticky top-0 z-40 flex h-18 w-full border-b border-border bg-card/80 backdrop-blur-md transition-all shadow-none">
       <div className="flex h-full w-full max-w-[1920px] mx-auto px-4 md:px-8 items-center justify-between gap-4">
-        {/* Left Section: Brand Logo, Mobile Toggle & Upgrade to Pro */}
+        {/* Left Section: Brand Logo, Mobile Toggle & Pro Badge / Upgrade Button */}
         <div className="flex items-center gap-3 sm:gap-4">
           {/* Mobile Navigation Toggle Button */}
           <button
@@ -87,14 +89,25 @@ export function Topbar() {
             </div>
           </Link>
 
-          {/* Upgrade to Pro Action Pill (to the right of the logo) */}
-          <Link
-            to="/pricing"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-primary text-primary-foreground shadow-none hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer ml-1"
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>Upgrade to Pro</span>
-          </Link>
+          {/* Pro Badge (shown when user upgrades to Pro) or Upgrade to Pro Button */}
+          {isPro ? (
+            <Link
+              to="/pricing"
+              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-primary via-indigo-500 to-primary text-primary-foreground shadow-none ring-1 ring-primary/30 uppercase tracking-widest ml-1 cursor-pointer hover:opacity-90 transition-opacity"
+              title="Active Subscription: Pro Plan"
+            >
+              <Sparkles className="h-3 w-3 fill-current" />
+              <span>PRO</span>
+            </Link>
+          ) : (
+            <Link
+              to="/pricing"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-primary text-primary-foreground shadow-none hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer ml-1"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>Upgrade to Pro</span>
+            </Link>
+          )}
         </div>
 
         {/* Center Section: Primary Navigation Links (Desktop) */}
@@ -248,19 +261,34 @@ export function Topbar() {
                     </p>
                   </div>
 
-                  {/* Featured Upgrade to Pro Menu Item */}
-                  <Link
-                    to="/pricing"
-                    onClick={() => setMenuOpen(false)}
-                    className="flex items-center justify-between px-3 py-2 text-xs font-bold text-primary bg-primary/10 rounded-xl hover:bg-primary/20 border border-primary/20 transition-colors"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Sparkles className="h-4 w-4 text-primary" /> Upgrade to Pro
-                    </span>
-                    <span className="text-[10px] font-extrabold bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full">
-                      PRO
-                    </span>
-                  </Link>
+                  {/* Upgrade to Pro or Active Pro Subscription Menu Item */}
+                  {isPro ? (
+                    <Link
+                      to="/pricing"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center justify-between px-3 py-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 rounded-xl hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-emerald-500" /> Pro Subscription
+                      </span>
+                      <span className="text-[10px] font-extrabold bg-emerald-500 text-white px-1.5 py-0.5 rounded-full">
+                        ACTIVE
+                      </span>
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/pricing"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center justify-between px-3 py-2 text-xs font-bold text-primary bg-primary/10 rounded-xl hover:bg-primary/20 border border-primary/20 transition-colors"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-primary" /> Upgrade to Pro
+                      </span>
+                      <span className="text-[10px] font-extrabold bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full">
+                        PRO
+                      </span>
+                    </Link>
+                  )}
 
                   <Link
                     to="/account"
@@ -331,20 +359,35 @@ export function Topbar() {
                 )
               })}
 
-              {/* Mobile Upgrade to Pro Button */}
+              {/* Mobile Upgrade to Pro Button or Active Pro Badge */}
               <div className="pt-2 border-t border-border mt-2">
-                <Link
-                  to="/pricing"
-                  onClick={() => setMobileNavOpen(false)}
-                  className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-primary text-primary-foreground transition-all shadow-none"
-                >
-                  <span className="flex items-center gap-2.5">
-                    <Sparkles className="h-4 w-4" /> Upgrade to Pro
-                  </span>
-                  <span className="text-xs bg-white/20 text-white px-2 py-0.5 rounded-full font-extrabold">
-                    PRO
-                  </span>
-                </Link>
+                {isPro ? (
+                  <Link
+                    to="/pricing"
+                    onClick={() => setMobileNavOpen(false)}
+                    className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 transition-all shadow-none"
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <Sparkles className="h-4 w-4 text-emerald-500" /> Pro Subscription Active
+                    </span>
+                    <span className="text-xs bg-emerald-500 text-white px-2 py-0.5 rounded-full font-extrabold">
+                      ACTIVE
+                    </span>
+                  </Link>
+                ) : (
+                  <Link
+                    to="/pricing"
+                    onClick={() => setMobileNavOpen(false)}
+                    className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-primary text-primary-foreground transition-all shadow-none"
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <Sparkles className="h-4 w-4" /> Upgrade to Pro
+                    </span>
+                    <span className="text-xs bg-white/20 text-white px-2 py-0.5 rounded-full font-extrabold">
+                      PRO
+                    </span>
+                  </Link>
+                )}
               </div>
             </nav>
           </motion.div>
