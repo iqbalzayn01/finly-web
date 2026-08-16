@@ -280,55 +280,55 @@ function Dashboard() {
           transition={{ ...m3Transition, delay: 0.24 }}
           className="relative flex flex-col justify-between overflow-hidden p-6 bg-card text-foreground border border-border shadow-none rounded-2xl hover:border-foreground/20 active:scale-[0.98] transition-all cursor-pointer"
         >
-          {/* Header: Left Icon + Label, Right Status Pill */}
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                <ShieldCheck className="h-5 w-5" />
-              </div>
-              <span className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
-                Cash Health & Runway
-              </span>
+          {/* Top Bar: Icon on Left, Status Pill Badge on Right */}
+          <div className="flex items-center justify-between">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <ShieldCheck className="h-5 w-5" />
             </div>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
+            <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              🟢 Healthy (94/100)
+              Healthy (94/100)
             </span>
           </div>
 
-          {/* Main Metric */}
-          <div className="mt-4 mb-2">
-            <h3 className="font-mono text-2xl lg:text-3xl font-bold tracking-tight text-foreground">
-              14.2 Months
-            </h3>
-            <p className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-              <ArrowUpRight className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">↗ +1.5 mo</span> vs last month
+          {/* Middle Content: Big Value, Micro Delta, and Card Title */}
+          <div className="mt-6 mb-4">
+            <div className="flex items-baseline justify-between gap-2 flex-wrap">
+              <h3 className="font-mono text-2xl lg:text-3xl font-bold tracking-tight">
+                14.2 Months
+              </h3>
+              <span className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <ArrowUpRight className="h-3.5 w-3.5" />
+                +1.5 mo <span className="opacity-75 font-normal text-foreground">vs last mo</span>
+              </span>
+            </div>
+            <p className="text-[13px] font-semibold opacity-75 mt-1 tracking-wide">
+              Cash Health & Runway
             </p>
           </div>
 
           {/* Visual Safety Gauge */}
-          <div className="space-y-1.5 my-1">
+          <div className="space-y-1.5">
             <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-indigo-500 transition-all duration-500"
                 style={{ width: '74%' }}
               />
             </div>
-            <div className="flex items-center justify-between text-[11px] text-muted-foreground font-medium">
+            <div className="flex items-center justify-between text-[11px] font-medium opacity-75">
               <span>Fortress Zone (&gt;6 Mo Runway)</span>
-              <span className="font-mono">74% of target</span>
+              <span>74% of target</span>
             </div>
           </div>
 
           {/* Footer Breakdown (2-Column Micro Grid) */}
-          <div className="pt-3 border-t border-border mt-3 grid grid-cols-2 gap-3 text-xs">
+          <div className="pt-3 border-t border-border mt-3.5 grid grid-cols-2 gap-3 text-xs">
             <div className="space-y-0.5">
-              <p className="text-[11px] text-muted-foreground font-medium">Avg Monthly Burn</p>
+              <p className="text-[11px] font-medium opacity-75">Avg Monthly Burn</p>
               <p className="font-mono text-xs font-bold text-foreground">$12,450.00</p>
             </div>
             <div className="space-y-0.5 text-right">
-              <p className="text-[11px] text-muted-foreground font-medium">Liquid Cash</p>
+              <p className="text-[11px] font-medium opacity-75">Liquid Cash</p>
               <p className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">$148,250.00</p>
             </div>
           </div>
