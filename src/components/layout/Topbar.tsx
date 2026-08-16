@@ -12,6 +12,7 @@ import {
   Package,
   Menu,
   X,
+  Sparkles,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useState, useRef, useEffect } from 'react'
@@ -113,8 +114,17 @@ export function Topbar() {
           })}
         </nav>
 
-        {/* Right Section: Theme Toggle, Notifications, Account Profile */}
+        {/* Right Section: Upgrade to Pro, Theme Toggle, Notifications, Account Profile */}
         <div className="flex items-center gap-3">
+          {/* Upgrade to Pro Action Pill */}
+          <Link
+            to="/pricing"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-primary text-primary-foreground shadow-none hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>Upgrade to Pro</span>
+          </Link>
+
           {/* Theme Switcher Toggle */}
           <ThemeToggle />
 
@@ -227,7 +237,7 @@ export function Topbar() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.95 }}
                   transition={{ type: 'spring', stiffness: 450, damping: 28 }}
-                  className="absolute right-0 mt-3 w-56 bg-card border border-border rounded-2xl shadow-none z-50 p-2 space-y-1"
+                  className="absolute right-0 mt-3 w-60 bg-card border border-border rounded-2xl shadow-none z-50 p-2 space-y-1"
                 >
                   <div className="px-3 py-2 border-b border-border mb-1">
                     <p className="text-xs font-bold text-foreground">
@@ -237,6 +247,20 @@ export function Topbar() {
                       iqbal@finly.io
                     </p>
                   </div>
+
+                  {/* Featured Upgrade to Pro Menu Item */}
+                  <Link
+                    to="/pricing"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center justify-between px-3 py-2 text-xs font-bold text-primary bg-primary/10 rounded-xl hover:bg-primary/20 border border-primary/20 transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-primary" /> Upgrade to Pro
+                    </span>
+                    <span className="text-[10px] font-extrabold bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full">
+                      PRO
+                    </span>
+                  </Link>
 
                   <Link
                     to="/account"
@@ -306,6 +330,22 @@ export function Topbar() {
                   </Link>
                 )
               })}
+
+              {/* Mobile Upgrade to Pro Button */}
+              <div className="pt-2 border-t border-border mt-2">
+                <Link
+                  to="/pricing"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-primary text-primary-foreground transition-all shadow-none"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Sparkles className="h-4 w-4" /> Upgrade to Pro
+                  </span>
+                  <span className="text-xs bg-white/20 text-white px-2 py-0.5 rounded-full font-extrabold">
+                    PRO
+                  </span>
+                </Link>
+              </div>
             </nav>
           </motion.div>
         )}
