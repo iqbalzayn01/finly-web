@@ -20,7 +20,6 @@ import {
   SelectContent,
   SelectItem,
 } from '../components/ui/select'
-import { CashHealthRunwayCard } from '../components/dashboard/CashHealthRunwayCard'
 import {
   XAxis,
   YAxis,
@@ -171,7 +170,7 @@ function Dashboard() {
         </motion.div>
       </div>
 
-      {/* Top Metrics Cards - M3 Tonal Surfaces + Cash Health & Runway */}
+      {/* Top Metrics Cards - M3 Tonal Surfaces */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {[
           {
@@ -220,6 +219,22 @@ function Dashboard() {
             progress: 35,
             progressBg: 'bg-muted',
             progressFill: 'bg-rose-500',
+          },
+          {
+            title: 'Net Cash Runway',
+            value: '14.2 Months',
+            trend: '+1.5 mo',
+            isUp: true,
+            icon: ArrowUpRight,
+            containerClass:
+              'bg-card text-foreground border border-border shadow-none rounded-2xl',
+            iconClass:
+              'bg-primary/10 text-primary border border-primary/20 rounded-xl',
+            trendClass:
+              'bg-primary/10 text-primary rounded-full',
+            progress: 74,
+            progressBg: 'bg-muted',
+            progressFill: 'bg-primary',
           },
         ].map((stat, i) => (
           <motion.div
@@ -273,15 +288,6 @@ function Dashboard() {
             </div>
           </motion.div>
         ))}
-
-        {/* 4th Metric Card: Cash Health & Runway */}
-        <CashHealthRunwayCard
-          runwayMonths={14.2}
-          runwayDeltaMonths={1.5}
-          healthScore={94}
-          avgMonthlyBurnInCents={1_245_000}
-          liquidCashInCents={14_825_000}
-        />
       </div>
 
       {/* Main Chart Area: Dual Bar Chart (Income vs Expense) with Smooth Rounded Bars */}
