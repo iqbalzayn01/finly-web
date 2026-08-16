@@ -278,7 +278,7 @@ function Dashboard() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ ...m3Transition, delay: 0.24 }}
-          className="relative flex flex-col justify-between overflow-hidden p-6 bg-card text-foreground border border-border shadow-none rounded-2xl hover:border-foreground/20 active:scale-[0.98] transition-all cursor-pointer"
+          className="relative flex flex-col justify-between overflow-hidden p-6 bg-card text-foreground border border-border shadow-none rounded-2xl"
         >
           {/* Top Bar: Icon on Left, Status Pill Badge on Right */}
           <div className="flex items-center justify-between">
