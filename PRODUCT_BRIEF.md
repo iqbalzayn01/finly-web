@@ -3,7 +3,7 @@
 **Product Name:** Finly (B2B Cashflow Operating System)  
 **Tagline:** *"Ditch the Spreadsheets. Master Your Cashflow."*  
 **Document Type:** Core Product Brief — The Why & Who  
-**Version:** 2.1.0  
+**Version:** 2.3.0  
 **Target Audience:** Non-Accountant Founders, Agency Directors, Consultants, Freelancers, Solopreneurs, and Micro-SMEs  
 
 ---
