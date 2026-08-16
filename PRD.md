@@ -1,6 +1,6 @@
 # Finly Web — Frontend Product Requirements Document (PRD)
 
-**Document Version:** 2.2.0  
+**Document Version:** 2.3.0  
 **Scope:** Frontend Application Only (`finly-web` / `app.finly.io`)  
 **Target Audience:** Non-accountant operators (freelancers, consultants, agencies, solopreneurs, and micro-SME founders)  
 **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Architecture  
@@ -22,7 +22,8 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 * **Routing & SSR Engine:** TanStack Start & TanStack Router (`@tanstack/react-router`) with end-to-end type-safe file routes.
 * **State Management & Data Layer:**
   * **Server State & Caching:** TanStack Query v5 (`@tanstack/react-query`) with automatic background refetching, SWR caching, and optimistic UI mutations.
-  * **Client Global Store:** Zustand for layout state, UI modals, notification toasts, and active theme preferences (`light` | `dark` | `auto`).
+  * **Client Global Store:** Zustand for layout state, UI modals, and notification toasts.
+  * **Subscription Store (`src/lib/subscription.ts`):** Reactive subscription hook and persistence with cross-window event synchronization (`starter`, `pro`, `enterprise`).
 * **Table & Form Orchestration:**
   * **TanStack Table v8:** High-performance tabular data grids, multi-column filtering, and server/client-side sorting.
   * **TanStack Form & Zod:** Type-safe form validation pipelines with real-time field error formatting.
@@ -36,173 +37,136 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 * **Typography Hierarchy:**
   * **UI & Body:** *IBM Plex Sans* (headings, interactive labels, table headers, form inputs).
   * **Financial & Tabular Data:** *IBM Plex Mono* (`font-mono` / tabular figures) for all currency values, transaction amounts, invoice IDs, basis points, and numeric calculations.
-* **Interaction & Motion:** Material Design 3 (M3) cubic-bezier easing (`[0.2, 0, 0, 1]`) and Motion (`framer-motion`) micro-transitions (modal fade-ins, drawer slides, accordion toggles).
+* **Interaction & Motion:** Material Design 3 (M3) cubic-bezier easing (`[0.2, 0, 0, 1]`) and Motion (`framer-motion`) micro-transitions.
 * **Pointer Consistency:** Mandatory `cursor: pointer` on all buttons, interactive pills, tab triggers, clickable table rows, and select controls.
 
 ---
 
 ## 3. Layout, Navigation & Responsive Specifications
 
-### 3.1 Centered Topbar Header Navigation (`Topbar.tsx`)
+### 3.1 3-Column Centered Topbar Header (`Topbar.tsx`)
 * **Header Structure:** Sticky, backdrop-filtered topbar navigation bar (`h-18`, `bg-card/80 backdrop-blur-md border-b border-border`).
-* **Left Section:**
-  * Finly Brand Logo: 40px primary brand badge with centered "F" monogram and bold "Finly" title with live version pill badge (`v2.2.0`).
-  * Mobile Navigation Hamburger: Toggle drawer button visible on viewports `< 1024px`.
-* **Center Section (Desktop Navigation):**
-  * Centered pill button navigation group:
-    * **Dashboard** (`/`) — Icon: `LayoutDashboard`
-    * **Cashbook** (`/cashbook`) — Icon: `Wallet`
-    * **Invoices** (`/invoices`) — Icon: `FileText`
-    * **Customers** (`/customers`) — Icon: `Users`
-    * **Catalog** (`/items`) — Icon: `Package`
-    * **Settings** (`/settings`) — Icon: `Settings`
-  * **Active Pill State:** High-contrast active styling (`bg-primary text-primary-foreground font-extrabold border border-primary/30 ring-2 ring-primary/20`) ensuring immediate spatial orientation.
-* **Right Section:**
-  * **Theme Switcher (`ThemeToggle.tsx`):** Light / Dark mode toggle button.
-  * **Notifications Center:** Trigger for operational alerts (overdue reminders, receipt uploads).
-  * **User Profile Avatar Dropdown:** User identity snapshot, active business indicator, and quick links to `/account`, workspace switching, and logout.
+* **3-Column Balanced Grid (`grid grid-cols-2 lg:grid-cols-[1fr_auto_1fr]`):**
+  * **Left Column (Logo & Pro Badge):**
+    * Finly Brand Logo: 40px primary brand badge with centered "F" monogram and bold "Finly" title with live version indicator.
+    * **Dynamic Pro Badge / Upgrade Button:** Placed directly adjacent to the logo. Displays `"Upgrade to Pro"` button for Starter users, which automatically transitions to a gradient **`PRO`** badge upon upgrading.
+    * Mobile Navigation Toggle: Hamburger button visible on viewports `< 1024px`.
+  * **Center Column (Geometrically Centered Navigation):**
+    * Centered pill button navigation group:
+      * **Dashboard** (`/dashboard`) — Icon: `LayoutDashboard`
+      * **Cashbook** (`/cashbook`) — Icon: `Wallet`
+      * **Invoices** (`/invoices`) — Icon: `FileText`
+      * **Customers** (`/customers`) — Icon: `Users`
+      * **Catalog** (`/items`) — Icon: `Package`
+      * **Settings** (`/settings`) — Icon: `Settings`
+    * **Active Pill State:** High-contrast active styling (`bg-primary text-primary-foreground font-extrabold border border-primary/30 ring-2 ring-primary/20`).
+  * **Right Column (Actions):**
+    * **Theme Switcher (`ThemeToggle.tsx`):** Light / Dark mode toggle.
+    * **Notifications Center:** Operational alerts popover.
+    * **User Profile Avatar Dropdown:** User identity, active Pro subscription indicator, links to `/account`, `/settings`, and logout.
 * **Mobile Responsive Drawer:** Collapsible slide-over drawer providing identical navigation items and active states on mobile devices (<1024px).
 
-### 3.2 Full-Width Canvas Layout (`Layout.tsx`)
-* **Sidebarless Full Canvas:** Clean, unobstructed horizontal workspace layout without vertical sidebar margins or drawer offsets.
-* **Max Canvas Width:** Centered container constrained to `max-w-[1920px] mx-auto` for high-resolution desktop and ultrawide monitors.
-* **Responsive Breakpoints:**
-  * Mobile (`< 640px`): Single-column stacked cards, full-width inputs, and horizontal scroll tables (`min-w-[600px]`).
-  * Tablet (`640px - 1024px`): 2-column metric cards, responsive split builders.
-  * Desktop (`≥ 1024px`): Centered topbar pill navigation, multi-column dashboard layouts.
+### 3.2 Public Header (`PublicNavbar.tsx`)
+* **Structure:** 3-column CSS grid (`grid grid-cols-[1fr_auto_1fr] max-w-7xl mx-auto px-6 md:px-10`).
+* **Left:** Brand logo linked to root (`/`).
+* **Center:** Perfectly centered navigation links (`Overview` `/`, `Features` `/#features-section`, `Pricing` `/pricing`).
+* **Right:** Theme toggle and "Open Dashboard" button linking to `/dashboard`.
+
+### 3.3 Canvas Layout (`Layout.tsx`)
+* **Public Pages:** `/` (Landing Page) and `/pricing` with public navbar and marketing footer.
+* **Authenticated App Pages:** `/dashboard`, `/cashbook`, `/invoices`, `/customers`, `/items`, `/settings`, `/account` with topbar and AI assistant.
+* **Max Canvas Width:** Centered container constrained to `max-w-[1920px] mx-auto` for widescreen desktops.
 
 ---
 
 ## 4. Route & Feature Specifications
 
-### 4.1 Executive Cashflow Dashboard (`/`)
+### 4.1 Public SaaS Landing Page (`/`)
+* **Hero Section:**
+  * High-converting headline: *"Master your agency cashflow with intelligent automation."*
+  * Dual primary/secondary CTAs ("Start 14-Day Free Trial" linking to `/pricing` and "Launch Live App" linking to `/dashboard`).
+* **Interactive Showcase Window:** Tabbed preview of Cashflow Dynamics, AI Receipt & Invoice Parsing, and Live Multi-Currency FX Engine.
+* **Interactive ROI Calculator:** Real-time slider calculating monthly time saved (hours) and cashflow recovered ($).
+* **Bento Grid Features:** Visual highlights of Integer Minor-Unit Engine, Human-in-the-Loop AI, Live FX Engine, and PostgreSQL RLS Isolation.
+* **Social Proof & Testimonials:** Trust badges from 500+ B2B agencies and customer quotes.
+* **SEO Structured Data:** Integrated Schema.org `SoftwareApplication` JSON-LD metadata.
+
+---
+
+### 4.2 Executive Cashflow Dashboard (`/dashboard`)
 * **Purpose:** Provide an operator with an immediate 5-second health check of their business cashflow.
-* **Key Performance Indicators (KPI Cards):**
-  * **Total Income:** Current period cash inflows formatted with currency symbol.
-  * **Total Expenses:** Current period business expenditures.
-  * **Net Cashflow / Profit:** Inflows minus outflows with green/red positive/negative indicators.
-  * **Operating Expense Ratio (OER):** Ratio of business expenses to income presented in percentage / basis points.
-* **Visual Cashflow Chart:**
-  * Interactive area chart displaying monthly cash inflow vs expense curves.
-  * Tooltip showing exact minor-unit monetary figures on hover.
-  * Range selector (3 Months, 6 Months, 12 Months).
-* **Urgency Receivables Card:**
-  * Summary of outstanding unpaid invoices and overdue alerts (`status = 'unpaid' AND due_date < today`).
-  * Direct action link to invoice detail view.
-* **Recent Activity Feed:** Latest 5 cashbook transactions with quick category badges and amount tags.
+* **Key Performance Indicators (Top 4 KPI Cards):**
+  1. **Total Net Balance:** $148,250.00 (+12.5% trend, progress against target).
+  2. **Total Income:** $34,120.00 (+8.2% trend, emerald tonal styling).
+  3. **Total Expenses:** $12,450.00 (-2.4% trend, rose tonal styling).
+  4. **Cash Health & Runway Card:**
+     * **Header:** `ShieldCheck` icon in emerald tonal badge + `Healthy (94/100)` status badge with live pulse indicator.
+     * **Main Metric:** `14.2 Months` (`font-mono text-2xl lg:text-3xl font-bold`) + `↗ +1.5 mo vs last mo` micro delta.
+     * **Visual Safety Gauge:** Horizontal emerald-to-indigo gradient progress bar showing Fortress Zone status (>6 Mo Runway).
+     * **Footer Micro-Grid:** 2-column breakdown of `Avg Monthly Burn: $12,450.00` and `Liquid Cash: $148,250.00`.
+* **Cashflow Dynamics Chart:**
+  * Dual stacked bar chart comparing monthly Inflows vs Expenses.
+  * Timeframe filter pills (`6M`, `YTD`, `1Y`).
+  * Custom interactive tooltips with net cashflow calculation.
+* **Bottom Grid (3 Cards):**
+  1. **Financial Statistics:** Operating Profit Margin (63.4%), Avg. Invoice Settled ($4,250.00), On-Time Payment Rate (96.5%).
+  2. **FX Currency Converter:** Interactive live currency conversion (USD, IDR, EUR, GBP, SGD) with minor-unit calculation.
+  3. **Recent Activity Feed:** Latest cash transactions with instant type filtering (`All`, `Income`, `Expense`).
 
 ---
 
-### 4.2 Jargon-Free Cashbook (`/cashbook`)
-* **Purpose:** A straightforward cash ledger replacing intimidating debit/credit jargon with direct Income and Expense tracking.
-* **Transaction Table:**
-  * **Columns:** Date, Merchant / Client Description, Category Pill Badge, Scope (`Business` vs `Personal`), Receipt Status, Amount (`+ $4,000.00` in emerald green vs `- $500.00` in crimson red), and Row Actions.
-  * **Filtering & Search:** Real-time search by merchant/client, type filter (`All`, `Income`, `Expense`), scope filter (`Business`, `Personal`), and category dropdown.
-* **Quick-Add Transaction Drawer (3-Second Rule):**
-  * Rapid creation form for operators on the go.
-  * Fields: Type (Income / Expense segmented switch), Amount (formatted currency input), Category, Merchant / Client, Date picker, Project Tag, Notes, and File Attachment upload.
-* **Receipt Viewer Modal:**
-  * Secure preview of transaction receipts via temporary pre-signed URLs (`receipt_path`).
+### 4.3 Jargon-Free Cashbook (`/cashbook`)
+* **Transaction Table:** Date, Merchant / Client Description, Category Pill Badge, Scope (`Business` vs `Personal`), Receipt Status, Amount (`+` in emerald green vs `-` in crimson red), and Row Actions.
+* **Filtering & Search:** Real-time search, type filters, scope filters, and category dropdowns.
+* **Quick-Add Transaction Drawer (3-Second Rule):** Rapid creation form for operators on the go.
+* **Receipt Viewer Modal:** Secure preview of transaction receipts via temporary pre-signed URLs.
 
 ---
 
-### 4.3 Invoice Management & Builder (`/invoices`)
+### 4.4 Invoice Management & Builder (`/invoices`)
 
 #### A. Invoices List (`/invoices`)
-* **Data Grid:**
-  * Displays Invoice Number, Customer Name, Issue Date, Due Date, Total Amount, Derived Display Status (`Draft`, `Unpaid`, `Paid`, `Overdue`, `Void`), and Actions Menu.
-* **Status Badges:**
-  * **Draft:** Muted gray badge.
-  * **Unpaid:** Warning amber badge.
-  * **Overdue:** Urgent red badge (derived dynamically on client: `status === 'unpaid' && dueDate < today`).
-  * **Paid:** Solid emerald green badge.
-  * **Void:** Strikethrough dark badge.
-* **Search & Filters:** Instant search by invoice number or client name, tabbed status filters.
+* Displays Invoice Number, Customer Name, Issue Date, Due Date, Total Amount, Derived Display Status (`Draft`, `Unpaid`, `Paid`, `Overdue`, `Void`), and Actions Menu.
+* Overdue status derived dynamically: `status === 'unpaid' && dueDate < today`.
 
 #### B. Live Invoice Builder (`/invoices/builder`)
-* **Real-Time Interactive Editor:**
-  * Split-pane or responsive stacked layout with live recalculation preview.
-* **Header & Customer Configuration:**
-  * Customer selector (auto-fills payment terms and snapshot address).
-  * Issue Date & Due Date pickers (automatically defaults due date based on customer's `paymentTermsDays`).
-  * Custom notes and payment instructions.
-* **Dynamic Line Items Editor:**
-  * Add, reorder, and remove line items.
-  * Catalog item picker (auto-fills unit price and default tax bps) or custom free-text description.
-  * Quantity (scaled in thousandths, e.g. `1.500`) and Unit Price inputs.
-* **Deterministic Calculation Pipeline:**
-  $$\text{line\_total} = \operatorname{round}\left(\frac{\text{unit\_price} \times \text{quantity\_milli}}{1000}\right)$$
-  $$\text{subtotal} = \sum \text{line\_total}$$
-  $$\text{discount} = \operatorname{round}\left(\frac{\text{subtotal} \times \text{discount\_bps}}{10\,000}\right)$$
-  $$\text{taxable\_base} = \text{subtotal} - \text{discount}$$
-  $$\text{tax\_amount} = \operatorname{round}\left(\frac{\text{taxable\_base} \times \text{tax\_bps}}{10\,000}\right)$$
-  $$\text{total} = \text{taxable\_base} + \text{tax\_amount}$$
-* **Save Controls:** Save as Draft or Issue Invoice immediately.
+* Split-pane interactive editor with real-time recalculation preview.
+* Line items editor with catalog picker, millesimal quantities (`quantity_milli`), and integer basis points tax/discount.
+* Mathematical order: Line totals $\to$ Subtotal $\to$ Discount $\to$ Taxable Base $\to$ Tax $\to$ Grand Total.
 
 #### C. Invoice Document Detail View (`/invoices/$id`)
-* **Static Snapshot Presentation:**
-  * Rendered formal invoice document card presenting snapshotted client name, line items, subtotal, discount, taxes, and total.
-* **Action Toolbar:**
-  * **Print / PDF Download:** Browser print triggering clean print stylesheet (`@media print`).
-  * **Send Email:** Dispatches email notification with invoice snapshot.
-  * **Mark as Paid:** Records payment date and atomically creates an Income entry in the Cashbook under `Invoice Payment`.
-  * **Void Invoice:** Terminal cancellation path with audit reason modal.
-  * **Copy Public Link:** Copies link for client review.
+* Rendered formal invoice document presenting snapshotted data.
+* Actions: Print/PDF download (`@media print`), email dispatch, atomic "Mark as Paid" cashbook sync, and void cancellation.
 
 ---
 
-### 4.4 Customers & Catalog Directory (`/customers`, `/items`)
-
-#### A. Customers Directory (`/customers`)
-* **Client Data Grid:** Customer name, email, phone number, address, tax number/EIN, payment terms (e.g., Net 14, Net 30), and total lifetime billings.
-* **Customer Drawer / Modal:** Create and update customer details without leaving the current view.
-* **Inline Search:** Instant client filtering with debounced query execution.
-
-#### B. Product & Service Catalog (`/items`)
-* **Catalog Table:** Item name, description, unit (e.g., `hours`, `units`, `project`), default price in minor units, default tax rate (basis points), and active status toggle.
-* **Quick Create / Edit Modal:** Simplified pricing input with currency mask.
+### 4.5 Customers & Catalog Directory (`/customers`, `/items`)
+* **Customers Directory (`/customers`):** Client contact directory, payment terms (Net 14, Net 30), lifetime billings, and create/edit modal.
+* **Product & Service Catalog (`/items`):** Reusable products and services with default minor-unit pricing and default tax rates.
 
 ---
 
-### 4.5 Settings & AI Agent Integrations (`/settings`)
-
-#### A. Workspace & Business Profile Tab
-* **Business Profile:** Company legal name, business address, tax number / VAT ID / NPWP, and logo upload.
-* **Invoice Formatting:** Custom invoice numbering prefix (e.g., `INV`, `FIN`), sequence preview (`INV-2026-000001`).
-* **Base Currency Configuration:** Fixed Scale 100 base currency (IDR, USD, EUR, SGD, GBP, AUD, JPY).
-
-#### B. AI Agent Connections Tab
-* **Multi-Provider LLM Engine Selector:**
-  * **Google Gemini** (Gemini 2.0 Flash, Gemini 1.5 Pro)
-  * **OpenAI ChatGPT** (GPT-4o, GPT-4o-mini)
-  * **Anthropic Claude** (Claude 3.7 Sonnet, Claude 3.5 Haiku)
-  * **DeepSeek AI** (DeepSeek-V3, DeepSeek-R1)
-  * **Custom / Local Ollama** (Self-hosted endpoint configuration)
-* **Configuration Controls:**
-  * Encrypted API Key input with secure password show/hide toggle.
-  * Custom Base URL endpoint override (for enterprise proxies and local Ollama instances).
-  * Model selection dropdown with capability indicators.
-  * Temperature Presets: `Precise (0.1)` for strict reconciliation, `Balanced (0.4)` for standard categorization, `Creative (0.8)` for report summaries.
-  * **Ping & Latency Verification:** Live connection test button validating credentials and returning real-time response latency (e.g., `⚡ Connected (142ms)`).
+### 4.6 Settings & AI Agent Integrations (`/settings`)
+* **Workspace Profile:** Business legal name, business address, tax number/VAT/NPWP, and logo upload.
+* **AI Agent Connections:** Multi-provider API connection management:
+  * Google Gemini (Gemini 2.0 Flash, Gemini 1.5 Pro)
+  * OpenAI ChatGPT (GPT-4o, GPT-4o-mini)
+  * Anthropic Claude (Claude 3.7 Sonnet, Claude 3.5 Haiku)
+  * DeepSeek AI (DeepSeek-V3, DeepSeek-R1)
+  * Local / Self-Hosted Ollama (Custom Base URL)
+* Real-time ping latency verification (`⚡ Connected (142ms)`).
 
 ---
 
-### 4.6 User Account Management (`/account`)
-* **Profile Management:** User full name, email address, password change form.
-* **Active Business Memberships:** List of accessible workspaces with user's specific RBAC role (`Owner`, `Admin`, `Editor`, `Viewer`).
-* **Session Management:** Active session overview and secure logout button.
+### 4.7 User Account Management (`/account`)
+* Profile details, password security, active workspace memberships, and session management.
 
 ---
 
-### 4.7 Public Landing Page & Pricing (`/landing`, `/pricing`)
-* **Landing Page (`/landing`):**
-  * Hero showcase with CTA buttons ("Start Free Trial", "Live Demo").
-  * Interactive feature highlights grid (`#features-section`).
-  * Non-accountant comparison breakdown (Traditional Accounting vs Finly OS).
-  * Responsive footer with product sitemap and social links.
-* **Pricing Page (`/pricing`):**
-  * Transparent pricing tiers (Starter, Professional, Agency).
-  * Monthly / Annual billing switch with discount badge.
+### 4.8 Subscription & Pricing (`/pricing`)
+* Transparent pricing plans (Starter $0, Pro $29/mo or $23/mo annual, Enterprise $79/mo).
+* 1-click Pro upgrade with real-time app-wide subscription state synchronization.
+* Monthly / Annual billing switch with 20% discount savings pill.
 
 ---
 
@@ -210,29 +174,25 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 
 1. **Integer Minor Units Everywhere:**
    * Monetary amounts are stored, calculated, and transmitted as integer minor units (`*_in_cents`) with a fixed scale of 100.
-   * Rp 50.000 is represented as `5000000`; $50.00 is represented as `5000`.
    * Floating-point arithmetic and `parseFloat` are strictly prohibited in calculation paths.
-   * `Money.format()` is reserved exclusively for the presentation layer.
+   * `Money.format()` is reserved exclusively for presentation.
 
 2. **Session-Derived Multi-Tenancy:**
-   * The client never invents, stores in localStorage, or manually injects `businessId` into API mutation payloads. Tenant context is managed server-side via session cookies.
+   * Client never manually injects `businessId`. Tenant context is managed server-side via session cookies.
 
 3. **No Overdue Enum in State:**
-   * Overdue is never a stored or mutated database enum. The frontend derives overdue status dynamically: `status === 'unpaid' && dueDate < today`.
+   * Overdue is derived dynamically on client: `status === 'unpaid' && dueDate < today`.
 
 4. **Zero-Fluff Flat Aesthetics:**
-   * No excessive decorative shadows (`shadow-none`), no random rainbow gradients, no purple-on-dark clichés, and no textureless floating cards.
-   * High information density, high-contrast borders (`rgba(255, 255, 255, 0.12)` in dark mode), and clear typographic hierarchy using IBM Plex fonts.
+   * Global `shadow-none` rule, high information density, crisp 1px borders, and IBM Plex typography.
 
-5. **Accessibility & Interactive Feedback:**
-   * All interactive elements must show clear hover, focus-visible, and disabled states.
-   * Asynchronous mutations must display instant loading indicators (spinners or skeleton loaders) and trigger clear toast confirmations upon success or error.
+5. **Accessibility & Interactive Consistency:**
+   * Mandatory `cursor: pointer` on interactive elements, consistent M3 transitions, and responsive grid centering.
 
 ---
 
 ## 6. Frontend Verification & Quality Standards
 
-* **TypeScript:** `npx tsc --noEmit` must pass with `0 errors` under strict mode.
-* **Linting:** ESLint must pass with `0 errors`.
-* **Vite Bundle Build:** `npm run build` must output optimized SSR and client bundles without circular dependency warnings.
-* **Responsive Integrity:** All views must maintain layout stability across mobile (320px+), tablet (768px+), desktop (1024px+), and ultrawide displays (1920px+).
+* **TypeScript:** Strict compilation with `0 errors`.
+* **Vite Bundle Build:** Production build passed with `0 errors`.
+* **Responsive Integrity:** Layout stability across mobile (320px+), tablet (768px+), desktop (1024px+), and ultrawide (1920px+).

@@ -1,6 +1,6 @@
 {
   "name": "finly-web",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Finly Web — B2B Cashflow & Financial Operating System (OS) for agencies, consultants, freelancers, and micro-SMEs",
   "private": true,
   "type": "module",
