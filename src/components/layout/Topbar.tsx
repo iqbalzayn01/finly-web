@@ -23,7 +23,7 @@ import { cn } from '../../lib/utils'
 import { useSubscription } from '../../lib/subscription'
 
 const NAV_ITEMS = [
-  { icon: LayoutDashboard, label: 'Dashboard', to: '/' },
+  { icon: LayoutDashboard, label: 'Dashboard', to: '/dashboard' },
   { icon: Wallet, label: 'Cashbook', to: '/cashbook' },
   { icon: FileText, label: 'Invoices', to: '/invoices' },
   { icon: Users, label: 'Customers', to: '/customers' },
@@ -75,7 +75,7 @@ export function Topbar() {
           </button>
 
           {/* Brand Header Logo */}
-          <Link to="/" className="flex items-center gap-3 group outline-none">
+          <Link to="/dashboard" className="flex items-center gap-3 group outline-none">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground font-black text-lg shadow-none">
               F
             </div>
@@ -116,7 +116,7 @@ export function Topbar() {
             const Icon = item.icon
             const isActive =
               location.pathname === item.to ||
-              (item.to !== '/' && location.pathname.startsWith(item.to))
+              (item.to !== '/dashboard' && location.pathname.startsWith(item.to))
 
             return (
               <Link
@@ -339,7 +339,7 @@ export function Topbar() {
                 const Icon = item.icon
                 const isActive =
                   location.pathname === item.to ||
-                  (item.to !== '/' && location.pathname.startsWith(item.to))
+                  (item.to !== '/dashboard' && location.pathname.startsWith(item.to))
 
                 return (
                   <Link

@@ -8,7 +8,7 @@ export function PublicNavbar() {
 
   return (
     <header className="sticky top-0 z-40 flex h-20 items-center justify-between px-6 md:px-12 bg-card/80 backdrop-blur-md border-b border-border shadow-none">
-      <Link to="/landing" className="flex items-center gap-3">
+      <Link to="/" className="flex items-center gap-3">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-primary text-primary-foreground rounded-2xl shadow-none">
           <svg
             width="22"
@@ -31,16 +31,16 @@ export function PublicNavbar() {
 
       <nav className="hidden md:flex items-center gap-8 text-sm font-semibold">
         <Link
-          to="/landing"
+          to="/"
           className={cn(
             'transition-colors',
-            location.pathname === '/landing' ? 'text-primary font-bold' : 'text-muted-foreground hover:text-foreground'
+            location.pathname === '/' ? 'text-primary font-bold' : 'text-muted-foreground hover:text-foreground'
           )}
         >
           Overview
         </Link>
         <a
-          href="/landing#features-section"
+          href="/#features-section"
           className="text-muted-foreground hover:text-foreground transition-colors"
         >
           Features
@@ -59,7 +59,7 @@ export function PublicNavbar() {
       <div className="flex items-center gap-3">
         <ThemeToggle />
         <Link
-          to="/"
+          to="/dashboard"
           className="px-4 py-2 text-xs font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-none flex items-center gap-1.5"
         >
           Open Dashboard
