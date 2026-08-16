@@ -1,25 +1,15 @@
 import React from 'react'
 import { Link, useLocation } from '@tanstack/react-router'
-import { motion } from 'motion/react'
-import { Sidebar, useSidebarStore } from './layout/Sidebar'
 import { Topbar } from './layout/Topbar'
 import { PublicNavbar } from './layout/PublicNavbar'
 import { AiChatAssistant } from './AiChatAssistant'
 
-// Re-export V2Tooltip and useSidebarStore for backwards compatibility
+// Re-export V2Tooltip for backwards compatibility
 export { V2Tooltip } from './ui/v2-tooltip'
-export { useSidebarStore } from './layout/Sidebar'
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation()
-  const { isExpanded } = useSidebarStore()
   const isPublicPage = location.pathname === '/landing' || location.pathname === '/pricing'
-
-  const m3Transition = {
-    type: 'tween' as const,
-    ease: [0.2, 0, 0, 1] as [number, number, number, number],
-    duration: 0.35,
-  }
 
   if (isPublicPage) {
     return (
@@ -44,19 +34,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-background font-sans text-foreground selection:bg-primary/20">
-      <Sidebar />
-      <motion.main
-        initial={false}
-        animate={{ marginLeft: isExpanded ? 240 : 80 }}
-        transition={m3Transition}
-        className="relative z-10 min-h-screen flex flex-col max-lg:!ml-0"
-      >
-        <Topbar />
-        <div className="flex-1 p-6 md:p-8 w-full max-w-[1920px] mx-auto space-y-8">
-          {children}
-        </div>
-      </motion.main>
+    <div className="min-h-screen bg-background font-sans text-foreground selection:bg-primary/20 flex flex-col">
+      <Topbar />
+      <main className="flex-1 p-6 md:p-8 w-full max-w-[1920px] mx-auto space-y-8">
+        {children}
+      </main>
       <AiChatAssistant />
     </div>
   )

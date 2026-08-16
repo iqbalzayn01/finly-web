@@ -28,21 +28,24 @@ This document outlines the complete product requirements, technical architecture
 
 ---
 
-## 3. Layout & Structure Specifications
+## 3. Layout & Navigation Architecture Specifications
 
-### 3.1 Sidebar Navigation (`Sidebar.tsx`)
-* **Width States**: Expanded (240px) vs Collapsed (80px) with synchronized M3 transitions.
-* **Search Input**: Sized to `h-11 rounded-2xl` matching navigation item pills.
-* **Floating Toggle Button**: Floating right-margin button positioned at `absolute -right-3.5 top-[22px] z-50`.
-* **Collapsed Logo Header**: Centered 44px brand logo button with expand indicator.
-* **Mobile Drawer**: Responsive mobile slide-in drawer with dark backdrop blur overlay.
+### 3.1 Centered Topbar Header Navigation (`Topbar.tsx`)
+* **Layout**: Sticky topbar header (`h-18`) with glassmorphism backdrop blur.
+* **Left Section**: Finly Brand Logo (40px primary badge with "F" logo) & brand title. Mobile hamburger navigation toggle button.
+* **Center Section**: Primary navigation menu pill group (`lg:flex`):
+  * **Dashboard** (`/`) — `LayoutDashboard`
+  * **Cashbook** (`/cashbook`) — `Wallet`
+  * **Invoices** (`/invoices`) — `FileText`
+  * **Customers** (`/customers`) — `Users`
+  * **Catalog** (`/items`) — `Package`
+  * **Settings** (`/settings`) — `Settings`
+* **Right Section**: Theme switcher (`ThemeToggle`), notification bell modal, and user account profile dropdown (`Avatar`).
+* **Responsive Mobile Navigation**: Mobile dropdown menu for small screens (<1024px).
 
-### 3.2 Topbar Header (`Topbar.tsx`)
-* **Layout**: Sticky header (`h-18`), page title/subtitle matching active route.
-* **Controls**: Mobile hamburger drawer toggle, theme switcher (`Light`, `Dark`, `Auto`), notification bell modal, and user account dropdown.
-
-### 3.3 Main Layout Container (`Layout.tsx`)
-* **Max Width**: Centered `max-w-[1920px] mx-auto` container for widescreen displays.
+### 3.2 Main Layout Container (`Layout.tsx`)
+* **Full-Width Canvas**: Full-width `<main>` layout container without vertical sidebar margin offsets.
+* **Max Width**: Centered `max-w-[1920px] mx-auto` container for ultra-wide desktop displays.
 
 ---
 
