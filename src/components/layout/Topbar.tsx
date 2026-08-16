@@ -61,8 +61,8 @@ export function Topbar() {
   return (
     <header className="sticky top-0 z-40 flex h-18 w-full border-b border-border bg-card/80 backdrop-blur-md transition-all shadow-none">
       <div className="flex h-full w-full max-w-[1920px] mx-auto px-4 md:px-8 items-center justify-between gap-4">
-        {/* Left Section: Brand Logo & Mobile Toggle */}
-        <div className="flex items-center gap-3">
+        {/* Left Section: Brand Logo, Mobile Toggle & Upgrade to Pro */}
+        <div className="flex items-center gap-3 sm:gap-4">
           {/* Mobile Navigation Toggle Button */}
           <button
             onClick={() => setMobileNavOpen(!mobileNavOpen)}
@@ -85,6 +85,15 @@ export function Topbar() {
                 B2B Cashflow OS
               </span>
             </div>
+          </Link>
+
+          {/* Upgrade to Pro Action Pill (to the right of the logo) */}
+          <Link
+            to="/pricing"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-primary text-primary-foreground shadow-none hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer ml-1"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>Upgrade to Pro</span>
           </Link>
         </div>
 
@@ -114,17 +123,8 @@ export function Topbar() {
           })}
         </nav>
 
-        {/* Right Section: Upgrade to Pro, Theme Toggle, Notifications, Account Profile */}
+        {/* Right Section: Theme Toggle, Notifications, Account Profile */}
         <div className="flex items-center gap-3">
-          {/* Upgrade to Pro Action Pill */}
-          <Link
-            to="/pricing"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-primary text-primary-foreground shadow-none hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer"
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>Upgrade to Pro</span>
-          </Link>
-
           {/* Theme Switcher Toggle */}
           <ThemeToggle />
 
