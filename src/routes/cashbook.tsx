@@ -339,25 +339,37 @@ function Cashbook() {
             <div className="flex items-center gap-3">
               <div className="w-40">
                 <Select value={typeFilter} onValueChange={setTypeFilter}>
-                  <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-card text-foreground rounded-xl">
+                  <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-card text-foreground rounded-full">
                     <SelectValue placeholder="All Types" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="income">Income</SelectItem>
-                    <SelectItem value="expense">Expense</SelectItem>
+                    <SelectItem value="all" className="rounded-full">
+                      All Types
+                    </SelectItem>
+                    <SelectItem value="income" className="rounded-full">
+                      Income
+                    </SelectItem>
+                    <SelectItem value="expense" className="rounded-full">
+                      Expense
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="w-40">
                 <Select value={scopeFilter} onValueChange={setScopeFilter}>
-                  <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-card text-foreground rounded-xl">
+                  <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-card text-foreground rounded-full">
                     <SelectValue placeholder="All Scopes" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
-                    <SelectItem value="all">All Scopes</SelectItem>
-                    <SelectItem value="business">Business</SelectItem>
-                    <SelectItem value="personal">Personal</SelectItem>
+                    <SelectItem value="all" className="rounded-full">
+                      All Scopes
+                    </SelectItem>
+                    <SelectItem value="business" className="rounded-full">
+                      Business
+                    </SelectItem>
+                    <SelectItem value="personal" className="rounded-full">
+                      Personal
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>

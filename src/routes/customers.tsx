@@ -142,7 +142,7 @@ function Customers() {
             <SelectTrigger className="w-full h-11 border border-border text-sm shadow-none font-medium bg-card text-foreground rounded-full">
               <SelectValue placeholder="Payment Terms" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
+            <SelectContent className="rounded-full">
               <SelectItem value="all" className="rounded-full">
                 All Terms
               </SelectItem>

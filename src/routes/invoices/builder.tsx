@@ -81,8 +81,8 @@ function InvoiceBuilder() {
 
       <div className="border border-border bg-card shadow-none rounded-2xl overflow-hidden">
         {/* Document Header */}
-        <div className="p-8 md:p-10 border-b border-border">
-          <div className="grid grid-cols-2 gap-12">
+        <div className="p-6 md:p-10 border-b border-border">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                 From
@@ -143,8 +143,9 @@ function InvoiceBuilder() {
         </div>
 
         {/* Line Items */}
-        <div className="p-8 md:p-10">
-          <table className="w-full text-left">
+        <div className="p-6 md:p-10">
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-left min-w-[600px]">
             <thead>
               <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
                 <th className="pb-3 font-semibold w-1/2">
@@ -217,6 +218,7 @@ function InvoiceBuilder() {
               </AnimatePresence>
             </tbody>
           </table>
+        </div>
 
           <Button
             onClick={addItem}
