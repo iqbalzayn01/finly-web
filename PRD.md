@@ -1,6 +1,6 @@
 # Finly Web — Frontend Product Requirements Document (PRD)
 
-**Document Version:** 2.1.0  
+**Document Version:** 2.2.0  
 **Scope:** Frontend Application Only (`finly-web` / `app.finly.io`)  
 **Target Audience:** Non-accountant operators (freelancers, consultants, agencies, solopreneurs, and micro-SME founders)  
 **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Architecture  
@@ -46,7 +46,7 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 ### 3.1 Centered Topbar Header Navigation (`Topbar.tsx`)
 * **Header Structure:** Sticky, backdrop-filtered topbar navigation bar (`h-18`, `bg-card/80 backdrop-blur-md border-b border-border`).
 * **Left Section:**
-  * Finly Brand Logo: 40px primary brand badge with centered "F" monogram and bold "Finly" title with live version pill badge (`v2.1.0`).
+  * Finly Brand Logo: 40px primary brand badge with centered "F" monogram and bold "Finly" title with live version pill badge (`v2.2.0`).
   * Mobile Navigation Hamburger: Toggle drawer button visible on viewports `< 1024px`.
 * **Center Section (Desktop Navigation):**
   * Centered pill button navigation group:
