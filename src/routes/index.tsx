@@ -28,9 +28,6 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
-  RadialBarChart,
-  RadialBar,
-  PolarAngleAxis,
 } from 'recharts'
 
 export const Route = createFileRoute('/')({ component: Dashboard })
@@ -48,13 +45,6 @@ const fullCashflowData = [
   { name: 'May', income: 18900, expense: 12100, year: 2026 },
   { name: 'Jun', income: 24500, expense: 10800, year: 2026 },
   { name: 'Jul', income: 28400, expense: 14200, year: 2026 },
-]
-
-const financeScoreRadialData = [
-  { name: 'Income Growth', value: 85, fill: 'var(--primary)' },
-  { name: 'Savings Rate', value: 72, fill: '#10b981' },
-  { name: 'Budget Control', value: 90, fill: '#f59e0b' },
-  { name: 'Cash Runway', value: 94, fill: '#6366f1' },
 ]
 
 function Dashboard() {
@@ -230,22 +220,6 @@ function Dashboard() {
             progressBg: 'bg-muted',
             progressFill: 'bg-rose-500',
           },
-          {
-            title: 'Net Cash Runway',
-            value: '14.2 Months',
-            trend: '+1.5 mo',
-            isUp: true,
-            icon: ArrowUpRight,
-            containerClass:
-              'bg-card text-foreground border border-border shadow-none rounded-2xl',
-            iconClass:
-              'bg-primary/10 text-primary border border-primary/20 rounded-xl',
-            trendClass:
-              'bg-primary/10 text-primary rounded-full',
-            progress: 74,
-            progressBg: 'bg-muted',
-            progressFill: 'bg-primary',
-          },
         ].map((stat, i) => (
           <motion.div
             key={i}
@@ -298,224 +272,209 @@ function Dashboard() {
             </div>
           </motion.div>
         ))}
-      </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Main Chart Area: Dual Bar Chart (Income vs Expense) with Smooth Rounded Bars */}
+        {/* 4th Metric Card: Cash Health & Runway */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...m3Transition, delay: 0.2 }}
-          className="lg:col-span-2 bg-card border border-border shadow-none rounded-2xl p-6"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ ...m3Transition, delay: 0.24 }}
+          className="relative flex flex-col justify-between overflow-hidden p-6 bg-card text-foreground border border-border shadow-none rounded-2xl"
         >
-          <div className="flex items-center justify-between mb-8 px-2 flex-wrap gap-4">
-            <div>
-              <h2 className="text-xl font-semibold text-foreground">
-                Cashflow Dynamics
-              </h2>
-              <p className="text-xs text-muted-foreground mt-0.5">Stacked Income & Expense Breakdown</p>
+          {/* Top Bar: Icon on Left, Status Pill Badge on Right */}
+          <div className="flex items-center justify-between">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <ShieldCheck className="h-5 w-5" />
             </div>
-            <div className="flex items-center gap-4 flex-wrap">
-              {/* Income / Expense Legend Dots */}
-              <div className="flex items-center gap-4 text-xs font-semibold mr-1">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-primary" /> Income
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-black/25 dark:bg-white/25" /> <span className="text-black/25 dark:text-white/25 font-semibold">Expense</span>
-                </div>
-              </div>
-
-              {/* Timeframe Filter Pills */}
-              <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-xl border border-border">
-                {(['6m', 'ytd', '1y'] as const).map((tf) => (
-                  <button
-                    key={tf}
-                    onClick={() => setCashflowTimeframe(tf)}
-                    className={cn(
-                      'px-3 py-1 text-xs font-bold rounded-lg uppercase transition-all cursor-pointer outline-none',
-                      cashflowTimeframe === tf
-                        ? 'bg-card text-foreground shadow-none'
-                        : 'text-muted-foreground hover:text-foreground'
-                    )}
-                  >
-                    {tf}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="h-[340px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={filteredCashflowData}
-                barCategoryGap="12%"
-                margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
-              >
-                <CartesianGrid
-                  strokeDasharray="4 4"
-                  strokeWidth={1.5}
-                  vertical={false}
-                  stroke="currentColor"
-                  className="text-border opacity-50"
-                />
-                <XAxis
-                  dataKey="name"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{
-                    fill: 'var(--muted-foreground)',
-                    fontSize: 13,
-                    fontWeight: 500,
-                  }}
-                  dy={10}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{
-                    fill: 'var(--muted-foreground)',
-                    fontSize: 12,
-                    fontWeight: 500,
-                  }}
-                  tickFormatter={(val) => `$${val / 1000}k`}
-                  dx={-5}
-                />
-                <Tooltip
-                  wrapperStyle={{ zIndex: 100 }}
-                  allowEscapeViewBox={{ x: false, y: false }}
-                  content={({ active, payload, label }) => {
-                    if (!active || payload.length === 0) return null
-                    const incomeItem = payload.find((p) => p.dataKey === 'income')
-                    const expenseItem = payload.find((p) => p.dataKey === 'expense')
-                    const incomeVal = Number(incomeItem?.value || 0)
-                    const expenseVal = Number(expenseItem?.value || 0)
-                    const netVal = incomeVal - expenseVal
-
-                    return (
-                      <div className="rounded-xl border border-border bg-card p-3.5 shadow-none text-foreground text-xs space-y-1.5 min-w-[180px]">
-                        <p className="font-semibold text-muted-foreground border-b border-border pb-1">
-                          Month: <span className="text-foreground font-bold">{label}</span>
-                        </p>
-                        <div className="flex justify-between items-center pt-0.5">
-                          <span className="font-semibold text-primary flex items-center gap-1.5">
-                            <span className="h-2 w-2 rounded-full bg-primary" /> Income:
-                          </span>
-                          <span className="font-mono font-bold">${incomeVal.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="font-semibold text-black/25 dark:text-white/25 flex items-center gap-1.5">
-                            <span className="h-2 w-2 rounded-full bg-black/25 dark:bg-white/25" /> Expense:
-                          </span>
-                          <span className="font-mono font-bold">${expenseVal.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between items-center border-t border-border pt-1.5 mt-1 text-[11px]">
-                          <span className="font-medium text-muted-foreground">Net Cashflow:</span>
-                          <span className={`font-mono font-bold ${netVal >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}`}>
-                            {netVal >= 0 ? '+' : ''}${netVal.toLocaleString()}
-                          </span>
-                        </div>
-                      </div>
-                    )
-                  }}
-                  cursor={{ fill: 'var(--accent)', opacity: 0.15 }}
-                />
-                <Bar
-                  dataKey="expense"
-                  name="Expense"
-                  stackId="cashflowStack"
-                  className="text-black/25 dark:text-white/25 fill-current"
-                  radius={[0, 0, 4, 4]}
-                  maxBarSize={72}
-                />
-                <Bar
-                  dataKey="income"
-                  name="Income"
-                  stackId="cashflowStack"
-                  fill="var(--primary)"
-                  radius={[6, 6, 0, 0]}
-                  maxBarSize={72}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </motion.div>
-
-        {/* Finance Score Card: Radial Bar Chart (Stacked) */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...m3Transition, delay: 0.3 }}
-          className="bg-card border border-border shadow-none rounded-2xl p-6 flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-xl font-semibold text-foreground">Finance Health</h2>
-              <p className="text-xs text-muted-foreground mt-0.5">Overall Health Rating</p>
-            </div>
-            <span className="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
-              94% Excellent
+            <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Healthy (94/100)
             </span>
           </div>
 
-          <div className="relative h-[220px] w-full flex items-center justify-center">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadialBarChart
-                cx="50%"
-                cy="50%"
-                innerRadius="30%"
-                outerRadius="95%"
-                barSize={10}
-                data={financeScoreRadialData}
-                startAngle={180}
-                endAngle={0}
-              >
-                <PolarAngleAxis
-                  type="number"
-                  domain={[0, 100]}
-                  angleAxisId={0}
-                  tick={false}
-                />
-                <RadialBar
-                  background={{ fill: 'var(--muted)' }}
-                  dataKey="value"
-                  cornerRadius={10}
-                />
-                <Tooltip
-                  contentStyle={{
-                    borderRadius: '12px',
-                    border: '1px solid var(--border)',
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
-                    backgroundColor: 'var(--card)',
-                    color: 'var(--foreground)',
-                    padding: '10px 14px',
-                    fontWeight: 'bold',
-                  }}
-                  labelFormatter={(label) => `Metric: ${label}`}
-                  formatter={(val: any) => [`${val}%`, 'Score']}
-                />
-              </RadialBarChart>
-            </ResponsiveContainer>
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-center pointer-events-none">
-              <span className="font-mono text-3xl font-bold text-foreground">94</span>
-              <span className="text-xs text-muted-foreground block font-semibold uppercase tracking-wider">Health Index</span>
+          {/* Middle Content: Big Value, Micro Delta, and Card Title */}
+          <div className="mt-6 mb-4">
+            <div className="flex items-baseline justify-between gap-2 flex-wrap">
+              <h3 className="font-mono text-2xl lg:text-3xl font-bold tracking-tight">
+                14.2 Months
+              </h3>
+              <span className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <ArrowUpRight className="h-3.5 w-3.5" />
+                +1.5 mo <span className="opacity-75 font-normal text-foreground">vs last mo</span>
+              </span>
+            </div>
+            <p className="text-[13px] font-semibold opacity-75 mt-1 tracking-wide">
+              Cash Health & Runway
+            </p>
+          </div>
+
+          {/* Visual Safety Gauge */}
+          <div className="space-y-1.5">
+            <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-indigo-500 transition-all duration-500"
+                style={{ width: '74%' }}
+              />
+            </div>
+            <div className="flex items-center justify-between text-[11px] font-medium opacity-75">
+              <span>Fortress Zone (&gt;6 Mo Runway)</span>
+              <span>74% of target</span>
             </div>
           </div>
 
-          <div className="mt-2 space-y-2 pt-2 border-t border-border">
-            {financeScoreRadialData.map((item) => (
-              <div key={item.name} className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.fill }} />
-                  <span className="font-medium text-muted-foreground">{item.name}</span>
-                </div>
-                <span className="font-mono font-bold text-foreground">{item.value}%</span>
-              </div>
-            ))}
+          {/* Footer Breakdown (2-Column Micro Grid) */}
+          <div className="pt-3 border-t border-border mt-3.5 grid grid-cols-2 gap-3 text-xs">
+            <div className="space-y-0.5">
+              <p className="text-[11px] font-medium opacity-75">Avg Monthly Burn</p>
+              <p className="font-mono text-xs font-bold text-foreground">$12,450.00</p>
+            </div>
+            <div className="space-y-0.5 text-right">
+              <p className="text-[11px] font-medium opacity-75">Liquid Cash</p>
+              <p className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">$148,250.00</p>
+            </div>
           </div>
         </motion.div>
       </div>
+
+      {/* Main Chart Area: Dual Bar Chart (Income vs Expense) with Smooth Rounded Bars */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...m3Transition, delay: 0.2 }}
+        className="w-full bg-card border border-border shadow-none rounded-2xl p-6"
+      >
+        <div className="flex items-center justify-between mb-8 px-2 flex-wrap gap-4">
+          <div>
+            <h2 className="text-xl font-semibold text-foreground">
+              Cashflow Dynamics
+            </h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Stacked Income & Expense Breakdown</p>
+          </div>
+          <div className="flex items-center gap-4 flex-wrap">
+            {/* Income / Expense Legend Dots */}
+            <div className="flex items-center gap-4 text-xs font-semibold mr-1">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-primary" /> Income
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-black/25 dark:bg-white/25" /> <span className="text-black/25 dark:text-white/25 font-semibold">Expense</span>
+              </div>
+            </div>
+
+            {/* Timeframe Filter Pills */}
+            <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-xl border border-border">
+              {(['6m', 'ytd', '1y'] as const).map((tf) => (
+                <button
+                  key={tf}
+                  onClick={() => setCashflowTimeframe(tf)}
+                  className={cn(
+                    'px-3 py-1 text-xs font-bold rounded-lg uppercase transition-all cursor-pointer outline-none',
+                    cashflowTimeframe === tf
+                      ? 'bg-card text-foreground shadow-none'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {tf}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="h-[340px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={filteredCashflowData}
+              barCategoryGap="12%"
+              margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+            >
+              <CartesianGrid
+                strokeDasharray="4 4"
+                strokeWidth={1.5}
+                vertical={false}
+                stroke="currentColor"
+                className="text-border opacity-50"
+              />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                tick={{
+                  fill: 'var(--muted-foreground)',
+                  fontSize: 13,
+                  fontWeight: 500,
+                }}
+                dy={10}
+              />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{
+                  fill: 'var(--muted-foreground)',
+                  fontSize: 12,
+                  fontWeight: 500,
+                }}
+                tickFormatter={(val) => `$${val / 1000}k`}
+                dx={-5}
+              />
+              <Tooltip
+                wrapperStyle={{ zIndex: 100 }}
+                allowEscapeViewBox={{ x: false, y: false }}
+                content={({ active, payload, label }) => {
+                  if (!active || payload.length === 0) return null
+                  const incomeItem = payload.find((p) => p.dataKey === 'income')
+                  const expenseItem = payload.find((p) => p.dataKey === 'expense')
+                  const incomeVal = Number(incomeItem?.value || 0)
+                  const expenseVal = Number(expenseItem?.value || 0)
+                  const netVal = incomeVal - expenseVal
+
+                  return (
+                    <div className="rounded-xl border border-border bg-card p-3.5 shadow-none text-foreground text-xs space-y-1.5 min-w-[180px]">
+                      <p className="font-semibold text-muted-foreground border-b border-border pb-1">
+                        Month: <span className="text-foreground font-bold">{label}</span>
+                      </p>
+                      <div className="flex justify-between items-center pt-0.5">
+                        <span className="font-semibold text-primary flex items-center gap-1.5">
+                          <span className="h-2 w-2 rounded-full bg-primary" /> Income:
+                        </span>
+                        <span className="font-mono font-bold">${incomeVal.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="font-semibold text-black/25 dark:text-white/25 flex items-center gap-1.5">
+                          <span className="h-2 w-2 rounded-full bg-black/25 dark:bg-white/25" /> Expense:
+                        </span>
+                        <span className="font-mono font-bold">${expenseVal.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between items-center border-t border-border pt-1.5 mt-1 text-[11px]">
+                        <span className="font-medium text-muted-foreground">Net Cashflow:</span>
+                        <span className={`font-mono font-bold ${netVal >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}`}>
+                          {netVal >= 0 ? '+' : ''}${netVal.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                }}
+                cursor={{ fill: 'var(--accent)', opacity: 0.15 }}
+              />
+              <Bar
+                dataKey="expense"
+                name="Expense"
+                stackId="cashflowStack"
+                className="text-black/25 dark:text-white/25 fill-current"
+                radius={[0, 0, 4, 4]}
+                maxBarSize={72}
+              />
+              <Bar
+                dataKey="income"
+                name="Income"
+                stackId="cashflowStack"
+                fill="var(--primary)"
+                radius={[6, 6, 0, 0]}
+                maxBarSize={72}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </motion.div>
 
       {/* 3-Column Bottom Grid: Financial Statistics | FX Exchange | Recent Transactions with Filter */}
       <div className="grid gap-6 lg:grid-cols-3">
