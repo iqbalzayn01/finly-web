@@ -13,8 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as CashbookRouteImport } from './routes/cashbook'
 import { Route as CustomersRouteImport } from './routes/customers'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ItemsRouteImport } from './routes/items'
-import { Route as LandingRouteImport } from './routes/landing'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as InvoicesIndexRouteImport } from './routes/invoices/index'
@@ -41,14 +41,14 @@ const CustomersRoute = CustomersRouteImport.update({
   path: '/customers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ItemsRoute = ItemsRouteImport.update({
   id: '/items',
   path: '/items',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LandingRoute = LandingRouteImport.update({
-  id: '/landing',
-  path: '/landing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -82,8 +82,8 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/cashbook': typeof CashbookRoute
   '/customers': typeof CustomersRoute
+  '/dashboard': typeof DashboardRoute
   '/items': typeof ItemsRoute
-  '/landing': typeof LandingRoute
   '/pricing': typeof PricingRoute
   '/settings': typeof SettingsRoute
   '/invoices/$id': typeof InvoicesIdRoute
@@ -95,8 +95,8 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/cashbook': typeof CashbookRoute
   '/customers': typeof CustomersRoute
+  '/dashboard': typeof DashboardRoute
   '/items': typeof ItemsRoute
-  '/landing': typeof LandingRoute
   '/pricing': typeof PricingRoute
   '/settings': typeof SettingsRoute
   '/invoices/$id': typeof InvoicesIdRoute
@@ -109,8 +109,8 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/cashbook': typeof CashbookRoute
   '/customers': typeof CustomersRoute
+  '/dashboard': typeof DashboardRoute
   '/items': typeof ItemsRoute
-  '/landing': typeof LandingRoute
   '/pricing': typeof PricingRoute
   '/settings': typeof SettingsRoute
   '/invoices/$id': typeof InvoicesIdRoute
@@ -124,8 +124,8 @@ export interface FileRouteTypes {
     | '/account'
     | '/cashbook'
     | '/customers'
+    | '/dashboard'
     | '/items'
-    | '/landing'
     | '/pricing'
     | '/settings'
     | '/invoices/$id'
@@ -137,8 +137,8 @@ export interface FileRouteTypes {
     | '/account'
     | '/cashbook'
     | '/customers'
+    | '/dashboard'
     | '/items'
-    | '/landing'
     | '/pricing'
     | '/settings'
     | '/invoices/$id'
@@ -150,8 +150,8 @@ export interface FileRouteTypes {
     | '/account'
     | '/cashbook'
     | '/customers'
+    | '/dashboard'
     | '/items'
-    | '/landing'
     | '/pricing'
     | '/settings'
     | '/invoices/$id'
@@ -164,8 +164,8 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   CashbookRoute: typeof CashbookRoute
   CustomersRoute: typeof CustomersRoute
+  DashboardRoute: typeof DashboardRoute
   ItemsRoute: typeof ItemsRoute
-  LandingRoute: typeof LandingRoute
   PricingRoute: typeof PricingRoute
   SettingsRoute: typeof SettingsRoute
   InvoicesIdRoute: typeof InvoicesIdRoute
@@ -203,18 +203,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/items': {
       id: '/items'
       path: '/items'
       fullPath: '/items'
       preLoaderRoute: typeof ItemsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/landing': {
-      id: '/landing'
-      path: '/landing'
-      fullPath: '/landing'
-      preLoaderRoute: typeof LandingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -260,8 +260,8 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   CashbookRoute: CashbookRoute,
   CustomersRoute: CustomersRoute,
+  DashboardRoute: DashboardRoute,
   ItemsRoute: ItemsRoute,
-  LandingRoute: LandingRoute,
   PricingRoute: PricingRoute,
   SettingsRoute: SettingsRoute,
   InvoicesIdRoute: InvoicesIdRoute,

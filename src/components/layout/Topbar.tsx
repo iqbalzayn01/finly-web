@@ -23,7 +23,7 @@ import { cn } from '../../lib/utils'
 import { useSubscription } from '../../lib/subscription'
 
 const NAV_ITEMS = [
-  { icon: LayoutDashboard, label: 'Dashboard', to: '/' },
+  { icon: LayoutDashboard, label: 'Dashboard', to: '/dashboard' },
   { icon: Wallet, label: 'Cashbook', to: '/cashbook' },
   { icon: FileText, label: 'Invoices', to: '/invoices' },
   { icon: Users, label: 'Customers', to: '/customers' },
@@ -62,9 +62,9 @@ export function Topbar() {
 
   return (
     <header className="sticky top-0 z-40 flex h-18 w-full border-b border-border bg-card/80 backdrop-blur-md transition-all shadow-none">
-      <div className="flex h-full w-full max-w-[1920px] mx-auto px-4 md:px-8 items-center justify-between gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-[1fr_auto_1fr] items-center h-full w-full max-w-[1920px] mx-auto px-4 md:px-8 gap-4">
         {/* Left Section: Brand Logo, Mobile Toggle & Pro Badge / Upgrade Button */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center justify-start gap-3 sm:gap-4">
           {/* Mobile Navigation Toggle Button */}
           <button
             onClick={() => setMobileNavOpen(!mobileNavOpen)}
@@ -75,7 +75,7 @@ export function Topbar() {
           </button>
 
           {/* Brand Header Logo */}
-          <Link to="/" className="flex items-center gap-3 group outline-none">
+          <Link to="/dashboard" className="flex items-center gap-3 group outline-none">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground font-black text-lg shadow-none">
               F
             </div>
@@ -110,34 +110,36 @@ export function Topbar() {
           )}
         </div>
 
-        {/* Center Section: Primary Navigation Links (Desktop) */}
-        <nav className="hidden lg:flex items-center gap-1.5 bg-muted/50 p-1.5 rounded-2xl border border-border">
-          {NAV_ITEMS.map((item) => {
-            const Icon = item.icon
-            const isActive =
-              location.pathname === item.to ||
-              (item.to !== '/' && location.pathname.startsWith(item.to))
+        {/* Center Section: Perfectly Centered Primary Navigation Links (Desktop) */}
+        <div className="hidden lg:flex items-center justify-center">
+          <nav className="flex items-center gap-1.5 bg-muted/50 p-1.5 rounded-2xl border border-border">
+            {NAV_ITEMS.map((item) => {
+              const Icon = item.icon
+              const isActive =
+                location.pathname === item.to ||
+                (item.to !== '/dashboard' && location.pathname.startsWith(item.to))
 
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={cn(
-                  'flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs transition-all cursor-pointer outline-none',
-                  isActive
-                    ? 'bg-primary text-primary-foreground font-extrabold border border-primary/30 shadow-none ring-2 ring-primary/20'
-                    : 'text-muted-foreground font-semibold hover:text-foreground hover:bg-accent/60'
-                )}
-              >
-                <Icon className={cn('h-4 w-4', isActive ? 'text-primary-foreground' : 'text-muted-foreground')} />
-                <span>{item.label}</span>
-              </Link>
-            )
-          })}
-        </nav>
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={cn(
+                    'flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs transition-all cursor-pointer outline-none',
+                    isActive
+                      ? 'bg-primary text-primary-foreground font-extrabold border border-primary/30 shadow-none ring-2 ring-primary/20'
+                      : 'text-muted-foreground font-semibold hover:text-foreground hover:bg-accent/60'
+                  )}
+                >
+                  <Icon className={cn('h-4 w-4', isActive ? 'text-primary-foreground' : 'text-muted-foreground')} />
+                  <span>{item.label}</span>
+                </Link>
+              )
+            })}
+          </nav>
+        </div>
 
         {/* Right Section: Theme Toggle, Notifications, Account Profile */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-end gap-3">
           {/* Theme Switcher Toggle */}
           <ThemeToggle />
 
@@ -339,7 +341,7 @@ export function Topbar() {
                 const Icon = item.icon
                 const isActive =
                   location.pathname === item.to ||
-                  (item.to !== '/' && location.pathname.startsWith(item.to))
+                  (item.to !== '/dashboard' && location.pathname.startsWith(item.to))
 
                 return (
                   <Link

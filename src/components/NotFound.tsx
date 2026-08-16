@@ -22,14 +22,14 @@ export function NotFound() {
 
       <div className="flex items-center gap-3">
         <Link
-          to="/"
+          to="/dashboard"
           className="px-5 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl transition-all shadow-none flex items-center gap-2"
         >
           <Home className="h-4 w-4" />
           Return to Dashboard
         </Link>
         <Link
-          to="/landing"
+          to="/"
           className="px-5 py-2.5 border border-border bg-card hover:bg-accent text-foreground text-xs font-bold rounded-xl transition-all shadow-none flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />

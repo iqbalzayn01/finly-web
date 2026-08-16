@@ -212,7 +212,7 @@ function PricingPage() {
                     if (plan.id === 'pro') {
                       upgradeToPro()
                       setTimeout(() => {
-                        navigate({ to: '/' })
+                        navigate({ to: '/dashboard' })
                       }, 400)
                     } else if (plan.id === 'starter') {
                       downgradeToStarter()

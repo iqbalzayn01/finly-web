@@ -36,7 +36,7 @@ export const useSidebarStore = create<{
 }))
 
 const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', to: '/' },
+  { icon: LayoutDashboard, label: 'Dashboard', to: '/dashboard' },
   { icon: Wallet, label: 'Cashbook', to: '/cashbook' },
   { icon: FileText, label: 'Invoices', to: '/invoices' },
   { icon: Users, label: 'Customers', to: '/customers' },
@@ -107,7 +107,7 @@ export function Sidebar() {
           {/* Brand Header (aligned with Topbar height h-18) */}
           <div className="flex h-18 shrink-0 items-center px-4 border-b border-border/50">
             <Link
-              to="/landing"
+              to="/dashboard"
               className={cn(
                 'flex items-center gap-3 overflow-hidden',
                 !isExpanded && 'mx-auto',
@@ -318,7 +318,7 @@ export function Sidebar() {
                 {/* Mobile Brand Header */}
                 <div className="flex items-center justify-between">
                   <Link
-                    to="/landing"
+                    to="/dashboard"
                     onClick={() => setMobileOpen(false)}
                     className="flex items-center gap-3"
                   >
