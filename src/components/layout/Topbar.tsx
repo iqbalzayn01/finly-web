@@ -58,7 +58,7 @@ export function Topbar() {
   }, [location.pathname])
 
   return (
-    <header className="sticky top-0 z-40 flex h-18 w-full border-b border-border bg-card/90 backdrop-blur-md transition-all shadow-none">
+    <header className="sticky top-0 z-40 flex h-18 w-full border-b border-border bg-card/80 backdrop-blur-md transition-all shadow-none">
       <div className="flex h-full w-full max-w-[1920px] mx-auto px-4 md:px-8 items-center justify-between gap-4">
         {/* Left Section: Brand Logo & Mobile Toggle */}
         <div className="flex items-center gap-3">
