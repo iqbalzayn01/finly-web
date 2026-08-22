@@ -3,7 +3,7 @@
 **Product Name:** Finly (B2B Cashflow Operating System)  
 **Tagline:** *"Ditch the Spreadsheets. Master Your Cashflow."*  
 **Document Type:** Core Product Brief — The Why & Who  
-**Version:** 2.3.0  
+**Version:** 2.4.0  
 **Target Audience:** Non-Accountant Founders, Agency Directors, Consultants, Freelancers, Solopreneurs, and Micro-SMEs  
 
 ---
@@ -14,7 +14,7 @@ Small business founders, freelancers, and agency directors overwhelmingly rely o
 
 **Finly** is engineered specifically for **non-accountants** to manage their business finances professionally without needing accounting degrees or complex double-entry bookkeeping. It replaces spreadsheets with a blazingly fast, 100% trustworthy B2B cashflow operating system that combines an accurate minor-unit cashbook ledger, real-time live invoice builder with instant math preview, customer/catalog directories, executive analytics, and multi-provider AI Agent integration (Google Gemini, OpenAI ChatGPT, Anthropic Claude, DeepSeek AI, and self-hosted Ollama).
 
-Our core philosophy: **Accuracy & Simplicity are non-negotiable.** Every financial calculation is backed by integer minor-unit arithmetic, strict tenant isolation, zero-jargon user workflows, and human-in-the-loop AI safety boundaries.
+Our core philosophy: **Accuracy & Simplicity are non-negotiable.** Every financial calculation is backed by integer minor-unit arithmetic, strict tenant isolation, zero-jargon user workflows, accessible ShadCN Dialog modal boundaries, and human-in-the-loop AI safety boundaries.
 
 ---
 
@@ -65,7 +65,7 @@ Finly is engineered specifically for **service-based B2B micro-businesses operat
 | **100% Trustworthy Ledger** | Zero floating-point drift. All financial calculations use minor integer minor-units at a fixed scale of 100. | Strict backend invariants with tenant-scoped isolation (`set_config('app.business_id', ...)`). |
 | **Instant Invoice Engine** | Real-time invoice builder math with instant side-by-side document preview. | Snapshot line-item & total calculations written at issue time (`subtotal_in_cents`, `total_in_cents`). |
 | **Multi-Provider AI Connection** | Freedom to connect any LLM (Gemini, OpenAI, Claude, DeepSeek, Ollama/vLLM) via API key. | Human-in-the-loop architecture: AI drafts records; humans explicitly approve before database entry. |
-| **State-of-the-Art Aesthetic** | Ultra-modern 100% OLED pitch-black dark theme (`#000000`), flat `shadow-none` border-first system, and IBM Plex typography. | Frictionless side-drawer interactions, cursor pointer interactions, and responsive mobile drawer. |
+| **State-of-the-Art Aesthetic** | Ultra-modern 100% OLED pitch-black dark theme (`#000000`), flat `shadow-none` border-first system, accessible ShadCN dialogs, and IBM Plex typography. | Frictionless side-drawer interactions, cursor pointer interactions, and responsive mobile drawer. |
 
 ---
 
@@ -92,13 +92,15 @@ Finly measures success across three primary operational dimensions:
 
 ## 6. Strategic Scope & Roadmap
 
-### Phase 1: Core Cashflow OS (Current Release v2.1.0 — Live)
-- Executive analytics dashboard (Income, Expenses, Net Profit, OER, TanStack Charts).
+### Phase 1: Core Cashflow OS (Current Release v2.4.0 — Live)
+- Executive analytics dashboard (Income, Expenses, Net Profit, OER, TanStack Charts, Cash Health & Runway Fortress gauge).
 - Jargon-free cashbook ledger with multi-criteria filtering, side-drawer quick-add, and signed receipt previews.
 - Live Invoice builder, denormalized snapshot totals, status tracking (Paid, Unpaid, Void, Overdue), PDF print/download, and email dispatch.
 - Customer & Item catalogs with side-drawer client invoice history.
 - Settings page separating Profile/Workspace preferences from AI Agent API Connections.
 - 100% OLED pitch-black dark mode (`#000000`), global `shadow-none` border system, and `cursor: pointer` standards.
+- ShadCN accessible dialog modal architecture replacing all native browser dialogs.
+- High-converting landing page with live interactive main dashboard showcase and anti-slop conversion copy.
 
 ### Phase 2: AI Multi-Model Automation (Deferred / Next Release)
 - Natural language chat assistant for drafting invoices (*"Invoice Acme $1,200 for Q3 consulting"*).
@@ -108,3 +110,4 @@ Finly measures success across three primary operational dimensions:
 ---
 
 *Document maintained by Finly Product & Engineering Team.*
+

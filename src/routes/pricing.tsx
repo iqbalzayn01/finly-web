@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import { Check, Sparkles, Zap, Shield, HelpCircle, ChevronDown, ArrowRight } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { useSubscription } from '../lib/subscription'
+import { AlertModal } from '../components/ui/alert-modal'
 
 export const Route = createFileRoute('/pricing')({
   component: PricingPage,
@@ -14,6 +15,7 @@ function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('annual')
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
+  const [enterpriseModalOpen, setEnterpriseModalOpen] = useState(false)
   const navigate = useNavigate()
 
   const m3Transition = {
@@ -217,7 +219,7 @@ function PricingPage() {
                     } else if (plan.id === 'starter') {
                       downgradeToStarter()
                     } else {
-                      alert('Enterprise sales inquiry requested. Our team will contact you!')
+                      setEnterpriseModalOpen(true)
                     }
                   }}
                   className={cn(
@@ -318,6 +320,15 @@ function PricingPage() {
           })}
         </div>
       </div>
+
+      <AlertModal
+        open={enterpriseModalOpen}
+        onOpenChange={setEnterpriseModalOpen}
+        type="info"
+        title="Enterprise Plan Inquiry"
+        description="Our enterprise concierge team will contact you within 24 hours with custom volume pricing, dedicated VPC deployment, and SLA support."
+        confirmText="Got it"
+      />
     </div>
   )
 }

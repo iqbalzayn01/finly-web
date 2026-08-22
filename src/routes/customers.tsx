@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../components/ui/button'
+import { AlertModal } from '../components/ui/alert-modal'
 import {
   Select,
   SelectTrigger,
@@ -77,6 +78,21 @@ function Customers() {
   const [showForm, setShowForm] = useState(false)
   const [openKebab, setOpenKebab] = useState<number | null>(null)
   const [termFilter, setTermFilter] = useState('all')
+  const [successModal, setSuccessModal] = useState<{
+    open: boolean
+    title: string
+    desc: string
+  }>({
+    open: false,
+    title: '',
+    desc: '',
+  })
+  const [deleteModal, setDeleteModal] = useState<{
+    open: boolean
+    customerName?: string
+  }>({
+    open: false,
+  })
 
   const {
     inputQuery,
@@ -137,12 +153,12 @@ function Customers() {
             </span>
           )}
         </div>
-        <div className="w-48">
+        <div className="w-40">
           <Select value={termFilter} onValueChange={setTermFilter}>
-            <SelectTrigger className="w-full h-11 border border-border text-sm shadow-none font-medium bg-card text-foreground rounded-full">
+            <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-card text-foreground rounded-full">
               <SelectValue placeholder="Payment Terms" />
             </SelectTrigger>
-            <SelectContent className="rounded-full">
+            <SelectContent className="rounded-xl">
               <SelectItem value="all" className="rounded-full">
                 All Terms
               </SelectItem>
@@ -161,8 +177,28 @@ function Customers() {
       </div>
 
       {filteredCustomers.length === 0 ? (
-        <div className="border border-border bg-card p-12 text-center text-muted-foreground font-medium rounded-2xl shadow-none">
-          No customers found matching search criteria.
+        <div className="border border-border bg-card p-12 text-center rounded-2xl shadow-none flex flex-col items-center justify-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-muted/60 text-muted-foreground border border-border">
+            <Search className="h-5 w-5" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="font-semibold text-base text-foreground">
+              No customers found
+            </h3>
+            <p className="text-xs text-muted-foreground max-w-sm">
+              We couldn&apos;t find any customer accounts matching your query.
+            </p>
+          </div>
+          {inputQuery && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setInputQuery('')}
+              className="mt-2 text-xs"
+            >
+              Clear Search
+            </Button>
+          )}
         </div>
       ) : (
         <motion.div
@@ -215,8 +251,12 @@ function Customers() {
                         >
                           <button
                             onClick={() => {
-                              alert('Customer updated successfully')
                               setOpenKebab(null)
+                              setSuccessModal({
+                                open: true,
+                                title: 'Customer Updated',
+                                desc: `Customer ${customer.name} has been updated successfully.`,
+                              })
                             }}
                             className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-accent/50 font-medium rounded-lg transition-all"
                           >
@@ -224,8 +264,11 @@ function Customers() {
                           </button>
                           <button
                             onClick={() => {
-                              alert('Customer deleted')
                               setOpenKebab(null)
+                              setDeleteModal({
+                                open: true,
+                                customerName: customer.name,
+                              })
                             }}
                             className="w-full flex items-center gap-2 px-3 py-2 text-xs text-destructive hover:bg-destructive/10 font-medium rounded-lg transition-all"
                           >
@@ -349,8 +392,12 @@ function Customers() {
                 </Button>
                 <Button
                   onClick={() => {
-                    alert('Customer added successfully!')
                     setShowForm(false)
+                    setSuccessModal({
+                      open: true,
+                      title: 'Customer Added',
+                      desc: 'New customer account has been created and added to your directory.',
+                    })
                   }}
                 >
                   Create Customer
@@ -360,6 +407,34 @@ function Customers() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Success Modal */}
+      <AlertModal
+        open={successModal.open}
+        onOpenChange={(open) => setSuccessModal((prev) => ({ ...prev, open }))}
+        type="success"
+        title={successModal.title}
+        description={successModal.desc}
+        confirmText="Got it"
+      />
+
+      {/* Delete Confirmation Modal */}
+      <AlertModal
+        open={deleteModal.open}
+        onOpenChange={(open) => setDeleteModal((prev) => ({ ...prev, open }))}
+        type="error"
+        title="Delete Customer"
+        description={`Are you sure you want to delete ${deleteModal.customerName || 'this customer'}? All associated draft records will be archived.`}
+        confirmText="Delete Customer"
+        cancelText="Cancel"
+        onConfirm={() => {
+          setSuccessModal({
+            open: true,
+            title: 'Customer Deleted',
+            desc: 'The customer record was removed.',
+          })
+        }}
+      />
     </div>
   )
 }

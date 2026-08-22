@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useState, useRef, useEffect } from 'react'
+import { LogoutModal } from '../ui/logout-modal'
 import { ThemeToggle } from '../ThemeToggle'
 import { V2Tooltip } from '../ui/v2-tooltip'
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
@@ -37,6 +38,7 @@ export function Topbar() {
   const [notifOpen, setNotifOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+  const [logoutOpen, setLogoutOpen] = useState(false)
 
   const notifRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -312,7 +314,7 @@ export function Topbar() {
                     <button
                       onClick={() => {
                         setMenuOpen(false)
-                        alert('Logged out successfully.')
+                        setLogoutOpen(true)
                       }}
                       className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-destructive rounded-xl hover:bg-destructive/10 transition-colors cursor-pointer"
                     >
@@ -395,6 +397,14 @@ export function Topbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <LogoutModal
+        open={logoutOpen}
+        onOpenChange={setLogoutOpen}
+        onLogout={() => {
+          window.location.href = '/'
+        }}
+      />
     </header>
   )
 }

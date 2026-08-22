@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../components/ui/button'
+import { AlertModal } from '../components/ui/alert-modal'
 import {
   Select,
   SelectTrigger,
@@ -252,9 +253,22 @@ function Cashbook() {
   const [entryAmount, setEntryAmount] = useState('0')
   const [txType, setTxType] = useState<'income' | 'expense'>('expense')
   const [openKebab, setOpenKebab] = useState<number | null>(null)
-
   const [typeFilter, setTypeFilter] = useState('all')
   const [scopeFilter, setScopeFilter] = useState('all')
+  const [feedbackModal, setFeedbackModal] = useState<{
+    open: boolean
+    type: 'info' | 'success' | 'warning' | 'error'
+    title: string
+    desc: string
+  }>({
+    open: false,
+    type: 'info',
+    title: '',
+    desc: '',
+  })
+  const [deleteModal, setDeleteModal] = useState<{ open: boolean; txDesc?: string }>({
+    open: false,
+  })
 
   const {
     inputQuery,
@@ -399,9 +413,20 @@ function Cashbook() {
                   <tr>
                     <td
                       colSpan={6}
-                      className="py-12 text-center text-muted-foreground font-medium"
+                      className="py-16 text-center"
                     >
-                      No transactions found matching criteria.
+                      <div className="flex flex-col items-center justify-center gap-2 max-w-sm mx-auto">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                          <Search className="h-4 w-4" />
+                        </div>
+                        <p className="font-semibold text-sm text-foreground">No transactions found</p>
+                        <p className="text-xs text-muted-foreground">No ledger transactions matched your active search query and scope.</p>
+                        {inputQuery && (
+                          <Button variant="outline" size="sm" onClick={() => setInputQuery('')} className="mt-2 text-xs">
+                            Clear Search
+                          </Button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ) : (
@@ -456,7 +481,14 @@ function Cashbook() {
                       <td className="px-6 py-4 text-center">
                         {tx.receipt ? (
                           <button
-                            onClick={() => alert('Viewing uploaded receipt')}
+                            onClick={() =>
+                              setFeedbackModal({
+                                open: true,
+                                type: 'info',
+                                title: 'Receipt Verified',
+                                desc: `Receipt attachment for ${tx.desc} is verified and encrypted in secure storage.`,
+                              })
+                            }
                             className="p-1.5 border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all"
                           >
                             <Camera className="h-4 w-4 mx-auto" />
@@ -492,8 +524,13 @@ function Cashbook() {
                             >
                               <button
                                 onClick={() => {
-                                  alert('Transaction updated')
                                   setOpenKebab(null)
+                                  setFeedbackModal({
+                                    open: true,
+                                    type: 'success',
+                                    title: 'Transaction Updated',
+                                    desc: `Transaction ${tx.desc} has been updated.`,
+                                  })
                                 }}
                                 className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-accent/50 font-medium rounded-lg transition-all"
                               >
@@ -501,8 +538,11 @@ function Cashbook() {
                               </button>
                               <button
                                 onClick={() => {
-                                  alert('Transaction deleted')
                                   setOpenKebab(null)
+                                  setDeleteModal({
+                                    open: true,
+                                    txDesc: tx.desc,
+                                  })
                                 }}
                                 className="w-full flex items-center gap-2 px-3 py-2 text-xs text-destructive hover:bg-destructive/10 font-medium rounded-lg transition-all"
                               >
@@ -655,8 +695,13 @@ function Cashbook() {
                 <Button
                   className="w-full mt-2"
                   onClick={() => {
-                    alert('Transaction saved successfully!')
                     setShowNumpad(false)
+                    setFeedbackModal({
+                      open: true,
+                      type: 'success',
+                      title: 'Transaction Saved',
+                      desc: `Ledger entry of $${entryAmount} has been recorded to cashbook.`,
+                    })
                   }}
                 >
                   Save Transaction
@@ -666,6 +711,35 @@ function Cashbook() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Feedback Modal */}
+      <AlertModal
+        open={feedbackModal.open}
+        onOpenChange={(open) => setFeedbackModal((prev) => ({ ...prev, open }))}
+        type={feedbackModal.type}
+        title={feedbackModal.title}
+        description={feedbackModal.desc}
+        confirmText="Got it"
+      />
+
+      {/* Delete Transaction Confirmation Modal */}
+      <AlertModal
+        open={deleteModal.open}
+        onOpenChange={(open) => setDeleteModal((prev) => ({ ...prev, open }))}
+        type="error"
+        title="Delete Transaction"
+        description={`Are you sure you want to delete ${deleteModal.txDesc || 'this entry'}? This will adjust your ledger cash balance.`}
+        confirmText="Delete Entry"
+        cancelText="Cancel"
+        onConfirm={() => {
+          setFeedbackModal({
+            open: true,
+            type: 'success',
+            title: 'Transaction Deleted',
+            desc: 'The ledger entry was deleted and balances updated.',
+          })
+        }}
+      />
     </div>
   )
 }

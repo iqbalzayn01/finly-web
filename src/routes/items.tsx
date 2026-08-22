@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Plus, Search, Box, MoreVertical, Edit2, Trash2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../components/ui/button'
+import { AlertModal } from '../components/ui/alert-modal'
 import {
   Select,
   SelectTrigger,
@@ -71,6 +72,20 @@ function Items() {
   const [showForm, setShowForm] = useState(false)
   const [openKebab, setOpenKebab] = useState<number | null>(null)
   const [statusFilter, setStatusFilter] = useState('all')
+  const [itemModal, setItemModal] = useState<{
+    open: boolean
+    type: 'info' | 'success' | 'warning' | 'error'
+    title: string
+    desc: string
+  }>({
+    open: false,
+    type: 'info',
+    title: '',
+    desc: '',
+  })
+  const [deleteModal, setDeleteModal] = useState<{ open: boolean; itemName?: string }>({
+    open: false,
+  })
 
   const {
     inputQuery,
@@ -169,9 +184,20 @@ function Items() {
                 <tr>
                   <td
                     colSpan={6}
-                    className="py-12 text-center text-muted-foreground font-medium"
+                    className="py-16 text-center"
                   >
-                    No catalog items found matching criteria.
+                    <div className="flex flex-col items-center justify-center gap-2 max-w-sm mx-auto">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                        <Search className="h-4 w-4" />
+                      </div>
+                      <p className="font-semibold text-sm text-foreground">No items found</p>
+                      <p className="text-xs text-muted-foreground">No catalog services or products matched your active search query.</p>
+                      {inputQuery && (
+                        <Button variant="outline" size="sm" onClick={() => setInputQuery('')} className="mt-2 text-xs">
+                          Clear Search
+                        </Button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ) : (
@@ -239,8 +265,13 @@ function Items() {
                           >
                             <button
                               onClick={() => {
-                                alert('Item updated successfully')
                                 setOpenKebab(null)
+                                setItemModal({
+                                  open: true,
+                                  type: 'success',
+                                  title: 'Item Updated',
+                                  desc: `Item ${item.name} pricing and details updated.`,
+                                })
                               }}
                               className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-accent/50 font-medium rounded-lg transition-all"
                             >
@@ -248,8 +279,11 @@ function Items() {
                             </button>
                             <button
                               onClick={() => {
-                                alert('Item deleted')
                                 setOpenKebab(null)
+                                setDeleteModal({
+                                  open: true,
+                                  itemName: item.name,
+                                })
                               }}
                               className="w-full flex items-center gap-2 px-3 py-2 text-xs text-destructive hover:bg-destructive/10 font-medium rounded-lg transition-all"
                             >
@@ -332,8 +366,13 @@ function Items() {
                   <Button
                     className="px-6"
                     onClick={() => {
-                      alert('Item saved successfully!')
                       setShowForm(false)
+                      setItemModal({
+                        open: true,
+                        type: 'success',
+                        title: 'Item Created',
+                        desc: 'Catalog item has been successfully added to your inventory.',
+                      })
                     }}
                   >
                     Save Item
@@ -344,6 +383,35 @@ function Items() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Item Feedback Modal */}
+      <AlertModal
+        open={itemModal.open}
+        onOpenChange={(open) => setItemModal((prev) => ({ ...prev, open }))}
+        type={itemModal.type}
+        title={itemModal.title}
+        description={itemModal.desc}
+        confirmText="Got it"
+      />
+
+      {/* Delete Item Confirmation Modal */}
+      <AlertModal
+        open={deleteModal.open}
+        onOpenChange={(open) => setDeleteModal((prev) => ({ ...prev, open }))}
+        type="error"
+        title="Delete Item"
+        description={`Are you sure you want to delete ${deleteModal.itemName || 'this item'} from your catalog? Existing issued invoices will retain snapshot pricing.`}
+        confirmText="Delete Item"
+        cancelText="Cancel"
+        onConfirm={() => {
+          setItemModal({
+            open: true,
+            type: 'success',
+            title: 'Item Deleted',
+            desc: 'The catalog item has been removed.',
+          })
+        }}
+      />
     </div>
   )
 }

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../../components/ui/button'
+import { AlertModal } from '../../components/ui/alert-modal'
 import {
   Select,
   SelectTrigger,
@@ -102,6 +103,17 @@ const StatusBadge = ({ status }: { status: string }) => {
 function Invoices() {
   const [openKebab, setOpenKebab] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState('all')
+  const [actionModal, setActionModal] = useState<{
+    open: boolean
+    type: 'info' | 'success' | 'warning' | 'error'
+    title: string
+    desc: string
+  }>({
+    open: false,
+    type: 'info',
+    title: '',
+    desc: '',
+  })
 
   const {
     inputQuery,
@@ -239,9 +251,20 @@ function Invoices() {
                 <tr>
                   <td
                     colSpan={6}
-                    className="py-12 text-center text-muted-foreground font-medium"
+                    className="py-16 text-center"
                   >
-                    No invoices found matching criteria.
+                    <div className="flex flex-col items-center justify-center gap-2 max-w-sm mx-auto">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                        <Search className="h-4 w-4" />
+                      </div>
+                      <p className="font-semibold text-sm text-foreground">No invoices found</p>
+                      <p className="text-xs text-muted-foreground">No customer invoices matched your active search and status filter.</p>
+                      {inputQuery && (
+                        <Button variant="outline" size="sm" onClick={() => setInputQuery('')} className="mt-2 text-xs">
+                          Clear Search
+                        </Button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ) : (
@@ -314,8 +337,13 @@ function Invoices() {
                             </Link>
                             <button
                               onClick={() => {
-                                alert('Invoice updated successfully')
                                 setOpenKebab(null)
+                                setActionModal({
+                                  open: true,
+                                  type: 'success',
+                                  title: 'Invoice Updated',
+                                  desc: `Invoice ${inv.id} has been saved with latest modifications.`,
+                                })
                               }}
                               className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-accent/50 font-medium rounded-lg transition-all"
                             >
@@ -324,8 +352,13 @@ function Invoices() {
                             <div className="my-1 h-px bg-border" />
                             <button
                               onClick={() => {
-                                alert('Invoice voided')
                                 setOpenKebab(null)
+                                setActionModal({
+                                  open: true,
+                                  type: 'warning',
+                                  title: 'Invoice Voided',
+                                  desc: `Invoice ${inv.id} has been marked as void.`,
+                                })
                               }}
                               className="w-full flex items-center gap-2 px-3 py-2 text-xs text-destructive hover:bg-destructive/10 font-medium rounded-lg transition-all"
                             >
@@ -348,6 +381,15 @@ function Invoices() {
           </table>
         </div>
       </div>
+
+      <AlertModal
+        open={actionModal.open}
+        onOpenChange={(open) => setActionModal((prev) => ({ ...prev, open }))}
+        type={actionModal.type}
+        title={actionModal.title}
+        description={actionModal.desc}
+        confirmText="Got it"
+      />
     </div>
   )
 }

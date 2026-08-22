@@ -1,6 +1,6 @@
 # Finly Web — Frontend Product Requirements Document (PRD)
 
-**Document Version:** 2.3.0  
+**Document Version:** 2.4.0  
 **Scope:** Frontend Application Only (`finly-web` / `app.finly.io`)  
 **Target Audience:** Non-accountant operators (freelancers, consultants, agencies, solopreneurs, and micro-SME founders)  
 **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Architecture  
@@ -18,7 +18,7 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 ## 2. Technical Stack & Architecture
 
 ### 2.1 Core Framework & Runtime
-* **Framework & Tooling:** React 18 · Vite 8 · TypeScript (Strict Mode).
+* **Framework & Tooling:** React 19 · Vite · TypeScript (Strict Mode).
 * **Routing & SSR Engine:** TanStack Start & TanStack Router (`@tanstack/react-router`) with end-to-end type-safe file routes.
 * **State Management & Data Layer:**
   * **Server State & Caching:** TanStack Query v5 (`@tanstack/react-query`) with automatic background refetching, SWR caching, and optimistic UI mutations.
@@ -27,6 +27,8 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 * **Table & Form Orchestration:**
   * **TanStack Table v8:** High-performance tabular data grids, multi-column filtering, and server/client-side sorting.
   * **TanStack Form & Zod:** Type-safe form validation pipelines with real-time field error formatting.
+* **Modal & Dialog Architecture:**
+  * **Radix UI Dialog & ShadCN UI Primitives (`src/components/ui/dialog.tsx`, `modal.tsx`, `alert-modal.tsx`, `api-key-modal.tsx`, `logout-modal.tsx`):** 100% accessible, keyboard-trapped, focus-managed dialog overlays with smooth Motion transitions. Zero native browser `window.alert()` or `window.confirm()` calls.
 * **Data Visualizations:** TanStack Charts & Recharts for interactive cashflow trends, area curves, and expense breakdowns.
 * **Error Boundaries & 404 Routing:** Global `NotFound` handler (`src/components/NotFound.tsx`) and error boundary components registered on router initialization.
 
@@ -63,7 +65,7 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
   * **Right Column (Actions):**
     * **Theme Switcher (`ThemeToggle.tsx`):** Light / Dark mode toggle.
     * **Notifications Center:** Operational alerts popover.
-    * **User Profile Avatar Dropdown:** User identity, active Pro subscription indicator, links to `/account`, `/settings`, and logout.
+    * **User Profile Avatar Dropdown:** User identity, active Pro subscription indicator, links to `/account`, `/settings`, and smooth ShadCN logout dialog.
 * **Mobile Responsive Drawer:** Collapsible slide-over drawer providing identical navigation items and active states on mobile devices (<1024px).
 
 ### 3.2 Public Header (`PublicNavbar.tsx`)
@@ -83,12 +85,18 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 
 ### 4.1 Public SaaS Landing Page (`/`)
 * **Hero Section:**
-  * High-converting headline: *"Master your agency cashflow with intelligent automation."*
-  * Dual primary/secondary CTAs ("Start 14-Day Free Trial" linking to `/pricing` and "Launch Live App" linking to `/dashboard`).
-* **Interactive Showcase Window:** Tabbed preview of Cashflow Dynamics, AI Receipt & Invoice Parsing, and Live Multi-Currency FX Engine.
+  * Eyebrow: *"ZERO-JARGON CASHFLOW OPERATING SYSTEM"*
+  * High-converting headline: *"Stop guessing your agency runway. Take control of your cashflow."*
+  * Subheadline: *"Eliminate floating-point ledger errors, turn vendor receipts into clean invoices in seconds, and track real-time multi-currency cashflow."*
+  * Dual high-intent CTAs: `"Start Free Trial"` (linking to `/pricing`) and `"Explore Live Demo"` (linking to `/dashboard`).
+* **Interactive Live Dashboard Window:**
+  * Exact embedded main dashboard inside the browser mockup window.
+  * Live period selector, 4 M3 tonal metric cards (Total Net Balance, Total Income, Total Expenses, Cash Health & Runway Fortress gauge).
+  * Interactive Cashflow Dynamics dual bar chart with `6M`, `YTD`, and `1Y` timeframe filtering.
+  * 3-column financial analytics grid: Operating Margin statistics, interactive FX Currency Converter (USD $\to$ IDR/EUR/GBP/SGD), and live filtered Recent Activity cashbook feed.
 * **Interactive ROI Calculator:** Real-time slider calculating monthly time saved (hours) and cashflow recovered ($).
-* **Bento Grid Features:** Visual highlights of Integer Minor-Unit Engine, Human-in-the-Loop AI, Live FX Engine, and PostgreSQL RLS Isolation.
-* **Social Proof & Testimonials:** Trust badges from 500+ B2B agencies and customer quotes.
+* **Bento Grid Features:** Zero Floating-Point Drift, Human-in-the-Loop AI Invoicing, Live Multi-Currency Settlement, and PostgreSQL Row-Level Security.
+* **Social Proof & Testimonials:** Trust proof from 500+ client-service agencies and authentic operator quotes.
 * **SEO Structured Data:** Integrated Schema.org `SoftwareApplication` JSON-LD metadata.
 
 ---
@@ -119,14 +127,14 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 * **Transaction Table:** Date, Merchant / Client Description, Category Pill Badge, Scope (`Business` vs `Personal`), Receipt Status, Amount (`+` in emerald green vs `-` in crimson red), and Row Actions.
 * **Filtering & Search:** Real-time search, type filters, scope filters, and category dropdowns.
 * **Quick-Add Transaction Drawer (3-Second Rule):** Rapid creation form for operators on the go.
-* **Receipt Viewer Modal:** Secure preview of transaction receipts via temporary pre-signed URLs.
+* **Receipt Viewer Modal & Delete Confirmations:** Accessible ShadCN Dialog modals for secure receipt previews and destructive action confirmations.
 
 ---
 
 ### 4.4 Invoice Management & Builder (`/invoices`)
 
 #### A. Invoices List (`/invoices`)
-* Displays Invoice Number, Customer Name, Issue Date, Due Date, Total Amount, Derived Display Status (`Draft`, `Unpaid`, `Paid`, `Overdue`, `Void`), and Actions Menu.
+* Displays Invoice Number, Customer Name, Issue Date, Due Date, Total Amount, Derived Display Status (`Draft`, `Unpaid`, `Paid`, `Overdue`, `Void`), and Actions Menu with animated ShadCN delete/void dialogs.
 * Overdue status derived dynamically: `status === 'unpaid' && dueDate < today`.
 
 #### B. Live Invoice Builder (`/invoices/builder`)
@@ -136,19 +144,20 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 
 #### C. Invoice Document Detail View (`/invoices/$id`)
 * Rendered formal invoice document presenting snapshotted data.
-* Actions: Print/PDF download (`@media print`), email dispatch, atomic "Mark as Paid" cashbook sync, and void cancellation.
+* Actions: Print/PDF download (`@media print`), email dispatch, atomic "Mark as Paid" cashbook sync, and void cancellation with ShadCN alert confirmations.
 
 ---
 
 ### 4.5 Customers & Catalog Directory (`/customers`, `/items`)
 * **Customers Directory (`/customers`):** Client contact directory, payment terms (Net 14, Net 30), lifetime billings, and create/edit modal.
 * **Product & Service Catalog (`/items`):** Reusable products and services with default minor-unit pricing and default tax rates.
+* **Destructive Action Safety:** All delete actions protected by custom accessible ShadCN Alert Modals.
 
 ---
 
 ### 4.6 Settings & AI Agent Integrations (`/settings`)
 * **Workspace Profile:** Business legal name, business address, tax number/VAT/NPWP, and logo upload.
-* **AI Agent Connections:** Multi-provider API connection management:
+* **AI Agent Connections:** Multi-provider API connection management via custom ShadCN API Key Dialogs:
   * Google Gemini (Gemini 2.0 Flash, Gemini 1.5 Pro)
   * OpenAI ChatGPT (GPT-4o, GPT-4o-mini)
   * Anthropic Claude (Claude 3.7 Sonnet, Claude 3.5 Haiku)
@@ -159,7 +168,7 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 ---
 
 ### 4.7 User Account Management (`/account`)
-* Profile details, password security, active workspace memberships, and session management.
+* Profile details, password security, active workspace memberships, static card surfaces without hover displacement, and session management.
 
 ---
 
@@ -187,7 +196,7 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
    * Global `shadow-none` rule, high information density, crisp 1px borders, and IBM Plex typography.
 
 5. **Accessibility & Interactive Consistency:**
-   * Mandatory `cursor: pointer` on interactive elements, consistent M3 transitions, and responsive grid centering.
+   * Mandatory `cursor: pointer` on interactive elements, consistent M3 transitions, responsive grid centering, and ShadCN Dialog focus-trapping.
 
 ---
 
@@ -196,3 +205,4 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 * **TypeScript:** Strict compilation with `0 errors`.
 * **Vite Bundle Build:** Production build passed with `0 errors`.
 * **Responsive Integrity:** Layout stability across mobile (320px+), tablet (768px+), desktop (1024px+), and ultrawide (1920px+).
+
