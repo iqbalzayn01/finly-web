@@ -18,6 +18,8 @@ import {
   SlidersHorizontal,
 } from 'lucide-react'
 import { Button } from '../components/ui/button'
+import { ApiKeyModal } from '../components/ui/api-key-modal'
+import { AlertModal } from '../components/ui/alert-modal'
 import { useState, useEffect } from 'react'
 import { cn } from '../lib/utils'
 import {
@@ -144,6 +146,8 @@ function Settings() {
   const [currency, setCurrency] = useState('IDR')
   const [invoicePrefix, setInvoicePrefix] = useState('INV')
   const [profileSaveSuccess, setProfileSaveSuccess] = useState<boolean>(false)
+  const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false)
+  const [logoModalOpen, setLogoModalOpen] = useState(false)
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -289,7 +293,7 @@ function Settings() {
                 <ImageIcon className="h-7 w-7 text-muted-foreground" />
               </div>
               <div>
-                <Button variant="outline" size="sm" className="mb-1.5" onClick={() => alert("Upload logo dialog opened")}>
+                <Button variant="outline" size="sm" className="mb-1.5" onClick={() => setLogoModalOpen(true)}>
                   Upload Logo
                 </Button>
                 <p className="text-xs text-muted-foreground">
@@ -498,7 +502,7 @@ function Settings() {
                     href="#"
                     onClick={(e) => {
                       e.preventDefault()
-                      alert(`Get your ${currentProviderObj.name} API Key from their developer dashboard.`)
+                      setApiKeyModalOpen(true)
                     }}
                     className="text-xs font-semibold text-primary hover:underline"
                   >
@@ -625,6 +629,24 @@ function Settings() {
           </div>
         </div>
       )}
+
+      {/* Modals */}
+      <ApiKeyModal
+        open={apiKeyModalOpen}
+        onOpenChange={setApiKeyModalOpen}
+        providerName={currentProviderObj.name}
+        currentKey={apiKeys[selectedProvider]}
+        onSaveKey={(newKey) => handleKeyChange(newKey)}
+      />
+
+      <AlertModal
+        open={logoModalOpen}
+        onOpenChange={setLogoModalOpen}
+        type="info"
+        title="Upload Business Logo"
+        description="Select a PNG, SVG, or JPEG file under 1MB to display on your customer invoices."
+        confirmText="Got it"
+      />
     </div>
   )
 }

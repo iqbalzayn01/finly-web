@@ -10,7 +10,9 @@ import {
   Share2,
   DollarSign,
 } from 'lucide-react'
+import { useState } from 'react'
 import { Button } from '../../components/ui/button'
+import { AlertModal } from '../../components/ui/alert-modal'
 
 export const Route = createFileRoute('/invoices/$id')({
   component: InvoiceDetail,
@@ -18,6 +20,17 @@ export const Route = createFileRoute('/invoices/$id')({
 
 function InvoiceDetail() {
   const { id } = Route.useParams()
+  const [modalState, setModalState] = useState<{
+    open: boolean
+    type: 'info' | 'success' | 'warning' | 'error'
+    title: string
+    desc: string
+  }>({
+    open: false,
+    type: 'info',
+    title: '',
+    desc: '',
+  })
 
   const invoice = {
     id: id || 'INV-2026-001',
@@ -96,12 +109,30 @@ function InvoiceDetail() {
             variant="outline"
             size="sm"
             className="px-4"
-            onClick={() => alert("Downloading invoice PDF...")}
+            onClick={() =>
+              setModalState({
+                open: true,
+                type: 'info',
+                title: 'PDF Download Started',
+                desc: 'Your invoice PDF document has been compiled and is ready for export.',
+              })
+            }
           >
             <Download className="h-3.5 w-3.5 mr-2" /> PDF
           </Button>
 
-          <Button size="sm" className="px-5" onClick={() => alert("Invoice emailed to " + invoice.client.email)}>
+          <Button
+            size="sm"
+            className="px-5"
+            onClick={() =>
+              setModalState({
+                open: true,
+                type: 'success',
+                title: 'Invoice Dispatched',
+                desc: `Invoice ${invoice.id} was successfully emailed to ${invoice.client.email}.`,
+              })
+            }
+          >
             <Mail className="h-3.5 w-3.5 mr-2" /> Send Email
           </Button>
         </div>
@@ -247,17 +278,48 @@ function InvoiceDetail() {
               Actions
             </h3>
             <div className="space-y-2.5">
-              <Button className="w-full" onClick={() => alert("Invoice marked as paid!")}>
+              <Button
+                className="w-full"
+                onClick={() =>
+                  setModalState({
+                    open: true,
+                    type: 'success',
+                    title: 'Payment Confirmed',
+                    desc: `Invoice ${invoice.id} has been recorded as paid in full in your cashbook.`,
+                  })
+                }
+              >
                 <DollarSign className="w-4 h-4 mr-2" /> Mark as Paid
               </Button>
 
-              <Button variant="outline" className="w-full" onClick={() => { navigator.clipboard.writeText(window.location.href); alert("Invoice link copied to clipboard!"); }}>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href)
+                  setModalState({
+                    open: true,
+                    type: 'info',
+                    title: 'Link Copied',
+                    desc: 'Direct invoice payment link has been copied to your clipboard.',
+                  })
+                }}
+              >
                 <Share2 className="w-4 h-4 mr-2" /> Copy Link
               </Button>
             </div>
           </div>
         </div>
       </div>
+
+      <AlertModal
+        open={modalState.open}
+        onOpenChange={(open) => setModalState((prev) => ({ ...prev, open }))}
+        type={modalState.type}
+        title={modalState.title}
+        description={modalState.desc}
+        confirmText="Got it"
+      />
     </div>
   )
 }

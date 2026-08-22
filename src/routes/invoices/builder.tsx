@@ -3,6 +3,7 @@ import { ArrowLeft, Plus, Save, Send, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../../components/ui/button'
+import { AlertModal } from '../../components/ui/alert-modal'
 import {
   Select,
   SelectTrigger,
@@ -24,6 +25,7 @@ interface LineItem {
 
 function InvoiceBuilder() {
   const navigate = useNavigate()
+  const [draftSavedModal, setDraftSavedModal] = useState(false)
   const [items, setItems] = useState<LineItem[]>([
     { id: '1', description: 'Web Application Development', qty: 1, price: 4000 },
     { id: '2', description: 'UI/UX Design & Branding', qty: 1, price: 1000 },
@@ -69,7 +71,7 @@ function InvoiceBuilder() {
           <Button
             variant="outline"
             className="px-5"
-            onClick={() => alert("Draft invoice saved successfully!")}
+            onClick={() => setDraftSavedModal(true)}
           >
             <Save className="h-4 w-4 mr-2" /> Save Draft
           </Button>
@@ -257,6 +259,15 @@ function InvoiceBuilder() {
           </div>
         </div>
       </div>
+
+      <AlertModal
+        open={draftSavedModal}
+        onOpenChange={setDraftSavedModal}
+        type="success"
+        title="Draft Saved"
+        description="Invoice draft has been saved to your workspace records."
+        confirmText="Got it"
+      />
     </div>
   )
 }

@@ -181,13 +181,23 @@ body {
   * {
     @apply border-border;
   }
-  *, ::before, ::after {
-    box-shadow: none !important;
-  }
   button, [role="button"], input[type="submit"], input[type="button"], input[type="reset"] {
     cursor: pointer;
   }
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
   body {
     @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
