@@ -59,13 +59,13 @@ export function PublicNavbar() {
         </nav>
 
         {/* Right Column: Actions */}
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex items-center justify-end gap-2 sm:gap-3">
           <ThemeToggle />
           <Link
             to="/dashboard"
-            className="px-4 py-2 text-xs font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-none flex items-center gap-1.5 cursor-pointer outline-none active:scale-[0.98]"
+            className="px-3 sm:px-4 py-2 text-xs font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-none flex items-center gap-1.5 cursor-pointer outline-none active:scale-[0.98] shrink-0"
           >
-            <span>Open Dashboard</span>
+            <span><span className="hidden sm:inline">Open </span>Dashboard</span>
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>

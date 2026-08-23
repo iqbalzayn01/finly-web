@@ -80,6 +80,81 @@ const fullCashflowData = [
   { name: 'Jul', income: 28400, expense: 14200, year: 2026 },
 ]
 
+const m3Transition = {
+  type: 'tween' as const,
+  ease: [0.2, 0, 0, 1] as [number, number, number, number],
+  duration: 0.5,
+}
+
+const allRecentTx = [
+  {
+    name: 'Acme Corp Web Dev',
+    category: 'Income / Services',
+    date: 'Today, 2:45 PM',
+    amount: 5000,
+    type: 'income',
+    icon: ArrowUpRight,
+    color:
+      'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+  },
+  {
+    name: 'AWS Infrastructure',
+    category: 'Software & Hosting',
+    date: 'Yesterday, 10:20 AM',
+    amount: 120,
+    type: 'expense',
+    icon: ArrowDownRight,
+    color:
+      'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+  },
+  {
+    name: 'Q3 Retainer GlobalTech',
+    category: 'Income / Retainer',
+    date: 'Jul 28, 2026',
+    amount: 3500,
+    type: 'income',
+    icon: ArrowUpRight,
+    color:
+      'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+  },
+  {
+    name: 'Facebook Ads Campaign',
+    category: 'Marketing & Ads',
+    date: 'Jul 26, 2026',
+    amount: 450,
+    type: 'expense',
+    icon: ArrowDownRight,
+    color:
+      'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+  },
+  {
+    name: 'Slack Team Subscription',
+    category: 'Software & SaaS',
+    date: 'Jul 24, 2026',
+    amount: 85,
+    type: 'expense',
+    icon: ArrowDownRight,
+    color:
+      'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+  },
+]
+
+// JSON-LD Structured Data for SEO
+const jsonLdData = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Finly B2B Cashflow OS',
+  operatingSystem: 'Web',
+  applicationCategory: 'BusinessApplication',
+  offers: {
+    '@type': 'Offer',
+    price: '29.00',
+    priceCurrency: 'USD',
+  },
+  description:
+    'Operating System for B2B agency cashflow, AI invoice drafting, live multi-currency FX rates, and integer-precision financial ledgers.',
+}
+
 function LandingPage() {
   const navigate = useNavigate()
   const [monthlyRevenue, setMonthlyRevenue] = useState<number>(45000)
@@ -103,16 +178,22 @@ function LandingPage() {
 
   useEffect(() => {
     if (!previewContainerRef.current) return
-    const updateScale = () => {
-      if (!previewContainerRef.current) return
-      const containerWidth = previewContainerRef.current.clientWidth
-      const baseWidth = 1000 // uncompromised fixed desktop dashboard width
-      const scale = containerWidth < baseWidth ? containerWidth / baseWidth : 1
-      setPreviewScale(scale)
+    let animationFrameId: number
 
-      if (previewContentRef.current) {
-        setContentHeight(previewContentRef.current.offsetHeight)
-      }
+    const updateScale = () => {
+      cancelAnimationFrame(animationFrameId)
+      animationFrameId = requestAnimationFrame(() => {
+        if (!previewContainerRef.current) return
+        const containerWidth = previewContainerRef.current.clientWidth
+        const baseWidth = 1040 // uncompromised fixed desktop dashboard width
+        const scale = containerWidth < baseWidth ? Math.max(0.25, containerWidth / baseWidth) : 1
+        setPreviewScale((prev) => (Math.abs(prev - scale) > 0.005 ? scale : prev))
+
+        if (previewContentRef.current) {
+          const height = previewContentRef.current.offsetHeight
+          setContentHeight((prev) => (prev !== height ? height : prev))
+        }
+      })
     }
 
     updateScale()
@@ -120,17 +201,11 @@ function LandingPage() {
       updateScale()
     })
     observer.observe(previewContainerRef.current)
-    if (previewContentRef.current) {
-      observer.observe(previewContentRef.current)
+    return () => {
+      cancelAnimationFrame(animationFrameId)
+      observer.disconnect()
     }
-    return () => observer.disconnect()
   }, [activeTab, cashflowTimeframe, recentTxFilter])
-
-  const m3Transition = {
-    type: 'tween' as const,
-    ease: [0.2, 0, 0, 1] as [number, number, number, number],
-    duration: 0.5,
-  }
 
   const filteredCashflowData = useMemo(() => {
     if (cashflowTimeframe === '6m') {
@@ -142,86 +217,17 @@ function LandingPage() {
     return fullCashflowData
   }, [cashflowTimeframe])
 
-  const allRecentTx = [
-    {
-      name: 'Acme Corp Web Dev',
-      category: 'Income / Services',
-      date: 'Today, 2:45 PM',
-      amount: 5000,
-      type: 'income',
-      icon: ArrowUpRight,
-      color:
-        'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-    },
-    {
-      name: 'AWS Infrastructure',
-      category: 'Software & Hosting',
-      date: 'Yesterday, 10:20 AM',
-      amount: 120,
-      type: 'expense',
-      icon: ArrowDownRight,
-      color:
-        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
-    },
-    {
-      name: 'Q3 Retainer GlobalTech',
-      category: 'Income / Retainer',
-      date: 'Jul 28, 2026',
-      amount: 3500,
-      type: 'income',
-      icon: ArrowUpRight,
-      color:
-        'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-    },
-    {
-      name: 'Facebook Ads Campaign',
-      category: 'Marketing & Ads',
-      date: 'Jul 26, 2026',
-      amount: 450,
-      type: 'expense',
-      icon: ArrowDownRight,
-      color:
-        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
-    },
-    {
-      name: 'Slack Team Subscription',
-      category: 'Software & SaaS',
-      date: 'Jul 24, 2026',
-      amount: 85,
-      type: 'expense',
-      icon: ArrowDownRight,
-      color:
-        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
-    },
-  ]
-
   const filteredTx = useMemo(() => {
     if (recentTxFilter === 'all') return allRecentTx
     return allRecentTx.filter((tx) => tx.type === recentTxFilter)
-  }, [recentTxFilter, allRecentTx])
+  }, [recentTxFilter])
 
   // Calculated ROI values
   const hoursSaved = Math.round((monthlyRevenue / 1000) * 0.4)
   const moneySaved = Math.round(monthlyRevenue * 0.08)
 
-  // JSON-LD Structured Data for SEO
-  const jsonLdData = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'Finly B2B Cashflow OS',
-    operatingSystem: 'Web',
-    applicationCategory: 'BusinessApplication',
-    offers: {
-      '@type': 'Offer',
-      price: '29.00',
-      priceCurrency: 'USD',
-    },
-    description:
-      'Operating System for B2B agency cashflow, AI invoice drafting, live multi-currency FX rates, and integer-precision financial ledgers.',
-  }
-
   return (
-    <div className="space-y-20 pb-20 overflow-hidden">
+    <div className="space-y-16 md:space-y-24 pb-20 overflow-hidden">
       {/* Inject Structured Data Script for Google Search Indexing */}
       <script
         type="application/ld+json"
@@ -253,7 +259,7 @@ function LandingPage() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...m3Transition, delay: 0.1 }}
-          className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground leading-[1.08] max-w-4xl mx-auto"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground leading-[1.1] max-w-4xl mx-auto"
         >
           Stop guessing your agency runway. Take control of your cashflow.
         </motion.h1>
@@ -1113,9 +1119,9 @@ function LandingPage() {
       <section
         id="calculator-section"
         aria-labelledby="calculator-heading"
-        className="max-w-5xl mx-auto px-6"
+        className="max-w-5xl mx-auto px-4 sm:px-6"
       >
-        <div className="p-8 md:p-10 rounded-3xl bg-card border border-border shadow-none space-y-8">
+        <div className="p-6 sm:p-8 md:p-10 rounded-3xl bg-card border border-border shadow-none space-y-6 sm:space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20">
               <Calculator className="h-3.5 w-3.5" /> Instant Cashflow Calculator
@@ -1147,23 +1153,23 @@ function LandingPage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-border">
-            <div className="p-6 rounded-2xl bg-muted/40 border border-border text-center space-y-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 pt-4 border-t border-border">
+            <div className="p-5 sm:p-6 rounded-2xl bg-muted/40 border border-border text-center space-y-1">
               <p className="text-xs text-muted-foreground font-semibold">
                 Estimated Monthly Time Reclaimed
               </p>
-              <p className="text-3xl font-mono font-extrabold text-foreground">
+              <p className="text-2xl sm:text-3xl font-mono font-extrabold text-foreground">
                 {hoursSaved} Hours / mo
               </p>
               <p className="text-[11px] text-muted-foreground">
                 Automating invoice drafts, payment tracking, and receipt logging
               </p>
             </div>
-            <div className="p-6 rounded-2xl bg-primary/10 border border-primary/20 text-center space-y-1">
+            <div className="p-5 sm:p-6 rounded-2xl bg-primary/10 border border-primary/20 text-center space-y-1">
               <p className="text-xs text-primary font-semibold">
                 Estimated Cashflow Protected
               </p>
-              <p className="text-3xl font-mono font-extrabold text-primary">
+              <p className="text-2xl sm:text-3xl font-mono font-extrabold text-primary">
                 ${moneySaved.toLocaleString()} / mo
               </p>
               <p className="text-[11px] text-muted-foreground">
@@ -1179,28 +1185,28 @@ function LandingPage() {
       <section
         id="features-section"
         aria-labelledby="features-heading"
-        className="max-w-6xl mx-auto px-6 space-y-8"
+        className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8"
       >
         <div className="text-center max-w-2xl mx-auto space-y-2">
           <h2
             id="features-heading"
-            className="text-3xl font-bold text-foreground"
+            className="text-2xl sm:text-3xl font-bold text-foreground"
           >
             Financial clarity without enterprise bloat
           </h2>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Engineered specifically for client-service businesses,
             consultancies, and digital agencies.
           </p>
         </div>
 
         {/* 3-Cell Asymmetric Bento Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-7 rounded-3xl bg-card border border-border shadow-none space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="p-6 sm:p-7 rounded-3xl bg-card border border-border shadow-none space-y-4">
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Zap className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-foreground">
+            <h3 className="text-base sm:text-lg font-bold text-foreground">
               Zero Floating-Point Drift
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
@@ -1210,11 +1216,11 @@ function LandingPage() {
             </p>
           </div>
 
-          <div className="p-7 rounded-3xl bg-card border border-border shadow-none space-y-4 md:col-span-2">
+          <div className="p-6 sm:p-7 rounded-3xl bg-card border border-border shadow-none space-y-4 md:col-span-2">
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Bot className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-foreground">
+            <h3 className="text-base sm:text-lg font-bold text-foreground">
               Human-in-the-Loop AI Invoicing
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
@@ -1226,12 +1232,12 @@ function LandingPage() {
         </div>
 
         {/* 2-Cell Equal Bento Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-7 rounded-3xl bg-card border border-border shadow-none space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="p-6 sm:p-7 rounded-3xl bg-card border border-border shadow-none space-y-4">
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Globe className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-foreground">
+            <h3 className="text-base sm:text-lg font-bold text-foreground">
               Live Multi-Currency Settlement
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
@@ -1240,11 +1246,11 @@ function LandingPage() {
             </p>
           </div>
 
-          <div className="p-7 rounded-3xl bg-card border border-border shadow-none space-y-4">
+          <div className="p-6 sm:p-7 rounded-3xl bg-card border border-border shadow-none space-y-4">
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Lock className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-foreground">
+            <h3 className="text-base sm:text-lg font-bold text-foreground">
               PostgreSQL Row-Level Security
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
@@ -1259,7 +1265,7 @@ function LandingPage() {
       {/* Testimonials Section */}
       <section
         aria-labelledby="testimonials-heading"
-        className="max-w-6xl mx-auto px-6 space-y-8"
+        className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8"
       >
         <div className="text-center max-w-xl mx-auto space-y-2">
           <h2
@@ -1273,7 +1279,7 @@ function LandingPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {[
             {
               quote:
@@ -1316,8 +1322,8 @@ function LandingPage() {
       </section>
 
       {/* Bottom CTA Banner */}
-      <section className="max-w-5xl mx-auto px-6">
-        <div className="p-10 md:p-14 rounded-3xl bg-primary text-primary-foreground text-center space-y-6 shadow-none relative overflow-hidden">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="p-8 sm:p-10 md:p-14 rounded-3xl bg-primary text-primary-foreground text-center space-y-6 shadow-none relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
           <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight max-w-2xl mx-auto leading-tight">
             Ready to run your agency on exact numbers?
