@@ -501,11 +501,11 @@ function LandingPage() {
                         </div>
                       </div>
 
-                      <div className="h-[280px] w-full">
+                      <div className="h-[280px] w-full max-w-4xl mx-auto">
                         <ResponsiveContainer width="100%" height="100%">
                           <BarChart
                             data={filteredCashflowData}
-                            barCategoryGap="12%"
+                            barCategoryGap="22%"
                             margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
                           >
                             <CartesianGrid
@@ -582,7 +582,7 @@ function LandingPage() {
                               stackId="cashflowStack"
                               className="text-black/25 dark:text-white/25 fill-current"
                               radius={[0, 0, 4, 4]}
-                              maxBarSize={64}
+                              maxBarSize={44}
                             />
                             <Bar
                               dataKey="income"
@@ -590,7 +590,7 @@ function LandingPage() {
                               stackId="cashflowStack"
                               fill="var(--primary)"
                               radius={[6, 6, 0, 0]}
-                              maxBarSize={64}
+                              maxBarSize={44}
                             />
                           </BarChart>
                         </ResponsiveContainer>
