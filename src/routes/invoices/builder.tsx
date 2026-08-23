@@ -27,13 +27,18 @@ function InvoiceBuilder() {
   const navigate = useNavigate()
   const [draftSavedModal, setDraftSavedModal] = useState(false)
   const [items, setItems] = useState<LineItem[]>([
-    { id: '1', description: 'Web Application Development', qty: 1, price: 4000 },
+    {
+      id: '1',
+      description: 'Web Application Development',
+      qty: 1,
+      price: 4000,
+    },
     { id: '2', description: 'UI/UX Design & Branding', qty: 1, price: 1000 },
   ])
 
   const updateItem = (id: string, field: keyof LineItem, value: any) => {
     setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
+      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
     )
   }
 
@@ -75,7 +80,12 @@ function InvoiceBuilder() {
           >
             <Save className="h-4 w-4 mr-2" /> Save Draft
           </Button>
-          <Button className="px-6" onClick={() => navigate({ to: "/invoices/$id", params: { id: "INV-2026-001" } })}>
+          <Button
+            className="px-6"
+            onClick={() =>
+              navigate({ to: '/invoices/$id', params: { id: 'INV-2026-001' } })
+            }
+          >
             <Send className="h-4 w-4 mr-2" /> Issue Document
           </Button>
         </div>
@@ -148,79 +158,92 @@ function InvoiceBuilder() {
         <div className="p-6 md:p-10">
           <div className="overflow-x-auto w-full">
             <table className="w-full text-left min-w-[600px]">
-            <thead>
-              <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
-                <th className="pb-3 font-semibold w-1/2">
-                  Description
-                </th>
-                <th className="pb-3 font-semibold text-right">
-                  Qty
-                </th>
-                <th className="pb-3 font-semibold text-right">
-                  Price
-                </th>
-                <th className="pb-3 font-semibold text-right">
-                  Total
-                </th>
-                <th className="pb-3"></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              <AnimatePresence initial={false}>
-                {items.map((item) => (
-                  <motion.tr
-                    key={item.id}
-                    layout
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-                    className="group"
-                  >
-                    <td className="py-4">
-                      <input
-                        type="text"
-                        value={item.description}
-                        onChange={(e) => updateItem(item.id, 'description', e.target.value)}
-                        placeholder="Item description"
-                        className="w-full bg-transparent text-sm font-semibold outline-none placeholder:font-normal text-foreground focus:border-b focus:border-primary"
-                      />
-                    </td>
-                    <td className="py-4 text-right">
-                      <input
-                        type="number"
-                        value={item.qty}
-                        onChange={(e) => updateItem(item.id, 'qty', parseFloat(e.target.value) || 0)}
-                        placeholder="Qty"
-                        className="w-16 bg-transparent text-right font-mono text-sm font-medium outline-none text-foreground focus:border-b focus:border-primary"
-                      />
-                    </td>
-                    <td className="py-4 text-right">
-                      <input
-                        type="number"
-                        value={item.price}
-                        onChange={(e) => updateItem(item.id, 'price', parseFloat(e.target.value) || 0)}
-                        placeholder="Price"
-                        className="w-32 bg-transparent text-right font-mono text-sm font-medium outline-none text-foreground focus:border-b focus:border-primary"
-                      />
-                    </td>
-                    <td className="py-4 text-right font-mono text-sm font-semibold text-foreground">
-                      ${(item.qty * item.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                    </td>
-                    <td className="py-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button
-                        onClick={() => removeItem(item.id)}
-                        className="p-1.5 border border-transparent rounded-full hover:bg-destructive/10 text-destructive transition-all"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </td>
-                  </motion.tr>
-                ))}
-              </AnimatePresence>
-            </tbody>
-          </table>
-        </div>
+              <thead>
+                <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
+                  <th className="pb-3 font-semibold w-1/2">Description</th>
+                  <th className="pb-3 font-semibold text-right">Qty</th>
+                  <th className="pb-3 font-semibold text-right">Price</th>
+                  <th className="pb-3 font-semibold text-right">Total</th>
+                  <th className="pb-3"></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                <AnimatePresence initial={false}>
+                  {items.map((item) => (
+                    <motion.tr
+                      key={item.id}
+                      layout
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 400,
+                        damping: 28,
+                      }}
+                      className="group"
+                    >
+                      <td className="py-4">
+                        <input
+                          type="text"
+                          value={item.description}
+                          onChange={(e) =>
+                            updateItem(item.id, 'description', e.target.value)
+                          }
+                          placeholder="Item description"
+                          className="w-full bg-transparent text-sm font-semibold outline-none placeholder:font-normal text-foreground focus:border-b focus:border-primary"
+                        />
+                      </td>
+                      <td className="py-4 text-right">
+                        <input
+                          type="number"
+                          value={item.qty}
+                          onChange={(e) =>
+                            updateItem(
+                              item.id,
+                              'qty',
+                              parseFloat(e.target.value) || 0,
+                            )
+                          }
+                          placeholder="Qty"
+                          className="w-16 bg-transparent text-right font-mono text-sm font-medium outline-none text-foreground focus:border-b focus:border-primary"
+                        />
+                      </td>
+                      <td className="py-4 text-right">
+                        <input
+                          type="number"
+                          value={item.price}
+                          onChange={(e) =>
+                            updateItem(
+                              item.id,
+                              'price',
+                              parseFloat(e.target.value) || 0,
+                            )
+                          }
+                          placeholder="Price"
+                          className="w-32 bg-transparent text-right font-mono text-sm font-medium outline-none text-foreground focus:border-b focus:border-primary"
+                        />
+                      </td>
+                      <td className="py-4 text-right font-mono text-sm font-semibold text-foreground">
+                        $
+                        {(item.qty * item.price).toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                        })}
+                      </td>
+                      <td className="py-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="p-1.5 border border-transparent rounded-full hover:bg-destructive/10 text-destructive transition-all"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </AnimatePresence>
+              </tbody>
+            </table>
+          </div>
 
           <Button
             onClick={addItem}
@@ -237,7 +260,10 @@ function InvoiceBuilder() {
                 <div className="flex justify-between text-xs font-medium text-muted-foreground">
                   <span>Subtotal</span>
                   <span className="font-mono text-foreground font-semibold">
-                    ${subtotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    $
+                    {subtotal.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                    })}
                   </span>
                 </div>
                 <div className="flex justify-between text-xs font-medium text-muted-foreground">

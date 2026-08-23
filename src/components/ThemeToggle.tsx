@@ -14,7 +14,9 @@ export function ThemeToggle() {
   useEffect(() => {
     const stored = window.localStorage.getItem('theme')
     const savedTheme: ThemeMode =
-      stored === 'light' || stored === 'dark' || stored === 'auto' ? stored : 'auto'
+      stored === 'light' || stored === 'dark' || stored === 'auto'
+        ? stored
+        : 'auto'
     setMode(savedTheme)
     applyThemeMode(savedTheme)
   }, [])
@@ -91,7 +93,7 @@ export function ThemeToggle() {
                 'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all',
                 mode === 'light'
                   ? 'bg-primary text-primary-foreground font-semibold'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50',
               )}
             >
               <Sun className="h-3.5 w-3.5" /> Light
@@ -102,7 +104,7 @@ export function ThemeToggle() {
                 'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all',
                 mode === 'dark'
                   ? 'bg-primary text-primary-foreground font-semibold'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50',
               )}
             >
               <Moon className="h-3.5 w-3.5" /> Dark
@@ -113,7 +115,7 @@ export function ThemeToggle() {
                 'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all',
                 mode === 'auto'
                   ? 'bg-primary text-primary-foreground font-semibold'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50',
               )}
             >
               <Monitor className="h-3.5 w-3.5" /> System

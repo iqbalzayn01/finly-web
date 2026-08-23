@@ -33,7 +33,7 @@ export function useDebouncedSearch<T>({
   }, [inputQuery, debounceMs])
 
   const trimmed = debouncedQuery.trim()
-  
+
   // 2. Minimum character check (block < 3 characters)
   const isTooShort = trimmed.length > 0 && trimmed.length < minChars
   const effectiveQuery = trimmed.length >= minChars ? trimmed : ''

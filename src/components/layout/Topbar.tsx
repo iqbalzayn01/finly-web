@@ -46,7 +46,10 @@ export function Topbar() {
   // Close popovers on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+      if (
+        notifRef.current &&
+        !notifRef.current.contains(event.target as Node)
+      ) {
         setNotifOpen(false)
       }
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -73,11 +76,18 @@ export function Topbar() {
             className="lg:hidden flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-foreground shadow-none hover:bg-accent transition-colors outline-none cursor-pointer"
             aria-label="Toggle Navigation Menu"
           >
-            {mobileNavOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileNavOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
 
           {/* Brand Header Logo */}
-          <Link to="/dashboard" className="flex items-center gap-3 group outline-none">
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-3 group outline-none"
+          >
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground font-black text-lg shadow-none">
               F
             </div>
@@ -119,7 +129,8 @@ export function Topbar() {
               const Icon = item.icon
               const isActive =
                 location.pathname === item.to ||
-                (item.to !== '/dashboard' && location.pathname.startsWith(item.to))
+                (item.to !== '/dashboard' &&
+                  location.pathname.startsWith(item.to))
 
               return (
                 <Link
@@ -129,10 +140,17 @@ export function Topbar() {
                     'flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs transition-all cursor-pointer outline-none',
                     isActive
                       ? 'bg-primary text-primary-foreground font-extrabold border border-primary/30 shadow-none ring-2 ring-primary/20'
-                      : 'text-muted-foreground font-semibold hover:text-foreground hover:bg-accent/60'
+                      : 'text-muted-foreground font-semibold hover:text-foreground hover:bg-accent/60',
                   )}
                 >
-                  <Icon className={cn('h-4 w-4', isActive ? 'text-primary-foreground' : 'text-muted-foreground')} />
+                  <Icon
+                    className={cn(
+                      'h-4 w-4',
+                      isActive
+                        ? 'text-primary-foreground'
+                        : 'text-muted-foreground',
+                    )}
+                  />
                   <span>{item.label}</span>
                 </Link>
               )
@@ -189,7 +207,8 @@ export function Topbar() {
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground line-clamp-2">
-                        Acme Corp completed payment of $4,500.00 via wire transfer.
+                        Acme Corp completed payment of $4,500.00 via wire
+                        transfer.
                       </p>
                     </div>
 
@@ -273,7 +292,8 @@ export function Topbar() {
                       className="flex items-center justify-between px-3 py-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 rounded-xl hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors"
                     >
                       <span className="flex items-center gap-2">
-                        <Sparkles className="h-4 w-4 text-emerald-500" /> Pro Subscription
+                        <Sparkles className="h-4 w-4 text-emerald-500" /> Pro
+                        Subscription
                       </span>
                       <span className="text-[10px] font-extrabold bg-emerald-500 text-white px-1.5 py-0.5 rounded-full">
                         ACTIVE
@@ -286,7 +306,8 @@ export function Topbar() {
                       className="flex items-center justify-between px-3 py-2 text-xs font-bold text-primary bg-primary/10 rounded-xl hover:bg-primary/20 border border-primary/20 transition-colors"
                     >
                       <span className="flex items-center gap-2">
-                        <Sparkles className="h-4 w-4 text-primary" /> Upgrade to Pro
+                        <Sparkles className="h-4 w-4 text-primary" /> Upgrade to
+                        Pro
                       </span>
                       <span className="text-[10px] font-extrabold bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full">
                         PRO
@@ -299,7 +320,8 @@ export function Topbar() {
                     onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-foreground rounded-xl hover:bg-accent transition-colors"
                   >
-                    <User className="h-4 w-4 text-muted-foreground" /> Account Profile
+                    <User className="h-4 w-4 text-muted-foreground" /> Account
+                    Profile
                   </Link>
 
                   <Link
@@ -307,7 +329,8 @@ export function Topbar() {
                     onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-foreground rounded-xl hover:bg-accent transition-colors"
                   >
-                    <SettingsIcon className="h-4 w-4 text-muted-foreground" /> Settings
+                    <SettingsIcon className="h-4 w-4 text-muted-foreground" />{' '}
+                    Settings
                   </Link>
 
                   <div className="border-t border-border pt-1 mt-1">
@@ -343,7 +366,8 @@ export function Topbar() {
                 const Icon = item.icon
                 const isActive =
                   location.pathname === item.to ||
-                  (item.to !== '/dashboard' && location.pathname.startsWith(item.to))
+                  (item.to !== '/dashboard' &&
+                    location.pathname.startsWith(item.to))
 
                 return (
                   <Link
@@ -354,10 +378,17 @@ export function Topbar() {
                       'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all',
                       isActive
                         ? 'bg-primary text-primary-foreground font-extrabold border border-primary/30 shadow-none ring-2 ring-primary/20'
-                        : 'text-foreground hover:bg-accent font-medium'
+                        : 'text-foreground hover:bg-accent font-medium',
                     )}
                   >
-                    <Icon className={cn('h-5 w-5', isActive ? 'text-primary-foreground' : 'text-muted-foreground')} />
+                    <Icon
+                      className={cn(
+                        'h-5 w-5',
+                        isActive
+                          ? 'text-primary-foreground'
+                          : 'text-muted-foreground',
+                      )}
+                    />
                     <span>{item.label}</span>
                   </Link>
                 )
@@ -372,7 +403,8 @@ export function Topbar() {
                     className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 transition-all shadow-none"
                   >
                     <span className="flex items-center gap-2.5">
-                      <Sparkles className="h-4 w-4 text-emerald-500" /> Pro Subscription Active
+                      <Sparkles className="h-4 w-4 text-emerald-500" /> Pro
+                      Subscription Active
                     </span>
                     <span className="text-xs bg-emerald-500 text-white px-2 py-0.5 rounded-full font-extrabold">
                       ACTIVE

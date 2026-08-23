@@ -47,7 +47,10 @@ export function AiChatAssistant() {
       id: 'welcome-1',
       sender: 'ai',
       text: "Hello! I'm your Finly AI Assistant. Tell me what you'd like to log or draft using natural language.",
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
     },
   ])
 
@@ -68,7 +71,10 @@ export function AiChatAssistant() {
       id: 'user-' + Date.now(),
       sender: 'user',
       text: query,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
     }
 
     setMessages((prev) => [...prev, userMsg])
@@ -80,27 +86,40 @@ export function AiChatAssistant() {
       const lower = query.toLowerCase()
       let aiResponse: ChatMessage
 
-      if (lower.includes('uber') || lower.includes('expense') || lower.includes('spent') || lower.includes('$15') || lower.includes('coffee') || lower.includes('ads')) {
+      if (
+        lower.includes('uber') ||
+        lower.includes('expense') ||
+        lower.includes('spent') ||
+        lower.includes('$15') ||
+        lower.includes('coffee') ||
+        lower.includes('ads')
+      ) {
         // Parse expense intent
         let amount = 15
         const amountMatch = query.match(/\$?(\d+(?:\.\d{2})?)/)
         if (amountMatch) amount = parseFloat(amountMatch[1])
 
         let merchant = 'Uber Transport'
-        if (lower.includes('facebook') || lower.includes('ads')) merchant = 'Facebook Ads'
-        else if (lower.includes('coffee') || lower.includes('starbucks')) merchant = 'Starbucks'
+        if (lower.includes('facebook') || lower.includes('ads'))
+          merchant = 'Facebook Ads'
+        else if (lower.includes('coffee') || lower.includes('starbucks'))
+          merchant = 'Starbucks'
         else if (lower.includes('slack')) merchant = 'Slack Technologies'
 
         let category = 'Transport & Travel'
         if (lower.includes('ads')) category = 'Advertising & Marketing'
-        else if (lower.includes('software') || lower.includes('slack')) category = 'Software & SaaS'
+        else if (lower.includes('software') || lower.includes('slack'))
+          category = 'Software & SaaS'
         else if (lower.includes('coffee')) category = 'Meals & Entertainment'
 
         aiResponse = {
           id: 'ai-' + Date.now(),
           sender: 'ai',
           text: `I've prepared a draft expense card for your review:`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
           intentCard: {
             type: 'expense',
             title: 'Draft Expense Entry',
@@ -110,7 +129,13 @@ export function AiChatAssistant() {
             isApproved: false,
           },
         }
-      } else if (lower.includes('invoice') || lower.includes('apple') || lower.includes('draft') || lower.includes('client') || lower.includes('acme')) {
+      } else if (
+        lower.includes('invoice') ||
+        lower.includes('apple') ||
+        lower.includes('draft') ||
+        lower.includes('client') ||
+        lower.includes('acme')
+      ) {
         // Parse invoice intent
         let amount = 5000
         const amountMatch = query.match(/\$?(\d+(?:\.\d{2})?)/)
@@ -125,7 +150,10 @@ export function AiChatAssistant() {
           id: 'ai-' + Date.now(),
           sender: 'ai',
           text: `Here is the draft invoice generated from your request:`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
           intentCard: {
             type: 'invoice',
             title: 'Draft Client Invoice',
@@ -133,23 +161,38 @@ export function AiChatAssistant() {
             category: 'B2B Services',
             amount: amount,
             items: [
-              { desc: lower.includes('consulting') ? 'Strategic Consulting Services' : 'Web Application Engineering', amount: amount },
+              {
+                desc: lower.includes('consulting')
+                  ? 'Strategic Consulting Services'
+                  : 'Web Application Engineering',
+                amount: amount,
+              },
             ],
             isApproved: false,
           },
         }
-      } else if (lower.includes('insight') || lower.includes('software') || lower.includes('spend') || lower.includes('how much') || lower.includes('analytics')) {
+      } else if (
+        lower.includes('insight') ||
+        lower.includes('software') ||
+        lower.includes('spend') ||
+        lower.includes('how much') ||
+        lower.includes('analytics')
+      ) {
         // Parse quick insight intent
         aiResponse = {
           id: 'ai-' + Date.now(),
           sender: 'ai',
           text: `Here is your expense insight for Software & Subscriptions this month:`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
           intentCard: {
             type: 'insight',
             title: 'Software Expenses (Aug 2026)',
             amount: 1450,
-            insightText: 'You spent $1,450.00 across 4 SaaS tools this month. That is 12% lower than July 2026 ($1,650.00).',
+            insightText:
+              'You spent $1,450.00 across 4 SaaS tools this month. That is 12% lower than July 2026 ($1,650.00).',
           },
         }
       } else {
@@ -158,7 +201,10 @@ export function AiChatAssistant() {
           id: 'ai-' + Date.now(),
           sender: 'ai',
           text: `I understood: "${query}". I can help you log expenses, draft client invoices, or analyze monthly cashflow trends. Try asking: "Log $50 for Facebook Ads" or "Draft invoice to Acme for $2500".`,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
         }
       }
 
@@ -167,7 +213,10 @@ export function AiChatAssistant() {
     }, 800)
   }
 
-  const handleApproveIntent = (msgId: string, cardType: 'expense' | 'invoice' | 'insight') => {
+  const handleApproveIntent = (
+    msgId: string,
+    cardType: 'expense' | 'invoice' | 'insight',
+  ) => {
     setMessages((prev) =>
       prev.map((msg) => {
         if (msg.id === msgId && msg.intentCard) {
@@ -180,7 +229,7 @@ export function AiChatAssistant() {
           }
         }
         return msg
-      })
+      }),
     )
 
     if (cardType === 'invoice') {
@@ -269,7 +318,9 @@ export function AiChatAssistant() {
                       </div>
                     )}
 
-                    <div className={`space-y-2 max-w-[85%] ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
+                    <div
+                      className={`space-y-2 max-w-[85%] ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+                    >
                       {msg.text && (
                         <div
                           className={`p-3.5 rounded-2xl text-sm leading-relaxed ${
@@ -291,9 +342,15 @@ export function AiChatAssistant() {
                         >
                           <div className="flex items-center justify-between border-b border-border pb-2.5">
                             <span className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
-                              {msg.intentCard.type === 'expense' && <Receipt className="h-3.5 w-3.5" />}
-                              {msg.intentCard.type === 'invoice' && <FileText className="h-3.5 w-3.5" />}
-                              {msg.intentCard.type === 'insight' && <TrendingUp className="h-3.5 w-3.5" />}
+                              {msg.intentCard.type === 'expense' && (
+                                <Receipt className="h-3.5 w-3.5" />
+                              )}
+                              {msg.intentCard.type === 'invoice' && (
+                                <FileText className="h-3.5 w-3.5" />
+                              )}
+                              {msg.intentCard.type === 'insight' && (
+                                <TrendingUp className="h-3.5 w-3.5" />
+                              )}
                               {msg.intentCard.title}
                             </span>
                             <span className="text-[10px] font-semibold text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
@@ -303,8 +360,12 @@ export function AiChatAssistant() {
 
                           {msg.intentCard.type === 'expense' && (
                             <div className="space-y-1.5">
-                              <p className="text-xs text-muted-foreground">Merchant / Entity</p>
-                              <p className="font-semibold text-sm text-foreground">{msg.intentCard.merchantOrClient}</p>
+                              <p className="text-xs text-muted-foreground">
+                                Merchant / Entity
+                              </p>
+                              <p className="font-semibold text-sm text-foreground">
+                                {msg.intentCard.merchantOrClient}
+                              </p>
                               <div className="flex justify-between items-center pt-2">
                                 <span className="text-xs font-medium text-muted-foreground bg-accent/40 px-2.5 py-0.5 rounded-full">
                                   {msg.intentCard.category}
@@ -318,20 +379,31 @@ export function AiChatAssistant() {
 
                           {msg.intentCard.type === 'invoice' && (
                             <div className="space-y-1.5">
-                              <p className="text-xs text-muted-foreground">Client Name</p>
-                              <p className="font-semibold text-sm text-foreground">{msg.intentCard.merchantOrClient}</p>
+                              <p className="text-xs text-muted-foreground">
+                                Client Name
+                              </p>
+                              <p className="font-semibold text-sm text-foreground">
+                                {msg.intentCard.merchantOrClient}
+                              </p>
                               {msg.intentCard.items && (
                                 <div className="space-y-1 pt-1">
                                   {msg.intentCard.items.map((item, idx) => (
-                                    <div key={idx} className="flex justify-between text-xs text-muted-foreground">
+                                    <div
+                                      key={idx}
+                                      className="flex justify-between text-xs text-muted-foreground"
+                                    >
                                       <span>{item.desc}</span>
-                                      <span className="font-mono text-foreground font-semibold">${item.amount.toFixed(2)}</span>
+                                      <span className="font-mono text-foreground font-semibold">
+                                        ${item.amount.toFixed(2)}
+                                      </span>
                                     </div>
                                   ))}
                                 </div>
                               )}
                               <div className="flex justify-between items-center pt-2 border-t border-border">
-                                <span className="text-xs font-semibold text-foreground">Total Payable</span>
+                                <span className="text-xs font-semibold text-foreground">
+                                  Total Payable
+                                </span>
                                 <span className="font-mono text-base font-bold text-primary">
                                   ${msg.intentCard.amount.toFixed(2)}
                                 </span>
@@ -345,8 +417,12 @@ export function AiChatAssistant() {
                                 {msg.intentCard.insightText}
                               </p>
                               <div className="pt-1 flex justify-between items-center">
-                                <span className="text-xs text-muted-foreground">Total SaaS Spend</span>
-                                <span className="font-mono text-base font-bold text-foreground">${msg.intentCard.amount.toFixed(2)}</span>
+                                <span className="text-xs text-muted-foreground">
+                                  Total SaaS Spend
+                                </span>
+                                <span className="font-mono text-base font-bold text-foreground">
+                                  ${msg.intentCard.amount.toFixed(2)}
+                                </span>
                               </div>
                             </div>
                           )}
@@ -357,16 +433,25 @@ export function AiChatAssistant() {
                               {msg.intentCard.isApproved ? (
                                 <div className="flex items-center justify-center gap-2 py-2 px-3 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl text-xs font-semibold border border-emerald-500/20">
                                   <CheckCircle2 className="h-4 w-4" />
-                                  {msg.intentCard.type === 'expense' ? 'Approved & Saved to Cashbook' : 'Approved & Sent to Builder'}
+                                  {msg.intentCard.type === 'expense'
+                                    ? 'Approved & Saved to Cashbook'
+                                    : 'Approved & Sent to Builder'}
                                 </div>
                               ) : (
                                 <Button
                                   size="sm"
                                   className="w-full"
-                                  onClick={() => handleApproveIntent(msg.id, msg.intentCard!.type)}
+                                  onClick={() =>
+                                    handleApproveIntent(
+                                      msg.id,
+                                      msg.intentCard!.type,
+                                    )
+                                  }
                                 >
                                   <CheckCircle2 className="h-3.5 w-3.5 mr-2" />
-                                  {msg.intentCard.type === 'expense' ? 'Approve & Save Expense' : 'Approve & Draft Invoice'}
+                                  {msg.intentCard.type === 'expense'
+                                    ? 'Approve & Save Expense'
+                                    : 'Approve & Draft Invoice'}
                                 </Button>
                               )}
                             </div>
@@ -407,7 +492,9 @@ export function AiChatAssistant() {
 
               {/* Suggested Prompt Chips */}
               <div className="p-3 border-t border-border bg-muted/20 space-y-2">
-                <p className="text-[11px] font-semibold text-muted-foreground px-1">Suggested Prompts:</p>
+                <p className="text-[11px] font-semibold text-muted-foreground px-1">
+                  Suggested Prompts:
+                </p>
                 <div className="flex flex-wrap gap-1.5">
                   {SUGGESTED_PROMPTS.map((prompt) => (
                     <button

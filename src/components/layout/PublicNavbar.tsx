@@ -16,8 +16,12 @@ export function PublicNavbar() {
               F
             </div>
             <div>
-              <h1 className="font-bold text-lg text-foreground tracking-tight leading-none">Finly</h1>
-              <p className="text-[10px] font-semibold text-muted-foreground mt-0.5">Cashflow OS</p>
+              <h1 className="font-bold text-lg text-foreground tracking-tight leading-none">
+                Finly
+              </h1>
+              <p className="text-[10px] font-semibold text-muted-foreground mt-0.5">
+                Cashflow OS
+              </p>
             </div>
           </Link>
         </div>
@@ -28,7 +32,9 @@ export function PublicNavbar() {
             to="/"
             className={cn(
               'transition-colors',
-              location.pathname === '/' ? 'text-primary font-bold' : 'text-muted-foreground hover:text-foreground'
+              location.pathname === '/'
+                ? 'text-primary font-bold'
+                : 'text-muted-foreground hover:text-foreground',
             )}
           >
             Overview
@@ -43,7 +49,9 @@ export function PublicNavbar() {
             to="/pricing"
             className={cn(
               'transition-colors',
-              location.pathname === '/pricing' ? 'text-primary font-bold' : 'text-muted-foreground hover:text-foreground'
+              location.pathname === '/pricing'
+                ? 'text-primary font-bold'
+                : 'text-muted-foreground hover:text-foreground',
             )}
           >
             Pricing
@@ -51,13 +59,13 @@ export function PublicNavbar() {
         </nav>
 
         {/* Right Column: Actions */}
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex items-center justify-end gap-2 sm:gap-3">
           <ThemeToggle />
           <Link
             to="/dashboard"
-            className="px-4 py-2 text-xs font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-none flex items-center gap-1.5 cursor-pointer outline-none active:scale-[0.98]"
+            className="px-3 sm:px-4 py-2 text-xs font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-none flex items-center gap-1.5 cursor-pointer outline-none active:scale-[0.98] shrink-0"
           >
-            <span>Open Dashboard</span>
+            <span><span className="hidden sm:inline">Open </span>Dashboard</span>
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>

@@ -43,8 +43,9 @@ function DialogOverlay({
   )
 }
 
-interface DialogContentProps
-  extends React.ComponentProps<typeof DialogPrimitive.Content> {
+interface DialogContentProps extends React.ComponentProps<
+  typeof DialogPrimitive.Content
+> {
   showCloseButton?: boolean
 }
 
@@ -82,10 +83,7 @@ function DialogContent({
   )
 }
 
-function DialogHeader({
-  className,
-  ...props
-}: React.ComponentProps<'div'>) {
+function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="dialog-header"
@@ -95,10 +93,7 @@ function DialogHeader({
   )
 }
 
-function DialogFooter({
-  className,
-  ...props
-}: React.ComponentProps<'div'>) {
+function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="dialog-footer"
@@ -118,7 +113,10 @@ function DialogTitle({
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn('font-semibold text-lg leading-tight tracking-tight text-foreground', className)}
+      className={cn(
+        'font-semibold text-lg leading-tight tracking-tight text-foreground',
+        className,
+      )}
       {...props}
     />
   )

@@ -1,5 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { User, Mail, Shield, Key, Camera, Check, ShieldAlert } from 'lucide-react'
+import {
+  User,
+  Mail,
+  Shield,
+  Key,
+  Camera,
+  Check,
+  ShieldAlert,
+} from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { motion } from 'motion/react'
 import { useState } from 'react'
@@ -52,10 +60,17 @@ function Account() {
             <AvatarFallback>AU</AvatarFallback>
           </Avatar>
           <div>
-            <Button variant="outline" size="sm" className="mb-1.5" onClick={() => setAvatarModalOpen(true)}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mb-1.5"
+              onClick={() => setAvatarModalOpen(true)}
+            >
               Change Avatar
             </Button>
-            <p className="text-xs text-muted-foreground">JPG, GIF or PNG. 1MB max.</p>
+            <p className="text-xs text-muted-foreground">
+              JPG, GIF or PNG. 1MB max.
+            </p>
           </div>
         </div>
 
@@ -103,9 +118,7 @@ function Account() {
         transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.2 }}
         className="border border-border bg-card p-8 rounded-2xl shadow-none"
       >
-        <h2 className="text-xl font-semibold text-foreground mb-6">
-          Security
-        </h2>
+        <h2 className="text-xl font-semibold text-foreground mb-6">Security</h2>
 
         <div className="space-y-6">
           <div className="flex items-center justify-between py-4 border-b border-border">
@@ -117,14 +130,20 @@ function Account() {
                 Last changed 3 months ago.
               </p>
             </div>
-            <Button variant="outline" size="sm" onClick={() => setPasswordModalOpen(true)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPasswordModalOpen(true)}
+            >
               Change Password
             </Button>
           </div>
           <div className="flex items-center justify-between py-4">
             <div>
               <h3 className="font-semibold text-sm text-foreground flex items-center gap-2">
-                <Shield className={`h-4 w-4 ${twoFactorEnabled ? 'text-emerald-500' : 'text-amber-500'}`} />
+                <Shield
+                  className={`h-4 w-4 ${twoFactorEnabled ? 'text-emerald-500' : 'text-amber-500'}`}
+                />
                 Two-Factor Authentication
               </h3>
               <p className="text-xs text-muted-foreground mt-0.5">
@@ -133,7 +152,11 @@ function Account() {
                   : 'Add an extra layer of security to your account.'}
               </p>
             </div>
-            <Button variant="outline" size="sm" onClick={() => setTwoFactorModalOpen(true)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setTwoFactorModalOpen(true)}
+            >
               {twoFactorEnabled ? 'Manage 2FA' : 'Enable 2FA'}
             </Button>
           </div>
@@ -169,7 +192,11 @@ function Account() {
         size="md"
         footer={
           <div className="flex w-full items-center justify-end gap-2 pt-2">
-            <Button variant="outline" size="sm" onClick={() => setPasswordModalOpen(false)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPasswordModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button size="sm" onClick={() => setPasswordModalOpen(false)}>
@@ -180,7 +207,9 @@ function Account() {
       >
         <div className="space-y-4 py-2">
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-foreground">Current Password</label>
+            <label className="text-xs font-semibold text-foreground">
+              Current Password
+            </label>
             <input
               type="password"
               placeholder="••••••••••••"
@@ -188,7 +217,9 @@ function Account() {
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-foreground">New Password</label>
+            <label className="text-xs font-semibold text-foreground">
+              New Password
+            </label>
             <input
               type="password"
               placeholder="Minimum 8 characters"
@@ -207,7 +238,11 @@ function Account() {
         size="md"
         footer={
           <div className="flex w-full items-center justify-end gap-2 pt-2">
-            <Button variant="outline" size="sm" onClick={() => setTwoFactorModalOpen(false)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setTwoFactorModalOpen(false)}
+            >
               Cancel
             </Button>
             <Button
@@ -226,7 +261,8 @@ function Account() {
           <div className="flex items-center gap-3 p-3.5 rounded-xl bg-muted/40 border border-border">
             <ShieldAlert className="h-6 w-6 text-primary shrink-0" />
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Scan the QR code with your authenticator app (Google Authenticator, 1Password, or Authy) and enter the 6-digit code.
+              Scan the QR code with your authenticator app (Google
+              Authenticator, 1Password, or Authy) and enter the 6-digit code.
             </p>
           </div>
           <div className="flex justify-center p-4 bg-white dark:bg-card border border-border rounded-xl">
