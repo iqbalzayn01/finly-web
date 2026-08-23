@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { useState, useId, useMemo } from 'react'
+import { useState, useId, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import {
   Sparkles,
@@ -95,6 +95,36 @@ function LandingPage() {
   const [fxAmount, setFxAmount] = useState<number>(1000)
   const [fxInput, setFxInput] = useState<number>(100)
   const sliderId = useId()
+
+  const previewContainerRef = useRef<HTMLDivElement>(null)
+  const previewContentRef = useRef<HTMLDivElement>(null)
+  const [previewScale, setPreviewScale] = useState(1)
+  const [contentHeight, setContentHeight] = useState<number | undefined>(undefined)
+
+  useEffect(() => {
+    if (!previewContainerRef.current) return
+    const updateScale = () => {
+      if (!previewContainerRef.current) return
+      const containerWidth = previewContainerRef.current.clientWidth
+      const baseWidth = 1000 // uncompromised fixed desktop dashboard width
+      const scale = containerWidth < baseWidth ? containerWidth / baseWidth : 1
+      setPreviewScale(scale)
+
+      if (previewContentRef.current) {
+        setContentHeight(previewContentRef.current.offsetHeight)
+      }
+    }
+
+    updateScale()
+    const observer = new ResizeObserver(() => {
+      updateScale()
+    })
+    observer.observe(previewContainerRef.current)
+    if (previewContentRef.current) {
+      observer.observe(previewContentRef.current)
+    }
+    return () => observer.disconnect()
+  }, [activeTab, cashflowTimeframe, recentTxFilter])
 
   const m3Transition = {
     type: 'tween' as const,
@@ -306,17 +336,34 @@ function LandingPage() {
             </div>
 
             {/* Tab Preview Content */}
-            <div className="p-5 md:p-7 bg-card min-h-[320px] flex flex-col justify-between overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              <AnimatePresence mode="wait">
-                {activeTab === 'overview' && (
-                  <motion.div
-                    key="overview"
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
-                    transition={m3Transition}
-                    className="space-y-5 min-w-[840px] xl:min-w-0 w-full"
-                  >
+            <div
+              ref={previewContainerRef}
+              className="p-4 sm:p-6 md:p-8 bg-card min-h-[320px] overflow-hidden flex justify-center transition-all duration-300"
+              style={{
+                height: contentHeight
+                  ? `${Math.ceil(contentHeight * previewScale)}px`
+                  : 'auto',
+              }}
+            >
+              <div
+                ref={previewContentRef}
+                style={{
+                  width: 1040,
+                  transform: `scale(${previewScale})`,
+                  transformOrigin: 'top center',
+                  flexShrink: 0,
+                }}
+              >
+                <AnimatePresence mode="wait">
+                  {activeTab === 'overview' && (
+                    <motion.div
+                      key="overview"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 10 }}
+                      transition={m3Transition}
+                      className="space-y-5 w-full"
+                    >
                     {/* Dashboard Header Area */}
                     <div className="flex items-end justify-between gap-4">
                       <div>
@@ -1028,6 +1075,7 @@ function LandingPage() {
                 )}
               </AnimatePresence>
             </div>
+          </div>
           </div>
         </motion.div>
       </section>
