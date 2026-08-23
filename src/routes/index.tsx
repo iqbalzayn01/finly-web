@@ -272,7 +272,7 @@ function LandingPage() {
         >
           <div className="rounded-3xl border border-border bg-card shadow-none overflow-hidden text-left">
             {/* Mac Browser Window Header */}
-            <div className="px-5 py-3.5 border-b border-border bg-muted/40 flex items-center justify-between flex-wrap gap-3">
+            <div className="px-5 py-3.5 border-b border-border bg-muted/40 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
                 <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
@@ -306,7 +306,7 @@ function LandingPage() {
             </div>
 
             {/* Tab Preview Content */}
-            <div className="p-6 md:p-8 bg-card min-h-[320px] flex flex-col justify-between">
+            <div className="p-5 md:p-7 bg-card min-h-[320px] flex flex-col justify-between overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <AnimatePresence mode="wait">
                 {activeTab === 'overview' && (
                   <motion.div
@@ -315,27 +315,27 @@ function LandingPage() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 10 }}
                     transition={m3Transition}
-                    className="space-y-6"
+                    className="space-y-5 min-w-[840px] xl:min-w-0 w-full"
                   >
                     {/* Dashboard Header Area */}
-                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                    <div className="flex items-end justify-between gap-4">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <h2 className="text-2xl sm:text-3xl font-medium tracking-tight text-foreground">
+                          <h2 className="text-xl sm:text-2xl font-medium tracking-tight text-foreground">
                             Analytics &amp; Cashflow
                           </h2>
                           <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
                             Live OS
                           </span>
                         </div>
-                        <p className="text-muted-foreground text-xs sm:text-sm">
+                        <p className="text-muted-foreground text-xs">
                           Real-time business health, operating cashflow, and AI
                           forecast.
                         </p>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 shrink-0">
                         <Select defaultValue="this_year">
-                          <SelectTrigger className="w-[160px] h-10 rounded-xl border border-border bg-card shadow-none text-foreground font-semibold text-xs">
+                          <SelectTrigger className="w-[150px] h-9 rounded-xl border border-border bg-card shadow-none text-foreground font-semibold text-xs">
                             <SelectValue placeholder="Select Period" />
                           </SelectTrigger>
                           <SelectContent className="rounded-xl border border-border shadow-none">
@@ -362,8 +362,8 @@ function LandingPage() {
                       </div>
                     </div>
 
-                    {/* Top Metrics Cards - M3 Tonal Surfaces */}
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    {/* Top Metrics Cards - Fixed 4-Column Layout */}
+                    <div className="grid grid-cols-4 gap-3.5">
                       {[
                         {
                           title: 'Total Net Balance',
@@ -676,7 +676,7 @@ function LandingPage() {
                     </Card>
 
                     {/* 3-Column Bottom Grid: Financial Statistics | FX Exchange | Recent Transactions with Filter */}
-                    <div className="grid gap-4 lg:grid-cols-3">
+                    <div className="grid grid-cols-3 gap-3.5">
                       {/* Card 1: Financial Statistics & Health */}
                       <div className="bg-card border border-border shadow-none rounded-2xl p-5 flex flex-col justify-between">
                         <div>
