@@ -34,8 +34,8 @@ import {
   ChartTooltipContent
   
 } from '../components/ui/chart'
-import type {ChartConfig} from '../components/ui/chart';
-import { XAxis, YAxis, CartesianGrid, BarChart, Bar } from 'recharts'
+import type { ChartConfig } from '../components/ui/chart'
+import { XAxis, YAxis, CartesianGrid, AreaChart, Area } from 'recharts'
 
 export const Route = createFileRoute('/dashboard')({ component: Dashboard })
 
@@ -376,7 +376,7 @@ function Dashboard() {
         </motion.div>
       </div>
 
-      {/* Main Chart Area: Multiple Bar Chart (Income vs Expense) using ShadCN UI */}
+      {/* Main Chart Area: Smooth Gradient Area Spline Monotone Bezier using ShadCN UI */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -390,7 +390,7 @@ function Dashboard() {
                 Cashflow Dynamics
               </CardTitle>
               <CardDescription className="text-xs text-muted-foreground mt-1">
-                Multiple Bar Chart — Side-by-Side Income & Expense Breakdown
+                Smooth Gradient Area Spline — Monotone Bezier Curves
               </CardDescription>
             </div>
             <div className="flex items-center gap-4 flex-wrap">
@@ -431,16 +431,26 @@ function Dashboard() {
               config={cashflowChartConfig}
               className="h-[320px] w-full"
             >
-              <BarChart
+              <AreaChart
                 accessibilityLayer
                 data={filteredCashflowData}
                 margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
               >
+                <defs>
+                  <linearGradient id="dashboardFillIncome" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--color-income)" stopOpacity={0.45} />
+                    <stop offset="95%" stopColor="var(--color-income)" stopOpacity={0.02} />
+                  </linearGradient>
+                  <linearGradient id="dashboardFillExpense" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--color-expense)" stopOpacity={0.35} />
+                    <stop offset="95%" stopColor="var(--color-expense)" stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
                 <CartesianGrid
                   vertical={false}
                   strokeDasharray="4 4"
                   strokeWidth={1.5}
-                  className="stroke-border opacity-50"
+                  className="stroke-border opacity-40"
                 />
                 <XAxis
                   dataKey="name"
@@ -466,22 +476,44 @@ function Dashboard() {
                   dx={-5}
                 />
                 <ChartTooltip
-                  cursor={{ fill: 'var(--accent)', opacity: 0.15 }}
-                  content={<ChartTooltipContent indicator="dashed" />}
+                  cursor={{
+                    stroke: 'var(--border)',
+                    strokeWidth: 1.5,
+                    strokeDasharray: '3 3',
+                  }}
+                  content={<ChartTooltipContent indicator="dot" />}
                 />
-                <Bar
-                  dataKey="income"
-                  fill="var(--color-income)"
-                  radius={[4, 4, 0, 0]}
-                  maxBarSize={44}
-                />
-                <Bar
+                <Area
                   dataKey="expense"
-                  fill="var(--color-expense)"
-                  radius={[4, 4, 0, 0]}
-                  maxBarSize={44}
+                  type="monotone"
+                  fill="url(#dashboardFillExpense)"
+                  fillOpacity={1}
+                  stroke="var(--color-expense)"
+                  strokeWidth={2.5}
+                  dot={false}
+                  activeDot={{
+                    r: 5,
+                    strokeWidth: 2,
+                    fill: 'var(--card)',
+                    stroke: 'var(--color-expense)',
+                  }}
                 />
-              </BarChart>
+                <Area
+                  dataKey="income"
+                  type="monotone"
+                  fill="url(#dashboardFillIncome)"
+                  fillOpacity={1}
+                  stroke="var(--color-income)"
+                  strokeWidth={2.5}
+                  dot={false}
+                  activeDot={{
+                    r: 5,
+                    strokeWidth: 2,
+                    fill: 'var(--card)',
+                    stroke: 'var(--color-income)',
+                  }}
+                />
+              </AreaChart>
             </ChartContainer>
           </CardContent>
           <CardFooter className="flex-col items-start gap-1.5 border-t border-border px-6 py-4 text-xs">
@@ -490,8 +522,7 @@ function Dashboard() {
               <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div className="text-muted-foreground font-medium">
-              Showing side-by-side revenue inflow vs operating burn across
-              selected months
+              Showing smooth gradient trajectory of revenue inflow vs operational expenditure
             </div>
           </CardFooter>
         </Card>

@@ -41,8 +41,8 @@ import {
   ChartTooltipContent
   
 } from '../components/ui/chart'
-import type {ChartConfig} from '../components/ui/chart';
-import { XAxis, YAxis, CartesianGrid, BarChart, Bar } from 'recharts'
+import type { ChartConfig } from '../components/ui/chart'
+import { XAxis, YAxis, CartesianGrid, AreaChart, Area } from 'recharts'
 import { cn } from '../lib/utils'
 import { Button } from '../components/ui/button'
 
@@ -521,7 +521,7 @@ function LandingPage() {
                       </div>
                     </div>
 
-                    {/* Main Chart Area: Multiple Bar Chart (Income vs Expense) using ShadCN UI */}
+                    {/* Main Chart Area: Smooth Gradient Area Spline Monotone Bezier using ShadCN UI */}
                     <Card className="rounded-2xl border border-border shadow-none bg-card">
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6 flex-wrap gap-3 p-5 pb-4">
                         <div>
@@ -529,8 +529,7 @@ function LandingPage() {
                             Cashflow Dynamics
                           </CardTitle>
                           <CardDescription className="text-xs text-muted-foreground mt-0.5">
-                            Multiple Bar Chart — Side-by-Side Inflow vs Burn
-                            Breakdown
+                            Smooth Gradient Area Spline — Monotone Bezier Curves
                           </CardDescription>
                         </div>
                         <div className="flex items-center gap-4 flex-wrap">
@@ -573,7 +572,7 @@ function LandingPage() {
                           config={cashflowChartConfig}
                           className="h-[280px] w-full"
                         >
-                          <BarChart
+                          <AreaChart
                             accessibilityLayer
                             data={filteredCashflowData}
                             margin={{
@@ -583,11 +582,21 @@ function LandingPage() {
                               bottom: 0,
                             }}
                           >
+                            <defs>
+                              <linearGradient id="landingFillIncome" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="var(--color-income)" stopOpacity={0.45} />
+                                <stop offset="95%" stopColor="var(--color-income)" stopOpacity={0.02} />
+                              </linearGradient>
+                              <linearGradient id="landingFillExpense" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="var(--color-expense)" stopOpacity={0.35} />
+                                <stop offset="95%" stopColor="var(--color-expense)" stopOpacity={0.02} />
+                              </linearGradient>
+                            </defs>
                             <CartesianGrid
                               vertical={false}
                               strokeDasharray="4 4"
                               strokeWidth={1.5}
-                              className="stroke-border opacity-50"
+                              className="stroke-border opacity-40"
                             />
                             <XAxis
                               dataKey="name"
@@ -613,24 +622,46 @@ function LandingPage() {
                               dx={-5}
                             />
                             <ChartTooltip
-                              cursor={{ fill: 'var(--accent)', opacity: 0.15 }}
+                              cursor={{
+                                stroke: 'var(--border)',
+                                strokeWidth: 1.5,
+                                strokeDasharray: '3 3',
+                              }}
                               content={
-                                <ChartTooltipContent indicator="dashed" />
+                                <ChartTooltipContent indicator="dot" />
                               }
                             />
-                            <Bar
-                              dataKey="income"
-                              fill="var(--color-income)"
-                              radius={[4, 4, 0, 0]}
-                              maxBarSize={40}
-                            />
-                            <Bar
+                            <Area
                               dataKey="expense"
-                              fill="var(--color-expense)"
-                              radius={[4, 4, 0, 0]}
-                              maxBarSize={40}
+                              type="monotone"
+                              fill="url(#landingFillExpense)"
+                              fillOpacity={1}
+                              stroke="var(--color-expense)"
+                              strokeWidth={2.5}
+                              dot={false}
+                              activeDot={{
+                                r: 4.5,
+                                strokeWidth: 2,
+                                fill: 'var(--card)',
+                                stroke: 'var(--color-expense)',
+                              }}
                             />
-                          </BarChart>
+                            <Area
+                              dataKey="income"
+                              type="monotone"
+                              fill="url(#landingFillIncome)"
+                              fillOpacity={1}
+                              stroke="var(--color-income)"
+                              strokeWidth={2.5}
+                              dot={false}
+                              activeDot={{
+                                r: 4.5,
+                                strokeWidth: 2,
+                                fill: 'var(--card)',
+                                stroke: 'var(--color-income)',
+                              }}
+                            />
+                          </AreaChart>
                         </ChartContainer>
                       </CardContent>
                       <CardFooter className="flex-col items-start gap-1 border-t border-border px-5 py-3 text-xs">
