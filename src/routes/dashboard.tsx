@@ -41,11 +41,11 @@ export const Route = createFileRoute('/dashboard')({ component: Dashboard })
 
 const cashflowChartConfig = {
   income: {
-    label: 'Income',
+    label: 'Revenue Inflow',
     color: 'var(--primary)',
   },
   expense: {
-    label: 'Expense',
+    label: 'Operating Expenses',
     color: 'rgba(15, 23, 42, 0.25)',
     theme: {
       light: 'rgba(15, 23, 42, 0.25)',
@@ -390,19 +390,19 @@ function Dashboard() {
                 Cashflow Dynamics
               </CardTitle>
               <CardDescription className="text-xs text-muted-foreground mt-1">
-                Smooth Gradient Area Spline — Monotone Bezier Curves
+                Real-time revenue inflow vs. operating burn trajectory
               </CardDescription>
             </div>
             <div className="flex items-center gap-4 flex-wrap">
               {/* Income / Expense Legend Dots */}
               <div className="flex items-center gap-4 text-xs font-semibold mr-1">
                 <div className="flex items-center gap-1.5 text-foreground">
-                  <div className="w-2.5 h-2.5 rounded-full bg-primary" /> Income
+                  <div className="w-2.5 h-2.5 rounded-full bg-primary" /> Revenue Inflow
                 </div>
                 <div className="flex items-center gap-1.5 text-foreground">
                   <div className="w-2.5 h-2.5 rounded-full bg-black/25 dark:bg-white/25" />{' '}
                   <span className="text-black/25 dark:text-white/25 font-semibold">
-                    Expense
+                    Operating Expenses
                   </span>
                 </div>
               </div>
@@ -518,11 +518,11 @@ function Dashboard() {
           </CardContent>
           <CardFooter className="flex-col items-start gap-1.5 border-t border-border px-6 py-4 text-xs">
             <div className="flex items-center gap-2 font-bold text-foreground">
-              Trending up by +12.5% this month{' '}
+              Net cashflow is trending up by +12.5% this month{' '}
               <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div className="text-muted-foreground font-medium">
-              Showing smooth gradient trajectory of revenue inflow vs operational expenditure
+              Inflow consistently outpaced operating expenses over the selected timeframe.
             </div>
           </CardFooter>
         </Card>
