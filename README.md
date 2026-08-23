@@ -1,6 +1,6 @@
 # 💎 Finly Web — Frontend Application
 
-> **Version:** `2.3.0`  
+> **Version:** `2.4.0`  
 > **Tagline:** *"Ditch the Spreadsheets. Master Your Cashflow."*  
 > **Target Audience:** Non-Accountant Founders, Agency Directors, Freelancers, Consultants, and Micro-SMEs.  
 > **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Shadow Architecture.
