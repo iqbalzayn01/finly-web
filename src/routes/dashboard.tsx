@@ -45,7 +45,7 @@ const cashflowChartConfig = {
     color: 'var(--primary)',
   },
   expense: {
-    label: 'Operating Expenses',
+    label: 'Operating Burn',
     color: 'rgba(15, 23, 42, 0.25)',
     theme: {
       light: 'rgba(15, 23, 42, 0.25)',
@@ -96,20 +96,20 @@ function Dashboard() {
 
   const allRecentTx = [
     {
-      name: 'Acme Corp Web Dev',
-      category: 'Income / Services',
-      date: 'Today',
+      name: 'Acme Corporation',
+      category: 'Client Retainer · Milestone #3',
+      date: 'Today, 2:45 PM',
       amount: 5000,
       type: 'income',
-      status: 'Paid',
+      status: 'Settled',
       icon: ArrowUpRight,
       color:
         'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
     },
     {
       name: 'AWS Cloud Infrastructure',
-      category: 'Software & Hosting',
-      date: 'Yesterday',
+      category: 'Production Hosting & Storage',
+      date: 'Yesterday, 10:20 AM',
       amount: 120,
       type: 'expense',
       status: 'Receipt',
@@ -118,31 +118,31 @@ function Dashboard() {
         'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
     },
     {
-      name: 'Q2 Retainer GlobalTech',
-      category: 'Income / Retainer',
-      date: 'Jul 28',
+      name: 'GlobalTech Solutions',
+      category: 'Consulting & Advisory Services',
+      date: 'Jul 28, 2026',
       amount: 3500,
       type: 'income',
-      status: 'Paid',
+      status: 'Settled',
       icon: ArrowUpRight,
       color:
         'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
     },
     {
-      name: 'Facebook Ads Campaign',
-      category: 'Marketing & Ads',
-      date: 'Jul 25',
+      name: 'Meta Ads Campaign',
+      category: 'Client Growth & Acquisition',
+      date: 'Jul 25, 2026',
       amount: 450,
       type: 'expense',
-      status: 'Missing',
+      status: 'Missing Receipt',
       icon: ArrowDownRight,
       color:
         'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
     },
     {
-      name: 'Slack Team Subscription',
-      category: 'Software & SaaS',
-      date: 'Jul 24',
+      name: 'Slack Enterprise Grid',
+      category: 'Workspace & Communication',
+      date: 'Jul 24, 2026',
       amount: 85,
       type: 'expense',
       status: 'Receipt',
@@ -166,16 +166,16 @@ function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={m3Transition}
         >
-          <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-3xl sm:text-4xl md:text-[44px] font-medium tracking-tight text-foreground">
-              Analytics & Cashflow
+          <div className="flex items-center gap-2.5 mb-1">
+            <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-foreground">
+              Financial Overview
             </h1>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-              Live OS
+              Live Ledger
             </span>
           </div>
           <p className="text-muted-foreground text-sm sm:text-[15px]">
-            Real-time business health, operating cashflow, and AI forecast.
+            Real-time cashflow, runway health, and multi-currency operations.
           </p>
         </motion.div>
         <motion.div
@@ -210,7 +210,7 @@ function Dashboard() {
       <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
         {[
           {
-            title: 'Total Net Balance',
+            title: 'Net Cash Balance',
             value: '$148,250.00',
             trend: '+12.5%',
             isUp: true,
@@ -222,9 +222,10 @@ function Dashboard() {
             progress: 82,
             progressBg: 'bg-white/20',
             progressFill: 'bg-white',
+            subtext: 'Liquid capital across operating accounts',
           },
           {
-            title: 'Total Income',
+            title: 'Total Inflow',
             value: '$34,120.00',
             trend: '+8.2% vs last month',
             isUp: true,
@@ -238,9 +239,10 @@ function Dashboard() {
             progress: 68,
             progressBg: 'bg-muted',
             progressFill: 'bg-emerald-500',
+            subtext: 'Settled customer invoices & receivables',
           },
           {
-            title: 'Total Expenses',
+            title: 'Total Outflow',
             value: '$12,450.00',
             trend: '-2.4% vs last month',
             isUp: false,
@@ -254,6 +256,7 @@ function Dashboard() {
             progress: 35,
             progressBg: 'bg-muted',
             progressFill: 'bg-rose-500',
+            subtext: 'Operating expenses & vendor settlements',
           },
         ].map((stat, i) => (
           <motion.div
@@ -303,8 +306,8 @@ function Dashboard() {
                 />
               </div>
               <div className="flex items-center justify-between text-[11px] font-medium opacity-75">
-                <span>{stat.progress}% of monthly target</span>
-                <span>vs last month</span>
+                <span>{stat.subtext}</span>
+                <span>{stat.progress}%</span>
               </div>
             </div>
           </motion.div>
@@ -324,10 +327,10 @@ function Dashboard() {
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6 flex-wrap gap-4 px-6 pt-6">
               <div>
                 <CardTitle className="text-xl font-semibold text-foreground">
-                  Cashflow Dynamics
+                  Cashflow Trajectory
                 </CardTitle>
                 <CardDescription className="text-xs text-muted-foreground mt-1">
-                  Real-time revenue inflow vs. operating burn trajectory
+                  Monthly revenue inflow compared against operating burn
                 </CardDescription>
               </div>
               <div className="flex items-center gap-4 flex-wrap">
@@ -339,7 +342,7 @@ function Dashboard() {
                   <div className="flex items-center gap-1.5 text-foreground">
                     <div className="w-2.5 h-2.5 rounded-full bg-black/25 dark:bg-white/25" />{' '}
                     <span className="text-black/25 dark:text-white/25 font-semibold">
-                      Operating Expenses
+                      Operating Burn
                     </span>
                   </div>
                 </div>
@@ -455,17 +458,17 @@ function Dashboard() {
             </CardContent>
             <CardFooter className="flex-col items-start gap-1.5 border-t border-border px-6 py-4 text-xs">
               <div className="flex items-center gap-2 font-bold text-foreground">
-                Net cashflow is trending up by +12.5% this month{' '}
+                Net positive cashflow: Inflow outpaced burn by $21,670.00 this month{' '}
                 <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div className="text-muted-foreground font-medium">
-                Inflow consistently outpaced operating expenses over the selected timeframe.
+                Trailing 6-month burn rate remains stable at $11,800/mo.
               </div>
             </CardFooter>
           </Card>
         </motion.div>
 
-        {/* Col-Span 4: Cash Health & Safety Milestone Meter */}
+        {/* Col-Span 4: Cash Health & Runway Safety Index */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -481,7 +484,7 @@ function Dashboard() {
                 </div>
                 <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Healthy (94/100)
+                  Health Score: 94 / 100
                 </span>
               </div>
 
@@ -495,30 +498,30 @@ function Dashboard() {
                     <ArrowUpRight className="h-3.5 w-3.5" />
                     +1.5 mo{' '}
                     <span className="opacity-75 font-normal text-foreground">
-                      vs last mo
+                      extension
                     </span>
                   </span>
                 </div>
                 <p className="text-[13px] font-semibold opacity-75 mt-1 tracking-wide">
-                  Cash Health &amp; Runway
+                  Estimated Operating Runway
                 </p>
               </div>
 
-              {/* Visual Safety Milestone Meter */}
+              {/* Runway Safety Index Meter */}
               <div className="space-y-2 p-4 rounded-xl bg-muted/40 border border-border">
                 <div className="flex items-center justify-between text-xs font-semibold text-foreground">
-                  <span>Safety Milestone Meter</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">74% Met</span>
+                  <span>Runway Safety Index</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">Fortress Grade</span>
                 </div>
                 <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-500 transition-all duration-500"
-                    style={{ width: '74%' }}
+                    style={{ width: '78%' }}
                   />
                 </div>
                 <div className="flex items-center justify-between text-[11px] font-medium opacity-75 pt-1">
-                  <span>Fortress Zone (&gt;6 Mo Runway)</span>
-                  <span>Target: 18 Mo</span>
+                  <span>Target: &gt; 12 Months Safety Margin</span>
+                  <span>78% of Target Cap</span>
                 </div>
               </div>
             </div>
@@ -527,14 +530,14 @@ function Dashboard() {
             <div className="pt-4 border-t border-border mt-5 grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-0.5">
                 <p className="text-[11px] font-medium opacity-75">
-                  Avg Monthly Burn
+                  Monthly Burn Rate
                 </p>
                 <p className="font-mono text-sm font-bold text-foreground">
                   $12,450.00
                 </p>
               </div>
               <div className="space-y-0.5 text-right">
-                <p className="text-[11px] font-medium opacity-75">Liquid Cash Reserve</p>
+                <p className="text-[11px] font-medium opacity-75">Liquid Reserves</p>
                 <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400">
                   $148,250.00
                 </p>
@@ -560,10 +563,10 @@ function Dashboard() {
                 </div>
                 <div>
                   <h2 className="text-lg font-semibold text-foreground">
-                    Recent Activity
+                    Recent Transactions
                   </h2>
                   <p className="text-xs text-muted-foreground">
-                    Latest reconciled inflows, cloud expenses, and client payments
+                    Verified ledger entries, invoice settlements, and operating expenses
                   </p>
                 </div>
               </div>
@@ -581,7 +584,11 @@ function Dashboard() {
                           : 'text-muted-foreground hover:text-foreground'
                       }`}
                     >
-                      {filterType}
+                      {filterType === 'all'
+                        ? 'All'
+                        : filterType === 'income'
+                          ? 'Inflow'
+                          : 'Outflow'}
                     </button>
                   ))}
                 </div>
@@ -600,7 +607,7 @@ function Dashboard() {
             <div className="divide-y divide-border rounded-xl border border-border overflow-hidden bg-background/50">
               {filteredTx.length === 0 ? (
                 <p className="py-10 text-center text-xs text-muted-foreground font-medium">
-                  No {recentTxFilter} transactions recorded.
+                  No transactions recorded for this filter.
                 </p>
               ) : (
                 filteredTx.map((tx, i) => (
@@ -627,27 +634,27 @@ function Dashboard() {
                     <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-8 shrink-0">
                       {/* Status / Receipt Badge */}
                       <div>
-                        {tx.status === 'Paid' && (
+                        {tx.status === 'Settled' && (
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                            Paid
+                            Settled
                           </span>
                         )}
                         {tx.status === 'Receipt' && (
                           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
                             <FileText className="h-3 w-3" />
-                            Receipt
+                            Receipt Attached
                           </span>
                         )}
-                        {tx.status === 'Missing' && (
+                        {tx.status === 'Missing Receipt' && (
                           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                            Missing
+                            Missing Receipt
                           </span>
                         )}
                       </div>
 
                       {/* Date */}
-                      <span className="text-xs text-muted-foreground font-medium w-24 text-left sm:text-right">
+                      <span className="text-xs text-muted-foreground font-medium w-28 text-left sm:text-right">
                         {tx.date}
                       </span>
 
@@ -672,13 +679,13 @@ function Dashboard() {
 
           <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs">
             <span className="text-muted-foreground font-medium">
-              Showing {filteredTx.length} of {allRecentTx.length} reconciled entries
+              Showing {filteredTx.length} of {allRecentTx.length} reconciled ledger entries
             </span>
             <Link
               to="/cashbook"
               className="font-semibold text-primary flex items-center gap-1 hover:underline"
             >
-              Open Cashbook <ArrowUpRight className="h-3.5 w-3.5" />
+              Open Full Cashbook <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
           </div>
         </div>
@@ -686,7 +693,7 @@ function Dashboard() {
 
       {/* ROW 4: ANALYTICS & CONVERTER (2 COLUMNS - 50% : 50%) */}
       <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-        {/* Col-Span 6: Financial Statistics */}
+        {/* Col-Span 6: Financial Performance */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -700,11 +707,11 @@ function Dashboard() {
                   <Activity className="h-4 w-4" />
                 </div>
                 <h2 className="text-lg font-semibold text-foreground">
-                  Financial Statistics
+                  Financial Performance
                 </h2>
               </div>
               <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                Score: 94/100
+                Health Score: 94 / 100
               </span>
             </div>
 
@@ -712,42 +719,42 @@ function Dashboard() {
               <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground font-medium">
-                    Operating Profit Margin
+                    Operating Margin
                   </p>
                   <p className="font-mono text-lg font-bold text-foreground mt-0.5">
                     63.4%
                   </p>
                 </div>
                 <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                  <TrendingUp className="h-3 w-3" /> +4.1%
+                  <TrendingUp className="h-3 w-3" /> +4.1% MoM
                 </span>
               </div>
 
               <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground font-medium">
-                    Avg. Invoice Settled
+                    Average Invoice Size
                   </p>
                   <p className="font-mono text-lg font-bold text-foreground mt-0.5">
                     $4,250.00
                   </p>
                 </div>
                 <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                  Net 14 Avg
+                  14-Day Velocity
                 </span>
               </div>
 
               <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground font-medium">
-                    On-Time Payment Rate
+                    On-Time Settlement Rate
                   </p>
                   <p className="font-mono text-lg font-bold text-foreground mt-0.5">
                     96.5%
                   </p>
                 </div>
                 <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                  High Reliability
+                  Tier-1 Reliability
                 </span>
               </div>
             </div>
@@ -755,8 +762,8 @@ function Dashboard() {
 
           <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Audit
-              Ledger Verified
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Double-Entry
+              Audit Verified
             </span>
             <span className="font-mono">v5.0 Ledger</span>
           </div>
@@ -776,12 +783,12 @@ function Dashboard() {
                   <Globe className="h-4 w-4" />
                 </div>
                 <h2 className="text-lg font-semibold text-foreground">
-                  FX Currency Converter
+                  Multi-Currency Settlement
                 </h2>
               </div>
               <span className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />{' '}
-                Live FX
+                Live Central Bank FX
               </span>
             </div>
 
@@ -797,7 +804,7 @@ function Dashboard() {
                   setFxInput(Math.max(0, parseFloat(e.target.value) || 0))
                 }
                 className="w-full h-10 bg-background border border-border rounded-xl pl-8 pr-16 text-sm font-bold font-mono outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground"
-                placeholder="Enter USD amount..."
+                placeholder="Enter base USD amount..."
               />
               <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-primary">
                 USD
@@ -808,22 +815,22 @@ function Dashboard() {
               {[
                 {
                   pair: 'USD / IDR',
-                  label: 'Indonesian Rupiah',
+                  label: 'Indonesian Rupiah (BI Reference)',
                   rate: `Rp ${(fxInput * 16250).toLocaleString()}`,
                 },
                 {
                   pair: 'EUR / USD',
-                  label: 'Euro',
+                  label: 'Euro (ECB Reference)',
                   rate: `€ ${(fxInput * 0.915).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
                 },
                 {
                   pair: 'GBP / USD',
-                  label: 'British Pound',
+                  label: 'British Pound (BoE Reference)',
                   rate: `£ ${(fxInput * 0.78).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
                 },
                 {
                   pair: 'SGD / IDR',
-                  label: 'Singapore Dollar',
+                  label: 'Singapore Dollar (MAS Reference)',
                   rate: `S$ ${(fxInput * 1.34).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
                 },
               ].map((fx, idx) => (
@@ -851,10 +858,10 @@ function Dashboard() {
 
           <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
-              <RefreshCw className="h-3 w-3" /> Auto-updates every 60s
+              <RefreshCw className="h-3 w-3" /> 60s auto-refresh
             </span>
             <span className="font-mono text-primary font-semibold">
-              1 USD = 16,250 IDR
+              Mid-Market Reference Rate
             </span>
           </div>
         </motion.div>
@@ -862,3 +869,4 @@ function Dashboard() {
     </div>
   )
 }
+
