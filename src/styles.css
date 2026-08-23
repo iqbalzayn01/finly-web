@@ -168,6 +168,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 html,
 body,
 #app {
@@ -182,6 +186,10 @@ body {
   font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body[data-scroll-locked] {
+  margin-right: 0px !important;
 }
 
 @layer base {

@@ -168,7 +168,7 @@ function Dashboard() {
         >
           <div className="flex items-center gap-2.5 mb-1">
             <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-foreground">
-              Dashboard
+              Financial Overview
             </h1>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
               Live
@@ -337,7 +337,8 @@ function Dashboard() {
                 {/* Income / Expense Legend Dots */}
                 <div className="flex items-center gap-4 text-xs font-semibold mr-1">
                   <div className="flex items-center gap-1.5 text-foreground">
-                    <div className="w-2.5 h-2.5 rounded-full bg-primary" /> Income
+                    <div className="w-2.5 h-2.5 rounded-full bg-primary" />{' '}
+                    Income
                   </div>
                   <div className="flex items-center gap-1.5 text-foreground">
                     <div className="w-2.5 h-2.5 rounded-full bg-black/25 dark:bg-white/25" />{' '}
@@ -377,13 +378,41 @@ function Dashboard() {
                   margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
                 >
                   <defs>
-                    <linearGradient id="dashboardFillIncome" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--color-income)" stopOpacity={0.45} />
-                      <stop offset="95%" stopColor="var(--color-income)" stopOpacity={0.02} />
+                    <linearGradient
+                      id="dashboardFillIncome"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop
+                        offset="5%"
+                        stopColor="var(--color-income)"
+                        stopOpacity={0.45}
+                      />
+                      <stop
+                        offset="95%"
+                        stopColor="var(--color-income)"
+                        stopOpacity={0.02}
+                      />
                     </linearGradient>
-                    <linearGradient id="dashboardFillExpense" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--color-expense)" stopOpacity={0.35} />
-                      <stop offset="95%" stopColor="var(--color-expense)" stopOpacity={0.02} />
+                    <linearGradient
+                      id="dashboardFillExpense"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop
+                        offset="5%"
+                        stopColor="var(--color-expense)"
+                        stopOpacity={0.35}
+                      />
+                      <stop
+                        offset="95%"
+                        stopColor="var(--color-expense)"
+                        stopOpacity={0.02}
+                      />
                     </linearGradient>
                   </defs>
                   <CartesianGrid
@@ -511,7 +540,9 @@ function Dashboard() {
               <div className="space-y-2 p-4 rounded-xl bg-muted/40 border border-border">
                 <div className="flex items-center justify-between text-xs font-semibold text-foreground">
                   <span>Safety Target</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">Strong (6+ Months)</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+                    Strong (6+ Months)
+                  </span>
                 </div>
                 <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
                   <div
@@ -537,7 +568,9 @@ function Dashboard() {
                 </p>
               </div>
               <div className="space-y-0.5 text-right">
-                <p className="text-[11px] font-medium opacity-75">Available Cash</p>
+                <p className="text-[11px] font-medium opacity-75">
+                  Available Cash
+                </p>
                 <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400">
                   $148,250.00
                 </p>
@@ -667,7 +700,11 @@ function Dashboard() {
                               : 'text-foreground'
                           }`}
                         >
-                          {tx.type === 'income' ? '+' : '-'}${tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          {tx.type === 'income' ? '+' : '-'}$
+                          {tx.amount.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
                         </p>
                       </div>
                     </div>
@@ -679,7 +716,8 @@ function Dashboard() {
 
           <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs">
             <span className="text-muted-foreground font-medium">
-              Showing {filteredTx.length} of {allRecentTx.length} recent transactions
+              Showing {filteredTx.length} of {allRecentTx.length} recent
+              transactions
             </span>
             <Link
               to="/cashbook"
@@ -762,8 +800,8 @@ function Dashboard() {
 
           <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Audited &amp;
-              Verified
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Audited
+              &amp; Verified
             </span>
             <span className="font-mono">Finly OS v5.0</span>
           </div>
@@ -869,4 +907,3 @@ function Dashboard() {
     </div>
   )
 }
-
