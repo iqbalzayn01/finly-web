@@ -1,6 +1,6 @@
 # Finly Web — Frontend Product Requirements Document (PRD)
 
-**Document Version:** 2.4.0  
+**Document Version:** 2.5.0  
 **Scope:** Frontend Application Only (`finly-web` / `app.finly.io`)  
 **Target Audience:** Non-accountant operators (freelancers, consultants, agencies, solopreneurs, and micro-SME founders)  
 **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Architecture
@@ -30,19 +30,19 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
   - **TanStack Form & Zod:** Type-safe form validation pipelines with real-time field error formatting.
 - **Modal & Dialog Architecture:**
   - **Radix UI Dialog & ShadCN UI Primitives (`src/components/ui/dialog.tsx`, `modal.tsx`, `alert-modal.tsx`, `api-key-modal.tsx`, `logout-modal.tsx`):** 100% accessible, keyboard-trapped, focus-managed dialog overlays with smooth Motion transitions. Zero native browser `window.alert()` or `window.confirm()` calls.
-- **Data Visualizations:** TanStack Charts & Recharts for interactive cashflow trends, area curves, and expense breakdowns.
+- **Data Visualizations:** TanStack Charts & Recharts with Monotone Bezier Curves (`type="monotone"`) and vertical gradient fills for interactive cashflow trends and area curves.
 - **Error Boundaries & 404 Routing:** Global `NotFound` handler (`src/components/NotFound.tsx`) and error boundary components registered on router initialization.
 
 ### 2.2 Styling, Tokens & Design System
 
-- **Brand Foundation:** Pluang FinTech V2 Brand Blue/Violet (`#463CFF` / `hsl(243 100% 62%)`).
-- **Dark Mode Architecture:** True 100% OLED Pitch Black (`#000000`) for canvas (`--background`), card surfaces (`--card`), popovers (`--popover`), and overlays with high-contrast subtle borders (`rgba(255, 255, 255, 0.12)`).
+- **Brand Foundation:** Modern Indigo/Violet (`#463CFF` / `hsl(243 100% 62%)`).
+- **Dark Mode Architecture:** True 100% OLED Pitch Black (`#101010` / `#000000`) for canvas (`--background`), card surfaces (`--card`), popovers (`--popover`), and overlays with high-contrast subtle borders (`rgba(255, 255, 255, 0.12)`).
 - **Flat Shadow System:** 0px shadow (`shadow-none`) architecture across all cards, modals, dropdowns, and tables, prioritizing crisp 1px borders and high information density over decorative gradients and heavy drop shadows.
 - **Typography Hierarchy:**
   - **UI & Body:** _IBM Plex Sans_ (headings, interactive labels, table headers, form inputs).
   - **Financial & Tabular Data:** _IBM Plex Mono_ (`font-mono` / tabular figures) for all currency values, transaction amounts, invoice IDs, basis points, and numeric calculations.
 - **Interaction & Motion:** Material Design 3 (M3) cubic-bezier easing (`[0.2, 0, 0, 1]`) and Motion (`framer-motion`) micro-transitions.
-- **Pointer Consistency:** Mandatory `cursor: pointer` on all buttons, interactive pills, tab triggers, clickable table rows, and select controls.
+- **Pointer Consistency & Viewport Stability:** Mandatory `cursor: pointer` on all buttons, interactive pills, tab triggers, clickable table rows, and select controls. `scrollbar-gutter: stable` and popper dropdown anchoring to eliminate layout shifts.
 
 ---
 
@@ -71,62 +71,45 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
     - **User Profile Avatar Dropdown:** User identity, active Pro subscription indicator, links to `/account`, `/settings`, and smooth ShadCN logout dialog.
 - **Mobile Responsive Drawer:** Collapsible slide-over drawer providing identical navigation items and active states on mobile devices (<1024px).
 
-### 3.2 Public Header (`PublicNavbar.tsx`)
+### 3.2 Canvas Layout (`Layout.tsx`)
 
-- **Structure:** 3-column CSS grid (`grid grid-cols-[1fr_auto_1fr] max-w-7xl mx-auto px-6 md:px-10`).
-- **Left:** Brand logo linked to root (`/`).
-- **Center:** Perfectly centered navigation links (`Overview` `/`, `Features` `/#features-section`, `Pricing` `/pricing`).
-- **Right:** Theme toggle and "Open Dashboard" button linking to `/dashboard`.
-
-### 3.3 Canvas Layout (`Layout.tsx`)
-
-- **Public Pages:** `/` (Landing Page) and `/pricing` with public navbar and marketing footer.
-- **Authenticated App Pages:** `/dashboard`, `/cashbook`, `/invoices`, `/customers`, `/items`, `/settings`, `/account` with topbar and AI assistant.
-- **Max Canvas Width:** Centered container constrained to `max-w-[1920px] mx-auto` for widescreen desktops.
+- **Dedicated App Layout:** Exclusively renders the high-performance application Topbar layout with centered container constrained to `max-w-[1920px] mx-auto` and floating AI Copilot.
 
 ---
 
 ## 4. Route & Feature Specifications
 
-### 4.1 Public SaaS Landing Page (`/`)
+### 4.1 Direct App Entry (`/`)
 
-- **Hero Section:**
-  - Eyebrow: _"ZERO-JARGON CASHFLOW OPERATING SYSTEM"_
-  - High-converting headline: _"Stop guessing your agency runway. Take control of your cashflow."_
-  - Subheadline: _"Eliminate floating-point ledger errors, turn vendor receipts into clean invoices in seconds, and track real-time multi-currency cashflow."_
-  - Dual high-intent CTAs: `"Start Free Trial"` (linking to `/pricing`) and `"Explore Live Demo"` (linking to `/dashboard`).
-- **Interactive Live Dashboard Window:**
-  - Exact embedded main dashboard inside the browser mockup window.
-  - Live period selector, 4 M3 tonal metric cards (Total Net Balance, Total Income, Total Expenses, Cash Health & Runway Fortress gauge).
-  - Interactive Cashflow Dynamics dual bar chart with `6M`, `YTD`, and `1Y` timeframe filtering.
-  - 3-column financial analytics grid: Operating Margin statistics, interactive FX Currency Converter (USD $\to$ IDR/EUR/GBP/SGD), and live filtered Recent Activity cashbook feed.
-- **Interactive ROI Calculator:** Real-time slider calculating monthly time saved (hours) and cashflow recovered ($).
-- **Bento Grid Features:** Zero Floating-Point Drift, Human-in-the-Loop AI Invoicing, Live Multi-Currency Settlement, and PostgreSQL Row-Level Security.
-- **Social Proof & Testimonials:** Trust proof from 500+ client-service agencies and authentic operator quotes.
-- **SEO Structured Data:** Integrated Schema.org `SoftwareApplication` JSON-LD metadata.
+- **Purpose:** Automatically redirects root traffic directly to `/dashboard` for instant, friction-free access to the cashflow operating system.
 
 ---
 
-### 4.2 Executive Cashflow Dashboard (`/dashboard`)
+### 4.2 Financial Overview Dashboard (`/dashboard`)
 
-- **Purpose:** Provide an operator with an immediate 5-second health check of their business cashflow.
-- **Key Performance Indicators (Top 4 KPI Cards):**
-  1. **Total Net Balance:** $148,250.00 (+12.5% trend, progress against target).
-  2. **Total Income:** $34,120.00 (+8.2% trend, emerald tonal styling).
-  3. **Total Expenses:** $12,450.00 (-2.4% trend, rose tonal styling).
-  4. **Cash Health & Runway Card:**
-     - **Header:** `ShieldCheck` icon in emerald tonal badge + `Healthy (94/100)` status badge with live pulse indicator.
-     - **Main Metric:** `14.2 Months` (`font-mono text-2xl lg:text-3xl font-bold`) + `↗ +1.5 mo vs last mo` micro delta.
-     - **Visual Safety Gauge:** Horizontal emerald-to-indigo gradient progress bar showing Fortress Zone status (>6 Mo Runway).
-     - **Footer Micro-Grid:** 2-column breakdown of `Avg Monthly Burn: $12,450.00` and `Liquid Cash: $148,250.00`.
-- **Cashflow Dynamics Chart:**
-  - Dual stacked bar chart comparing monthly Inflows vs Expenses.
-  - Timeframe filter pills (`6M`, `YTD`, `1Y`).
-  - Custom interactive tooltips with net cashflow calculation.
-- **Bottom Grid (3 Cards):**
-  1. **Financial Statistics:** Operating Profit Margin (63.4%), Avg. Invoice Settled ($4,250.00), On-Time Payment Rate (96.5%).
-  2. **FX Currency Converter:** Interactive live currency conversion (USD, IDR, EUR, GBP, SGD) with minor-unit calculation.
-  3. **Recent Activity Feed:** Latest cash transactions with instant type filtering (`All`, `Income`, `Expense`).
+- **Purpose:** Provide an operator with an immediate 5-second health check of their business cashflow organized in a balanced 4-row architecture:
+- **Row 1: Top Metric Cards (3 Columns):**
+  1. **Total Balance:** `$148,250.00` (+12.5% trend, progress against target, available cash across accounts).
+  2. **Total Income:** `$34,120.00` (+8.2% trend vs last month, emerald styling, paid invoices & client payments).
+  3. **Total Expenses:** `$12,450.00` (-2.4% trend vs last month, rose styling, bills, tools, and operational spending).
+- **Row 2: Asymmetric Cashflow & Health (65% : 35% / Col-Span 8 : Col-Span 4):**
+  - **Left (`lg:col-span-8`): Cash Flow Smooth Monotone Area Spline Chart:**
+    - Dual Smooth Gradient Area curve (`type="monotone"`) comparing monthly Income vs Expenses.
+    - Timeframe filter pills (`6M`, `YTD`, `1Y`).
+    - Summary footer: Net profit (`+$21,670.00 this month`) and trailing average monthly spending.
+  - **Right (`lg:col-span-4`): Cash Runway & Health Card:**
+    - Header with `ShieldCheck` and `Healthy (94/100)` badge.
+    - Big metric: `14.2 Months` (+1.5 mo vs last month).
+    - Visual safety target meter: `Strong (6+ Months)` buffer gauge with gradient progress fill.
+    - Footer breakdown: Monthly Spending (`$12,450.00`) and Available Cash (`$148,250.00`).
+- **Row 3: Recent Transactions (Full Width / Col-Span 12):**
+  - Verified ledger entries, invoice settlements, and operating expenses.
+  - Type filter pills: `All`, `Income`, `Expenses`.
+  - Transaction rows with merchant name, category, relative timestamp, and status badges (`Paid`, `Receipt`, `No Receipt`).
+  - Direct link to `/cashbook`.
+- **Row 4: Key Performance & Currency Converter (2 Columns / 50% : 50%):**
+  - **Left: Business Health Statistics:** Profit Margin (63.4%), Average Invoice ($4,250.00 / 14-Day Avg Pay), and On-Time Payments (96.5%).
+  - **Right: Live Currency Converter:** Interactive base USD amount input with auto-updating conversion cards for USD/IDR, EUR/USD, GBP/USD, and SGD/IDR.
 
 ---
 

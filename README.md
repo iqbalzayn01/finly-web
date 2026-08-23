@@ -1,6 +1,6 @@
 # 💎 Finly Web — Frontend Application
 
-> **Version:** `2.4.0`  
+> **Version:** `2.5.0`  
 > **Tagline:** _"Ditch the Spreadsheets. Master Your Cashflow."_  
 > **Target Audience:** Non-Accountant Founders, Agency Directors, Freelancers, Consultants, and Micro-SMEs.  
 > **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Shadow Architecture.
@@ -40,8 +40,8 @@ Finly bridges this gap by providing an instantaneous, responsive, and aesthetica
 
 | Route               | Module                                | Description & Highlights                                                                                                                                                                                                       |
 | :------------------ | :------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                 | **Public SaaS Landing Page**          | High-converting marketing landing page with SEO Schema.org JSON-LD, interactive ROI calculator, showcase tabs, bento feature grids, and trust badges.                                                                          |
-| `/dashboard`        | **Executive Cashflow Dashboard**      | Executive 5-second health check featuring **Cash Health & Runway Metric Card** (safety gauge + monthly burn breakdown), interactive Cashflow Dynamics stacked bar chart (6M / YTD / 1Y), and live Multi-Currency FX Converter. |
+| `/`                 | **Direct App Entry**                  | Instant router redirect straight into the authenticated **Financial Overview** dashboard for immediate operational access.                                                                                                    |
+| `/dashboard`        | **Financial Overview (4-Row Grid)**   | Executive dashboard featuring **Row 1 Top Metrics** (Total Balance, Total Income, Total Expenses), **Row 2 Asymmetric Cashflow & Health** (Smooth Monotone Area Spline Chart + Runway Safety Index), **Row 3 Full-Width Recent Transactions** table, and **Row 4 Performance & Live Currency Converter**. |
 | `/cashbook`         | **Jargon-Free Cashbook Ledger**       | Direct Income and Expense cash ledger with Business vs Personal scoping, 3-second quick-add expense drawer, and secure receipt image modal.                                                                                    |
 | `/invoices`         | **Invoice Management**                | Filterable invoice data grid with dynamically derived status pills (`Draft`, `Unpaid`, `Overdue`, `Paid`, `Void`).                                                                                                             |
 | `/invoices/builder` | **Live Split-Screen Invoice Builder** | Real-time interactive editor with instant mathematical recalculation preview, catalog item auto-fill, and millesimal quantity scaling.                                                                                         |
@@ -56,7 +56,7 @@ Finly bridges this gap by providing an instantaneous, responsive, and aesthetica
 
 ## 🛠️ Tech Stack & Architecture
 
-- **Core Framework & Runtime:** [React 18](https://react.dev/) · [Vite 8](https://vitejs.dev/) · [TypeScript](https://www.typescriptlang.org/) (Strict Mode).
+- **Core Framework & Runtime:** [React 19](https://react.dev/) · [Vite](https://vitejs.dev/) · [TypeScript](https://www.typescriptlang.org/) (Strict Mode).
 - **Routing & SSR:** [TanStack Start](https://tanstack.com/start) & [TanStack Router](https://tanstack.com/router) with end-to-end type-safe file-based routing.
 - **Serverless & Deployment Engine:** [Nitro](https://nitro.build/) (`nitro/vite`) generating `.output/server` and `.output/public` for zero-config Vercel SSR deployment without 404 routing errors.
 - **State Management & Caching:**
@@ -66,8 +66,8 @@ Finly bridges this gap by providing an instantaneous, responsive, and aesthetica
 - **Data Tables & Forms:**
   - [TanStack Table v8](https://tanstack.com/table) for high-performance tabular data grids, sorting, and debounced search.
   - [TanStack Form](https://tanstack.com/form) + [Zod](https://zod.dev/) for type-safe form validation and field error formatting.
-- **Data Visualizations:** [Recharts](https://recharts.org/) / TanStack Charts for responsive cashflow trends and area curves.
-- **UI Components & Icons:** [Radix UI](https://www.radix-ui.com/) accessible primitives, [Lucide Icons](https://lucide.dev/), and [Motion](https://motion.dev/) (Framer Motion) micro-interactions.
+- **Data Visualizations:** [Recharts](https://recharts.org/) / TanStack Charts with Monotone Bezier Curves and vertical gradient fills.
+- **UI Components & Icons:** [Radix UI](https://www.radix-ui.com/) accessible primitives with Popper dropdown positioning and stable scrollbar management, [Lucide Icons](https://lucide.dev/), and [Motion](https://motion.dev/) (Framer Motion) micro-interactions.
 
 ---
 
@@ -76,7 +76,7 @@ Finly bridges this gap by providing an instantaneous, responsive, and aesthetica
 Finly follows a strict, high-density financial interface philosophy:
 
 1. **100% OLED Pitch Black Dark Mode:**
-   - Background (`--background`), cards (`--card`), popovers (`--popover`), and sidebars use pure pitch black (`#000000`).
+   - Background (`--background`), cards (`--card`), popovers (`--popover`), and sidebars use pure pitch black (`#101010` / `#000000`).
    - Elevated surfaces are separated by crisp, high-contrast 1px borders (`rgba(255, 255, 255, 0.12)`).
 2. **0px Flat Shadow Architecture:**
    - Global `shadow-none` rule (`box-shadow: none !important`) across all cards, modals, dropdowns, and tables.
@@ -88,8 +88,9 @@ Finly follows a strict, high-density financial interface philosophy:
    - **Income / Paid / Positive:** Emerald Green (`#10B981`).
    - **Expense / Negative / Destructive:** Rose Red (`#F43F5E`).
    - **Draft / Pending:** Amber Yellow (`#F59E0B`).
-5. **Pointer Consistency:**
+5. **Pointer Consistency & Stable Viewport:**
    - Mandatory `cursor: pointer` on all buttons, interactive pills, tab triggers, clickable table rows, and select controls.
+   - `scrollbar-gutter: stable` and popper dropdown anchoring to ensure zero layout shift.
 
 ---
 
@@ -103,9 +104,9 @@ finly-web/
 ├── src/
 │   ├── components/
 │   │   ├── layout/         # Shell components (Topbar, PublicNavbar, Sidebar)
-│   │   ├── ui/             # Reusable primitives (Buttons, Dialogs, Cards, Badges)
+│   │   ├── ui/             # Reusable primitives (Buttons, Dialogs, Cards, Badges, Select)
 │   │   ├── AiChatAssistant.tsx # Floating AI Copilot drawer
-│   │   ├── Layout.tsx      # Dual shell router (Public marketing vs Authenticated App)
+│   │   ├── Layout.tsx      # Application Topbar shell layout
 │   │   ├── NotFound.tsx    # 404 handler and navigation recovery
 │   │   └── ThemeToggle.tsx # Light / Dark mode toggle switch
 │   ├── hooks/              # Custom React hooks (useDebouncedSearch, useTheme, etc.)
@@ -115,8 +116,8 @@ finly-web/
 │   │   └── utils.ts        # Tailwind cn helper, formatting & class utilities
 │   ├── routes/             # TanStack Router file-based route definitions
 │   │   ├── __root.tsx      # Root document shell (HTML, Head, Global Providers)
-│   │   ├── index.tsx       # Route '/' -> Public SaaS Landing Page
-│   │   ├── dashboard.tsx   # Route '/dashboard' -> Executive Analytics Dashboard
+│   │   ├── index.tsx       # Route '/' -> Redirects to /dashboard
+│   │   ├── dashboard.tsx   # Route '/dashboard' -> 4-Row Financial Overview
 │   │   ├── cashbook.tsx    # Route '/cashbook' -> Cashflow Ledger
 │   │   ├── invoices.tsx    # Route '/invoices' -> Invoices Data Grid
 │   │   ├── invoices/
