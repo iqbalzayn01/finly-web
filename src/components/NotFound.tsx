@@ -17,7 +17,8 @@ export function NotFound() {
       </h1>
 
       <p className="text-sm text-muted-foreground max-w-md mb-8 leading-relaxed">
-        The page or resource you are looking for doesn't exist, has been removed, or is temporarily unavailable.
+        The page or resource you are looking for doesn't exist, has been
+        removed, or is temporarily unavailable.
       </p>
 
       <div className="flex items-center gap-3">

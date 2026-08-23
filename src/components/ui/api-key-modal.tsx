@@ -38,7 +38,9 @@ export function ApiKeyModal({
   }, [currentKey])
 
   const targetUrl =
-    dashboardUrl || providerUrls[providerName] || 'https://aistudio.google.com/app/apikey'
+    dashboardUrl ||
+    providerUrls[providerName] ||
+    'https://aistudio.google.com/app/apikey'
 
   const handleSave = () => {
     onSaveKey?.(keyInput)
@@ -64,7 +66,11 @@ export function ApiKeyModal({
             Get API Key from Dashboard <ExternalLink className="h-3.5 w-3.5" />
           </a>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => onOpenChange?.(false)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onOpenChange?.(false)}
+            >
               Cancel
             </Button>
             <Button size="sm" onClick={handleSave}>
@@ -78,8 +84,8 @@ export function ApiKeyModal({
         <div className="flex items-start gap-3 rounded-xl border border-border bg-muted/40 p-3.5">
           <ShieldCheck className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
           <div className="text-xs leading-relaxed text-muted-foreground">
-            Your API key is stored locally in your browser session and encrypted in transit. It is
-            never shared with third parties.
+            Your API key is stored locally in your browser session and encrypted
+            in transit. It is never shared with third parties.
           </div>
         </div>
 

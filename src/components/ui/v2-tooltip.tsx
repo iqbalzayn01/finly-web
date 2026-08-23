@@ -122,14 +122,14 @@ export function V2Tooltip({
             transition={{ type: 'spring', stiffness: 450, damping: 28 }}
             className={cn(
               'absolute px-2.5 py-1.5 rounded-lg bg-card border border-border text-foreground text-[11px] font-semibold shadow-none whitespace-nowrap z-50 pointer-events-none',
-              getPositionClasses()
+              getPositionClasses(),
             )}
           >
             {content}
             <div
               className={cn(
                 'absolute w-2 h-2 rotate-45 bg-card border-border',
-                getArrowClasses()
+                getArrowClasses(),
               )}
             />
           </motion.div>

@@ -8,7 +8,9 @@ const SUBSCRIPTION_EVENT = 'finly_subscription_change'
 export function getStoredPlan(): SubscriptionPlan {
   if (typeof window === 'undefined') return 'starter'
   try {
-    const plan = localStorage.getItem(SUBSCRIPTION_STORAGE_KEY) as SubscriptionPlan
+    const plan = localStorage.getItem(
+      SUBSCRIPTION_STORAGE_KEY,
+    ) as SubscriptionPlan
     return plan === 'pro' || plan === 'enterprise' ? plan : 'starter'
   } catch {
     return 'starter'
@@ -31,11 +33,7 @@ export function useSubscription() {
   useEffect(() => {
     const handlePlanChange = (event: Event) => {
       const customEvent = event as CustomEvent<SubscriptionPlan>
-      if (customEvent.detail) {
-        setPlan(customEvent.detail)
-      } else {
-        setPlan(getStoredPlan())
-      }
+      setPlan(customEvent.detail)
     }
 
     window.addEventListener(SUBSCRIPTION_EVENT, handlePlanChange)

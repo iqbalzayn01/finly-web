@@ -16,8 +16,12 @@ export function PublicNavbar() {
               F
             </div>
             <div>
-              <h1 className="font-bold text-lg text-foreground tracking-tight leading-none">Finly</h1>
-              <p className="text-[10px] font-semibold text-muted-foreground mt-0.5">Cashflow OS</p>
+              <h1 className="font-bold text-lg text-foreground tracking-tight leading-none">
+                Finly
+              </h1>
+              <p className="text-[10px] font-semibold text-muted-foreground mt-0.5">
+                Cashflow OS
+              </p>
             </div>
           </Link>
         </div>
@@ -28,7 +32,9 @@ export function PublicNavbar() {
             to="/"
             className={cn(
               'transition-colors',
-              location.pathname === '/' ? 'text-primary font-bold' : 'text-muted-foreground hover:text-foreground'
+              location.pathname === '/'
+                ? 'text-primary font-bold'
+                : 'text-muted-foreground hover:text-foreground',
             )}
           >
             Overview
@@ -43,7 +49,9 @@ export function PublicNavbar() {
             to="/pricing"
             className={cn(
               'transition-colors',
-              location.pathname === '/pricing' ? 'text-primary font-bold' : 'text-muted-foreground hover:text-foreground'
+              location.pathname === '/pricing'
+                ? 'text-primary font-bold'
+                : 'text-muted-foreground hover:text-foreground',
             )}
           >
             Pricing

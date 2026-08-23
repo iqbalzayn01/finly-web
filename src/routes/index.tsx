@@ -28,20 +28,42 @@ import {
   SelectItem,
 } from '../components/ui/select'
 import {
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-} from 'recharts'
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/card'
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent
+  
+} from '../components/ui/chart'
+import type {ChartConfig} from '../components/ui/chart';
+import { XAxis, YAxis, CartesianGrid, BarChart, Bar } from 'recharts'
 import { cn } from '../lib/utils'
 import { Button } from '../components/ui/button'
 
 export const Route = createFileRoute('/')({
   component: LandingPage,
 })
+
+const cashflowChartConfig = {
+  income: {
+    label: 'Income',
+    color: 'var(--primary)',
+  },
+  expense: {
+    label: 'Expense',
+    color: 'rgba(15, 23, 42, 0.25)',
+    theme: {
+      light: 'rgba(15, 23, 42, 0.25)',
+      dark: 'rgba(255, 255, 255, 0.25)',
+    },
+  },
+} satisfies ChartConfig
 
 const fullCashflowData = [
   { name: 'Aug', income: 14500, expense: 9100, year: 2025 },
@@ -61,9 +83,15 @@ const fullCashflowData = [
 function LandingPage() {
   const navigate = useNavigate()
   const [monthlyRevenue, setMonthlyRevenue] = useState<number>(45000)
-  const [activeTab, setActiveTab] = useState<'overview' | 'ai' | 'fx'>('overview')
-  const [cashflowTimeframe, setCashflowTimeframe] = useState<'6m' | 'ytd' | '1y'>('6m')
-  const [recentTxFilter, setRecentTxFilter] = useState<'all' | 'income' | 'expense'>('all')
+  const [activeTab, setActiveTab] = useState<'overview' | 'ai' | 'fx'>(
+    'overview',
+  )
+  const [cashflowTimeframe, setCashflowTimeframe] = useState<
+    '6m' | 'ytd' | '1y'
+  >('6m')
+  const [recentTxFilter, setRecentTxFilter] = useState<
+    'all' | 'income' | 'expense'
+  >('all')
   const [fxAmount, setFxAmount] = useState<number>(1000)
   const [fxInput, setFxInput] = useState<number>(100)
   const sliderId = useId()
@@ -92,7 +120,8 @@ function LandingPage() {
       amount: 5000,
       type: 'income',
       icon: ArrowUpRight,
-      color: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+      color:
+        'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
     },
     {
       name: 'AWS Infrastructure',
@@ -101,7 +130,8 @@ function LandingPage() {
       amount: 120,
       type: 'expense',
       icon: ArrowDownRight,
-      color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+      color:
+        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
     },
     {
       name: 'Q3 Retainer GlobalTech',
@@ -110,7 +140,8 @@ function LandingPage() {
       amount: 3500,
       type: 'income',
       icon: ArrowUpRight,
-      color: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+      color:
+        'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
     },
     {
       name: 'Facebook Ads Campaign',
@@ -119,7 +150,8 @@ function LandingPage() {
       amount: 450,
       type: 'expense',
       icon: ArrowDownRight,
-      color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+      color:
+        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
     },
     {
       name: 'Slack Team Subscription',
@@ -128,7 +160,8 @@ function LandingPage() {
       amount: 85,
       type: 'expense',
       icon: ArrowDownRight,
-      color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+      color:
+        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
     },
   ]
 
@@ -202,7 +235,9 @@ function LandingPage() {
           transition={{ ...m3Transition, delay: 0.2 }}
           className="text-base sm:text-xl text-muted-foreground max-w-[55ch] mx-auto leading-relaxed font-medium"
         >
-          Eliminate floating-point ledger errors, turn vendor receipts into clean invoices in seconds, and track real-time multi-currency cashflow.
+          Eliminate floating-point ledger errors, turn vendor receipts into
+          clean invoices in seconds, and track real-time multi-currency
+          cashflow.
         </motion.p>
 
         {/* Dual Primary & Secondary CTAs */}
@@ -242,7 +277,9 @@ function LandingPage() {
                 <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
                 <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
                 <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
-                <span className="ml-2 text-xs font-mono font-medium text-muted-foreground">app.finly.io/dashboard</span>
+                <span className="ml-2 text-xs font-mono font-medium text-muted-foreground">
+                  app.finly.io/dashboard
+                </span>
               </div>
 
               {/* Interactive Showcase Tabs */}
@@ -255,10 +292,14 @@ function LandingPage() {
                       'px-3 py-1 text-xs font-bold rounded-lg uppercase transition-all cursor-pointer outline-none',
                       activeTab === tab
                         ? 'bg-primary text-primary-foreground shadow-none'
-                        : 'text-muted-foreground hover:text-foreground'
+                        : 'text-muted-foreground hover:text-foreground',
                     )}
                   >
-                    {tab === 'overview' ? 'Cashflow' : tab === 'ai' ? 'AI Parse' : 'Live FX'}
+                    {tab === 'overview'
+                      ? 'Cashflow'
+                      : tab === 'ai'
+                        ? 'AI Parse'
+                        : 'Live FX'}
                   </button>
                 ))}
               </div>
@@ -288,7 +329,8 @@ function LandingPage() {
                           </span>
                         </div>
                         <p className="text-muted-foreground text-xs sm:text-sm">
-                          Real-time business health, operating cashflow, and AI forecast.
+                          Real-time business health, operating cashflow, and AI
+                          forecast.
                         </p>
                       </div>
                       <div className="flex items-center gap-3">
@@ -297,13 +339,22 @@ function LandingPage() {
                             <SelectValue placeholder="Select Period" />
                           </SelectTrigger>
                           <SelectContent className="rounded-xl border border-border shadow-none">
-                            <SelectItem value="this_month" className="font-medium rounded-lg text-xs">
+                            <SelectItem
+                              value="this_month"
+                              className="font-medium rounded-lg text-xs"
+                            >
                               This Month
                             </SelectItem>
-                            <SelectItem value="this_quarter" className="font-medium rounded-lg text-xs">
+                            <SelectItem
+                              value="this_quarter"
+                              className="font-medium rounded-lg text-xs"
+                            >
                               This Quarter
                             </SelectItem>
-                            <SelectItem value="this_year" className="font-medium rounded-lg text-xs">
+                            <SelectItem
+                              value="this_year"
+                              className="font-medium rounded-lg text-xs"
+                            >
                               This Year
                             </SelectItem>
                           </SelectContent>
@@ -323,8 +374,7 @@ function LandingPage() {
                           containerClass:
                             'bg-primary text-primary-foreground border border-primary/20 shadow-none rounded-2xl',
                           iconClass: 'bg-white/20 text-white rounded-xl',
-                          trendClass:
-                            'bg-white/20 text-white rounded-full',
+                          trendClass: 'bg-white/20 text-white rounded-full',
                           progress: 82,
                           progressBg: 'bg-white/20',
                           progressFill: 'bg-white',
@@ -394,7 +444,9 @@ function LandingPage() {
                           </div>
 
                           <div className="space-y-1">
-                            <div className={`h-1.5 w-full rounded-full ${stat.progressBg} overflow-hidden`}>
+                            <div
+                              className={`h-1.5 w-full rounded-full ${stat.progressBg} overflow-hidden`}
+                            >
                               <div
                                 className={`h-full rounded-full ${stat.progressFill} transition-all duration-500`}
                                 style={{ width: `${stat.progress}%` }}
@@ -450,34 +502,49 @@ function LandingPage() {
 
                         <div className="pt-2.5 border-t border-border mt-2.5 grid grid-cols-2 gap-2 text-xs">
                           <div className="space-y-0.5">
-                            <p className="text-[10px] font-medium opacity-75">Monthly Burn</p>
-                            <p className="font-mono text-[11px] font-bold text-foreground">$12,450.00</p>
+                            <p className="text-[10px] font-medium opacity-75">
+                              Monthly Burn
+                            </p>
+                            <p className="font-mono text-[11px] font-bold text-foreground">
+                              $12,450.00
+                            </p>
                           </div>
                           <div className="space-y-0.5 text-right">
-                            <p className="text-[10px] font-medium opacity-75">Liquid Cash</p>
-                            <p className="font-mono text-[11px] font-bold text-emerald-600 dark:text-emerald-400">$148,250.00</p>
+                            <p className="text-[10px] font-medium opacity-75">
+                              Liquid Cash
+                            </p>
+                            <p className="font-mono text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                              $148,250.00
+                            </p>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Main Chart Area: Dual Bar Chart (Income vs Expense) */}
-                    <div className="w-full bg-card border border-border shadow-none rounded-2xl p-5">
-                      <div className="flex items-center justify-between mb-6 px-1 flex-wrap gap-3">
+                    {/* Main Chart Area: Multiple Bar Chart (Income vs Expense) using ShadCN UI */}
+                    <Card className="rounded-2xl border border-border shadow-none bg-card">
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6 flex-wrap gap-3 p-5 pb-4">
                         <div>
-                          <h3 className="text-lg font-semibold text-foreground">
+                          <CardTitle className="text-base sm:text-lg font-semibold text-foreground">
                             Cashflow Dynamics
-                          </h3>
-                          <p className="text-xs text-muted-foreground mt-0.5">Stacked Income &amp; Expense Breakdown</p>
+                          </CardTitle>
+                          <CardDescription className="text-xs text-muted-foreground mt-0.5">
+                            Multiple Bar Chart — Side-by-Side Inflow vs Burn
+                            Breakdown
+                          </CardDescription>
                         </div>
                         <div className="flex items-center gap-4 flex-wrap">
                           {/* Legend Dots */}
                           <div className="flex items-center gap-3 text-xs font-semibold mr-1">
-                            <div className="flex items-center gap-1.5">
-                              <div className="w-2.5 h-2.5 rounded-full bg-primary" /> Income
+                            <div className="flex items-center gap-1.5 text-foreground">
+                              <div className="w-2.5 h-2.5 rounded-full bg-primary" />{' '}
+                              Income
                             </div>
-                            <div className="flex items-center gap-1.5">
-                              <div className="w-2.5 h-2.5 rounded-full bg-black/25 dark:bg-white/25" /> <span className="text-black/25 dark:text-white/25 font-semibold">Expense</span>
+                            <div className="flex items-center gap-1.5 text-foreground">
+                              <div className="w-2.5 h-2.5 rounded-full bg-black/25 dark:bg-white/25" />{' '}
+                              <span className="text-black/25 dark:text-white/25 font-semibold">
+                                Expense
+                              </span>
                             </div>
                           </div>
 
@@ -491,7 +558,7 @@ function LandingPage() {
                                   'px-2.5 py-1 text-xs font-bold rounded-lg uppercase transition-all cursor-pointer outline-none',
                                   cashflowTimeframe === tf
                                     ? 'bg-card text-foreground shadow-none'
-                                    : 'text-muted-foreground hover:text-foreground'
+                                    : 'text-muted-foreground hover:text-foreground',
                                 )}
                               >
                                 {tf}
@@ -499,32 +566,40 @@ function LandingPage() {
                             ))}
                           </div>
                         </div>
-                      </div>
+                      </CardHeader>
 
-                      <div className="h-[280px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
+                      <CardContent className="px-5 pb-3">
+                        <ChartContainer
+                          config={cashflowChartConfig}
+                          className="h-[280px] w-full"
+                        >
                           <BarChart
+                            accessibilityLayer
                             data={filteredCashflowData}
-                            barCategoryGap="12%"
-                            margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+                            margin={{
+                              top: 10,
+                              right: 10,
+                              left: -10,
+                              bottom: 0,
+                            }}
                           >
                             <CartesianGrid
+                              vertical={false}
                               strokeDasharray="4 4"
                               strokeWidth={1.5}
-                              vertical={false}
-                              stroke="currentColor"
-                              className="text-border opacity-50"
+                              className="stroke-border opacity-50"
                             />
                             <XAxis
                               dataKey="name"
-                              axisLine={false}
                               tickLine={false}
+                              tickMargin={8}
+                              axisLine={false}
                               tick={{
                                 fill: 'var(--muted-foreground)',
                                 fontSize: 12,
                                 fontWeight: 500,
                               }}
-                              dy={6}
+                              dy={4}
                             />
                             <YAxis
                               axisLine={false}
@@ -537,65 +612,37 @@ function LandingPage() {
                               tickFormatter={(val) => `$${val / 1000}k`}
                               dx={-5}
                             />
-                            <Tooltip
-                              wrapperStyle={{ zIndex: 100 }}
-                              allowEscapeViewBox={{ x: false, y: false }}
-                              content={({ active, payload, label }) => {
-                                if (!active || payload.length === 0) return null
-                                const incomeItem = payload.find((p) => p.dataKey === 'income')
-                                const expenseItem = payload.find((p) => p.dataKey === 'expense')
-                                const incomeVal = Number(incomeItem?.value || 0)
-                                const expenseVal = Number(expenseItem?.value || 0)
-                                const netVal = incomeVal - expenseVal
-
-                                return (
-                                  <div className="rounded-xl border border-border bg-card p-3 shadow-none text-foreground text-xs space-y-1 min-w-[170px]">
-                                    <p className="font-semibold text-muted-foreground border-b border-border pb-1">
-                                      Month: <span className="text-foreground font-bold">{label}</span>
-                                    </p>
-                                    <div className="flex justify-between items-center pt-0.5">
-                                      <span className="font-semibold text-primary flex items-center gap-1.5">
-                                        <span className="h-2 w-2 rounded-full bg-primary" /> Income:
-                                      </span>
-                                      <span className="font-mono font-bold">${incomeVal.toLocaleString()}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                      <span className="font-semibold text-black/25 dark:text-white/25 flex items-center gap-1.5">
-                                        <span className="h-2 w-2 rounded-full bg-black/25 dark:bg-white/25" /> Expense:
-                                      </span>
-                                      <span className="font-mono font-bold">${expenseVal.toLocaleString()}</span>
-                                    </div>
-                                    <div className="flex justify-between items-center border-t border-border pt-1 mt-1 text-[11px]">
-                                      <span className="font-medium text-muted-foreground">Net Cashflow:</span>
-                                      <span className={`font-mono font-bold ${netVal >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}`}>
-                                        {netVal >= 0 ? '+' : ''}${netVal.toLocaleString()}
-                                      </span>
-                                    </div>
-                                  </div>
-                                )
-                              }}
+                            <ChartTooltip
                               cursor={{ fill: 'var(--accent)', opacity: 0.15 }}
-                            />
-                            <Bar
-                              dataKey="expense"
-                              name="Expense"
-                              stackId="cashflowStack"
-                              className="text-black/25 dark:text-white/25 fill-current"
-                              radius={[0, 0, 4, 4]}
-                              maxBarSize={64}
+                              content={
+                                <ChartTooltipContent indicator="dashed" />
+                              }
                             />
                             <Bar
                               dataKey="income"
-                              name="Income"
-                              stackId="cashflowStack"
-                              fill="var(--primary)"
-                              radius={[6, 6, 0, 0]}
-                              maxBarSize={64}
+                              fill="var(--color-income)"
+                              radius={[4, 4, 0, 0]}
+                              maxBarSize={40}
+                            />
+                            <Bar
+                              dataKey="expense"
+                              fill="var(--color-expense)"
+                              radius={[4, 4, 0, 0]}
+                              maxBarSize={40}
                             />
                           </BarChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </div>
+                        </ChartContainer>
+                      </CardContent>
+                      <CardFooter className="flex-col items-start gap-1 border-t border-border px-5 py-3 text-xs">
+                        <div className="flex items-center gap-2 font-bold text-foreground">
+                          Trending up by +12.5% this month{' '}
+                          <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                        </div>
+                        <div className="text-muted-foreground font-medium">
+                          Showing live operating revenue vs burn metrics
+                        </div>
+                      </CardFooter>
+                    </Card>
 
                     {/* 3-Column Bottom Grid: Financial Statistics | FX Exchange | Recent Transactions with Filter */}
                     <div className="grid gap-4 lg:grid-cols-3">
@@ -619,8 +666,12 @@ function LandingPage() {
                           <div className="space-y-3">
                             <div className="p-3 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
                               <div>
-                                <p className="text-[11px] text-muted-foreground font-medium">Operating Margin</p>
-                                <p className="font-mono text-base font-bold text-foreground mt-0.5">63.4%</p>
+                                <p className="text-[11px] text-muted-foreground font-medium">
+                                  Operating Margin
+                                </p>
+                                <p className="font-mono text-base font-bold text-foreground mt-0.5">
+                                  63.4%
+                                </p>
                               </div>
                               <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
                                 <TrendingUp className="h-3 w-3" /> +4.1%
@@ -629,8 +680,12 @@ function LandingPage() {
 
                             <div className="p-3 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
                               <div>
-                                <p className="text-[11px] text-muted-foreground font-medium">Avg. Invoice Settled</p>
-                                <p className="font-mono text-base font-bold text-foreground mt-0.5">$4,250.00</p>
+                                <p className="text-[11px] text-muted-foreground font-medium">
+                                  Avg. Invoice Settled
+                                </p>
+                                <p className="font-mono text-base font-bold text-foreground mt-0.5">
+                                  $4,250.00
+                                </p>
                               </div>
                               <span className="text-[10px] font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
                                 Net 14 Avg
@@ -639,8 +694,12 @@ function LandingPage() {
 
                             <div className="p-3 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
                               <div>
-                                <p className="text-[11px] text-muted-foreground font-medium">On-Time Payment</p>
-                                <p className="font-mono text-base font-bold text-foreground mt-0.5">96.5%</p>
+                                <p className="text-[11px] text-muted-foreground font-medium">
+                                  On-Time Payment
+                                </p>
+                                <p className="font-mono text-base font-bold text-foreground mt-0.5">
+                                  96.5%
+                                </p>
                               </div>
                               <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
                                 High Reliability
@@ -651,9 +710,12 @@ function LandingPage() {
 
                         <div className="pt-3 border-t border-border mt-3 flex items-center justify-between text-xs text-muted-foreground">
                           <span className="flex items-center gap-1">
-                            <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Audit Ledger Verified
+                            <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />{' '}
+                            Audit Ledger Verified
                           </span>
-                          <span className="font-mono text-[11px]">v5.0 Ledger</span>
+                          <span className="font-mono text-[11px]">
+                            v5.0 Ledger
+                          </span>
                         </div>
                       </div>
 
@@ -670,40 +732,71 @@ function LandingPage() {
                               </h4>
                             </div>
                             <span className="flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live FX
+                              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />{' '}
+                              Live FX
                             </span>
                           </div>
 
                           {/* Interactive Amount Converter Input */}
                           <div className="relative mb-3">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">$</span>
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
+                              $
+                            </span>
                             <input
                               type="number"
                               value={fxInput || ''}
-                              onChange={(e) => setFxInput(Math.max(0, parseFloat(e.target.value) || 0))}
+                              onChange={(e) =>
+                                setFxInput(
+                                  Math.max(0, parseFloat(e.target.value) || 0),
+                                )
+                              }
                               className="w-full h-9 bg-background border border-border rounded-xl pl-7 pr-14 text-xs font-bold font-mono outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground"
                               placeholder="Enter USD amount..."
                             />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-primary">USD</span>
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-primary">
+                              USD
+                            </span>
                           </div>
 
                           <div className="space-y-1.5">
                             {[
-                              { pair: 'USD / IDR', label: 'Indonesian Rupiah', rate: `Rp ${(fxInput * 16250).toLocaleString()}` },
-                              { pair: 'EUR / USD', label: 'Euro', rate: `€ ${(fxInput * 0.915).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
-                              { pair: 'GBP / USD', label: 'British Pound', rate: `£ ${(fxInput * 0.780).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
-                              { pair: 'SGD / IDR', label: 'Singapore Dollar', rate: `S$ ${(fxInput * 1.340).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+                              {
+                                pair: 'USD / IDR',
+                                label: 'Indonesian Rupiah',
+                                rate: `Rp ${(fxInput * 16250).toLocaleString()}`,
+                              },
+                              {
+                                pair: 'EUR / USD',
+                                label: 'Euro',
+                                rate: `€ ${(fxInput * 0.915).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                              },
+                              {
+                                pair: 'GBP / USD',
+                                label: 'British Pound',
+                                rate: `£ ${(fxInput * 0.78).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                              },
+                              {
+                                pair: 'SGD / IDR',
+                                label: 'Singapore Dollar',
+                                rate: `S$ ${(fxInput * 1.34).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                              },
                             ].map((fx, idx) => (
                               <div
                                 key={idx}
                                 className="flex items-center justify-between p-2 rounded-xl hover:bg-accent/40 transition-colors"
                               >
                                 <div>
-                                  <span className="text-xs font-semibold text-foreground block">{fx.pair}</span>
-                                  <span className="text-[10px] text-muted-foreground">{fx.label}</span>
+                                  <span className="text-xs font-semibold text-foreground block">
+                                    {fx.pair}
+                                  </span>
+                                  <span className="text-[10px] text-muted-foreground">
+                                    {fx.label}
+                                  </span>
                                 </div>
                                 <div className="text-right">
-                                  <p className="font-mono text-xs font-bold text-foreground">{fx.rate}</p>
+                                  <p className="font-mono text-xs font-bold text-foreground">
+                                    {fx.rate}
+                                  </p>
                                 </div>
                               </div>
                             ))}
@@ -714,7 +807,9 @@ function LandingPage() {
                           <span className="flex items-center gap-1">
                             <RefreshCw className="h-3 w-3" /> 60s live rate
                           </span>
-                          <span className="font-mono text-primary font-semibold">1 USD = 16,250 IDR</span>
+                          <span className="font-mono text-primary font-semibold">
+                            1 USD = 16,250 IDR
+                          </span>
                         </div>
                       </div>
 
@@ -740,19 +835,21 @@ function LandingPage() {
 
                           {/* Filter Pills Header */}
                           <div className="flex items-center gap-1 p-0.5 bg-muted/50 rounded-xl mb-3">
-                            {(['all', 'income', 'expense'] as const).map((filterType) => (
-                              <button
-                                key={filterType}
-                                onClick={() => setRecentTxFilter(filterType)}
-                                className={`flex-1 py-1 text-[11px] font-semibold rounded-lg capitalize transition-all ${
-                                  recentTxFilter === filterType
-                                    ? 'bg-card text-foreground shadow-none'
-                                    : 'text-muted-foreground hover:text-foreground'
-                                }`}
-                              >
-                                {filterType}
-                              </button>
-                            ))}
+                            {(['all', 'income', 'expense'] as const).map(
+                              (filterType) => (
+                                <button
+                                  key={filterType}
+                                  onClick={() => setRecentTxFilter(filterType)}
+                                  className={`flex-1 py-1 text-[11px] font-semibold rounded-lg capitalize transition-all ${
+                                    recentTxFilter === filterType
+                                      ? 'bg-card text-foreground shadow-none'
+                                      : 'text-muted-foreground hover:text-foreground'
+                                  }`}
+                                >
+                                  {filterType}
+                                </button>
+                              ),
+                            )}
                           </div>
 
                           {/* Filtered Transaction List */}
@@ -772,17 +869,21 @@ function LandingPage() {
                                     <h5 className="font-semibold text-xs text-foreground truncate max-w-[130px] sm:max-w-[180px]">
                                       {tx.name}
                                     </h5>
-                                    <p className="text-[10px] text-muted-foreground truncate">{tx.category}</p>
+                                    <p className="text-[10px] text-muted-foreground truncate">
+                                      {tx.category}
+                                    </p>
                                   </div>
                                 </div>
                                 <div className="text-right shrink-0">
                                   <p
                                     className={`font-mono text-xs font-semibold ${tx.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'}`}
                                   >
-                                    {tx.type === 'income' ? '+' : '-'}
-                                    ${tx.amount.toLocaleString()}
+                                    {tx.type === 'income' ? '+' : '-'}$
+                                    {tx.amount.toLocaleString()}
                                   </p>
-                                  <p className="text-[10px] text-muted-foreground">{tx.date.split(',')[0]}</p>
+                                  <p className="text-[10px] text-muted-foreground">
+                                    {tx.date.split(',')[0]}
+                                  </p>
                                 </div>
                               </div>
                             ))}
@@ -790,8 +891,13 @@ function LandingPage() {
                         </div>
 
                         <div className="pt-3 border-t border-border mt-3 flex items-center justify-between text-xs">
-                          <span className="text-muted-foreground text-[11px]">Showing {Math.min(4, filteredTx.length)} entries</span>
-                          <Link to="/cashbook" className="font-semibold text-primary flex items-center gap-1 hover:underline text-xs">
+                          <span className="text-muted-foreground text-[11px]">
+                            Showing {Math.min(4, filteredTx.length)} entries
+                          </span>
+                          <Link
+                            to="/cashbook"
+                            className="font-semibold text-primary flex items-center gap-1 hover:underline text-xs"
+                          >
                             Open Cashbook <ArrowUpRight className="h-3 w-3" />
                           </Link>
                         </div>
@@ -805,8 +911,13 @@ function LandingPage() {
                           <TrendingUp className="h-5 w-5" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-foreground">Integer Minor-Unit Accuracy</p>
-                          <p className="text-xs text-muted-foreground">Stored as minor units (Scale 100) preventing floating point ledger errors.</p>
+                          <p className="text-sm font-bold text-foreground">
+                            Integer Minor-Unit Accuracy
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Stored as minor units (Scale 100) preventing
+                            floating point ledger errors.
+                          </p>
                         </div>
                       </div>
                       <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/20">
@@ -828,15 +939,26 @@ function LandingPage() {
                     <div className="p-5 rounded-2xl bg-primary/5 border border-primary/20 flex items-start gap-4">
                       <Bot className="h-6 w-6 text-primary shrink-0 mt-1 animate-bounce" />
                       <div>
-                        <h4 className="text-sm font-bold text-foreground">AI Human-in-the-Loop Invoice Parser</h4>
+                        <h4 className="text-sm font-bold text-foreground">
+                          AI Human-in-the-Loop Invoice Parser
+                        </h4>
                         <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                          "Parsed PDF invoice #INV-2026-88. Customer: Acme Corp. Subtotal: $5,000.00. Tax: $550.00 (11%). Ready for 1-click confirmation."
+                          "Parsed PDF invoice #INV-2026-88. Customer: Acme Corp.
+                          Subtotal: $5,000.00. Tax: $550.00 (11%). Ready for
+                          1-click confirmation."
                         </p>
                       </div>
                     </div>
                     <div className="flex justify-end gap-2 pt-2">
-                      <Button variant="outline" size="sm">Edit Items</Button>
-                      <Button size="sm" onClick={() => navigate({ to: '/invoices' })}>Approve &amp; Draft</Button>
+                      <Button variant="outline" size="sm">
+                        Edit Items
+                      </Button>
+                      <Button
+                        size="sm"
+                        onClick={() => navigate({ to: '/invoices' })}
+                      >
+                        Approve &amp; Draft
+                      </Button>
                     </div>
                   </motion.div>
                 )}
@@ -852,7 +974,9 @@ function LandingPage() {
                   >
                     <div className="flex items-center justify-between p-4 rounded-2xl bg-muted/40 border border-border">
                       <div className="space-y-1">
-                        <p className="text-xs text-muted-foreground font-medium">Input USD Amount</p>
+                        <p className="text-xs text-muted-foreground font-medium">
+                          Input USD Amount
+                        </p>
                         <input
                           type="number"
                           value={fxAmount}
@@ -861,7 +985,9 @@ function LandingPage() {
                         />
                       </div>
                       <div className="text-right space-y-1">
-                        <p className="text-xs text-muted-foreground font-medium">IDR Live Conversion</p>
+                        <p className="text-xs text-muted-foreground font-medium">
+                          IDR Live Conversion
+                        </p>
                         <p className="font-mono text-xl font-bold text-primary">
                           Rp {(fxAmount * 15850).toLocaleString('id-ID')}
                         </p>
@@ -876,14 +1002,27 @@ function LandingPage() {
       </section>
 
       {/* Trusted By Logo Wall Section */}
-      <section aria-label="Trusted by companies" className="py-7 border-y border-border bg-muted/20">
+      <section
+        aria-label="Trusted by companies"
+        className="py-7 border-y border-border bg-muted/20"
+      >
         <div className="max-w-6xl mx-auto px-6 text-center space-y-4">
           <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
             TRUSTED BY 500+ CLIENT-SERVICE AGENCIES &amp; CONSULTANCIES
           </p>
           <div className="flex items-center justify-center gap-8 md:gap-14 flex-wrap opacity-75 grayscale hover:grayscale-0 transition-all">
-            {['Monolith Agency', 'HyperScale Digital', 'Nexus Growth', 'BrandCraft Studio', 'Vanguard Creative', 'Pulse Media'].map((logo, i) => (
-              <span key={i} className="text-sm md:text-base font-bold text-foreground font-mono tracking-tight">
+            {[
+              'Monolith Agency',
+              'HyperScale Digital',
+              'Nexus Growth',
+              'BrandCraft Studio',
+              'Vanguard Creative',
+              'Pulse Media',
+            ].map((logo, i) => (
+              <span
+                key={i}
+                className="text-sm md:text-base font-bold text-foreground font-mono tracking-tight"
+              >
                 {logo}
               </span>
             ))}
@@ -892,13 +1031,20 @@ function LandingPage() {
       </section>
 
       {/* Interactive Cashflow ROI & Time Savings Calculator */}
-      <section id="calculator-section" aria-labelledby="calculator-heading" className="max-w-5xl mx-auto px-6">
+      <section
+        id="calculator-section"
+        aria-labelledby="calculator-heading"
+        className="max-w-5xl mx-auto px-6"
+      >
         <div className="p-8 md:p-10 rounded-3xl bg-card border border-border shadow-none space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20">
               <Calculator className="h-3.5 w-3.5" /> Instant Cashflow Calculator
             </div>
-            <h2 id="calculator-heading" className="text-2xl md:text-3xl font-bold text-foreground">
+            <h2
+              id="calculator-heading"
+              className="text-2xl md:text-3xl font-bold text-foreground"
+            >
               See how much time and money Finly protects each month
             </h2>
           </div>
@@ -906,7 +1052,9 @@ function LandingPage() {
           <div className="space-y-4 max-w-xl mx-auto">
             <div className="flex justify-between items-center text-sm font-bold text-foreground">
               <label htmlFor={sliderId}>Monthly Agency Revenue:</label>
-              <span className="font-mono text-xl text-primary">${monthlyRevenue.toLocaleString()}/mo</span>
+              <span className="font-mono text-xl text-primary">
+                ${monthlyRevenue.toLocaleString()}/mo
+              </span>
             </div>
             <input
               id={sliderId}
@@ -922,27 +1070,48 @@ function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-border">
             <div className="p-6 rounded-2xl bg-muted/40 border border-border text-center space-y-1">
-              <p className="text-xs text-muted-foreground font-semibold">Estimated Monthly Time Reclaimed</p>
-              <p className="text-3xl font-mono font-extrabold text-foreground">{hoursSaved} Hours / mo</p>
-              <p className="text-[11px] text-muted-foreground">Automating invoice drafts, payment tracking, and receipt logging</p>
+              <p className="text-xs text-muted-foreground font-semibold">
+                Estimated Monthly Time Reclaimed
+              </p>
+              <p className="text-3xl font-mono font-extrabold text-foreground">
+                {hoursSaved} Hours / mo
+              </p>
+              <p className="text-[11px] text-muted-foreground">
+                Automating invoice drafts, payment tracking, and receipt logging
+              </p>
             </div>
             <div className="p-6 rounded-2xl bg-primary/10 border border-primary/20 text-center space-y-1">
-              <p className="text-xs text-primary font-semibold">Estimated Cashflow Protected</p>
-              <p className="text-3xl font-mono font-extrabold text-primary">${moneySaved.toLocaleString()} / mo</p>
-              <p className="text-[11px] text-muted-foreground">Preventing payment delays, rounding errors, and unbilled expenses</p>
+              <p className="text-xs text-primary font-semibold">
+                Estimated Cashflow Protected
+              </p>
+              <p className="text-3xl font-mono font-extrabold text-primary">
+                ${moneySaved.toLocaleString()} / mo
+              </p>
+              <p className="text-[11px] text-muted-foreground">
+                Preventing payment delays, rounding errors, and unbilled
+                expenses
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Asymmetric Bento Grid Features Section */}
-      <section id="features-section" aria-labelledby="features-heading" className="max-w-6xl mx-auto px-6 space-y-8">
+      <section
+        id="features-section"
+        aria-labelledby="features-heading"
+        className="max-w-6xl mx-auto px-6 space-y-8"
+      >
         <div className="text-center max-w-2xl mx-auto space-y-2">
-          <h2 id="features-heading" className="text-3xl font-bold text-foreground">
+          <h2
+            id="features-heading"
+            className="text-3xl font-bold text-foreground"
+          >
             Financial clarity without enterprise bloat
           </h2>
           <p className="text-sm text-muted-foreground">
-            Engineered specifically for client-service businesses, consultancies, and digital agencies.
+            Engineered specifically for client-service businesses,
+            consultancies, and digital agencies.
           </p>
         </div>
 
@@ -952,9 +1121,13 @@ function LandingPage() {
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Zap className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-foreground">Zero Floating-Point Drift</h3>
+            <h3 className="text-lg font-bold text-foreground">
+              Zero Floating-Point Drift
+            </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Every cent is stored as an exact integer minor unit (`*_in_cents`). Eliminates JavaScript rounding errors, decimal drift, and unbalanced ledgers.
+              Every cent is stored as an exact integer minor unit
+              (`*_in_cents`). Eliminates JavaScript rounding errors, decimal
+              drift, and unbalanced ledgers.
             </p>
           </div>
 
@@ -962,9 +1135,13 @@ function LandingPage() {
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Bot className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-foreground">Human-in-the-Loop AI Invoicing</h3>
+            <h3 className="text-lg font-bold text-foreground">
+              Human-in-the-Loop AI Invoicing
+            </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Drop in client contracts or vendor receipts. Finly parses line items, taxes, and customer totals in seconds. Review and approve with one click.
+              Drop in client contracts or vendor receipts. Finly parses line
+              items, taxes, and customer totals in seconds. Review and approve
+              with one click.
             </p>
           </div>
         </div>
@@ -975,9 +1152,12 @@ function LandingPage() {
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Globe className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-foreground">Live Multi-Currency Settlement</h3>
+            <h3 className="text-lg font-bold text-foreground">
+              Live Multi-Currency Settlement
+            </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Bill global clients in USD, EUR, or GBP while settling expenses in IDR. Real-time central-bank FX rates prevent conversion losses.
+              Bill global clients in USD, EUR, or GBP while settling expenses in
+              IDR. Real-time central-bank FX rates prevent conversion losses.
             </p>
           </div>
 
@@ -985,18 +1165,28 @@ function LandingPage() {
             <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
               <Lock className="h-5 w-5" />
             </div>
-            <h3 className="text-lg font-bold text-foreground">PostgreSQL Row-Level Security</h3>
+            <h3 className="text-lg font-bold text-foreground">
+              PostgreSQL Row-Level Security
+            </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Every query executes with strict tenant-scoped session policies. Your financial ledgers and client data remain completely isolated and private.
+              Every query executes with strict tenant-scoped session policies.
+              Your financial ledgers and client data remain completely isolated
+              and private.
             </p>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section aria-labelledby="testimonials-heading" className="max-w-6xl mx-auto px-6 space-y-8">
+      <section
+        aria-labelledby="testimonials-heading"
+        className="max-w-6xl mx-auto px-6 space-y-8"
+      >
         <div className="text-center max-w-xl mx-auto space-y-2">
-          <h2 id="testimonials-heading" className="text-2xl md:text-3xl font-bold text-foreground">
+          <h2
+            id="testimonials-heading"
+            className="text-2xl md:text-3xl font-bold text-foreground"
+          >
             Proven by founders and finance operators
           </h2>
           <p className="text-xs text-muted-foreground">
@@ -1007,28 +1197,36 @@ function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
-              quote: 'We were losing hours reconciling multi-currency invoices in spreadsheets. Finly exact integer ledger eliminated calculation errors overnight.',
+              quote:
+                'We were losing hours reconciling multi-currency invoices in spreadsheets. Finly exact integer ledger eliminated calculation errors overnight.',
               author: 'Alexander Wright',
               role: 'Managing Partner @ Monolith Studio',
             },
             {
-              quote: 'The AI receipt parser cuts our monthly close from 3 days to 45 minutes. Our project managers just drop PDF bills in and keep moving.',
+              quote:
+                'The AI receipt parser cuts our monthly close from 3 days to 45 minutes. Our project managers just drop PDF bills in and keep moving.',
               author: 'Elena Rostova',
               role: 'Operations Director @ HyperScale',
             },
             {
-              quote: 'Having our runway forecast directly tied to actual receivables and cash burn gave us the confidence to hire two senior developers.',
+              quote:
+                'Having our runway forecast directly tied to actual receivables and cash burn gave us the confidence to hire two senior developers.',
               author: 'Julian Thorne',
               role: 'Principal @ BrandCraft Studio',
             },
           ].map((t, i) => (
-            <div key={i} className="p-6 rounded-2xl bg-card border border-border shadow-none space-y-4">
+            <div
+              key={i}
+              className="p-6 rounded-2xl bg-card border border-border shadow-none space-y-4"
+            >
               <div className="flex gap-1 text-amber-500">
                 {[...Array(5)].map((_, s) => (
                   <Star key={s} className="h-4 w-4 fill-current" />
                 ))}
               </div>
-              <p className="text-xs text-foreground font-medium leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
+              <p className="text-xs text-foreground font-medium leading-relaxed">
+                &ldquo;{t.quote}&rdquo;
+              </p>
               <div className="border-t border-border pt-3">
                 <p className="text-xs font-bold text-foreground">{t.author}</p>
                 <p className="text-[11px] text-muted-foreground">{t.role}</p>
@@ -1046,7 +1244,9 @@ function LandingPage() {
             Ready to run your agency on exact numbers?
           </h2>
           <p className="text-sm md:text-base text-primary-foreground/85 max-w-xl mx-auto leading-relaxed">
-            Set up your workspace in under 2 minutes. Free 14-day trial with full access to automated invoice parsing and real-time cashflow analytics.
+            Set up your workspace in under 2 minutes. Free 14-day trial with
+            full access to automated invoice parsing and real-time cashflow
+            analytics.
           </p>
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-2">
             <Link

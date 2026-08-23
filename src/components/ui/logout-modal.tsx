@@ -10,11 +10,18 @@ export interface LogoutModalProps {
   onLogout?: () => void
 }
 
-export function LogoutModal({ trigger, open, onOpenChange, onLogout }: LogoutModalProps) {
+export function LogoutModal({
+  trigger,
+  open,
+  onOpenChange,
+  onLogout,
+}: LogoutModalProps) {
   const [internalOpen, setInternalOpen] = React.useState(false)
   const isControlled = open !== undefined
   const isOpen = isControlled ? open : internalOpen
-  const setIsOpen = isControlled ? (onOpenChange ?? (() => {})) : setInternalOpen
+  const setIsOpen = isControlled
+    ? (onOpenChange ?? (() => {}))
+    : setInternalOpen
 
   const handleConfirm = () => {
     onLogout?.()
@@ -44,10 +51,12 @@ export function LogoutModal({ trigger, open, onOpenChange, onLogout }: LogoutMod
           <LogOut className="h-6 w-6" />
         </div>
         <div className="flex flex-col gap-1.5">
-          <h3 className="font-semibold text-lg text-foreground">Sign out of Finly?</h3>
+          <h3 className="font-semibold text-lg text-foreground">
+            Sign out of Finly?
+          </h3>
           <p className="text-xs leading-relaxed text-muted-foreground">
-            Are you sure you want to end your active session? You will be redirected to the sign-in
-            screen.
+            Are you sure you want to end your active session? You will be
+            redirected to the sign-in screen.
           </p>
         </div>
       </div>

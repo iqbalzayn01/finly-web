@@ -1,7 +1,15 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { Check, Sparkles, Zap, Shield, HelpCircle, ChevronDown, ArrowRight } from 'lucide-react'
+import {
+  Check,
+  Sparkles,
+  Zap,
+  Shield,
+  HelpCircle,
+  ChevronDown,
+  ArrowRight,
+} from 'lucide-react'
 import { cn } from '../lib/utils'
 import { useSubscription } from '../lib/subscription'
 import { AlertModal } from '../components/ui/alert-modal'
@@ -11,8 +19,15 @@ export const Route = createFileRoute('/pricing')({
 })
 
 function PricingPage() {
-  const { plan: currentPlan, isPro, upgradeToPro, downgradeToStarter } = useSubscription()
-  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('annual')
+  const {
+    plan: currentPlan,
+    isPro,
+    upgradeToPro,
+    downgradeToStarter,
+  } = useSubscription()
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>(
+    'annual',
+  )
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [enterpriseModalOpen, setEnterpriseModalOpen] = useState(false)
@@ -28,7 +43,8 @@ function PricingPage() {
     {
       id: 'starter',
       name: 'Starter',
-      description: 'Essential cashbook and manual invoicing for freelancers & micro-SMEs.',
+      description:
+        'Essential cashbook and manual invoicing for freelancers & micro-SMEs.',
       monthlyPrice: 0,
       annualPrice: 0,
       popular: false,
@@ -45,7 +61,8 @@ function PricingPage() {
     {
       id: 'pro',
       name: 'Pro',
-      description: 'Supercharge agency cashflow with AI assistant, live FX, and smart parsing.',
+      description:
+        'Supercharge agency cashflow with AI assistant, live FX, and smart parsing.',
       monthlyPrice: 29,
       annualPrice: 23,
       popular: true,
@@ -64,7 +81,8 @@ function PricingPage() {
     {
       id: 'enterprise',
       name: 'Enterprise',
-      description: 'Dedicated infrastructure, audit logs, and custom integrations for scaling teams.',
+      description:
+        'Dedicated infrastructure, audit logs, and custom integrations for scaling teams.',
       monthlyPrice: 79,
       annualPrice: 63,
       popular: false,
@@ -84,19 +102,23 @@ function PricingPage() {
   const faqs = [
     {
       question: 'Can I upgrade or downgrade my plan at any time?',
-      answer: 'Yes! You can upgrade, downgrade, or cancel your subscription at any time directly from your Account Settings. Changes take effect at the start of your next billing cycle.',
+      answer:
+        'Yes! You can upgrade, downgrade, or cancel your subscription at any time directly from your Account Settings. Changes take effect at the start of your next billing cycle.',
     },
     {
       question: 'How does the Live Multi-Currency FX Engine work?',
-      answer: 'Finly automatically fetches live central bank exchange rates (USD, IDR, EUR, GBP, SGD, etc.) every hour. All ledger calculations are accurately computed using integer minor units.',
+      answer:
+        'Finly automatically fetches live central bank exchange rates (USD, IDR, EUR, GBP, SGD, etc.) every hour. All ledger calculations are accurately computed using integer minor units.',
     },
     {
       question: 'Is my financial data secure and private?',
-      answer: 'Absolutely. Finly enforces PostgreSQL Row-Level Security (RLS) and strict tenant-scoped repositories. Your invoice data is never used to train public AI models.',
+      answer:
+        'Absolutely. Finly enforces PostgreSQL Row-Level Security (RLS) and strict tenant-scoped repositories. Your invoice data is never used to train public AI models.',
     },
     {
       question: 'What happens when my 14-day free trial ends?',
-      answer: 'You can test all Pro features for 14 days without entering a credit card. At the end of the trial, you can choose to subscribe to Pro or continue on the free Starter plan.',
+      answer:
+        'You can test all Pro features for 14 days without entering a credit card. At the end of the trial, you can choose to subscribe to Pro or continue on the free Starter plan.',
     },
   ]
 
@@ -111,16 +133,26 @@ function PricingPage() {
           Predictable plans for growing agencies & teams
         </h1>
         <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
-          Scale your cashflow management with zero hidden fees. Switch between monthly and annual billing at any time.
+          Scale your cashflow management with zero hidden fees. Switch between
+          monthly and annual billing at any time.
         </p>
 
         {/* Billing Switcher */}
         <div className="pt-4 flex items-center justify-center gap-3">
-          <span className={cn('text-xs font-semibold transition-colors', billingCycle === 'monthly' ? 'text-foreground' : 'text-muted-foreground')}>
+          <span
+            className={cn(
+              'text-xs font-semibold transition-colors',
+              billingCycle === 'monthly'
+                ? 'text-foreground'
+                : 'text-muted-foreground',
+            )}
+          >
             Monthly Billing
           </span>
           <button
-            onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'annual' : 'monthly')}
+            onClick={() =>
+              setBillingCycle(billingCycle === 'monthly' ? 'annual' : 'monthly')
+            }
             className="relative h-7 w-13 rounded-full bg-muted p-1 border border-border transition-colors outline-none cursor-pointer"
           >
             <motion.div
@@ -130,7 +162,14 @@ function PricingPage() {
             />
           </button>
           <div className="flex items-center gap-1.5">
-            <span className={cn('text-xs font-semibold transition-colors', billingCycle === 'annual' ? 'text-foreground' : 'text-muted-foreground')}>
+            <span
+              className={cn(
+                'text-xs font-semibold transition-colors',
+                billingCycle === 'annual'
+                  ? 'text-foreground'
+                  : 'text-muted-foreground',
+              )}
+            >
               Annual Billing
             </span>
             <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold border border-emerald-500/20">
@@ -143,7 +182,8 @@ function PricingPage() {
       {/* Pricing Grid */}
       <div className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto items-stretch">
         {plans.map((plan) => {
-          const price = billingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice
+          const price =
+            billingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice
           return (
             <motion.div
               key={plan.id}
@@ -154,7 +194,7 @@ function PricingPage() {
                 'relative flex flex-col justify-between p-7 rounded-3xl bg-card border transition-all duration-300',
                 plan.popular
                   ? 'border-primary ring-2 ring-primary/20 shadow-none lg:-translate-y-2'
-                  : 'border-border shadow-none hover:border-border/80'
+                  : 'border-border shadow-none hover:border-border/80',
               )}
             >
               {plan.popular && (
@@ -165,7 +205,9 @@ function PricingPage() {
 
               <div>
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-bold text-foreground">{plan.name}</h3>
+                  <h3 className="text-xl font-bold text-foreground">
+                    {plan.name}
+                  </h3>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2 min-h-[36px] leading-relaxed">
                   {plan.description}
@@ -176,20 +218,32 @@ function PricingPage() {
                     ${price}
                   </span>
                   <span className="text-xs text-muted-foreground font-medium">
-                    / month {billingCycle === 'annual' && plan.monthlyPrice > 0 ? '(billed annually)' : ''}
+                    / month{' '}
+                    {billingCycle === 'annual' && plan.monthlyPrice > 0
+                      ? '(billed annually)'
+                      : ''}
                   </span>
                 </div>
 
                 {/* Features List */}
                 <div className="space-y-3 mb-8">
-                  <p className="text-xs font-bold text-foreground uppercase tracking-wider">Included Features:</p>
+                  <p className="text-xs font-bold text-foreground uppercase tracking-wider">
+                    Included Features:
+                  </p>
                   <ul className="space-y-2.5">
                     {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2.5 text-xs text-foreground font-medium">
-                        <div className={cn(
-                          'flex h-4 w-4 shrink-0 items-center justify-center rounded-full',
-                          plan.popular ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'
-                        )}>
+                      <li
+                        key={i}
+                        className="flex items-center gap-2.5 text-xs text-foreground font-medium"
+                      >
+                        <div
+                          className={cn(
+                            'flex h-4 w-4 shrink-0 items-center justify-center rounded-full',
+                            plan.popular
+                              ? 'bg-primary text-primary-foreground'
+                              : 'bg-muted text-foreground',
+                          )}
+                        >
                           <Check className="h-2.5 w-2.5 stroke-[3]" />
                         </div>
                         {feature}
@@ -226,7 +280,7 @@ function PricingPage() {
                     'w-full py-3 rounded-xl text-xs font-bold transition-all shadow-none outline-none cursor-pointer flex items-center justify-center gap-2 active:scale-[0.98]',
                     plan.id === 'pro'
                       ? 'bg-primary text-primary-foreground hover:opacity-95 shadow-none'
-                      : 'bg-muted/60 hover:bg-accent text-foreground border border-border'
+                      : 'bg-muted/60 hover:bg-accent text-foreground border border-border',
                   )}
                 >
                   {plan.id === 'pro' ? 'Upgrade to Pro' : plan.buttonText}
@@ -246,7 +300,8 @@ function PricingPage() {
           className="max-w-md mx-auto p-4 rounded-2xl bg-card border border-primary/30 shadow-none text-center space-y-2"
         >
           <p className="text-xs font-bold text-foreground">
-            Selected <span className="text-primary">{selectedPlan} Plan</span> ({billingCycle})
+            Selected <span className="text-primary">{selectedPlan} Plan</span> (
+            {billingCycle})
           </p>
           <p className="text-[11px] text-muted-foreground">
             Thank you for choosing Finly Pro! Redirecting to setup...
@@ -261,9 +316,12 @@ function PricingPage() {
             <Shield className="h-5 w-5" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-foreground">Enterprise-Grade Bank Security</h4>
+            <h4 className="text-sm font-bold text-foreground">
+              Enterprise-Grade Bank Security
+            </h4>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Strict PostgreSQL RLS tenant isolation, encrypted Redis session tokens, and automated nightly backups.
+              Strict PostgreSQL RLS tenant isolation, encrypted Redis session
+              tokens, and automated nightly backups.
             </p>
           </div>
         </div>
@@ -278,8 +336,12 @@ function PricingPage() {
       {/* FAQ Section */}
       <div className="max-w-3xl mx-auto space-y-6 pt-6">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-          <p className="text-xs text-muted-foreground">Everything you need to know about Finly plans and billing.</p>
+          <h2 className="text-2xl font-bold text-foreground">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            Everything you need to know about Finly plans and billing.
+          </p>
         </div>
 
         <div className="space-y-3">
@@ -299,7 +361,10 @@ function PricingPage() {
                     {faq.question}
                   </span>
                   <ChevronDown
-                    className={cn('h-4 w-4 text-muted-foreground transition-transform duration-300 shrink-0', isOpen && 'rotate-180')}
+                    className={cn(
+                      'h-4 w-4 text-muted-foreground transition-transform duration-300 shrink-0',
+                      isOpen && 'rotate-180',
+                    )}
                   />
                 </button>
                 <AnimatePresence>

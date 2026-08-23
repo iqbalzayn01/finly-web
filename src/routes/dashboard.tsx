@@ -21,16 +21,38 @@ import {
   SelectItem,
 } from '../components/ui/select'
 import {
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-} from 'recharts'
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/card'
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent
+  
+} from '../components/ui/chart'
+import type {ChartConfig} from '../components/ui/chart';
+import { XAxis, YAxis, CartesianGrid, BarChart, Bar } from 'recharts'
 
 export const Route = createFileRoute('/dashboard')({ component: Dashboard })
+
+const cashflowChartConfig = {
+  income: {
+    label: 'Income',
+    color: 'var(--primary)',
+  },
+  expense: {
+    label: 'Expense',
+    color: 'rgba(15, 23, 42, 0.25)',
+    theme: {
+      light: 'rgba(15, 23, 42, 0.25)',
+      dark: 'rgba(255, 255, 255, 0.25)',
+    },
+  },
+} satisfies ChartConfig
 
 const fullCashflowData = [
   { name: 'Aug', income: 14500, expense: 9100, year: 2025 },
@@ -48,8 +70,12 @@ const fullCashflowData = [
 ]
 
 function Dashboard() {
-  const [cashflowTimeframe, setCashflowTimeframe] = useState<'6m' | 'ytd' | '1y'>('6m')
-  const [recentTxFilter, setRecentTxFilter] = useState<'all' | 'income' | 'expense'>('all')
+  const [cashflowTimeframe, setCashflowTimeframe] = useState<
+    '6m' | 'ytd' | '1y'
+  >('6m')
+  const [recentTxFilter, setRecentTxFilter] = useState<
+    'all' | 'income' | 'expense'
+  >('all')
   const [fxInput, setFxInput] = useState<number>(100)
 
   const filteredCashflowData = useMemo(() => {
@@ -76,7 +102,8 @@ function Dashboard() {
       amount: 5000,
       type: 'income',
       icon: ArrowUpRight,
-      color: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+      color:
+        'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
     },
     {
       name: 'AWS Infrastructure',
@@ -85,7 +112,8 @@ function Dashboard() {
       amount: 120,
       type: 'expense',
       icon: ArrowDownRight,
-      color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+      color:
+        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
     },
     {
       name: 'Q3 Retainer GlobalTech',
@@ -94,7 +122,8 @@ function Dashboard() {
       amount: 3500,
       type: 'income',
       icon: ArrowUpRight,
-      color: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+      color:
+        'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
     },
     {
       name: 'Facebook Ads Campaign',
@@ -103,7 +132,8 @@ function Dashboard() {
       amount: 450,
       type: 'expense',
       icon: ArrowDownRight,
-      color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+      color:
+        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
     },
     {
       name: 'Slack Team Subscription',
@@ -112,7 +142,8 @@ function Dashboard() {
       amount: 85,
       type: 'expense',
       icon: ArrowDownRight,
-      color: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+      color:
+        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
     },
   ]
 
@@ -182,8 +213,7 @@ function Dashboard() {
             containerClass:
               'bg-primary text-primary-foreground border border-primary/20 shadow-none rounded-2xl',
             iconClass: 'bg-white/20 text-white rounded-xl',
-            trendClass:
-              'bg-white/20 text-white rounded-full',
+            trendClass: 'bg-white/20 text-white rounded-full',
             progress: 82,
             progressBg: 'bg-white/20',
             progressFill: 'bg-white',
@@ -259,7 +289,9 @@ function Dashboard() {
 
             {/* Bottom Progress Bar */}
             <div className="space-y-1.5">
-              <div className={`h-1.5 w-full rounded-full ${stat.progressBg} overflow-hidden`}>
+              <div
+                className={`h-1.5 w-full rounded-full ${stat.progressBg} overflow-hidden`}
+              >
                 <div
                   className={`h-full rounded-full ${stat.progressFill} transition-all duration-500`}
                   style={{ width: `${stat.progress}%` }}
@@ -299,7 +331,10 @@ function Dashboard() {
               </h3>
               <span className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                 <ArrowUpRight className="h-3.5 w-3.5" />
-                +1.5 mo <span className="opacity-75 font-normal text-foreground">vs last mo</span>
+                +1.5 mo{' '}
+                <span className="opacity-75 font-normal text-foreground">
+                  vs last mo
+                </span>
               </span>
             </div>
             <p className="text-[13px] font-semibold opacity-75 mt-1 tracking-wide">
@@ -324,156 +359,142 @@ function Dashboard() {
           {/* Footer Breakdown (2-Column Micro Grid) */}
           <div className="pt-3 border-t border-border mt-3.5 grid grid-cols-2 gap-3 text-xs">
             <div className="space-y-0.5">
-              <p className="text-[11px] font-medium opacity-75">Avg Monthly Burn</p>
-              <p className="font-mono text-xs font-bold text-foreground">$12,450.00</p>
+              <p className="text-[11px] font-medium opacity-75">
+                Avg Monthly Burn
+              </p>
+              <p className="font-mono text-xs font-bold text-foreground">
+                $12,450.00
+              </p>
             </div>
             <div className="space-y-0.5 text-right">
               <p className="text-[11px] font-medium opacity-75">Liquid Cash</p>
-              <p className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">$148,250.00</p>
+              <p className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                $148,250.00
+              </p>
             </div>
           </div>
         </motion.div>
       </div>
 
-      {/* Main Chart Area: Dual Bar Chart (Income vs Expense) with Smooth Rounded Bars */}
+      {/* Main Chart Area: Multiple Bar Chart (Income vs Expense) using ShadCN UI */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...m3Transition, delay: 0.2 }}
-        className="w-full bg-card border border-border shadow-none rounded-2xl p-6"
+        className="w-full"
       >
-        <div className="flex items-center justify-between mb-8 px-2 flex-wrap gap-4">
-          <div>
-            <h2 className="text-xl font-semibold text-foreground">
-              Cashflow Dynamics
-            </h2>
-            <p className="text-xs text-muted-foreground mt-0.5">Stacked Income & Expense Breakdown</p>
-          </div>
-          <div className="flex items-center gap-4 flex-wrap">
-            {/* Income / Expense Legend Dots */}
-            <div className="flex items-center gap-4 text-xs font-semibold mr-1">
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-primary" /> Income
+        <Card className="rounded-2xl border border-border shadow-none bg-card">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6 flex-wrap gap-4 px-6 pt-6">
+            <div>
+              <CardTitle className="text-xl font-semibold text-foreground">
+                Cashflow Dynamics
+              </CardTitle>
+              <CardDescription className="text-xs text-muted-foreground mt-1">
+                Multiple Bar Chart — Side-by-Side Income & Expense Breakdown
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-4 flex-wrap">
+              {/* Income / Expense Legend Dots */}
+              <div className="flex items-center gap-4 text-xs font-semibold mr-1">
+                <div className="flex items-center gap-1.5 text-foreground">
+                  <div className="w-2.5 h-2.5 rounded-full bg-primary" /> Income
+                </div>
+                <div className="flex items-center gap-1.5 text-foreground">
+                  <div className="w-2.5 h-2.5 rounded-full bg-black/25 dark:bg-white/25" />{' '}
+                  <span className="text-black/25 dark:text-white/25 font-semibold">
+                    Expense
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-black/25 dark:bg-white/25" /> <span className="text-black/25 dark:text-white/25 font-semibold">Expense</span>
+
+              {/* Timeframe Filter Pills */}
+              <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-xl border border-border">
+                {(['6m', 'ytd', '1y'] as const).map((tf) => (
+                  <button
+                    key={tf}
+                    onClick={() => setCashflowTimeframe(tf)}
+                    className={cn(
+                      'px-3 py-1 text-xs font-bold rounded-lg uppercase transition-all cursor-pointer outline-none',
+                      cashflowTimeframe === tf
+                        ? 'bg-card text-foreground shadow-none'
+                        : 'text-muted-foreground hover:text-foreground',
+                    )}
+                  >
+                    {tf}
+                  </button>
+                ))}
               </div>
             </div>
-
-            {/* Timeframe Filter Pills */}
-            <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-xl border border-border">
-              {(['6m', 'ytd', '1y'] as const).map((tf) => (
-                <button
-                  key={tf}
-                  onClick={() => setCashflowTimeframe(tf)}
-                  className={cn(
-                    'px-3 py-1 text-xs font-bold rounded-lg uppercase transition-all cursor-pointer outline-none',
-                    cashflowTimeframe === tf
-                      ? 'bg-card text-foreground shadow-none'
-                      : 'text-muted-foreground hover:text-foreground'
-                  )}
-                >
-                  {tf}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="h-[340px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={filteredCashflowData}
-              barCategoryGap="12%"
-              margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+          </CardHeader>
+          <CardContent className="px-6 pb-4">
+            <ChartContainer
+              config={cashflowChartConfig}
+              className="h-[320px] w-full"
             >
-              <CartesianGrid
-                strokeDasharray="4 4"
-                strokeWidth={1.5}
-                vertical={false}
-                stroke="currentColor"
-                className="text-border opacity-50"
-              />
-              <XAxis
-                dataKey="name"
-                axisLine={false}
-                tickLine={false}
-                tick={{
-                  fill: 'var(--muted-foreground)',
-                  fontSize: 13,
-                  fontWeight: 500,
-                }}
-                dy={10}
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{
-                  fill: 'var(--muted-foreground)',
-                  fontSize: 12,
-                  fontWeight: 500,
-                }}
-                tickFormatter={(val) => `$${val / 1000}k`}
-                dx={-5}
-              />
-              <Tooltip
-                wrapperStyle={{ zIndex: 100 }}
-                allowEscapeViewBox={{ x: false, y: false }}
-                content={({ active, payload, label }) => {
-                  if (!active || payload.length === 0) return null
-                  const incomeItem = payload.find((p) => p.dataKey === 'income')
-                  const expenseItem = payload.find((p) => p.dataKey === 'expense')
-                  const incomeVal = Number(incomeItem?.value || 0)
-                  const expenseVal = Number(expenseItem?.value || 0)
-                  const netVal = incomeVal - expenseVal
-
-                  return (
-                    <div className="rounded-xl border border-border bg-card p-3.5 shadow-none text-foreground text-xs space-y-1.5 min-w-[180px]">
-                      <p className="font-semibold text-muted-foreground border-b border-border pb-1">
-                        Month: <span className="text-foreground font-bold">{label}</span>
-                      </p>
-                      <div className="flex justify-between items-center pt-0.5">
-                        <span className="font-semibold text-primary flex items-center gap-1.5">
-                          <span className="h-2 w-2 rounded-full bg-primary" /> Income:
-                        </span>
-                        <span className="font-mono font-bold">${incomeVal.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="font-semibold text-black/25 dark:text-white/25 flex items-center gap-1.5">
-                          <span className="h-2 w-2 rounded-full bg-black/25 dark:bg-white/25" /> Expense:
-                        </span>
-                        <span className="font-mono font-bold">${expenseVal.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between items-center border-t border-border pt-1.5 mt-1 text-[11px]">
-                        <span className="font-medium text-muted-foreground">Net Cashflow:</span>
-                        <span className={`font-mono font-bold ${netVal >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}`}>
-                          {netVal >= 0 ? '+' : ''}${netVal.toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-                  )
-                }}
-                cursor={{ fill: 'var(--accent)', opacity: 0.15 }}
-              />
-              <Bar
-                dataKey="expense"
-                name="Expense"
-                stackId="cashflowStack"
-                className="text-black/25 dark:text-white/25 fill-current"
-                radius={[0, 0, 4, 4]}
-                maxBarSize={72}
-              />
-              <Bar
-                dataKey="income"
-                name="Income"
-                stackId="cashflowStack"
-                fill="var(--primary)"
-                radius={[6, 6, 0, 0]}
-                maxBarSize={72}
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+              <BarChart
+                accessibilityLayer
+                data={filteredCashflowData}
+                margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+              >
+                <CartesianGrid
+                  vertical={false}
+                  strokeDasharray="4 4"
+                  strokeWidth={1.5}
+                  className="stroke-border opacity-50"
+                />
+                <XAxis
+                  dataKey="name"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tick={{
+                    fill: 'var(--muted-foreground)',
+                    fontSize: 13,
+                    fontWeight: 500,
+                  }}
+                  dy={4}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{
+                    fill: 'var(--muted-foreground)',
+                    fontSize: 12,
+                    fontWeight: 500,
+                  }}
+                  tickFormatter={(val) => `$${val / 1000}k`}
+                  dx={-5}
+                />
+                <ChartTooltip
+                  cursor={{ fill: 'var(--accent)', opacity: 0.15 }}
+                  content={<ChartTooltipContent indicator="dashed" />}
+                />
+                <Bar
+                  dataKey="income"
+                  fill="var(--color-income)"
+                  radius={[4, 4, 0, 0]}
+                  maxBarSize={44}
+                />
+                <Bar
+                  dataKey="expense"
+                  fill="var(--color-expense)"
+                  radius={[4, 4, 0, 0]}
+                  maxBarSize={44}
+                />
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col items-start gap-1.5 border-t border-border px-6 py-4 text-xs">
+            <div className="flex items-center gap-2 font-bold text-foreground">
+              Trending up by +12.5% this month{' '}
+              <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            </div>
+            <div className="text-muted-foreground font-medium">
+              Showing side-by-side revenue inflow vs operating burn across
+              selected months
+            </div>
+          </CardFooter>
+        </Card>
       </motion.div>
 
       {/* 3-Column Bottom Grid: Financial Statistics | FX Exchange | Recent Transactions with Filter */}
@@ -503,8 +524,12 @@ function Dashboard() {
             <div className="space-y-4">
               <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-muted-foreground font-medium">Operating Profit Margin</p>
-                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">63.4%</p>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    Operating Profit Margin
+                  </p>
+                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">
+                    63.4%
+                  </p>
                 </div>
                 <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
                   <TrendingUp className="h-3 w-3" /> +4.1%
@@ -513,8 +538,12 @@ function Dashboard() {
 
               <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-muted-foreground font-medium">Avg. Invoice Settled</p>
-                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">$4,250.00</p>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    Avg. Invoice Settled
+                  </p>
+                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">
+                    $4,250.00
+                  </p>
                 </div>
                 <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
                   Net 14 Avg
@@ -523,8 +552,12 @@ function Dashboard() {
 
               <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-muted-foreground font-medium">On-Time Payment Rate</p>
-                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">96.5%</p>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    On-Time Payment Rate
+                  </p>
+                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">
+                    96.5%
+                  </p>
                 </div>
                 <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
                   High Reliability
@@ -535,7 +568,8 @@ function Dashboard() {
 
           <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Audit Ledger Verified
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Audit
+              Ledger Verified
             </span>
             <span className="font-mono">v5.0 Ledger</span>
           </div>
@@ -559,40 +593,69 @@ function Dashboard() {
                 </h2>
               </div>
               <span className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live FX
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />{' '}
+                Live FX
               </span>
             </div>
 
             {/* Interactive Amount Converter Input */}
             <div className="relative mb-4">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">$</span>
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
+                $
+              </span>
               <input
                 type="number"
                 value={fxInput || ''}
-                onChange={(e) => setFxInput(Math.max(0, parseFloat(e.target.value) || 0))}
+                onChange={(e) =>
+                  setFxInput(Math.max(0, parseFloat(e.target.value) || 0))
+                }
                 className="w-full h-10 bg-background border border-border rounded-xl pl-8 pr-16 text-sm font-bold font-mono outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground"
                 placeholder="Enter USD amount..."
               />
-              <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-primary">USD</span>
+              <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-primary">
+                USD
+              </span>
             </div>
 
             <div className="space-y-2.5">
               {[
-                { pair: 'USD / IDR', label: 'Indonesian Rupiah', rate: `Rp ${(fxInput * 16250).toLocaleString()}` },
-                { pair: 'EUR / USD', label: 'Euro', rate: `€ ${(fxInput * 0.915).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
-                { pair: 'GBP / USD', label: 'British Pound', rate: `£ ${(fxInput * 0.780).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
-                { pair: 'SGD / IDR', label: 'Singapore Dollar', rate: `S$ ${(fxInput * 1.340).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+                {
+                  pair: 'USD / IDR',
+                  label: 'Indonesian Rupiah',
+                  rate: `Rp ${(fxInput * 16250).toLocaleString()}`,
+                },
+                {
+                  pair: 'EUR / USD',
+                  label: 'Euro',
+                  rate: `€ ${(fxInput * 0.915).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                },
+                {
+                  pair: 'GBP / USD',
+                  label: 'British Pound',
+                  rate: `£ ${(fxInput * 0.78).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                },
+                {
+                  pair: 'SGD / IDR',
+                  label: 'Singapore Dollar',
+                  rate: `S$ ${(fxInput * 1.34).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                },
               ].map((fx, idx) => (
                 <div
                   key={idx}
                   className="flex items-center justify-between p-2.5 rounded-xl hover:bg-accent/40 transition-colors"
                 >
                   <div>
-                    <span className="text-xs font-semibold text-foreground block">{fx.pair}</span>
-                    <span className="text-[10px] text-muted-foreground">{fx.label}</span>
+                    <span className="text-xs font-semibold text-foreground block">
+                      {fx.pair}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      {fx.label}
+                    </span>
                   </div>
                   <div className="text-right">
-                    <p className="font-mono text-sm font-bold text-foreground">{fx.rate}</p>
+                    <p className="font-mono text-sm font-bold text-foreground">
+                      {fx.rate}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -603,7 +666,9 @@ function Dashboard() {
             <span className="flex items-center gap-1">
               <RefreshCw className="h-3 w-3" /> Auto-updates every 60s
             </span>
-            <span className="font-mono text-primary font-semibold">1 USD = 16,250 IDR</span>
+            <span className="font-mono text-primary font-semibold">
+              1 USD = 16,250 IDR
+            </span>
           </div>
         </motion.div>
 
@@ -671,17 +736,21 @@ function Dashboard() {
                         <h4 className="font-semibold text-xs text-foreground truncate group-hover:text-primary transition-colors">
                           {tx.name}
                         </h4>
-                        <p className="text-[11px] text-muted-foreground truncate">{tx.category}</p>
+                        <p className="text-[11px] text-muted-foreground truncate">
+                          {tx.category}
+                        </p>
                       </div>
                     </div>
                     <div className="text-right shrink-0">
                       <p
                         className={`font-mono text-sm font-semibold ${tx.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-foreground'}`}
                       >
-                        {tx.type === 'income' ? '+' : '-'}
-                        ${tx.amount.toLocaleString()}
+                        {tx.type === 'income' ? '+' : '-'}$
+                        {tx.amount.toLocaleString()}
                       </p>
-                      <p className="text-[10px] text-muted-foreground">{tx.date.split(',')[0]}</p>
+                      <p className="text-[10px] text-muted-foreground">
+                        {tx.date.split(',')[0]}
+                      </p>
                     </div>
                   </div>
                 ))
@@ -690,8 +759,13 @@ function Dashboard() {
           </div>
 
           <div className="pt-3 border-t border-border mt-4 flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">Showing {filteredTx.length} of {allRecentTx.length} entries</span>
-            <Link to="/cashbook" className="font-semibold text-primary flex items-center gap-1 hover:underline">
+            <span className="text-muted-foreground">
+              Showing {filteredTx.length} of {allRecentTx.length} entries
+            </span>
+            <Link
+              to="/cashbook"
+              className="font-semibold text-primary flex items-center gap-1 hover:underline"
+            >
               Open Cashbook <ArrowUpRight className="h-3 w-3" />
             </Link>
           </div>

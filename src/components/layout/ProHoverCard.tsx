@@ -25,7 +25,9 @@ export function ProHoverCard() {
             className="absolute left-full ml-3 w-64 p-4 rounded-2xl bg-card border border-border text-foreground shadow-none z-50 pointer-events-auto"
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-foreground">Finly Pro</span>
+              <span className="text-xs font-bold text-foreground">
+                Finly Pro
+              </span>
               <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-primary/10 text-primary border border-primary/20">
                 PRO
               </span>
@@ -35,13 +37,16 @@ export function ProHoverCard() {
             </p>
             <ul className="space-y-2 text-xs text-foreground font-medium mb-4">
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" /> Unlimited AI Parse & Drafts
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" />{' '}
+                Unlimited AI Parse & Drafts
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" /> Live FX Multi-Currency Engine
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" />{' '}
+                Live FX Multi-Currency Engine
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" /> Multi-Tenant Role Governance
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" />{' '}
+                Multi-Tenant Role Governance
               </li>
             </ul>
             <Link

@@ -34,7 +34,8 @@ const alertConfig: Record<
   },
   success: {
     icon: <CheckCircle2 className="h-6 w-6" />,
-    iconContainerClass: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400',
+    iconContainerClass:
+      'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400',
     buttonVariant: 'default',
   },
   warning: {
@@ -68,7 +69,9 @@ export function AlertModal({
   const [internalOpen, setInternalOpen] = React.useState(false)
   const isControlled = open !== undefined
   const isOpen = isControlled ? open : internalOpen
-  const setIsOpen = isControlled ? (onOpenChange ?? (() => {})) : setInternalOpen
+  const setIsOpen = isControlled
+    ? (onOpenChange ?? (() => {}))
+    : setInternalOpen
 
   const cfg = alertConfig[type]
 
@@ -111,7 +114,9 @@ export function AlertModal({
         <div className="flex flex-col gap-1.5">
           <h3 className="font-semibold text-lg text-foreground">{title}</h3>
           {description && (
-            <p className="text-xs leading-relaxed text-muted-foreground">{description}</p>
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              {description}
+            </p>
           )}
           {children && <div className="mt-2 text-left">{children}</div>}
         </div>

@@ -94,7 +94,7 @@ function InvoiceDetail() {
             <StatusBadge status={invoice.status} />
           </div>
         </div>
-        
+
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
@@ -180,26 +180,15 @@ function InvoiceDetail() {
               <table className="w-full text-left min-w-[500px]">
                 <thead>
                   <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
-                    <th className="pb-3 font-semibold w-1/2">
-                      Description
-                    </th>
-                    <th className="pb-3 font-semibold text-right">
-                      Qty
-                    </th>
-                    <th className="pb-3 font-semibold text-right">
-                      Price
-                    </th>
-                    <th className="pb-3 font-semibold text-right">
-                      Total
-                    </th>
+                    <th className="pb-3 font-semibold w-1/2">Description</th>
+                    <th className="pb-3 font-semibold text-right">Qty</th>
+                    <th className="pb-3 font-semibold text-right">Price</th>
+                    <th className="pb-3 font-semibold text-right">Total</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {invoice.items.map((item, i) => (
-                    <tr 
-                      key={i}
-                      className="transition-colors"
-                    >
+                    <tr key={i} className="transition-colors">
                       <td className="py-4 text-sm font-semibold text-foreground">
                         {item.desc}
                       </td>

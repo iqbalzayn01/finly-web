@@ -249,18 +249,25 @@ function Invoices() {
             <tbody className="divide-y divide-border">
               {filteredInvoices.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="py-16 text-center"
-                  >
+                  <td colSpan={6} className="py-16 text-center">
                     <div className="flex flex-col items-center justify-center gap-2 max-w-sm mx-auto">
                       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
                         <Search className="h-4 w-4" />
                       </div>
-                      <p className="font-semibold text-sm text-foreground">No invoices found</p>
-                      <p className="text-xs text-muted-foreground">No customer invoices matched your active search and status filter.</p>
+                      <p className="font-semibold text-sm text-foreground">
+                        No invoices found
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        No customer invoices matched your active search and
+                        status filter.
+                      </p>
                       {inputQuery && (
-                        <Button variant="outline" size="sm" onClick={() => setInputQuery('')} className="mt-2 text-xs">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setInputQuery('')}
+                          className="mt-2 text-xs"
+                        >
                           Clear Search
                         </Button>
                       )}
