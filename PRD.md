@@ -86,31 +86,31 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 
 ---
 
-### 4.2 Financial Overview Dashboard (`/dashboard`)
+## 4.2 Financial Overview Dashboard (`/dashboard`)
 
 - **Purpose:** Provide an operator with an immediate 5-second health check of their business cashflow organized in a balanced 4-row architecture:
 - **Row 1: Top Metric Cards (3 Columns):**
-  1. **Total Balance:** `$148,250.00` (+12.5% trend, progress against target, available cash across accounts).
-  2. **Total Income:** `$34,120.00` (+8.2% trend vs last month, emerald styling, paid invoices & client payments).
-  3. **Total Expenses:** `$12,450.00` (-2.4% trend vs last month, rose styling, bills, tools, and operational spending).
+  1. **Total Balance:** Dynamic formatting (+12.5% trend, progress against target, available cash across accounts).
+  2. **Total Income:** Dynamic formatting (+8.2% trend vs last month, emerald styling, paid invoices & client payments).
+  3. **Total Expenses:** Dynamic formatting (-2.4% trend vs last month, rose styling, bills, tools, and operational spending).
 - **Row 2: Asymmetric Cashflow & Health (65% : 35% / Col-Span 8 : Col-Span 4):**
   - **Left (`lg:col-span-8`): Cash Flow Smooth Monotone Area Spline Chart:**
     - Dual Smooth Gradient Area curve (`type="monotone"`) comparing monthly Income vs Expenses.
     - Timeframe filter pills (`6M`, `YTD`, `1Y`).
-    - Summary footer: Net profit (`+$21,670.00 this month`) and trailing average monthly spending.
+    - Summary footer: Net profit and trailing average monthly spending.
   - **Right (`lg:col-span-4`): Cash Runway & Health Card:**
     - Header with `ShieldCheck` and `Healthy (94/100)` badge.
     - Big metric: `14.2 Months` (+1.5 mo vs last month).
     - Visual safety target meter: `Strong (6+ Months)` buffer gauge with gradient progress fill.
-    - Footer breakdown: Monthly Spending (`$12,450.00`) and Available Cash (`$148,250.00`).
+    - Footer breakdown: Monthly Spending and Available Cash.
 - **Row 3: Recent Transactions (Full Width / Col-Span 12):**
   - Verified ledger entries, invoice settlements, and operating expenses.
   - Type filter pills: `All`, `Income`, `Expenses`.
   - Transaction rows with merchant name, category, relative timestamp, and status badges (`Paid`, `Receipt`, `No Receipt`).
   - Direct link to `/cashbook`.
 - **Row 4: Key Performance & Currency Converter (2 Columns / 50% : 50%):**
-  - **Left: Business Health Statistics:** Profit Margin (63.4%), Average Invoice ($4,250.00 / 14-Day Avg Pay), and On-Time Payments (96.5%).
-  - **Right: Live Currency Converter:** Interactive base USD amount input with auto-updating conversion cards for USD/IDR, EUR/USD, GBP/USD, and SGD/IDR.
+  - **Left: Business Health Statistics:** Profit Margin (63.4%), Average Invoice, and On-Time Payments (96.5%).
+  - **Right: Live Currency Converter:** Interactive base amount input with auto-updating conversion rates.
 
 ---
 
@@ -153,7 +153,7 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 
 ### 4.6 Settings & AI Agent Integrations (`/settings`)
 
-- **Workspace Profile:** Business legal name, business address, tax number/VAT/NPWP, and logo upload.
+- **Workspace Profile:** Business legal name, business address, tax number/VAT/NPWP, base currency selection (USD, IDR, EUR, GBP, SGD, AUD, CAD, JPY), and logo upload.
 - **AI Agent Connections:** Multi-provider API connection management via custom ShadCN API Key Dialogs:
   - Google Gemini (Gemini 2.0 Flash, Gemini 1.5 Pro)
   - OpenAI ChatGPT (GPT-4o, GPT-4o-mini)
@@ -189,18 +189,11 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
    - Client never manually injects `businessId`. Tenant context is managed server-side via session cookies.
 
 3. **No Overdue Enum in State:**
-   - Overdue is derived dynamically on client: `status === 'unpaid' && dueDate < today`.
+   - Database enum contains strictly `draft | unpaid | paid | void`.
+   - `Overdue` is derived entirely on the client: `status === 'unpaid' && dueDate < today`.
 
-4. **Zero-Fluff Flat Aesthetics:**
-   - Global `shadow-none` rule, high information density, crisp 1px borders, and IBM Plex typography.
+4. **Snapshot Immutability:**
+   - Historical invoices render immutable snapshots (`customer_name_snapshot`, `subtotal_in_cents`, `tax_amount_in_cents`, `total_in_cents`).
 
-5. **Accessibility & Interactive Consistency:**
-   - Mandatory `cursor: pointer` on interactive elements, consistent M3 transitions, responsive grid centering, and ShadCN Dialog focus-trapping.
-
----
-
-## 6. Frontend Verification & Quality Standards
-
-- **TypeScript:** Strict compilation with `0 errors`.
-- **Vite Bundle Build:** Production build passed with `0 errors`.
-- **Responsive Integrity:** Layout stability across mobile (320px+), tablet (768px+), desktop (1024px+), and ultrawide (1920px+).
+5. **No Native Browser Alerts:**
+   - All confirmations and alerts utilize custom accessible ShadCN Radix Dialog components.
