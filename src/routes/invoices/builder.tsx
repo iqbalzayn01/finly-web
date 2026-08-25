@@ -11,6 +11,7 @@ import {
   SelectContent,
   SelectItem,
 } from '../../components/ui/select'
+import { useCurrency } from '../../lib/currency'
 
 export const Route = createFileRoute('/invoices/builder')({
   component: InvoiceBuilder,
@@ -24,6 +25,7 @@ interface LineItem {
 }
 
 function InvoiceBuilder() {
+  const { currency, symbol, formatAmount } = useCurrency()
   const navigate = useNavigate()
   const [draftSavedModal, setDraftSavedModal] = useState(false)
   const [items, setItems] = useState<LineItem[]>([
@@ -225,10 +227,7 @@ function InvoiceBuilder() {
                         />
                       </td>
                       <td className="py-4 text-right font-mono text-sm font-semibold text-foreground">
-                        $
-                        {(item.qty * item.price).toLocaleString('en-US', {
-                          minimumFractionDigits: 2,
-                        })}
+                        {formatAmount(item.qty * item.price)}
                       </td>
                       <td className="py-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
@@ -260,16 +259,13 @@ function InvoiceBuilder() {
                 <div className="flex justify-between text-xs font-medium text-muted-foreground">
                   <span>Subtotal</span>
                   <span className="font-mono text-foreground font-semibold">
-                    $
-                    {subtotal.toLocaleString('en-US', {
-                      minimumFractionDigits: 2,
-                    })}
+                    {formatAmount(subtotal)}
                   </span>
                 </div>
                 <div className="flex justify-between text-xs font-medium text-muted-foreground">
                   <span>Tax (11%)</span>
                   <span className="font-mono text-foreground font-semibold">
-                    ${tax.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    {formatAmount(tax)}
                   </span>
                 </div>
               </div>
@@ -278,7 +274,7 @@ function InvoiceBuilder() {
                   Total
                 </span>
                 <span className="font-mono text-3xl font-bold tracking-tight text-primary">
-                  ${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  {formatAmount(total)}
                 </span>
               </div>
             </div>

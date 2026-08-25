@@ -36,6 +36,7 @@ import {
 } from '../components/ui/chart'
 import type { ChartConfig } from '../components/ui/chart'
 import { XAxis, YAxis, CartesianGrid, AreaChart, Area } from 'recharts'
+import { useCurrency } from '../lib/currency'
 
 export const Route = createFileRoute('/dashboard')({ component: Dashboard })
 
@@ -70,6 +71,7 @@ const fullCashflowData = [
 ]
 
 function Dashboard() {
+  const { currency, symbol, formatAmount } = useCurrency()
   const [cashflowTimeframe, setCashflowTimeframe] = useState<
     '6m' | 'ytd' | '1y'
   >('6m')
@@ -133,6 +135,28 @@ function Dashboard() {
       category: 'Online Marketing Ads',
       date: 'Jul 25, 2026',
       amount: 450,
+      type: 'expense',
+      status: 'Receipt',
+      icon: ArrowDownRight,
+      color:
+        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    },
+    {
+      name: 'Stripe Payout',
+      category: 'E-commerce Store Sales',
+      date: 'Jul 22, 2026',
+      amount: 8200,
+      type: 'income',
+      status: 'Paid',
+      icon: ArrowUpRight,
+      color:
+        'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    },
+    {
+      name: 'WeWork Office Space',
+      category: 'Monthly Desk & Utilities',
+      date: 'Jul 20, 2026',
+      amount: 850,
       type: 'expense',
       status: 'No Receipt',
       icon: ArrowDownRight,
@@ -211,7 +235,7 @@ function Dashboard() {
         {[
           {
             title: 'Total Balance',
-            value: '$148,250.00',
+            value: formatAmount(148250),
             trend: '+12.5%',
             isUp: true,
             icon: Wallet,
@@ -226,7 +250,7 @@ function Dashboard() {
           },
           {
             title: 'Total Income',
-            value: '$34,120.00',
+            value: formatAmount(34120),
             trend: '+8.2% vs last month',
             isUp: true,
             icon: ArrowUpRight,
@@ -243,7 +267,7 @@ function Dashboard() {
           },
           {
             title: 'Total Expenses',
-            value: '$12,450.00',
+            value: formatAmount(12450),
             trend: '-2.4% vs last month',
             isUp: false,
             icon: ArrowDownRight,
@@ -441,7 +465,7 @@ function Dashboard() {
                       fontSize: 12,
                       fontWeight: 500,
                     }}
-                    tickFormatter={(val) => `$${val / 1000}k`}
+                    tickFormatter={(val) => `${symbol}${val >= 1000 ? (val / 1000).toFixed(0) + 'k' : val}`}
                     dx={-5}
                   />
                   <ChartTooltip
@@ -487,11 +511,11 @@ function Dashboard() {
             </CardContent>
             <CardFooter className="flex-col items-start gap-1.5 border-t border-border px-6 py-4 text-xs">
               <div className="flex items-center gap-2 font-bold text-foreground">
-                Net profit: +$21,670.00 this month{' '}
+                Net profit: +{formatAmount(21670)} this month{' '}
                 <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div className="text-muted-foreground font-medium">
-                Average monthly spending: $11,800.
+                Average monthly spending: {formatAmount(11800)}.
               </div>
             </CardFooter>
           </Card>
@@ -564,7 +588,7 @@ function Dashboard() {
                   Monthly Spending
                 </p>
                 <p className="font-mono text-sm font-bold text-foreground">
-                  $12,450.00
+                  {formatAmount(12450)}
                 </p>
               </div>
               <div className="space-y-0.5 text-right">
@@ -572,7 +596,7 @@ function Dashboard() {
                   Available Cash
                 </p>
                 <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400">
-                  $148,250.00
+                  {formatAmount(148250)}
                 </p>
               </div>
             </div>
@@ -692,7 +716,7 @@ function Dashboard() {
                       </span>
 
                       {/* Amount */}
-                      <div className="text-right w-24">
+                      <div className="text-right w-28">
                         <p
                           className={`font-mono text-sm font-bold ${
                             tx.type === 'income'
@@ -700,11 +724,8 @@ function Dashboard() {
                               : 'text-foreground'
                           }`}
                         >
-                          {tx.type === 'income' ? '+' : '-'}$
-                          {tx.amount.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
+                          {tx.type === 'income' ? '+' : '-'}
+                          {formatAmount(tx.amount)}
                         </p>
                       </div>
                     </div>
@@ -774,7 +795,7 @@ function Dashboard() {
                     Average Invoice
                   </p>
                   <p className="font-mono text-lg font-bold text-foreground mt-0.5">
-                    $4,250.00
+                    {formatAmount(4250)}
                   </p>
                 </div>
                 <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">

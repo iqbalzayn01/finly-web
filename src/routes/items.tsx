@@ -12,6 +12,7 @@ import {
   SelectItem,
 } from '../components/ui/select'
 import { useDebouncedSearch } from '../hooks/use-debounced-search'
+import { useCurrency } from '../lib/currency'
 
 export const Route = createFileRoute('/items')({
   component: Items,
@@ -69,6 +70,7 @@ const initialItems = [
 ]
 
 function Items() {
+  const { formatAmount } = useCurrency()
   const [showForm, setShowForm] = useState(false)
   const [openKebab, setOpenKebab] = useState<number | null>(null)
   const [statusFilter, setStatusFilter] = useState('all')
@@ -236,7 +238,7 @@ function Items() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right font-mono font-semibold text-base text-foreground">
-                      ${item.price.toLocaleString()}
+                      {formatAmount(item.price)}
                     </td>
                     <td className="px-6 py-4 text-right font-medium text-muted-foreground">
                       {item.taxRate}%

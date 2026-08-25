@@ -1,6 +1,6 @@
 # Finly Web — Frontend Product Requirements Document (PRD)
 
-**Document Version:** 2.5.0  
+**Document Version:** 2.6.0  
 **Scope:** Frontend Application Only (`finly-web` / `app.finly.io`)  
 **Target Audience:** Non-accountant operators (freelancers, consultants, agencies, solopreneurs, and micro-SME founders)  
 **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Architecture
@@ -25,11 +25,12 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
   - **Server State & Caching:** TanStack Query v5 (`@tanstack/react-query`) with automatic background refetching, SWR caching, and optimistic UI mutations.
   - **Client Global Store:** Zustand for layout state, UI modals, and notification toasts.
   - **Subscription Store (`src/lib/subscription.ts`):** Reactive subscription hook and persistence with cross-window event synchronization (`starter`, `pro`, `enterprise`).
+  - **Universal Multi-Currency Engine (`src/lib/currency.ts`):** Reactive tenant base currency state with cross-tab and cross-component broadcasting (`USD`, `IDR`, `EUR`, `GBP`, `SGD`, `AUD`, `CAD`, `JPY`), scale-100 minor unit formatting, and high-denomination formatting.
 - **Table & Form Orchestration:**
   - **TanStack Table v8:** High-performance tabular data grids, multi-column filtering, and server/client-side sorting.
   - **TanStack Form & Zod:** Type-safe form validation pipelines with real-time field error formatting.
 - **Modal & Dialog Architecture:**
-  - **Radix UI Dialog & ShadCN UI Primitives (`src/components/ui/dialog.tsx`, `modal.tsx`, `alert-modal.tsx`, `api-key-modal.tsx`, `logout-modal.tsx`):** 100% accessible, keyboard-trapped, focus-managed dialog overlays with smooth Motion transitions. Zero native browser `window.alert()` or `window.confirm()` calls.
+  - **Radix UI Dialog & ShadCN UI Primitives (`src/components/ui/dialog.tsx`, `modal.tsx`, `alert-modal.tsx`, `api-key-modal.tsx`, `logout-modal.tsx`, `quick-entry-modal.tsx`):** 100% accessible, keyboard-trapped, focus-managed dialog overlays with smooth Motion transitions. Zero native browser `window.alert()` or `window.confirm()` calls.
 - **Data Visualizations:** TanStack Charts & Recharts with Monotone Bezier Curves (`type="monotone"`) and vertical gradient fills for interactive cashflow trends and area curves.
 - **Error Boundaries & 404 Routing:** Global `NotFound` handler (`src/components/NotFound.tsx`) and error boundary components registered on router initialization.
 
@@ -115,9 +116,9 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 
 ### 4.3 Jargon-Free Cashbook (`/cashbook`)
 
-- **Transaction Table:** Date, Merchant / Client Description, Category Pill Badge, Scope (`Business` vs `Personal`), Receipt Status, Amount (`+` in emerald green vs `-` in crimson red), and Row Actions.
+- **Full-Width Transaction Table:** Date, Merchant / Client Description, Category Pill Badge, Scope (`Business` vs `Personal`), Receipt Status, Dynamic Minor-Unit Amount (`+` in emerald green vs `-` in crimson red), and Row Actions.
 - **Filtering & Search:** Real-time search, type filters, scope filters, and category dropdowns.
-- **Quick-Add Transaction Drawer (3-Second Rule):** Rapid creation form for operators on the go.
+- **Standalone Quick Entry Modal:** Tactile 3×4 numpad modal with spring physics animation, dynamic base currency formatting, and hardware keyboard / numeric keypad event listeners (`0-9`, `Numpad0-9`, `Backspace`, `C`, `E`, `I`, `Enter`) with smart focus isolation when typing in text fields.
 - **Receipt Viewer Modal & Delete Confirmations:** Accessible ShadCN Dialog modals for secure receipt previews and destructive action confirmations.
 
 ---

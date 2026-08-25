@@ -1,6 +1,6 @@
 # 💎 Finly Web — Frontend Application
 
-> **Version:** `2.5.0`  
+> **Version:** `2.6.0`  
 > **Tagline:** _"Ditch the Spreadsheets. Master Your Cashflow."_  
 > **Target Audience:** Non-Accountant Founders, Agency Directors, Freelancers, Consultants, and Micro-SMEs.  
 > **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Shadow Architecture.
@@ -11,6 +11,7 @@
 
 - [Overview](#-overview)
 - [Key Features & Modules](#-key-features--modules)
+- [Universal Currency & Ledger Architecture](#-universal-currency--ledger-architecture)
 - [Tech Stack & Architecture](#-tech-stack--architecture)
 - [Design System & Tokens](#-design-system--tokens)
 - [Project Structure](#-project-structure)
@@ -38,19 +39,30 @@ Finly bridges this gap by providing an instantaneous, responsive, and aesthetica
 
 ## 🚀 Key Features & Modules
 
-| Route               | Module                                | Description & Highlights                                                                                                                                                                                                       |
-| :------------------ | :------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                 | **Direct App Entry**                  | Instant router redirect straight into the authenticated **Financial Overview** dashboard for immediate operational access.                                                                                                    |
-| `/dashboard`        | **Financial Overview (4-Row Grid)**   | Executive dashboard featuring **Row 1 Top Metrics** (Total Balance, Total Income, Total Expenses), **Row 2 Asymmetric Cashflow & Health** (Smooth Monotone Area Spline Chart + Runway Safety Index), **Row 3 Full-Width Recent Transactions** table, and **Row 4 Performance & Live Currency Converter**. |
-| `/cashbook`         | **Jargon-Free Cashbook Ledger**       | Direct Income and Expense cash ledger with Business vs Personal scoping, 3-second quick-add expense drawer, and secure receipt image modal.                                                                                    |
-| `/invoices`         | **Invoice Management**                | Filterable invoice data grid with dynamically derived status pills (`Draft`, `Unpaid`, `Overdue`, `Paid`, `Void`).                                                                                                             |
-| `/invoices/builder` | **Live Split-Screen Invoice Builder** | Real-time interactive editor with instant mathematical recalculation preview, catalog item auto-fill, and millesimal quantity scaling.                                                                                         |
-| `/invoices/$id`     | **Formal Invoice Snapshot Detail**    | Rendered formal invoice document view with print stylesheet (`@media print`), email dispatch, and atomic 1-click payment settlement.                                                                                           |
-| `/customers`        | **Client Directory**                  | Customer contact management, payment terms (Net 14, Net 30), and lifetime billing aggregates.                                                                                                                                  |
-| `/items`            | **Product & Service Catalog**         | Standardized reusable items with minor-unit unit prices and default tax rates.                                                                                                                                                 |
-| `/settings`         | **Settings & AI Copilot Engine**      | Business workspace branding + Multi-Provider AI API connection management (Google Gemini, OpenAI ChatGPT, Anthropic Claude, DeepSeek AI, and local Ollama) with real-time ping latency checks.                                 |
-| `/pricing`          | **Subscription & Pricing**            | Transparent pricing plans (Starter $0, Pro $29/mo, Enterprise $79/mo) with monthly/annual billing switch and instant Pro upgrade triggering the dynamic **`PRO`** header badge.                                                |
-| `/account`          | **User Account & Workspaces**         | User profile configuration, password security, and active workspace memberships.                                                                                                                                               |
+| Route               | Module                                | Description & Highlights                                                                                                                                                                                                                                                                                  |
+| :------------------ | :------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                 | **Direct App Entry**                  | Instant router redirect straight into the authenticated **Financial Overview** dashboard for immediate operational access.                                                                                                                                                                                |
+| `/dashboard`        | **Financial Overview (4-Row Grid)**   | Executive dashboard featuring **Row 1 Top Metrics** (Total Balance, Total Income, Total Expenses), **Row 2 Asymmetric Cashflow & Health** (Smooth Monotone Area Spline Chart + Runway Safety Index), **Row 3 Full-Width Recent Transactions** table, and **Row 4 Performance & Live Currency Converter**. Dynamic currency formatting across all cards and chart axes. |
+| `/cashbook`         | **Jargon-Free Cashbook Ledger**       | Direct Income and Expense cash ledger with Business vs Personal scoping, standalone **Quick Entry Modal** with hardware numeric keypad (`0-9`, `Numpad0-9`, `Backspace`, `C`, `E`, `I`, `Enter`), tactile button feedback, and secure receipt attachment verification.                                   |
+| `/invoices`         | **Invoice Management**                | Filterable invoice data grid with dynamically derived status pills (`Draft`, `Unpaid`, `Overdue`, `Paid`, `Void`) and dynamic summary metric totals.                                                                                                                                                      |
+| `/invoices/builder` | **Live Split-Screen Invoice Builder** | Real-time interactive editor with instant mathematical recalculation preview, catalog item auto-fill, dynamic minor-unit pricing, and millesimal quantity scaling.                                                                                                                                       |
+| `/invoices/$id`     | **Formal Invoice Snapshot Detail**    | Rendered formal invoice document view with print stylesheet (`@media print`), email dispatch, and atomic 1-click payment settlement in active workspace currency.                                                                                                                                         |
+| `/customers`        | **Client Directory**                  | Customer contact management, payment terms (Net 14, Net 30), and lifetime billing aggregates.                                                                                                                                                                                                             |
+| `/items`            | **Product & Service Catalog**         | Standardized reusable items with minor-unit unit prices and default tax rates formatted with active base currency.                                                                                                                                                                                         |
+| `/settings`         | **Settings & AI Copilot Engine**      | Business workspace branding, Base Currency regional selection (USD, IDR, EUR, GBP, SGD, AUD, CAD, JPY) with instant live reactivity across tabs + Multi-Provider AI API connection management (Gemini, OpenAI, Claude, DeepSeek, Ollama).                                                                 |
+| `/pricing`          | **Subscription & Pricing**            | Transparent pricing plans (Starter $0, Pro $29/mo, Enterprise $79/mo) with monthly/annual billing switch and instant Pro upgrade triggering the dynamic **`PRO`** header badge.                                                                                                                           |
+| `/account`          | **User Account & Workspaces**         | User profile configuration, password security, and active workspace memberships.                                                                                                                                                                                                                          |
+
+---
+
+## 🪙 Universal Currency & Ledger Architecture
+
+Finly features a universal, multi-currency presentation engine backed by a strict **Scale-100 Minor Integer Unit** ledger:
+
+1. **Supported Currencies**: `USD` ($), `IDR` (Rp), `EUR` (€), `GBP` (£), `SGD` (S$), `AUD` (A$), `CAD` (C$), and `JPY` (¥).
+2. **Mathematical Invariant (GEMINI.md Rule #3)**: All ledger money is represented in minor integer units at fixed scale of 100 with zero floating-point arithmetic.
+3. **Reactive Synchronization (`useCurrency`)**: Instant, zero-reload cross-tab and cross-component broadcasting when the tenant switches their base currency in Settings.
+4. **Dynamic High-Denomination Formatting**: Intelligent integer formatting for currencies like Indonesian Rupiah (`Rp 50.000.000` without cent clutter) and expanded digit capacity up to 13 digits in Quick Entry.
 
 ---
 

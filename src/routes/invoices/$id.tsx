@@ -13,12 +13,14 @@ import {
 import { useState } from 'react'
 import { Button } from '../../components/ui/button'
 import { AlertModal } from '../../components/ui/alert-modal'
+import { useCurrency } from '../../lib/currency'
 
 export const Route = createFileRoute('/invoices/$id')({
   component: InvoiceDetail,
 })
 
 function InvoiceDetail() {
+  const { formatAmount } = useCurrency()
   const { id } = Route.useParams()
   const [modalState, setModalState] = useState<{
     open: boolean
@@ -196,10 +198,10 @@ function InvoiceDetail() {
                         {item.qty}
                       </td>
                       <td className="py-4 text-right font-mono text-sm text-muted-foreground">
-                        ${item.price.toLocaleString()}
+                        {formatAmount(item.price)}
                       </td>
                       <td className="py-4 text-right font-mono font-semibold text-sm text-foreground">
-                        ${item.total.toLocaleString()}
+                        {formatAmount(item.total)}
                       </td>
                     </tr>
                   ))}
@@ -213,13 +215,13 @@ function InvoiceDetail() {
                   <div className="flex justify-between text-xs font-medium text-muted-foreground">
                     <span>Subtotal</span>
                     <span className="font-mono text-foreground font-semibold">
-                      ${invoice.subtotal.toLocaleString()}
+                      {formatAmount(invoice.subtotal)}
                     </span>
                   </div>
                   <div className="flex justify-between text-xs font-medium text-muted-foreground">
                     <span>Tax (11%)</span>
                     <span className="font-mono text-foreground font-semibold">
-                      ${invoice.tax.toLocaleString()}
+                      {formatAmount(invoice.tax)}
                     </span>
                   </div>
                 </div>
@@ -228,7 +230,7 @@ function InvoiceDetail() {
                     Total
                   </span>
                   <span className="font-mono text-3xl font-bold tracking-tight text-primary">
-                    ${invoice.total.toLocaleString()}
+                    {formatAmount(invoice.total)}
                   </span>
                 </div>
               </div>

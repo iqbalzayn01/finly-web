@@ -29,6 +29,11 @@ import {
   SelectContent,
   SelectItem,
 } from '../components/ui/select'
+import {
+  useCurrency,
+  SUPPORTED_CURRENCIES,
+  type CurrencyCode,
+} from '../lib/currency'
 
 export const Route = createFileRoute('/settings')({
   component: Settings,
@@ -159,13 +164,21 @@ function Settings() {
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
 
   // Profile Settings State
+  const { currency: globalCurrency, setCurrency: setGlobalCurrency } = useCurrency()
   const [businessName, setBusinessName] = useState('Finly HQ')
   const [taxId, setTaxId] = useState('00-1234567')
-  const [currency, setCurrency] = useState('IDR')
+  const [currency, setCurrency] = useState<string>(globalCurrency || 'IDR')
   const [invoicePrefix, setInvoicePrefix] = useState('INV')
   const [profileSaveSuccess, setProfileSaveSuccess] = useState<boolean>(false)
   const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false)
   const [logoModalOpen, setLogoModalOpen] = useState(false)
+
+  // Sync currency state when global currency changes
+  useEffect(() => {
+    if (globalCurrency) {
+      setCurrency(globalCurrency)
+    }
+  }, [globalCurrency])
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -243,6 +256,9 @@ function Settings() {
       invoicePrefix,
     }
     localStorage.setItem('finly_profile_settings', JSON.stringify(dataToSave))
+    if (currency in SUPPORTED_CURRENCIES) {
+      setGlobalCurrency(currency as CurrencyCode)
+    }
     setProfileSaveSuccess(true)
     setTimeout(() => setProfileSaveSuccess(false), 3000)
   }
@@ -390,9 +406,11 @@ function Settings() {
                     <SelectValue placeholder="Select currency" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
-                    <SelectItem value="IDR">Indonesian Rupiah (IDR)</SelectItem>
-                    <SelectItem value="USD">US Dollar (USD)</SelectItem>
-                    <SelectItem value="EUR">Euro (EUR)</SelectItem>
+                    {Object.values(SUPPORTED_CURRENCIES).map((c) => (
+                      <SelectItem key={c.code} value={c.code}>
+                        {c.name} ({c.symbol})
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">

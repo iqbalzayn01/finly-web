@@ -3,7 +3,7 @@
 **Product Name:** Finly (B2B Cashflow Operating System)  
 **Tagline:** _"Ditch the Spreadsheets. Master Your Cashflow."_  
 **Document Type:** Core Product Brief — The Why & Who  
-**Version:** 2.5.0  
+**Version:** 2.6.0  
 **Target Audience:** Non-Accountant Founders, Agency Directors, Consultants, Freelancers, Solopreneurs, and Micro-SMEs
 
 ---
@@ -102,10 +102,11 @@ Finly measures success across three primary operational dimensions:
 
 ## 6. Strategic Scope & Roadmap
 
-### Phase 1: Core Cashflow OS (Current Release v2.4.0 — Live)
+### Phase 1: Core Cashflow OS (Current Release v2.6.0 — Live)
 
-- Executive analytics dashboard (Income, Expenses, Net Profit, OER, TanStack Charts, Cash Health & Runway Fortress gauge).
-- Jargon-free cashbook ledger with multi-criteria filtering, side-drawer quick-add, and signed receipt previews.
+- Executive analytics dashboard (Income, Expenses, Net Profit, OER, TanStack Charts, Cash Health & Runway Fortress gauge) with dynamic currency formatting.
+- Jargon-free cashbook ledger with standalone tactile **Quick Entry Modal** (hardware keyboard/numpad listener `0-9`, `Numpad0-9`, `Backspace`, `C`, `E`, `I`, `Enter`, dynamic digit capacity, and focus isolation).
+- **Universal Multi-Currency Engine (`useCurrency`)**: Real-time cross-tab and cross-component base currency switching across 8 global currencies (`USD`, `IDR`, `EUR`, `GBP`, `SGD`, `AUD`, `CAD`, `JPY`).
 - Live Invoice builder, denormalized snapshot totals, status tracking (Paid, Unpaid, Void, Overdue), PDF print/download, and email dispatch.
 - Customer & Item catalogs with side-drawer client invoice history.
 - Settings page separating Profile/Workspace preferences from AI Agent API Connections.
@@ -117,7 +118,7 @@ Finly measures success across three primary operational dimensions:
 
 - Natural language chat assistant for drafting invoices (_"Invoice Acme $1,200 for Q3 consulting"_).
 - Automatic receipt OCR document data extraction into cashbook drawer.
-- Bank feed integration & multi-currency exchange rate conversions.
+- Automatic bank feed integration & multi-currency exchange rate conversions.
 
 ---
 
