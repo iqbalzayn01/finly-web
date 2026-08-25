@@ -1,25 +1,24 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 import {
+  Wallet,
   ArrowUpRight,
   ArrowDownRight,
-  Wallet,
-  RefreshCw,
   TrendingUp,
-  Globe,
-  Activity,
-  ShieldCheck,
   Receipt,
   FileText,
+  Activity,
+  Globe,
+  RefreshCw,
+  ShieldCheck,
 } from 'lucide-react'
 import { useState, useMemo } from 'react'
-import { motion } from 'motion/react'
-import { cn } from '../lib/utils'
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '../components/ui/select'
 import {
   Card,
@@ -36,6 +35,7 @@ import {
 } from '../components/ui/chart'
 import type { ChartConfig } from '../components/ui/chart'
 import { XAxis, YAxis, CartesianGrid, AreaChart, Area } from 'recharts'
+import { useCurrency } from '../lib/currency'
 
 export const Route = createFileRoute('/dashboard')({ component: Dashboard })
 
@@ -70,6 +70,7 @@ const fullCashflowData = [
 ]
 
 function Dashboard() {
+  const { symbol, formatAmount } = useCurrency()
   const [cashflowTimeframe, setCashflowTimeframe] = useState<
     '6m' | 'ytd' | '1y'
   >('6m')
@@ -83,23 +84,22 @@ function Dashboard() {
       return fullCashflowData.slice(-6)
     }
     if (cashflowTimeframe === 'ytd') {
-      return fullCashflowData.filter((d) => d.year === 2026)
+      return fullCashflowData.filter((item) => item.year === 2026)
     }
     return fullCashflowData
   }, [cashflowTimeframe])
 
   const m3Transition = {
-    type: 'tween' as const,
+    duration: 0.35,
     ease: [0.2, 0, 0, 1] as [number, number, number, number],
-    duration: 0.5,
   }
 
   const allRecentTx = [
     {
-      name: 'Acme Corporation',
-      category: 'Client Project Milestone #3',
-      date: 'Today, 2:45 PM',
-      amount: 5000,
+      name: 'Acme Corp Q3 Retainer',
+      category: 'Design Systems & Strategy',
+      date: 'Jul 28, 2026',
+      amount: 14500,
       type: 'income',
       status: 'Paid',
       icon: ArrowUpRight,
@@ -108,9 +108,9 @@ function Dashboard() {
     },
     {
       name: 'AWS Cloud Infrastructure',
-      category: 'Web Hosting & Storage',
-      date: 'Yesterday, 10:20 AM',
-      amount: 120,
+      category: 'Server & Hosting Ops',
+      date: 'Jul 27, 2026',
+      amount: 1250,
       type: 'expense',
       status: 'Receipt',
       icon: ArrowDownRight,
@@ -118,10 +118,32 @@ function Dashboard() {
         'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
     },
     {
-      name: 'GlobalTech Solutions',
-      category: 'Monthly Consulting Retainer',
-      date: 'Jul 28, 2026',
-      amount: 3500,
+      name: 'Vercel Enterprise Plan',
+      category: 'Frontend Edge Hosting',
+      date: 'Jul 26, 2026',
+      amount: 240,
+      type: 'expense',
+      status: 'Receipt',
+      icon: ArrowDownRight,
+      color:
+        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    },
+    {
+      name: 'Meta Ads Campaign',
+      category: 'Online Marketing Ads',
+      date: 'Jul 25, 2026',
+      amount: 450,
+      type: 'expense',
+      status: 'Receipt',
+      icon: ArrowDownRight,
+      color:
+        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    },
+    {
+      name: 'Stripe Payout',
+      category: 'E-commerce Store Sales',
+      date: 'Jul 22, 2026',
+      amount: 8200,
       type: 'income',
       status: 'Paid',
       icon: ArrowUpRight,
@@ -129,10 +151,10 @@ function Dashboard() {
         'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
     },
     {
-      name: 'Meta Ads Campaign',
-      category: 'Online Marketing Ads',
-      date: 'Jul 25, 2026',
-      amount: 450,
+      name: 'WeWork Office Space',
+      category: 'Monthly Desk & Utilities',
+      date: 'Jul 20, 2026',
+      amount: 850,
       type: 'expense',
       status: 'No Receipt',
       icon: ArrowDownRight,
@@ -211,7 +233,7 @@ function Dashboard() {
         {[
           {
             title: 'Total Balance',
-            value: '$148,250.00',
+            value: formatAmount(148250),
             trend: '+12.5%',
             isUp: true,
             icon: Wallet,
@@ -226,7 +248,7 @@ function Dashboard() {
           },
           {
             title: 'Total Income',
-            value: '$34,120.00',
+            value: formatAmount(34120),
             trend: '+8.2% vs last month',
             isUp: true,
             icon: ArrowUpRight,
@@ -243,7 +265,7 @@ function Dashboard() {
           },
           {
             title: 'Total Expenses',
-            value: '$12,450.00',
+            value: formatAmount(12450),
             trend: '-2.4% vs last month',
             isUp: false,
             icon: ArrowDownRight,
@@ -253,61 +275,61 @@ function Dashboard() {
               'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-xl',
             trendClass:
               'bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-full',
-            progress: 35,
+            progress: 42,
             progressBg: 'bg-muted',
             progressFill: 'bg-rose-500',
-            subtext: 'Bills, tools, and operational spending',
+            subtext: 'Bills, tools & operational spend',
           },
-        ].map((stat, i) => (
+        ].map((card, idx) => (
           <motion.div
-            key={i}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ ...m3Transition, delay: i * 0.08 }}
-            className={`relative flex flex-col justify-between overflow-hidden p-6 ${stat.containerClass}`}
+            key={idx}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...m3Transition, delay: 0.15 + idx * 0.05 }}
           >
-            {/* Top Bar: Icon on Left, Trend Badge on Right */}
-            <div className="flex items-center justify-between">
-              <div
-                className={`flex h-11 w-11 shrink-0 items-center justify-center ${stat.iconClass}`}
-              >
-                <stat.icon className="h-5 w-5" />
+            <div
+              className={`p-6 ${card.containerClass} transition-colors flex flex-col justify-between h-[210px]`}
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <span className="text-xs font-semibold opacity-80 tracking-wide uppercase">
+                      {card.title}
+                    </span>
+                    <h3 className="font-mono text-3xl font-medium tracking-tight">
+                      {card.value}
+                    </h3>
+                  </div>
+                  <div className={`p-3 ${card.iconClass}`}>
+                    <card.icon className="h-5 w-5" />
+                  </div>
+                </div>
               </div>
-              <span
-                className={`flex items-center gap-1 px-3 py-1 text-xs font-semibold ${stat.trendClass}`}
-              >
-                {stat.isUp ? (
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                ) : (
-                  <ArrowDownRight className="h-3.5 w-3.5" />
-                )}
-                {stat.trend}
-              </span>
-            </div>
 
-            {/* Middle Content: Big Value and Title */}
-            <div className="mt-6 mb-4">
-              <h3 className="font-mono text-2xl lg:text-3xl font-bold tracking-tight">
-                {stat.value}
-              </h3>
-              <p className="text-[13px] font-semibold opacity-75 mt-1 tracking-wide">
-                {stat.title}
-              </p>
-            </div>
-
-            {/* Bottom Progress Bar */}
-            <div className="space-y-1.5">
-              <div
-                className={`h-1.5 w-full rounded-full ${stat.progressBg} overflow-hidden`}
-              >
+              <div className="space-y-3">
+                {/* Progress bar */}
                 <div
-                  className={`h-full rounded-full ${stat.progressFill} transition-all duration-500`}
-                  style={{ width: `${stat.progress}%` }}
-                />
-              </div>
-              <div className="flex items-center justify-between text-[11px] font-medium opacity-75">
-                <span>{stat.subtext}</span>
-                <span>{stat.progress}%</span>
+                  className={`h-1.5 w-full rounded-full ${card.progressBg} overflow-hidden`}
+                >
+                  <div
+                    className={`h-full rounded-full ${card.progressFill}`}
+                    style={{ width: `${card.progress}%` }}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between text-xs">
+                  <span className="opacity-75 font-medium">{card.subtext}</span>
+                  <span
+                    className={`inline-flex items-center gap-1 font-semibold px-2 py-0.5 ${card.trendClass}`}
+                  >
+                    {card.isUp ? (
+                      <ArrowUpRight className="h-3 w-3" />
+                    ) : (
+                      <ArrowDownRight className="h-3 w-3" />
+                    )}
+                    {card.trend}
+                  </span>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -315,67 +337,51 @@ function Dashboard() {
       </div>
 
       {/* ROW 2: ASYMMETRIC CASHFLOW & HEALTH (65% : 35% / Col-Span 8 : Col-Span 4) */}
-      <div className="grid gap-6 grid-cols-1 lg:grid-cols-12">
-        {/* Col-Span 8: Cash Flow Chart */}
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-12 items-stretch">
+        {/* Col-Span 8: Cash Flow Smooth Monotone Area Spline Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ ...m3Transition, delay: 0.2 }}
+          transition={{ ...m3Transition, delay: 0.25 }}
           className="lg:col-span-8 flex flex-col"
         >
-          <Card className="rounded-2xl border border-border shadow-none bg-card flex-1 flex flex-col justify-between">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6 flex-wrap gap-4 px-6 pt-6">
+          <Card className="flex-1 flex flex-col justify-between rounded-2xl border-border bg-card shadow-none">
+            <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 gap-4">
               <div>
-                <CardTitle className="text-xl font-semibold text-foreground">
-                  Cash Flow
+                <CardTitle className="text-xl font-medium tracking-tight text-foreground">
+                  Cash Flow Overview
                 </CardTitle>
-                <CardDescription className="text-xs text-muted-foreground mt-1">
-                  Monthly income vs. expenses
+                <CardDescription className="text-xs text-muted-foreground mt-0.5">
+                  Monthly cash influx vs outgoing expenditures
                 </CardDescription>
               </div>
-              <div className="flex items-center gap-4 flex-wrap">
-                {/* Income / Expense Legend Dots */}
-                <div className="flex items-center gap-4 text-xs font-semibold mr-1">
-                  <div className="flex items-center gap-1.5 text-foreground">
-                    <div className="w-2.5 h-2.5 rounded-full bg-primary" />{' '}
-                    Income
-                  </div>
-                  <div className="flex items-center gap-1.5 text-foreground">
-                    <div className="w-2.5 h-2.5 rounded-full bg-black/25 dark:bg-white/25" />{' '}
-                    <span className="text-black/25 dark:text-white/25 font-semibold">
-                      Expenses
-                    </span>
-                  </div>
-                </div>
 
-                {/* Timeframe Filter Pills */}
-                <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-xl border border-border">
-                  {(['6m', 'ytd', '1y'] as const).map((tf) => (
-                    <button
-                      key={tf}
-                      onClick={() => setCashflowTimeframe(tf)}
-                      className={cn(
-                        'px-3 py-1 text-xs font-bold rounded-lg uppercase transition-all cursor-pointer outline-none',
-                        cashflowTimeframe === tf
-                          ? 'bg-card text-foreground shadow-none'
-                          : 'text-muted-foreground hover:text-foreground',
-                      )}
-                    >
-                      {tf}
-                    </button>
-                  ))}
-                </div>
+              {/* Timeframe selector pills */}
+              <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-xl self-start sm:self-auto">
+                {(['6m', 'ytd', '1y'] as const).map((tf) => (
+                  <button
+                    key={tf}
+                    onClick={() => setCashflowTimeframe(tf)}
+                    className={`px-3 py-1 text-xs font-semibold rounded-lg uppercase transition-all cursor-pointer ${
+                      cashflowTimeframe === tf
+                        ? 'bg-card text-foreground shadow-none'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {tf}
+                  </button>
+                ))}
               </div>
             </CardHeader>
-            <CardContent className="px-6 pb-4">
+
+            <CardContent className="px-2 pt-0 sm:px-6">
               <ChartContainer
                 config={cashflowChartConfig}
-                className="h-[320px] w-full"
+                className="aspect-auto h-[260px] w-full"
               >
                 <AreaChart
-                  accessibilityLayer
                   data={filteredCashflowData}
-                  margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
+                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                 >
                   <defs>
                     <linearGradient
@@ -387,13 +393,13 @@ function Dashboard() {
                     >
                       <stop
                         offset="5%"
-                        stopColor="var(--color-income)"
-                        stopOpacity={0.45}
+                        stopColor="var(--primary)"
+                        stopOpacity={0.4}
                       />
                       <stop
                         offset="95%"
-                        stopColor="var(--color-income)"
-                        stopOpacity={0.02}
+                        stopColor="var(--primary)"
+                        stopOpacity={0.0}
                       />
                     </linearGradient>
                     <linearGradient
@@ -406,26 +412,26 @@ function Dashboard() {
                       <stop
                         offset="5%"
                         stopColor="var(--color-expense)"
-                        stopOpacity={0.35}
+                        stopOpacity={0.25}
                       />
                       <stop
                         offset="95%"
                         stopColor="var(--color-expense)"
-                        stopOpacity={0.02}
+                        stopOpacity={0.0}
                       />
                     </linearGradient>
                   </defs>
                   <CartesianGrid
                     vertical={false}
-                    strokeDasharray="4 4"
-                    strokeWidth={1.5}
-                    className="stroke-border opacity-40"
+                    strokeDasharray="3 3"
+                    stroke="var(--border)"
+                    opacity={0.6}
                   />
                   <XAxis
                     dataKey="name"
                     tickLine={false}
-                    tickMargin={10}
                     axisLine={false}
+                    tickMargin={8}
                     tick={{
                       fill: 'var(--muted-foreground)',
                       fontSize: 13,
@@ -441,7 +447,7 @@ function Dashboard() {
                       fontSize: 12,
                       fontWeight: 500,
                     }}
-                    tickFormatter={(val) => `$${val / 1000}k`}
+                    tickFormatter={(val) => `${symbol}${val >= 1000 ? (val / 1000).toFixed(0) + 'k' : val}`}
                     dx={-5}
                   />
                   <ChartTooltip
@@ -487,11 +493,11 @@ function Dashboard() {
             </CardContent>
             <CardFooter className="flex-col items-start gap-1.5 border-t border-border px-6 py-4 text-xs">
               <div className="flex items-center gap-2 font-bold text-foreground">
-                Net profit: +$21,670.00 this month{' '}
+                Net profit: +{formatAmount(21670)} this month{' '}
                 <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div className="text-muted-foreground font-medium">
-                Average monthly spending: $11,800.
+                Average monthly spending: {formatAmount(11800)}.
               </div>
             </CardFooter>
           </Card>
@@ -508,52 +514,62 @@ function Dashboard() {
             {/* Top Bar */}
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                  <ShieldCheck className="h-5 w-5" />
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-xl bg-primary/10 text-primary border border-primary/20">
+                    <ShieldCheck className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm text-foreground">
+                      Cash Runway
+                    </h3>
+                    <p className="text-[11px] text-muted-foreground">
+                      Zero Revenue Survival
+                    </p>
+                  </div>
                 </div>
-                <span className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                   Healthy (94/100)
                 </span>
               </div>
 
-              {/* Big Value, Delta, and Title */}
-              <div className="mt-4 mb-5">
-                <div className="flex items-baseline justify-between gap-2 flex-wrap">
-                  <h3 className="font-mono text-3xl font-bold tracking-tight">
-                    14.2 Months
-                  </h3>
-                  <span className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                    +1.5 mo{' '}
-                    <span className="opacity-75 font-normal text-foreground">
-                      vs last mo
-                    </span>
+              {/* Big Metric */}
+              <div className="my-6">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-mono text-5xl font-extrabold tracking-tight text-foreground">
+                    14.2
+                  </span>
+                  <span className="text-base font-semibold text-muted-foreground">
+                    Months
                   </span>
                 </div>
-                <p className="text-[13px] font-semibold opacity-75 mt-1 tracking-wide">
-                  Cash Runway
+                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1 flex items-center gap-1">
+                  <TrendingUp className="h-3 w-3" /> +1.5 mo vs last month
                 </p>
               </div>
 
-              {/* Visual Safety Meter */}
-              <div className="space-y-2 p-4 rounded-xl bg-muted/40 border border-border">
-                <div className="flex items-center justify-between text-xs font-semibold text-foreground">
-                  <span>Safety Target</span>
+              {/* Visual Safety Target Meter */}
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs font-semibold">
+                  <span className="text-muted-foreground">
+                    Safety Target (6 mo)
+                  </span>
                   <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                    Strong (6+ Months)
+                    Strong (14.2 mo)
                   </span>
                 </div>
-                <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-500 transition-all duration-500"
-                    style={{ width: '78%' }}
+                    className="h-full bg-linear-to-r from-emerald-500 to-primary rounded-full transition-all duration-500"
+                    style={{ width: '85%' }}
                   />
                 </div>
-                <div className="flex items-center justify-between text-[11px] font-medium opacity-75 pt-1">
-                  <span>Current: 14.2 Months buffer</span>
-                  <span>Goal: 12+ Mo</span>
-                </div>
+                <p className="text-[11px] text-muted-foreground leading-relaxed pt-1">
+                  Your business can operate normally for{' '}
+                  <strong className="text-foreground font-semibold">
+                    14+ months
+                  </strong>{' '}
+                  with zero additional revenue.
+                </p>
               </div>
             </div>
 
@@ -564,7 +580,7 @@ function Dashboard() {
                   Monthly Spending
                 </p>
                 <p className="font-mono text-sm font-bold text-foreground">
-                  $12,450.00
+                  {formatAmount(12450)}
                 </p>
               </div>
               <div className="space-y-0.5 text-right">
@@ -572,7 +588,7 @@ function Dashboard() {
                   Available Cash
                 </p>
                 <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400">
-                  $148,250.00
+                  {formatAmount(148250)}
                 </p>
               </div>
             </div>
@@ -692,7 +708,7 @@ function Dashboard() {
                       </span>
 
                       {/* Amount */}
-                      <div className="text-right w-24">
+                      <div className="text-right w-28">
                         <p
                           className={`font-mono text-sm font-bold ${
                             tx.type === 'income'
@@ -700,11 +716,8 @@ function Dashboard() {
                               : 'text-foreground'
                           }`}
                         >
-                          {tx.type === 'income' ? '+' : '-'}$
-                          {tx.amount.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
+                          {tx.type === 'income' ? '+' : '-'}
+                          {formatAmount(tx.amount)}
                         </p>
                       </div>
                     </div>
@@ -774,7 +787,7 @@ function Dashboard() {
                     Average Invoice
                   </p>
                   <p className="font-mono text-lg font-bold text-foreground mt-0.5">
-                    $4,250.00
+                    {formatAmount(4250)}
                   </p>
                 </div>
                 <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">

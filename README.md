@@ -1,6 +1,6 @@
 # 💎 Finly Web — Frontend Application
 
-> **Version:** `2.5.0`  
+> **Version:** `2.6.0`  
 > **Tagline:** _"Ditch the Spreadsheets. Master Your Cashflow."_  
 > **Target Audience:** Non-Accountant Founders, Agency Directors, Freelancers, Consultants, and Micro-SMEs.  
 > **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Shadow Architecture.
@@ -11,6 +11,7 @@
 
 - [Overview](#-overview)
 - [Key Features & Modules](#-key-features--modules)
+- [Universal Currency & Ledger Architecture](#-universal-currency--ledger-architecture)
 - [Tech Stack & Architecture](#-tech-stack--architecture)
 - [Design System & Tokens](#-design-system--tokens)
 - [Project Structure](#-project-structure)
@@ -38,19 +39,30 @@ Finly bridges this gap by providing an instantaneous, responsive, and aesthetica
 
 ## 🚀 Key Features & Modules
 
-| Route               | Module                                | Description & Highlights                                                                                                                                                                                                       |
-| :------------------ | :------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                 | **Direct App Entry**                  | Instant router redirect straight into the authenticated **Financial Overview** dashboard for immediate operational access.                                                                                                    |
-| `/dashboard`        | **Financial Overview (4-Row Grid)**   | Executive dashboard featuring **Row 1 Top Metrics** (Total Balance, Total Income, Total Expenses), **Row 2 Asymmetric Cashflow & Health** (Smooth Monotone Area Spline Chart + Runway Safety Index), **Row 3 Full-Width Recent Transactions** table, and **Row 4 Performance & Live Currency Converter**. |
-| `/cashbook`         | **Jargon-Free Cashbook Ledger**       | Direct Income and Expense cash ledger with Business vs Personal scoping, 3-second quick-add expense drawer, and secure receipt image modal.                                                                                    |
-| `/invoices`         | **Invoice Management**                | Filterable invoice data grid with dynamically derived status pills (`Draft`, `Unpaid`, `Overdue`, `Paid`, `Void`).                                                                                                             |
-| `/invoices/builder` | **Live Split-Screen Invoice Builder** | Real-time interactive editor with instant mathematical recalculation preview, catalog item auto-fill, and millesimal quantity scaling.                                                                                         |
-| `/invoices/$id`     | **Formal Invoice Snapshot Detail**    | Rendered formal invoice document view with print stylesheet (`@media print`), email dispatch, and atomic 1-click payment settlement.                                                                                           |
-| `/customers`        | **Client Directory**                  | Customer contact management, payment terms (Net 14, Net 30), and lifetime billing aggregates.                                                                                                                                  |
-| `/items`            | **Product & Service Catalog**         | Standardized reusable items with minor-unit unit prices and default tax rates.                                                                                                                                                 |
-| `/settings`         | **Settings & AI Copilot Engine**      | Business workspace branding + Multi-Provider AI API connection management (Google Gemini, OpenAI ChatGPT, Anthropic Claude, DeepSeek AI, and local Ollama) with real-time ping latency checks.                                 |
-| `/pricing`          | **Subscription & Pricing**            | Transparent pricing plans (Starter $0, Pro $29/mo, Enterprise $79/mo) with monthly/annual billing switch and instant Pro upgrade triggering the dynamic **`PRO`** header badge.                                                |
-| `/account`          | **User Account & Workspaces**         | User profile configuration, password security, and active workspace memberships.                                                                                                                                               |
+| Route               | Module                                | Description & Highlights                                                                                                                                                                                                                                                                                  |
+| :------------------ | :------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                 | **Direct App Entry**                  | Instant router redirect straight into the authenticated **Financial Overview** dashboard for immediate operational access.                                                                                                                                                                                |
+| `/dashboard`        | **Financial Overview (4-Row Grid)**   | Executive dashboard featuring **Row 1 Top Metrics** (Total Balance, Total Income, Total Expenses), **Row 2 Asymmetric Cashflow & Health** (Smooth Monotone Area Spline Chart + Runway Safety Index), **Row 3 Full-Width Recent Transactions** table, and **Row 4 Performance & Live Currency Converter**. Dynamic currency formatting across all cards and chart axes. |
+| `/cashbook`         | **Jargon-Free Cashbook Ledger**       | Direct Income and Expense cash ledger with Business vs Personal scoping, standalone **Quick Entry Modal** with hardware numeric keypad (`0-9`, `Numpad0-9`, `Backspace`, `C`, `E`, `I`, `Enter`), tactile button feedback, and secure receipt attachment verification.                                   |
+| `/invoices`         | **Invoice Management**                | Filterable invoice data grid with dynamically derived status pills (`Draft`, `Unpaid`, `Overdue`, `Paid`, `Void`) and dynamic summary metric totals.                                                                                                                                                      |
+| `/invoices/builder` | **Live Split-Screen Invoice Builder** | Real-time interactive editor with instant mathematical recalculation preview, catalog item auto-fill, dynamic minor-unit pricing, and millesimal quantity scaling.                                                                                                                                       |
+| `/invoices/$id`     | **Formal Invoice Snapshot Detail**    | Rendered formal invoice document view with print stylesheet (`@media print`), email dispatch, and atomic 1-click payment settlement in active workspace currency.                                                                                                                                         |
+| `/customers`        | **Client Directory**                  | Customer contact management, payment terms (Net 14, Net 30), and lifetime billing aggregates.                                                                                                                                                                                                             |
+| `/items`            | **Product & Service Catalog**         | Standardized reusable items with minor-unit unit prices and default tax rates formatted with active base currency.                                                                                                                                                                                         |
+| `/settings`         | **Settings & AI Copilot Engine**      | Business workspace branding, Base Currency regional selection (USD, IDR, EUR, GBP, SGD, AUD, CAD, JPY) with instant live reactivity across tabs + Multi-Provider AI API connection management (Gemini, OpenAI, Claude, DeepSeek, Ollama).                                                                 |
+| `/pricing`          | **Subscription & Pricing**            | Transparent pricing plans (Starter $0, Pro $29/mo, Enterprise $79/mo) with monthly/annual billing switch and instant Pro upgrade triggering the dynamic **`PRO`** header badge.                                                                                                                           |
+| `/account`          | **User Account & Workspaces**         | User profile configuration, password security, and active workspace memberships.                                                                                                                                                                                                                          |
+
+---
+
+## 🪙 Universal Currency & Ledger Architecture
+
+Finly features a universal, multi-currency presentation engine backed by a strict **Scale-100 Minor Integer Unit** ledger:
+
+1. **Supported Currencies**: `USD` ($), `IDR` (Rp), `EUR` (€), `GBP` (£), `SGD` (S$), `AUD` (A$), `CAD` (C$), and `JPY` (¥).
+2. **Mathematical Invariant (GEMINI.md Rule #3)**: All ledger money is represented in minor integer units at fixed scale of 100 with zero floating-point arithmetic.
+3. **Reactive Synchronization (`useCurrency`)**: Instant, zero-reload cross-tab and cross-component broadcasting when the tenant switches their base currency in Settings.
+4. **Dynamic High-Denomination Formatting**: Intelligent integer formatting for currencies like Indonesian Rupiah (`Rp 50.000.000` without cent clutter) and expanded digit capacity up to 13 digits in Quick Entry.
 
 ---
 
@@ -107,185 +119,112 @@ finly-web/
 │   │   ├── ui/             # Reusable primitives (Buttons, Dialogs, Cards, Badges, Select)
 │   │   ├── AiChatAssistant.tsx # Floating AI Copilot drawer
 │   │   ├── Layout.tsx      # Application Topbar shell layout
-│   │   ├── NotFound.tsx    # 404 handler and navigation recovery
-│   │   └── ThemeToggle.tsx # Light / Dark mode toggle switch
-│   ├── hooks/              # Custom React hooks (useDebouncedSearch, useTheme, etc.)
-│   ├── integrations/       # TanStack Query root provider & Devtools setup
+│   │   ├── NotFound.tsx    # 404 Error page component
+│   │   └── ThemeToggle.tsx # Dark/Light mode switcher
+│   ├── hooks/
+│   │   ├── use-ai-chat.ts  # Multi-provider AI streaming hook
+│   │   └── use-debounced-search.ts # Debounced search hook
 │   ├── lib/
-│   │   ├── subscription.ts # Subscription store, persistence & cross-window sync
-│   │   └── utils.ts        # Tailwind cn helper, formatting & class utilities
-│   ├── routes/             # TanStack Router file-based route definitions
-│   │   ├── __root.tsx      # Root document shell (HTML, Head, Global Providers)
-│   │   ├── index.tsx       # Route '/' -> Redirects to /dashboard
-│   │   ├── dashboard.tsx   # Route '/dashboard' -> 4-Row Financial Overview
-│   │   ├── cashbook.tsx    # Route '/cashbook' -> Cashflow Ledger
-│   │   ├── invoices.tsx    # Route '/invoices' -> Invoices Data Grid
-│   │   ├── invoices/
-│   │   │   ├── builder.tsx # Route '/invoices/builder' -> Live Invoice Builder
-│   │   │   └── $id.tsx     # Route '/invoices/:id' -> Invoice Document Detail
-│   │   ├── customers.tsx   # Route '/customers' -> Customer Directory
-│   │   ├── items.tsx       # Route '/items' -> Product & Service Catalog
-│   │   ├── settings.tsx    # Route '/settings' -> Settings & AI Connection Manager
-│   │   ├── pricing.tsx     # Route '/pricing' -> Pricing Tiers & Pro Checkout
-│   │   └── account.tsx     # Route '/account' -> User Profile & Workspaces
-│   ├── routeTree.gen.ts    # Auto-generated TanStack route tree (do not edit manually)
-│   ├── router.tsx          # Router factory & SSR Query integration
-│   └── styles.css          # Tailwind CSS v4 directives & color variables
-├── package.json            # Dependencies & scripts
-├── tsconfig.json           # Strict TypeScript configuration
-├── tsr.config.json         # TanStack Router generator config
-└── vite.config.ts          # Vite 8 + Nitro + Tailwind + TanStack plugins
+│   │   ├── currency.ts     # Multi-currency configuration & useCurrency hook
+│   │   ├── subscription.ts # Subscription store & upgrade events
+│   │   └── utils.ts        # Class merging & Tailwind utilities
+│   ├── routes/             # File-based TanStack routes
+│   │   ├── __root.tsx      # Root layout wrapper (Theme, Modals, Assistant)
+│   │   ├── index.tsx       # Direct route redirect to /dashboard
+│   │   ├── dashboard.tsx   # Financial Overview 4-row grid
+│   │   ├── cashbook.tsx    # Cash ledger with Quick Entry modal
+│   │   ├── invoices/       # Invoices index, builder, and $id views
+│   │   ├── customers.tsx   # Client directory
+│   │   ├── items.tsx       # Product & Service catalog
+│   │   ├── settings.tsx    # Workspace settings & AI provider keys
+│   │   ├── pricing.tsx     # Pricing plans & Pro upgrade
+│   │   └── account.tsx     # Profile & security settings
+│   ├── styles/             # Global Tailwind styles & CSS variables
+│   ├── main.tsx            # Application entry point & router mounting
+│   └── routeTree.gen.ts    # Auto-generated TanStack route tree
+├── package.json
+├── tsconfig.json
+└── vite.config.ts
 ```
 
 ---
 
-## 💻 Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- **Node.js:** `v20.x` or higher (tested on `v20` and `v24`).
-- **Package Manager:** `npm` (v10+), `pnpm`, or `yarn`.
+- **Node.js:** `v20.0.0` or higher (LTS recommended)
+- **Package Manager:** `npm` (v10+) or `pnpm`
 
 ### Installation
 
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/iqbalzayn01/finly-web.git
-   cd finly-web
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+cd finly-web
+npm install
+```
 
 ### Running the Development Server
-
-Start the local Vite development server:
 
 ```bash
 npm run dev
 ```
 
-The application will be accessible at:
-👉 **`http://localhost:3000`**
-
-- **Public Landing Page:** `http://localhost:3000/`
-- **Main App Dashboard:** `http://localhost:3000/dashboard`
-- **Pricing & Pro Upgrades:** `http://localhost:3000/pricing`
+The application will start locally at [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## ⚡ Available Scripts
+## 📜 Available Scripts
 
-| Command                   | Description                                                                         |
-| :------------------------ | :---------------------------------------------------------------------------------- |
-| `npm run dev`             | Starts the Vite development server on port `3000`.                                  |
-| `npm run build`           | Builds the optimized production client and server bundles with **Nitro** SSR.       |
-| `npm run preview`         | Locally previews the generated production build (`.output/server`).                 |
-| `npm run generate-routes` | Manually triggers TanStack Router code generator to refresh `src/routeTree.gen.ts`. |
-| `npm run lint`            | Runs ESLint across all TypeScript and React source files.                           |
-| `npm run format`          | Formats code with Prettier and runs ESLint with auto-fix.                           |
-| `npm run check`           | Validates Prettier formatting rules without modifying files.                        |
-
----
-
-## 🗺️ Routing & Navigation Architecture
-
-### 1. File-Based Routing (`@tanstack/react-router`)
-
-Routes in `src/routes/` automatically map to URL paths:
-
-- `src/routes/index.tsx` $\to$ `/` (Public Landing Page)
-- `src/routes/dashboard.tsx` $\to$ `/dashboard` (Executive Dashboard)
-- `src/routes/cashbook.tsx` $\to$ `/cashbook`
-- `src/routes/invoices.tsx` $\to$ `/invoices`
-- `src/routes/invoices/builder.tsx` $\to$ `/invoices/builder`
-- `src/routes/invoices/$id.tsx` $\to$ `/invoices/:id`
-- `src/routes/pricing.tsx` $\to$ `/pricing`
-
-When adding a new route, simply create a `.tsx` file inside `src/routes/` and run `npm run generate-routes` (or start the dev server).
-
-### 2. Dual Shell Layout (`src/components/Layout.tsx`)
-
-The application automatically determines whether to wrap a view in the public or authenticated app shell:
-
-- **Public Pages (`/`, `/pricing`):** Renders the clean `PublicNavbar` with centered links and marketing footer.
-- **App Pages (`/dashboard`, `/cashbook`, `/invoices`, etc.):** Renders the authenticated `Topbar` navigation, account avatar popover, and floating `AiChatAssistant`.
-
-### 3. Symmetrical 3-Column Navigation Grid
-
-Both headers (`PublicNavbar.tsx` and `Topbar.tsx`) utilize a 3-column CSS grid:
-
-```tsx
-<div className="grid grid-cols-[1fr_auto_1fr] max-w-7xl mx-auto px-6 md:px-10">
-  <div className="flex justify-start">{/* Logo & Pro Pill */}</div>
-  <div className="flex justify-center">{/* Center Navigation */}</div>
-  <div className="flex justify-end">{/* Actions & Profile */}</div>
-</div>
-```
-
-This guarantees that primary navigation pills are **always mathematically centered** on the viewport regardless of variations in logo or action button widths.
+| Command                  | Description                                                  |
+| :----------------------- | :----------------------------------------------------------- |
+| `npm run dev`            | Starts the Vite development server on port 3000.             |
+| `npm run generate-routes`| Regenerates the TanStack router tree (`routeTree.gen.ts`).   |
+| `npm run build`          | Compiles client bundle and Nitro serverless output.          |
+| `npm run preview`        | Locally previews the production build.                       |
+| `npm run lint`           | Runs ESLint checks across TypeScript and TSX files.          |
+| `npm run format`         | Formats code with Prettier and automatically fixes lints.    |
+| `npm run check`          | Checks code formatting without modifying files.              |
 
 ---
 
-## 🔒 Core Engineering Rules & Invariants
+## 🧭 Routing & Navigation Architecture
 
-When contributing to `finly-web`, always follow these non-negotiable rules:
+Finly Web uses **TanStack Router** file-based routing:
 
-1. **Integer Minor Units Everywhere (Scale 100):**
-   - Monetary values must never use JavaScript floats or `parseFloat` in calculation logic.
-   - Store and compute as integer cents (`*_in_cents`). $50.00 is `5000`; Rp 50.000 is `5000000`.
-   - Use basis points for rates (`tax_bps`, `discount_bps` e.g., 1100 = 11%) and millesimals for quantities (`quantity_milli` e.g., 1500 = 1.5).
-2. **Dynamic Overdue State (Never Stored):**
-   - Overdue is never a hardcoded status. It must always be derived dynamically:
-     ```ts
-     const isOverdue = status === 'unpaid' && new Date(dueDate) < new Date()
-     ```
-3. **Immutable Snapshot Totals:**
-   - Subtotals, tax amounts, and grand totals are snapshotted on issue. Do not dynamically recompute totals from live catalog items on read.
-4. **Multi-Tenancy Isolation:**
-   - The frontend never invents or manually injects `businessId` into API payloads. Tenant context is handled server-side via session cookies.
+- **Root Layout (`__root.tsx`):** Injects theme providers, global Modals, and floating AI assistant.
+- **Route Definitions:** All routes map 1-to-1 with files in `src/routes/`.
+- **Active Navigation State:** Route triggers determine active navigation pills with high-contrast indicator highlights.
 
 ---
 
-## ☁️ Deployment (Vercel)
+## 🛡️ Core Engineering Rules & Invariants
 
-`finly-web` is configured for **zero-config Vercel SSR deployment** using **Nitro**:
+1. **Integer Minor Units (Scale 100):**
+   - Monetary amounts are strictly integer minor units (`*_in_cents`).
+   - Floating-point calculations are strictly forbidden in arithmetic paths.
+2. **Session-Derived Multi-Tenancy:**
+   - Client never passes tenant IDs in request bodies or query params.
+3. **No Overdue Enum:**
+   - Overdue status is computed dynamically on the client (`status === 'unpaid' && dueDate < today`).
+4. **Snapshot Immutability:**
+   - Invoices render permanent snapshot data recorded at issuance.
+5. **No Native Browser Modals:**
+   - Confirmations and prompts use accessible ShadCN Radix dialog components.
 
-1. **Nitro Engine (`nitro/vite`):**
-   - Configured in `vite.config.ts`.
-   - Automatically detects Vercel (`process.env.VERCEL`) and packages the serverless runtime into `.output/server` and static assets into `.output/public`.
-   - Prevents `404: NOT_FOUND` errors on direct URL loads or page refreshes on subroutes (`/dashboard`, `/pricing`, `/invoices`, etc.).
+---
 
-2. **Deploying on Vercel:**
-   - Connect your GitHub repository on [Vercel Dashboard](https://vercel.com/new).
-   - **Framework Preset:** Vercel automatically detects _TanStack Start / Nitro_.
-   - **Build Command:** `npm run build`
-   - **Output Directory:** Automatic (managed by Nitro).
+## 🚢 Deployment (Vercel)
+
+Finly Web is configured with **Nitro SSR** (`nitro/vite`) for zero-config deployment to Vercel:
+
+1. **Build Command:** `npm run build`
+2. **Output Directory:** `.output/public`
+3. **Serverless Functions:** Automatically generated in `.output/server` to handle all SSR route requests without 404 redirects.
 
 ---
 
 ## 🤝 Contributing & Code Quality
 
-Before opening a Pull Request:
-
-1. Ensure TypeScript compiles with zero errors:
-   ```bash
-   npx tsc --noEmit
-   ```
-2. Verify production build succeeds:
-   ```bash
-   npm run build
-   ```
-3. Run linting and formatting:
-   ```bash
-   npm run check
-   ```
-
----
-
-## 📄 License
-
-Proprietary — Finly Inc. All rights reserved.
+1. Match surrounding conventions and avoid introducing redundant UI dependencies.
+2. Run `npm run check` and `npm run build` before submitting PRs.
+3. Adhere strictly to the design tokens: `shadow-none`, `font-mono` for currency, and `cursor: pointer` on interactive controls.

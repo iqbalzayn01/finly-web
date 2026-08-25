@@ -1,6 +1,6 @@
 # Finly Web — Frontend Product Requirements Document (PRD)
 
-**Document Version:** 2.5.0  
+**Document Version:** 2.6.0  
 **Scope:** Frontend Application Only (`finly-web` / `app.finly.io`)  
 **Target Audience:** Non-accountant operators (freelancers, consultants, agencies, solopreneurs, and micro-SME founders)  
 **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Architecture
@@ -25,11 +25,12 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
   - **Server State & Caching:** TanStack Query v5 (`@tanstack/react-query`) with automatic background refetching, SWR caching, and optimistic UI mutations.
   - **Client Global Store:** Zustand for layout state, UI modals, and notification toasts.
   - **Subscription Store (`src/lib/subscription.ts`):** Reactive subscription hook and persistence with cross-window event synchronization (`starter`, `pro`, `enterprise`).
+  - **Universal Multi-Currency Engine (`src/lib/currency.ts`):** Reactive tenant base currency state with cross-tab and cross-component broadcasting (`USD`, `IDR`, `EUR`, `GBP`, `SGD`, `AUD`, `CAD`, `JPY`), scale-100 minor unit formatting, and high-denomination formatting.
 - **Table & Form Orchestration:**
   - **TanStack Table v8:** High-performance tabular data grids, multi-column filtering, and server/client-side sorting.
   - **TanStack Form & Zod:** Type-safe form validation pipelines with real-time field error formatting.
 - **Modal & Dialog Architecture:**
-  - **Radix UI Dialog & ShadCN UI Primitives (`src/components/ui/dialog.tsx`, `modal.tsx`, `alert-modal.tsx`, `api-key-modal.tsx`, `logout-modal.tsx`):** 100% accessible, keyboard-trapped, focus-managed dialog overlays with smooth Motion transitions. Zero native browser `window.alert()` or `window.confirm()` calls.
+  - **Radix UI Dialog & ShadCN UI Primitives (`src/components/ui/dialog.tsx`, `modal.tsx`, `alert-modal.tsx`, `api-key-modal.tsx`, `logout-modal.tsx`, `quick-entry-modal.tsx`):** 100% accessible, keyboard-trapped, focus-managed dialog overlays with smooth Motion transitions. Zero native browser `window.alert()` or `window.confirm()` calls.
 - **Data Visualizations:** TanStack Charts & Recharts with Monotone Bezier Curves (`type="monotone"`) and vertical gradient fills for interactive cashflow trends and area curves.
 - **Error Boundaries & 404 Routing:** Global `NotFound` handler (`src/components/NotFound.tsx`) and error boundary components registered on router initialization.
 
@@ -85,39 +86,39 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 
 ---
 
-### 4.2 Financial Overview Dashboard (`/dashboard`)
+## 4.2 Financial Overview Dashboard (`/dashboard`)
 
 - **Purpose:** Provide an operator with an immediate 5-second health check of their business cashflow organized in a balanced 4-row architecture:
 - **Row 1: Top Metric Cards (3 Columns):**
-  1. **Total Balance:** `$148,250.00` (+12.5% trend, progress against target, available cash across accounts).
-  2. **Total Income:** `$34,120.00` (+8.2% trend vs last month, emerald styling, paid invoices & client payments).
-  3. **Total Expenses:** `$12,450.00` (-2.4% trend vs last month, rose styling, bills, tools, and operational spending).
+  1. **Total Balance:** Dynamic formatting (+12.5% trend, progress against target, available cash across accounts).
+  2. **Total Income:** Dynamic formatting (+8.2% trend vs last month, emerald styling, paid invoices & client payments).
+  3. **Total Expenses:** Dynamic formatting (-2.4% trend vs last month, rose styling, bills, tools, and operational spending).
 - **Row 2: Asymmetric Cashflow & Health (65% : 35% / Col-Span 8 : Col-Span 4):**
   - **Left (`lg:col-span-8`): Cash Flow Smooth Monotone Area Spline Chart:**
     - Dual Smooth Gradient Area curve (`type="monotone"`) comparing monthly Income vs Expenses.
     - Timeframe filter pills (`6M`, `YTD`, `1Y`).
-    - Summary footer: Net profit (`+$21,670.00 this month`) and trailing average monthly spending.
+    - Summary footer: Net profit and trailing average monthly spending.
   - **Right (`lg:col-span-4`): Cash Runway & Health Card:**
     - Header with `ShieldCheck` and `Healthy (94/100)` badge.
     - Big metric: `14.2 Months` (+1.5 mo vs last month).
     - Visual safety target meter: `Strong (6+ Months)` buffer gauge with gradient progress fill.
-    - Footer breakdown: Monthly Spending (`$12,450.00`) and Available Cash (`$148,250.00`).
+    - Footer breakdown: Monthly Spending and Available Cash.
 - **Row 3: Recent Transactions (Full Width / Col-Span 12):**
   - Verified ledger entries, invoice settlements, and operating expenses.
   - Type filter pills: `All`, `Income`, `Expenses`.
   - Transaction rows with merchant name, category, relative timestamp, and status badges (`Paid`, `Receipt`, `No Receipt`).
   - Direct link to `/cashbook`.
 - **Row 4: Key Performance & Currency Converter (2 Columns / 50% : 50%):**
-  - **Left: Business Health Statistics:** Profit Margin (63.4%), Average Invoice ($4,250.00 / 14-Day Avg Pay), and On-Time Payments (96.5%).
-  - **Right: Live Currency Converter:** Interactive base USD amount input with auto-updating conversion cards for USD/IDR, EUR/USD, GBP/USD, and SGD/IDR.
+  - **Left: Business Health Statistics:** Profit Margin (63.4%), Average Invoice, and On-Time Payments (96.5%).
+  - **Right: Live Currency Converter:** Interactive base amount input with auto-updating conversion rates.
 
 ---
 
 ### 4.3 Jargon-Free Cashbook (`/cashbook`)
 
-- **Transaction Table:** Date, Merchant / Client Description, Category Pill Badge, Scope (`Business` vs `Personal`), Receipt Status, Amount (`+` in emerald green vs `-` in crimson red), and Row Actions.
+- **Full-Width Transaction Table:** Date, Merchant / Client Description, Category Pill Badge, Scope (`Business` vs `Personal`), Receipt Status, Dynamic Minor-Unit Amount (`+` in emerald green vs `-` in crimson red), and Row Actions.
 - **Filtering & Search:** Real-time search, type filters, scope filters, and category dropdowns.
-- **Quick-Add Transaction Drawer (3-Second Rule):** Rapid creation form for operators on the go.
+- **Standalone Quick Entry Modal:** Tactile 3×4 numpad modal with spring physics animation, dynamic base currency formatting, and hardware keyboard / numeric keypad event listeners (`0-9`, `Numpad0-9`, `Backspace`, `C`, `E`, `I`, `Enter`) with smart focus isolation when typing in text fields.
 - **Receipt Viewer Modal & Delete Confirmations:** Accessible ShadCN Dialog modals for secure receipt previews and destructive action confirmations.
 
 ---
@@ -152,7 +153,7 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
 
 ### 4.6 Settings & AI Agent Integrations (`/settings`)
 
-- **Workspace Profile:** Business legal name, business address, tax number/VAT/NPWP, and logo upload.
+- **Workspace Profile:** Business legal name, business address, tax number/VAT/NPWP, base currency selection (USD, IDR, EUR, GBP, SGD, AUD, CAD, JPY), and logo upload.
 - **AI Agent Connections:** Multi-provider API connection management via custom ShadCN API Key Dialogs:
   - Google Gemini (Gemini 2.0 Flash, Gemini 1.5 Pro)
   - OpenAI ChatGPT (GPT-4o, GPT-4o-mini)
@@ -188,18 +189,11 @@ The web client (`finly-web`) provides an instantaneous, responsive, and visually
    - Client never manually injects `businessId`. Tenant context is managed server-side via session cookies.
 
 3. **No Overdue Enum in State:**
-   - Overdue is derived dynamically on client: `status === 'unpaid' && dueDate < today`.
+   - Database enum contains strictly `draft | unpaid | paid | void`.
+   - `Overdue` is derived entirely on the client: `status === 'unpaid' && dueDate < today`.
 
-4. **Zero-Fluff Flat Aesthetics:**
-   - Global `shadow-none` rule, high information density, crisp 1px borders, and IBM Plex typography.
+4. **Snapshot Immutability:**
+   - Historical invoices render immutable snapshots (`customer_name_snapshot`, `subtotal_in_cents`, `tax_amount_in_cents`, `total_in_cents`).
 
-5. **Accessibility & Interactive Consistency:**
-   - Mandatory `cursor: pointer` on interactive elements, consistent M3 transitions, responsive grid centering, and ShadCN Dialog focus-trapping.
-
----
-
-## 6. Frontend Verification & Quality Standards
-
-- **TypeScript:** Strict compilation with `0 errors`.
-- **Vite Bundle Build:** Production build passed with `0 errors`.
-- **Responsive Integrity:** Layout stability across mobile (320px+), tablet (768px+), desktop (1024px+), and ultrawide (1920px+).
+5. **No Native Browser Alerts:**
+   - All confirmations and alerts utilize custom accessible ShadCN Radix Dialog components.

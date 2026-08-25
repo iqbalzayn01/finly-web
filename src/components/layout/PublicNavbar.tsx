@@ -65,7 +65,9 @@ export function PublicNavbar() {
             to="/dashboard"
             className="px-3 sm:px-4 py-2 text-xs font-bold rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-none flex items-center gap-1.5 cursor-pointer outline-none active:scale-[0.98] shrink-0"
           >
-            <span><span className="hidden sm:inline">Open </span>Dashboard</span>
+            <span>
+              <span className="hidden sm:inline">Open </span>Dashboard
+            </span>
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>

@@ -13,6 +13,8 @@ import {
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../components/ui/button'
 import { AlertModal } from '../components/ui/alert-modal'
+import { QuickEntryModal } from '../components/ui/quick-entry-modal'
+import { useCurrency } from '../lib/currency'
 import {
   Select,
   SelectTrigger,
@@ -249,9 +251,8 @@ const initialTransactions = [
 ]
 
 function Cashbook() {
-  const [showNumpad, setShowNumpad] = useState(false)
-  const [entryAmount, setEntryAmount] = useState('0')
-  const [txType, setTxType] = useState<'income' | 'expense'>('expense')
+  const { currency, formatAmount } = useCurrency()
+  const [quickEntryOpen, setQuickEntryOpen] = useState(false)
   const [openKebab, setOpenKebab] = useState<number | null>(null)
   const [typeFilter, setTypeFilter] = useState('all')
   const [scopeFilter, setScopeFilter] = useState('all')
@@ -302,24 +303,12 @@ function Cashbook() {
     },
   })
 
-  const handleNumpad = (val: string) => {
-    if (val === 'C') {
-      setEntryAmount('0')
-      return
-    }
-    if (val === '00') {
-      setEntryAmount((prev) => (prev === '0' ? '0' : prev + '00'))
-      return
-    }
-    setEntryAmount((prev) => (prev === '0' ? val : prev + val))
-  }
-
   return (
-    <div className="flex flex-col xl:flex-row gap-8 pb-12">
+    <div className="space-y-8 pb-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex-1 space-y-8"
+        className="space-y-8"
       >
         <div className="flex items-end justify-between">
           <div>
@@ -330,7 +319,7 @@ function Cashbook() {
               Ledger of all business and personal transactions.
             </p>
           </div>
-          <Button onClick={() => setShowNumpad(true)}>
+          <Button onClick={() => setQuickEntryOpen(true)}>
             <Plus className="h-5 w-5 mr-2" /> Quick Entry
           </Button>
         </div>
@@ -485,7 +474,7 @@ function Cashbook() {
                           ) : (
                             <ArrowDownRight className="h-4 w-4 text-rose-500" />
                           )}
-                          ${tx.amount.toLocaleString()}
+                          {formatAmount(tx.amount)}
                         </div>
                       </td>
                       <td className="px-6 py-4 text-center">
@@ -577,150 +566,20 @@ function Cashbook() {
         </div>
       </motion.div>
 
-      <AnimatePresence>
-        {showNumpad && (
-          <motion.div
-            initial={{ opacity: 0, x: 50, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 50, scale: 0.95 }}
-            transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
-            className="w-full xl:w-[360px] shrink-0"
-          >
-            <div className="sticky top-24 border border-border bg-card p-6 rounded-2xl shadow-none">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="font-semibold text-base text-foreground">
-                  Quick Entry
-                </h3>
-                <button
-                  onClick={() => setShowNumpad(false)}
-                  className="text-xs font-semibold text-muted-foreground hover:text-foreground"
-                >
-                  Close
-                </button>
-              </div>
-
-              <div className="flex gap-2 mb-6 p-1 border border-border bg-muted/30 rounded-xl relative">
-                <button
-                  onClick={() => setTxType('expense')}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all relative z-10 ${txType === 'expense' ? 'bg-card text-foreground shadow-none' : 'text-muted-foreground hover:text-foreground'}`}
-                >
-                  Expense
-                </button>
-                <button
-                  onClick={() => setTxType('income')}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all relative z-10 ${txType === 'income' ? 'bg-card text-foreground shadow-none' : 'text-muted-foreground hover:text-foreground'}`}
-                >
-                  Income
-                </button>
-              </div>
-
-              <div className="text-center mb-8">
-                <p className="text-muted-foreground text-xs font-medium mb-1.5">
-                  Amount (USD)
-                </p>
-                <motion.div
-                  key={entryAmount}
-                  initial={{ scale: 0.95, opacity: 0.8 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-                  className={`font-mono text-4xl font-bold tracking-tight ${txType === 'income' ? 'text-emerald-500' : 'text-foreground'}`}
-                >
-                  ${parseInt(entryAmount).toLocaleString()}
-                </motion.div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2.5 mb-6">
-                {[
-                  '1',
-                  '2',
-                  '3',
-                  '4',
-                  '5',
-                  '6',
-                  '7',
-                  '8',
-                  '9',
-                  '00',
-                  '0',
-                  'C',
-                ].map((key) => (
-                  <motion.button
-                    key={key}
-                    whileHover={{ scale: 1.04, y: -1 }}
-                    whileTap={{ scale: 0.93 }}
-                    transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-                    onClick={() => handleNumpad(key)}
-                    className="h-12 border border-border bg-card text-base font-semibold text-foreground hover:bg-accent/50 rounded-xl shadow-none transition-all"
-                  >
-                    {key}
-                  </motion.button>
-                ))}
-              </div>
-
-              <div className="space-y-3">
-                <Select>
-                  <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-card text-foreground rounded-xl">
-                    <SelectValue placeholder="Select Category..." />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    {CATEGORIES.map((catGroup) => (
-                      <SelectGroup key={catGroup.group}>
-                        <SelectLabel className="font-semibold text-xs text-muted-foreground">
-                          {catGroup.group}
-                        </SelectLabel>
-                        {catGroup.items.map((item) => (
-                          <SelectItem
-                            key={item}
-                            value={item.toLowerCase().replace(/[\s,()]+/g, '-')}
-                          >
-                            <div className="flex items-center gap-2">
-                              <div
-                                className={`w-2.5 h-2.5 rounded-full border border-border ${catGroup.dot}`}
-                              />
-                              <span>{item}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select>
-                  <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-card text-foreground rounded-xl">
-                    <SelectValue placeholder="Select Scope..." />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    <SelectItem value="business">Business</SelectItem>
-                    <SelectItem value="personal">Personal</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <input
-                  type="text"
-                  placeholder="Description (Optional)"
-                  className="w-full h-11 border border-border bg-background rounded-xl px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
-                />
-
-                <Button
-                  className="w-full mt-2"
-                  onClick={() => {
-                    setShowNumpad(false)
-                    setFeedbackModal({
-                      open: true,
-                      type: 'success',
-                      title: 'Transaction Saved',
-                      desc: `Ledger entry of $${entryAmount} has been recorded to cashbook.`,
-                    })
-                  }}
-                >
-                  Save Transaction
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Quick Entry Modal */}
+      <QuickEntryModal
+        open={quickEntryOpen}
+        onOpenChange={setQuickEntryOpen}
+        currency={currency}
+        onSave={(data) => {
+          setFeedbackModal({
+            open: true,
+            type: 'success',
+            title: 'Transaction Saved',
+            desc: `Ledger entry of ${formatAmount(data.amount)} (${data.type.toUpperCase()}) has been recorded to cashbook.`,
+          })
+        }}
+      />
 
       {/* Feedback Modal */}
       <AlertModal

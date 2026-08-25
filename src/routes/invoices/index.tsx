@@ -22,6 +22,7 @@ import {
   SelectContent,
   SelectItem,
 } from '../../components/ui/select'
+import { useCurrency } from '../../lib/currency'
 import { useDebouncedSearch } from '../../hooks/use-debounced-search'
 
 export const Route = createFileRoute('/invoices/')({
@@ -101,6 +102,7 @@ const StatusBadge = ({ status }: { status: string }) => {
 }
 
 function Invoices() {
+  const { formatAmount } = useCurrency()
   const [openKebab, setOpenKebab] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState('all')
   const [actionModal, setActionModal] = useState<{
@@ -167,7 +169,7 @@ function Invoices() {
             Total Receivables
           </p>
           <p className="font-mono text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">
-            $17,000.00
+            {formatAmount(17000)}
           </p>
           <p className="text-xs text-muted-foreground mt-1">
             2 Unpaid Invoices
@@ -178,7 +180,7 @@ function Invoices() {
             Paid This Month
           </p>
           <p className="font-mono text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
-            $3,500.00
+            {formatAmount(3500)}
           </p>
           <p className="text-xs text-muted-foreground mt-1">
             1 Settled Invoice
@@ -188,8 +190,8 @@ function Invoices() {
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Draft Invoices
           </p>
-          <p className="font-mono text-2xl font-bold text-primary mt-1">
-            $200.00
+          <p className="font-mono text-2xl font-bold text-foreground mt-1">
+            {formatAmount(200)}
           </p>
           <p className="text-xs text-muted-foreground mt-1">1 Pending Review</p>
         </div>
@@ -308,7 +310,7 @@ function Invoices() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right font-mono font-semibold text-base text-foreground">
-                      ${inv.amount.toLocaleString()}
+                      {formatAmount(inv.amount)}
                     </td>
                     <td className="px-6 py-4">
                       <StatusBadge status={inv.status} />
