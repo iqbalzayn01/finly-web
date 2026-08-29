@@ -3,7 +3,7 @@
 **Product Name:** Finly (B2B Cashflow Operating System)  
 **Tagline:** _"Ditch the Spreadsheets. Master Your Cashflow."_  
 **Document Type:** Core Product Brief — The Why & Who  
-**Version:** 2.6.0  
+**Version:** 2.7.0  
 **Target Audience:** Non-Accountant Founders, Agency Directors, Consultants, Freelancers, Solopreneurs, and Micro-SMEs
 
 ---
@@ -66,13 +66,12 @@ Finly is engineered specifically for **service-based B2B micro-businesses operat
 
 ## 4. Value Proposition & Key Differentiators
 
-| Core Pillar                      | Value Delivered                                                                                                                                        | Unfair Advantage                                                                                       |
-| :------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------- |
-| **Non-Accountant Usability**     | Zero accounting jargon. Color-coded Income vs. Expense ledger with 3-second quick-add drawers and standalone Quick Entry Modal.                         | Intuitive side-drawer workflows and clear status pills (`Paid`, `Unpaid`, `Overdue`, `Draft`).         |
-| **100% Trustworthy Ledger**      | Zero floating-point drift. All financial calculations use minor integer minor-units at a fixed scale of 100.                                           | Strict backend invariants with tenant-scoped isolation (`set_config('app.business_id', ...)`).         |
-| **Instant Invoice Engine**       | Real-time invoice builder math with instant side-by-side document preview.                                                                             | Snapshot line-item & total calculations written at issue time (`subtotal_in_cents`, `total_in_cents`). |
-| **Multi-Provider AI Connection** | Freedom to connect any LLM (Gemini, OpenAI, Claude, DeepSeek, Ollama/vLLM) via API key.                                                                | Human-in-the-loop architecture: AI drafts records; humans explicitly approve before database entry.    |
-| **State-of-the-Art Aesthetic**   | Ultra-modern 100% OLED pitch-black dark theme (`#000000`), flat `shadow-none` border-first system, accessible ShadCN dialogs, and IBM Plex typography. | Frictionless side-drawer interactions, cursor pointer interactions, and responsive mobile drawer.      |
+| Core Pillar | Value Delivered | Unfair Advantage |
+| **Non-Accountant Usability** | Zero accounting jargon. Color-coded Income vs. Expense ledger with 3-second quick-add drawers and standalone Quick Entry Modal. | Intuitive side-drawer workflows and clear status pills (`Paid`, `Unpaid`, `Overdue`, `Draft`). |
+| **100% Trustworthy Ledger** | Zero floating-point drift. All financial calculations use minor integer minor-units at a fixed scale of 100. | Strict backend invariants with tenant-scoped isolation (`set_config('app.business_id', ...)`). |
+| **Instant Invoice Engine** | Real-time invoice builder math with instant side-by-side document preview. | Snapshot line-item & total calculations written at issue time (`subtotal_in_cents`, `total_in_cents`). |
+| **Multi-Provider AI Connection** | Freedom to connect any LLM (Gemini, OpenAI, Claude, DeepSeek, Ollama/vLLM) via API key. | Human-in-the-loop architecture: AI drafts records; humans explicitly approve before database entry. |
+| **State-of-the-Art Aesthetic** | Ultra-modern 100% OLED pitch-black dark theme (`#000000`), flat `shadow-none` border-first system, accessible ShadCN dialogs, and IBM Plex typography. | Frictionless side-drawer interactions, cursor pointer interactions, and responsive mobile drawer. |
 
 ---
 

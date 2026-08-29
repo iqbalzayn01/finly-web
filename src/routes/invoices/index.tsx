@@ -11,7 +11,7 @@ import {
   Edit2,
   Eye,
   Trash2,
-} from 'lucide-react'
+} from '../../components/ui/icon'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../../components/ui/button'
 import { AlertModal } from '../../components/ui/alert-modal'
@@ -151,7 +151,7 @@ function Invoices() {
           <h1 className="text-4xl font-bold tracking-tight text-foreground">
             Invoices & Billing
           </h1>
-          <p className="mt-2 text-muted-foreground text-[15px]">
+          <p className="mt-2 text-muted-foreground">
             Manage client billing, draft invoices, and automatic receivables.
           </p>
         </div>
@@ -287,7 +287,7 @@ function Invoices() {
                     className="transition-colors"
                   >
                     <td className="px-6 py-4 font-mono font-semibold text-foreground flex items-center gap-3">
-                      <div className="p-2 border border-border bg-accent/40 text-accent-foreground rounded-xl">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-border bg-accent/40 text-accent-foreground rounded-xl">
                         <FileText className="h-4 w-4" />
                       </div>
                       <Link
@@ -320,7 +320,7 @@ function Invoices() {
                         onClick={() =>
                           setOpenKebab(openKebab === inv.id ? null : inv.id)
                         }
-                        className="p-1.5 border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all"
+                        className="flex h-8 w-8 items-center justify-center border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all cursor-pointer outline-none"
                       >
                         <MoreVertical className="h-4 w-4" />
                       </button>

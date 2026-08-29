@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowLeft, Home, FileQuestion } from 'lucide-react'
+import { ArrowLeft, Home, FileQuestion } from './ui/icon'
 
 export function NotFound() {
   return (

@@ -1,6 +1,6 @@
 # 💎 Finly Web — Frontend Application
 
-> **Version:** `2.6.0`  
+> **Version:** `2.7.0`  
 > **Tagline:** _"Ditch the Spreadsheets. Master Your Cashflow."_  
 > **Target Audience:** Non-Accountant Founders, Agency Directors, Freelancers, Consultants, and Micro-SMEs.  
 > **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Shadow Architecture.
@@ -39,19 +39,19 @@ Finly bridges this gap by providing an instantaneous, responsive, and aesthetica
 
 ## 🚀 Key Features & Modules
 
-| Route               | Module                                | Description & Highlights                                                                                                                                                                                                                                                                                  |
-| :------------------ | :------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                 | **Direct App Entry**                  | Instant router redirect straight into the authenticated **Financial Overview** dashboard for immediate operational access.                                                                                                                                                                                |
+| Route               | Module                                | Description & Highlights                                                                                                                                                                                                                                                                                                                                               |
+| :------------------ | :------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                 | **Direct App Entry**                  | Instant router redirect straight into the authenticated **Financial Overview** dashboard for immediate operational access.                                                                                                                                                                                                                                             |
 | `/dashboard`        | **Financial Overview (4-Row Grid)**   | Executive dashboard featuring **Row 1 Top Metrics** (Total Balance, Total Income, Total Expenses), **Row 2 Asymmetric Cashflow & Health** (Smooth Monotone Area Spline Chart + Runway Safety Index), **Row 3 Full-Width Recent Transactions** table, and **Row 4 Performance & Live Currency Converter**. Dynamic currency formatting across all cards and chart axes. |
-| `/cashbook`         | **Jargon-Free Cashbook Ledger**       | Direct Income and Expense cash ledger with Business vs Personal scoping, standalone **Quick Entry Modal** with hardware numeric keypad (`0-9`, `Numpad0-9`, `Backspace`, `C`, `E`, `I`, `Enter`), tactile button feedback, and secure receipt attachment verification.                                   |
-| `/invoices`         | **Invoice Management**                | Filterable invoice data grid with dynamically derived status pills (`Draft`, `Unpaid`, `Overdue`, `Paid`, `Void`) and dynamic summary metric totals.                                                                                                                                                      |
-| `/invoices/builder` | **Live Split-Screen Invoice Builder** | Real-time interactive editor with instant mathematical recalculation preview, catalog item auto-fill, dynamic minor-unit pricing, and millesimal quantity scaling.                                                                                                                                       |
-| `/invoices/$id`     | **Formal Invoice Snapshot Detail**    | Rendered formal invoice document view with print stylesheet (`@media print`), email dispatch, and atomic 1-click payment settlement in active workspace currency.                                                                                                                                         |
-| `/customers`        | **Client Directory**                  | Customer contact management, payment terms (Net 14, Net 30), and lifetime billing aggregates.                                                                                                                                                                                                             |
-| `/items`            | **Product & Service Catalog**         | Standardized reusable items with minor-unit unit prices and default tax rates formatted with active base currency.                                                                                                                                                                                         |
-| `/settings`         | **Settings & AI Copilot Engine**      | Business workspace branding, Base Currency regional selection (USD, IDR, EUR, GBP, SGD, AUD, CAD, JPY) with instant live reactivity across tabs + Multi-Provider AI API connection management (Gemini, OpenAI, Claude, DeepSeek, Ollama).                                                                 |
-| `/pricing`          | **Subscription & Pricing**            | Transparent pricing plans (Starter $0, Pro $29/mo, Enterprise $79/mo) with monthly/annual billing switch and instant Pro upgrade triggering the dynamic **`PRO`** header badge.                                                                                                                           |
-| `/account`          | **User Account & Workspaces**         | User profile configuration, password security, and active workspace memberships.                                                                                                                                                                                                                          |
+| `/cashbook`         | **Jargon-Free Cashbook Ledger**       | Direct Income and Expense cash ledger with Business vs Personal scoping, standalone **Quick Entry Modal** with hardware numeric keypad (`0-9`, `Numpad0-9`, `Backspace`, `C`, `E`, `I`, `Enter`), tactile button feedback, and secure receipt attachment verification.                                                                                                 |
+| `/invoices`         | **Invoice Management**                | Filterable invoice data grid with dynamically derived status pills (`Draft`, `Unpaid`, `Overdue`, `Paid`, `Void`) and dynamic summary metric totals.                                                                                                                                                                                                                   |
+| `/invoices/builder` | **Live Split-Screen Invoice Builder** | Real-time interactive editor with instant mathematical recalculation preview, catalog item auto-fill, dynamic minor-unit pricing, and millesimal quantity scaling.                                                                                                                                                                                                     |
+| `/invoices/$id`     | **Formal Invoice Snapshot Detail**    | Rendered formal invoice document view with print stylesheet (`@media print`), email dispatch, and atomic 1-click payment settlement in active workspace currency.                                                                                                                                                                                                      |
+| `/customers`        | **Client Directory**                  | Customer contact management, payment terms (Net 14, Net 30), and lifetime billing aggregates.                                                                                                                                                                                                                                                                          |
+| `/items`            | **Product & Service Catalog**         | Standardized reusable items with minor-unit unit prices and default tax rates formatted with active base currency.                                                                                                                                                                                                                                                     |
+| `/settings`         | **Settings & AI Copilot Engine**      | Business workspace branding, Base Currency regional selection (USD, IDR, EUR, GBP, SGD, AUD, CAD, JPY) with instant live reactivity across tabs + Multi-Provider AI API connection management (Gemini, OpenAI, Claude, DeepSeek, Ollama).                                                                                                                              |
+| `/pricing`          | **Subscription & Pricing**            | Transparent pricing plans (Starter $0, Pro $29/mo, Enterprise $79/mo) with monthly/annual billing switch and instant Pro upgrade triggering the dynamic **`PRO`** header badge.                                                                                                                                                                                        |
+| `/account`          | **User Account & Workspaces**         | User profile configuration, password security, and active workspace memberships.                                                                                                                                                                                                                                                                                       |
 
 ---
 
@@ -175,15 +175,15 @@ The application will start locally at [http://localhost:3000](http://localhost:3
 
 ## 📜 Available Scripts
 
-| Command                  | Description                                                  |
-| :----------------------- | :----------------------------------------------------------- |
-| `npm run dev`            | Starts the Vite development server on port 3000.             |
-| `npm run generate-routes`| Regenerates the TanStack router tree (`routeTree.gen.ts`).   |
-| `npm run build`          | Compiles client bundle and Nitro serverless output.          |
-| `npm run preview`        | Locally previews the production build.                       |
-| `npm run lint`           | Runs ESLint checks across TypeScript and TSX files.          |
-| `npm run format`         | Formats code with Prettier and automatically fixes lints.    |
-| `npm run check`          | Checks code formatting without modifying files.              |
+| Command                   | Description                                                |
+| :------------------------ | :--------------------------------------------------------- |
+| `npm run dev`             | Starts the Vite development server on port 3000.           |
+| `npm run generate-routes` | Regenerates the TanStack router tree (`routeTree.gen.ts`). |
+| `npm run build`           | Compiles client bundle and Nitro serverless output.        |
+| `npm run preview`         | Locally previews the production build.                     |
+| `npm run lint`            | Runs ESLint checks across TypeScript and TSX files.        |
+| `npm run format`          | Formats code with Prettier and automatically fixes lints.  |
+| `npm run check`           | Checks code formatting without modifying files.            |
 
 ---
 

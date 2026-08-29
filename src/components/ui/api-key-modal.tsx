@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Key, ExternalLink, ShieldCheck } from 'lucide-react'
+import { Key, ExternalLink, ShieldCheck } from './icon'
 import { Button } from '#/components/ui/button'
 import { Modal } from '#/components/ui/modal'
 

@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import { Sun, Moon, Monitor } from 'lucide-react'
+import { Sun, Moon, Monitor } from './ui/icon'
 import { motion, AnimatePresence } from 'motion/react'
 import { cn } from '../lib/utils'
-import { V2Tooltip } from './Layout'
+import { TooltipSimple } from './ui/tooltip'
 
 export type ThemeMode = 'light' | 'dark' | 'auto'
 
@@ -74,7 +74,7 @@ export function ThemeToggle() {
   return (
     <div className="relative" ref={menuRef}>
       {!isOpen ? (
-        <V2Tooltip content={tooltipLabel}>{toggleButton}</V2Tooltip>
+        <TooltipSimple content={tooltipLabel}>{toggleButton}</TooltipSimple>
       ) : (
         toggleButton
       )}

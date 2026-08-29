@@ -1,25 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router'
-import {
-  User,
-  Mail,
-  Shield,
-  Key,
-  Camera,
-  Check,
-  ShieldAlert,
-} from 'lucide-react'
+import { User, Mail, Shield, Key, ShieldAlert } from '../components/ui/icon'
 import { Button } from '../components/ui/button'
 import { motion } from 'motion/react'
 import { useState } from 'react'
 import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar'
 import { AlertModal } from '../components/ui/alert-modal'
 import { Modal } from '../components/ui/modal'
+import { useSubscription } from '../lib/subscription'
+import { cn } from '../lib/utils'
 
 export const Route = createFileRoute('/account')({
   component: Account,
 })
 
 function Account() {
+  const { isPro } = useSubscription()
   const [avatarModalOpen, setAvatarModalOpen] = useState(false)
   const [saveModalOpen, setSaveModalOpen] = useState(false)
   const [passwordModalOpen, setPasswordModalOpen] = useState(false)
@@ -47,12 +42,27 @@ function Account() {
         transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.1 }}
         className="border border-border bg-card p-8 rounded-2xl shadow-none"
       >
-        <h2 className="text-xl font-semibold text-foreground mb-6">
-          Profile Information
-        </h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-semibold text-foreground">
+            Profile Information
+          </h2>
+          {isPro && (
+            <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20 flex items-center gap-1.5">
+              <span className="size-1.5 rounded-full bg-primary animate-pulse" />
+              Pro Account
+            </span>
+          )}
+        </div>
 
         <div className="flex items-center gap-6 mb-8">
-          <Avatar className="h-20 w-20 border border-border shadow-none">
+          <Avatar
+            className={cn(
+              'h-20 w-20 shadow-none transition-all',
+              isPro
+                ? 'border-2 border-primary ring-4 ring-primary/20'
+                : 'border border-border',
+            )}
+          >
             <AvatarImage
               src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
               alt="Avatar"

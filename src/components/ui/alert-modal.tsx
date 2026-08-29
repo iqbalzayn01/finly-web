@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { AlertCircle, AlertTriangle, CheckCircle2, Info } from 'lucide-react'
+import { AlertCircle, AlertTriangle, CheckCircle2, Info } from './icon'
 import { Button } from '#/components/ui/button'
 import { Modal } from '#/components/ui/modal'
 

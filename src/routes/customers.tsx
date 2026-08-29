@@ -9,7 +9,7 @@ import {
   MoreVertical,
   Edit2,
   Trash2,
-} from 'lucide-react'
+} from '../components/ui/icon'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../components/ui/button'
 import { AlertModal } from '../components/ui/alert-modal'
@@ -132,7 +132,10 @@ function Customers() {
             Manage client profiles and billing terms.
           </p>
         </div>
-        <Button onClick={() => setShowForm(true)}>
+        <Button
+          onClick={() => setShowForm(true)}
+          className="h-11 px-6 rounded-full font-semibold shadow-none"
+        >
           <Plus className="h-5 w-5 mr-2" /> Add Customer
         </Button>
       </div>
@@ -232,7 +235,7 @@ function Customers() {
                       onClick={() =>
                         setOpenKebab(openKebab === c.id ? null : c.id)
                       }
-                      className="p-1.5 border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all"
+                      className="flex h-8 w-8 items-center justify-center border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all cursor-pointer outline-none"
                     >
                       <MoreVertical className="h-4 w-4" />
                     </button>
@@ -255,7 +258,7 @@ function Customers() {
                               setSuccessModal({
                                 open: true,
                                 title: 'Customer Updated',
-                                desc: `Customer ${customer.name} has been updated successfully.`,
+                                desc: `Customer ${c.name} has been updated successfully.`,
                               })
                             }}
                             className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-accent/50 font-medium rounded-lg transition-all"
@@ -267,7 +270,7 @@ function Customers() {
                               setOpenKebab(null)
                               setDeleteModal({
                                 open: true,
-                                customerName: customer.name,
+                                customerName: c.name,
                               })
                             }}
                             className="w-full flex items-center gap-2 px-3 py-2 text-xs text-destructive hover:bg-destructive/10 font-medium rounded-lg transition-all"
