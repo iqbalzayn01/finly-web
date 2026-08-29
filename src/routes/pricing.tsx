@@ -9,7 +9,7 @@ import {
   HelpCircle,
   ChevronDown,
   ArrowRight,
-} from 'lucide-react'
+} from '../components/ui/icon'
 import { cn } from '../lib/utils'
 import { useSubscription } from '../lib/subscription'
 import { AlertModal } from '../components/ui/alert-modal'
@@ -21,7 +21,6 @@ export const Route = createFileRoute('/pricing')({
 function PricingPage() {
   const {
     plan: currentPlan,
-    isPro,
     upgradeToPro,
     downgradeToStarter,
   } = useSubscription()

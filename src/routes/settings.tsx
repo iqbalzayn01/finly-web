@@ -16,7 +16,7 @@ import {
   Check,
   User,
   SlidersHorizontal,
-} from 'lucide-react'
+} from '../components/ui/icon'
 import { Button } from '../components/ui/button'
 import { ApiKeyModal } from '../components/ui/api-key-modal'
 import { AlertModal } from '../components/ui/alert-modal'
@@ -29,11 +29,9 @@ import {
   SelectContent,
   SelectItem,
 } from '../components/ui/select'
-import {
-  useCurrency,
-  SUPPORTED_CURRENCIES,
-  type CurrencyCode,
-} from '../lib/currency'
+import { useCurrency, SUPPORTED_CURRENCIES } from '../lib/currency'
+import type { CurrencyCode } from '../lib/currency'
+import { useSubscription } from '../lib/subscription'
 
 export const Route = createFileRoute('/settings')({
   component: Settings,
@@ -140,6 +138,7 @@ const AI_PROVIDERS: AIProvider[] = [
 ]
 
 function Settings() {
+  const { isPro } = useSubscription()
   const [activeTab, setActiveTab] = useState<'profile' | 'ai'>('profile')
 
   // AI Settings State
@@ -164,10 +163,11 @@ function Settings() {
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
 
   // Profile Settings State
-  const { currency: globalCurrency, setCurrency: setGlobalCurrency } = useCurrency()
+  const { currency: globalCurrency, setCurrency: setGlobalCurrency } =
+    useCurrency()
   const [businessName, setBusinessName] = useState('Finly HQ')
   const [taxId, setTaxId] = useState('00-1234567')
-  const [currency, setCurrency] = useState<string>(globalCurrency || 'IDR')
+  const [currency, setCurrency] = useState<string>(globalCurrency)
   const [invoicePrefix, setInvoicePrefix] = useState('INV')
   const [profileSaveSuccess, setProfileSaveSuccess] = useState<boolean>(false)
   const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false)
@@ -175,9 +175,7 @@ function Settings() {
 
   // Sync currency state when global currency changes
   useEffect(() => {
-    if (globalCurrency) {
-      setCurrency(globalCurrency)
-    }
+    setCurrency(globalCurrency)
   }, [globalCurrency])
 
   // Load from localStorage on mount
@@ -327,7 +325,14 @@ function Settings() {
             </div>
 
             <div className="flex items-center gap-6 pt-2">
-              <div className="h-20 w-20 border border-border bg-accent/40 rounded-2xl flex items-center justify-center shadow-none">
+              <div
+                className={cn(
+                  'h-20 w-20 bg-accent/40 rounded-2xl flex items-center justify-center shadow-none transition-all',
+                  isPro
+                    ? 'border-2 border-primary ring-4 ring-primary/20'
+                    : 'border border-border',
+                )}
+              >
                 <ImageIcon className="h-7 w-7 text-muted-foreground" />
               </div>
               <div>
@@ -656,7 +661,7 @@ function Settings() {
                       className={cn(
                         'flex-1 py-2 text-xs font-semibold rounded-lg border transition-all cursor-pointer outline-none',
                         temperature === t.val
-                          ? 'bg-card text-foreground border-primary shadow-none font-bold'
+                          ? 'bg-primary text-primary-foreground border-primary shadow-xs font-bold'
                           : 'bg-background text-muted-foreground border-border hover:text-foreground',
                       )}
                     >

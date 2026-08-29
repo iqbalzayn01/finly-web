@@ -10,7 +10,7 @@ import {
   TrendingUp,
   Receipt,
   ShieldCheck,
-} from 'lucide-react'
+} from './ui/icon'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from './ui/button'
 import { useNavigate } from '@tanstack/react-router'

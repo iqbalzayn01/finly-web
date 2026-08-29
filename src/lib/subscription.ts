@@ -28,9 +28,14 @@ export function setStoredPlan(plan: SubscriptionPlan) {
 }
 
 export function useSubscription() {
-  const [plan, setPlan] = useState<SubscriptionPlan>(() => getStoredPlan())
+  // Always initialize with 'starter' to prevent SSR / Client Hydration mismatches
+  const [plan, setPlan] = useState<SubscriptionPlan>('starter')
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+    setPlan(getStoredPlan())
+
     const handlePlanChange = (event: Event) => {
       const customEvent = event as CustomEvent<SubscriptionPlan>
       setPlan(customEvent.detail)
@@ -51,6 +56,7 @@ export function useSubscription() {
   return {
     plan,
     isPro: plan === 'pro' || plan === 'enterprise',
+    mounted,
     setPlan: setStoredPlan,
     upgradeToPro,
     downgradeToStarter,

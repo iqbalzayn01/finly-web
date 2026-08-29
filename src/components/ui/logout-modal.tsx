@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { LogOut } from 'lucide-react'
+import { LogOut } from './icon'
 import { Button } from '#/components/ui/button'
 import { Modal } from '#/components/ui/modal'
 

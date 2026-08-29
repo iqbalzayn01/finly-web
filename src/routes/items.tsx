@@ -1,6 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Plus, Search, Box, MoreVertical, Edit2, Trash2 } from 'lucide-react'
+import {
+  Plus,
+  Search,
+  Box,
+  MoreVertical,
+  Edit2,
+  Trash2,
+} from '../components/ui/icon'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../components/ui/button'
 import { AlertModal } from '../components/ui/alert-modal'
@@ -130,7 +137,10 @@ function Items() {
             Manage products, services, and default pricing.
           </p>
         </div>
-        <Button onClick={() => setShowForm(true)}>
+        <Button
+          onClick={() => setShowForm(true)}
+          className="h-11 px-6 rounded-full font-semibold shadow-none"
+        >
           <Plus className="h-5 w-5 mr-2" /> Add Item
         </Button>
       </div>
@@ -258,7 +268,7 @@ function Items() {
                         onClick={() =>
                           setOpenKebab(openKebab === item.id ? null : item.id)
                         }
-                        className="p-1.5 border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all"
+                        className="flex h-8 w-8 items-center justify-center border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all cursor-pointer outline-none"
                       >
                         <MoreVertical className="h-4 w-4" />
                       </button>

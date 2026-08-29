@@ -6,17 +6,18 @@ import {
   ArrowDownRight,
   TrendingUp,
   Receipt,
-  FileText,
   Activity,
   Globe,
   RefreshCw,
   ShieldCheck,
-} from 'lucide-react'
+} from '../components/ui/icon'
 import { useState, useMemo } from 'react'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '../components/ui/select'
@@ -34,10 +35,53 @@ import {
   ChartTooltipContent,
 } from '../components/ui/chart'
 import type { ChartConfig } from '../components/ui/chart'
-import { XAxis, YAxis, CartesianGrid, AreaChart, Area } from 'recharts'
+import {
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  AreaChart,
+  Area,
+  Line,
+  LineChart,
+  Label,
+  PolarGrid,
+  PolarRadiusAxis,
+  RadialBar,
+  RadialBarChart,
+} from 'recharts'
 import { useCurrency } from '../lib/currency'
 
 export const Route = createFileRoute('/dashboard')({ component: Dashboard })
+
+const runwayChartData = [
+  { month: 'Feb', runway: 10.4 },
+  { month: 'Mar', runway: 11.2 },
+  { month: 'Apr', runway: 12.8 },
+  { month: 'May', runway: 12.1 },
+  { month: 'Jun', runway: 13.5 },
+  { month: 'Jul', runway: 14.2 },
+]
+
+const runwayChartConfig = {
+  runway: {
+    label: 'Runway (Months)',
+    color: 'var(--primary)',
+  },
+} satisfies ChartConfig
+
+const healthChartData = [
+  { metric: 'health', score: 94, fill: 'var(--primary)' },
+]
+
+const healthChartConfig = {
+  score: {
+    label: 'Health Score',
+  },
+  health: {
+    label: 'Cash Health',
+    color: 'var(--primary)',
+  },
+} satisfies ChartConfig
 
 const cashflowChartConfig = {
   income: {
@@ -46,47 +90,90 @@ const cashflowChartConfig = {
   },
   expense: {
     label: 'Expenses',
-    color: 'rgba(15, 23, 42, 0.25)',
+    color: '#d4d4d4',
     theme: {
-      light: 'rgba(15, 23, 42, 0.25)',
-      dark: 'rgba(255, 255, 255, 0.25)',
+      light: '#d4d4d4',
+      dark: '#525252',
     },
   },
 } satisfies ChartConfig
 
-const fullCashflowData = [
-  { name: 'Aug', income: 14500, expense: 9100, year: 2025 },
-  { name: 'Sep', income: 16200, expense: 9800, year: 2025 },
-  { name: 'Oct', income: 18400, expense: 11200, year: 2025 },
-  { name: 'Nov', income: 15100, expense: 8900, year: 2025 },
-  { name: 'Dec', income: 22400, expense: 14500, year: 2025 },
-  { name: 'Jan', income: 12400, expense: 8200, year: 2026 },
-  { name: 'Feb', income: 15600, expense: 9400, year: 2026 },
-  { name: 'Mar', income: 14200, expense: 11000, year: 2026 },
-  { name: 'Apr', income: 21800, expense: 13500, year: 2026 },
-  { name: 'May', income: 18900, expense: 12100, year: 2026 },
-  { name: 'Jun', income: 24500, expense: 10800, year: 2026 },
-  { name: 'Jul', income: 28400, expense: 14200, year: 2026 },
+type CashflowTimeframe = '1d' | '1m' | '3m' | '6m' | '1y' | '5y'
+
+const TIMEFRAME_OPTIONS: { label: string; value: CashflowTimeframe }[] = [
+  { label: '1D', value: '1d' },
+  { label: '1M', value: '1m' },
+  { label: '3M', value: '3m' },
+  { label: '6M', value: '6m' },
+  { label: '1Y', value: '1y' },
+  { label: '5Y', value: '5y' },
 ]
+
+const cashflowDataMap: Record<
+  CashflowTimeframe,
+  { name: string; income: number; expense: number }[]
+> = {
+  '1d': [
+    { name: '00:00', income: 420, expense: 120 },
+    { name: '04:00', income: 680, expense: 210 },
+    { name: '08:00', income: 1950, expense: 640 },
+    { name: '12:00', income: 3420, expense: 1480 },
+    { name: '16:00', income: 2890, expense: 1120 },
+    { name: '20:00', income: 1740, expense: 590 },
+  ],
+  '1m': [
+    { name: 'Week 1', income: 6400, expense: 3100 },
+    { name: 'Week 2', income: 7800, expense: 3900 },
+    { name: 'Week 3', income: 5900, expense: 2800 },
+    { name: 'Week 4', income: 8300, expense: 4400 },
+  ],
+  '3m': [
+    { name: 'May', income: 18900, expense: 12100 },
+    { name: 'Jun', income: 24500, expense: 10800 },
+    { name: 'Jul', income: 28400, expense: 14200 },
+  ],
+  '6m': [
+    { name: 'Feb', income: 15600, expense: 9400 },
+    { name: 'Mar', income: 14200, expense: 11000 },
+    { name: 'Apr', income: 21800, expense: 13500 },
+    { name: 'May', income: 18900, expense: 12100 },
+    { name: 'Jun', income: 24500, expense: 10800 },
+    { name: 'Jul', income: 28400, expense: 14200 },
+  ],
+  '1y': [
+    { name: 'Aug 25', income: 14500, expense: 9100 },
+    { name: 'Sep 25', income: 16200, expense: 9800 },
+    { name: 'Oct 25', income: 18400, expense: 11200 },
+    { name: 'Nov 25', income: 15100, expense: 8900 },
+    { name: 'Dec 25', income: 22400, expense: 14500 },
+    { name: 'Jan 26', income: 12400, expense: 8200 },
+    { name: 'Feb 26', income: 15600, expense: 9400 },
+    { name: 'Mar 26', income: 14200, expense: 11000 },
+    { name: 'Apr 26', income: 21800, expense: 13500 },
+    { name: 'May 26', income: 18900, expense: 12100 },
+    { name: 'Jun 26', income: 24500, expense: 10800 },
+    { name: 'Jul 26', income: 28400, expense: 14200 },
+  ],
+  '5y': [
+    { name: '2022', income: 142000, expense: 98000 },
+    { name: '2023', income: 188000, expense: 122000 },
+    { name: '2024', income: 236000, expense: 154000 },
+    { name: '2025', income: 295000, expense: 186000 },
+    { name: '2026', income: 198500, expense: 118400 },
+  ],
+}
 
 function Dashboard() {
   const { symbol, formatAmount } = useCurrency()
-  const [cashflowTimeframe, setCashflowTimeframe] = useState<
-    '6m' | 'ytd' | '1y'
-  >('6m')
+  const [cashflowTimeframe, setCashflowTimeframe] =
+    useState<CashflowTimeframe>('6m')
   const [recentTxFilter, setRecentTxFilter] = useState<
     'all' | 'income' | 'expense'
   >('all')
   const [fxInput, setFxInput] = useState<number>(100)
 
   const filteredCashflowData = useMemo(() => {
-    if (cashflowTimeframe === '6m') {
-      return fullCashflowData.slice(-6)
-    }
-    if (cashflowTimeframe === 'ytd') {
-      return fullCashflowData.filter((item) => item.year === 2026)
-    }
-    return fullCashflowData
+    return cashflowDataMap[cashflowTimeframe]
   }, [cashflowTimeframe])
 
   const m3Transition = {
@@ -174,6 +261,13 @@ function Dashboard() {
     },
   ]
 
+  const period = [
+    { label: 'Select a period', value: null },
+    { label: 'This Month', value: 'this_month' },
+    { label: 'This Quarter', value: 'this_quarter' },
+    { label: 'This Year', value: 'this_year' },
+  ]
+
   const filteredTx = allRecentTx.filter((tx) => {
     if (recentTxFilter === 'all') return true
     return tx.type === recentTxFilter
@@ -192,11 +286,8 @@ function Dashboard() {
             <h1 className="text-3xl sm:text-4xl font-medium tracking-tight text-foreground">
               Financial Overview
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-              Live
-            </span>
           </div>
-          <p className="text-muted-foreground text-sm sm:text-[15px]">
+          <p className="text-muted-foreground">
             Track your cash flow, runway, and daily business activity.
           </p>
         </motion.div>
@@ -206,23 +297,19 @@ function Dashboard() {
           transition={{ ...m3Transition, delay: 0.1 }}
           className="flex items-center gap-3"
         >
-          <Select defaultValue="this_year">
-            <SelectTrigger className="w-[180px] h-11 rounded-xl border border-border bg-card shadow-none text-foreground font-semibold">
-              <SelectValue placeholder="Select Period" />
+          <Select items={period}>
+            <SelectTrigger className="w-full max-w-48 bg-card text-foreground font-semibold">
+              <SelectValue placeholder="Select a Period" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border border-border shadow-none">
-              <SelectItem value="this_month" className="font-medium rounded-lg">
-                This Month
-              </SelectItem>
-              <SelectItem
-                value="this_quarter"
-                className="font-medium rounded-lg"
-              >
-                This Quarter
-              </SelectItem>
-              <SelectItem value="this_year" className="font-medium rounded-lg">
-                This Year
-              </SelectItem>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Period</SelectLabel>
+                {period.map((item) => (
+                  <SelectItem key={item.label} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
         </motion.div>
@@ -288,7 +375,7 @@ function Dashboard() {
             transition={{ ...m3Transition, delay: 0.15 + idx * 0.05 }}
           >
             <div
-              className={`p-6 ${card.containerClass} transition-colors flex flex-col justify-between h-[210px]`}
+              className={`p-6 ${card.containerClass} transition-colors flex flex-col justify-between h-52.5`}
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -296,11 +383,13 @@ function Dashboard() {
                     <span className="text-xs font-semibold opacity-80 tracking-wide uppercase">
                       {card.title}
                     </span>
-                    <h3 className="font-mono text-3xl font-medium tracking-tight">
+                    <h3 className="font-mono text-4xl font-medium tracking-tight">
                       {card.value}
                     </h3>
                   </div>
-                  <div className={`p-3 ${card.iconClass}`}>
+                  <div
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center ${card.iconClass}`}
+                  >
                     <card.icon className="h-5 w-5" />
                   </div>
                 </div>
@@ -309,7 +398,7 @@ function Dashboard() {
               <div className="space-y-3">
                 {/* Progress bar */}
                 <div
-                  className={`h-1.5 w-full rounded-full ${card.progressBg} overflow-hidden`}
+                  className={`h-6.5 w-full rounded-full ${card.progressBg} overflow-hidden`}
                 >
                   <div
                     className={`h-full rounded-full ${card.progressFill}`}
@@ -336,186 +425,159 @@ function Dashboard() {
         ))}
       </div>
 
-      {/* ROW 2: ASYMMETRIC CASHFLOW & HEALTH (65% : 35% / Col-Span 8 : Col-Span 4) */}
-      <div className="grid gap-6 grid-cols-1 lg:grid-cols-12 items-stretch">
-        {/* Col-Span 8: Cash Flow Smooth Monotone Area Spline Chart */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...m3Transition, delay: 0.25 }}
-          className="lg:col-span-8 flex flex-col"
-        >
-          <Card className="flex-1 flex flex-col justify-between rounded-2xl border-border bg-card shadow-none">
-            <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 gap-4">
-              <div>
-                <CardTitle className="text-xl font-medium tracking-tight text-foreground">
-                  Cash Flow Overview
-                </CardTitle>
-                <CardDescription className="text-xs text-muted-foreground mt-0.5">
-                  Monthly cash influx vs outgoing expenditures
-                </CardDescription>
-              </div>
+      {/* ROW 2: CASH FLOW OVERVIEW CHART (FULL WIDTH) */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...m3Transition, delay: 0.25 }}
+        className="w-full"
+      >
+        <Card className="rounded-2xl border-border bg-card shadow-none">
+          <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 gap-4">
+            <div>
+              <CardTitle className="text-xl font-medium tracking-tight text-foreground">
+                Cash Flow Overview
+              </CardTitle>
+              <CardDescription className="text-xs text-muted-foreground mt-0.5">
+                Monthly cash influx vs outgoing expenditures
+              </CardDescription>
+            </div>
 
-              {/* Timeframe selector pills */}
-              <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-xl self-start sm:self-auto">
-                {(['6m', 'ytd', '1y'] as const).map((tf) => (
-                  <button
-                    key={tf}
-                    onClick={() => setCashflowTimeframe(tf)}
-                    className={`px-3 py-1 text-xs font-semibold rounded-lg uppercase transition-all cursor-pointer ${
-                      cashflowTimeframe === tf
-                        ? 'bg-card text-foreground shadow-none'
-                        : 'text-muted-foreground hover:text-foreground'
-                    }`}
-                  >
-                    {tf}
-                  </button>
-                ))}
-              </div>
-            </CardHeader>
-
-            <CardContent className="px-2 pt-0 sm:px-6">
-              <ChartContainer
-                config={cashflowChartConfig}
-                className="aspect-auto h-[260px] w-full"
-              >
-                <AreaChart
-                  data={filteredCashflowData}
-                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+            {/* Timeframe selector pills */}
+            <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-xl self-start sm:self-auto overflow-x-auto max-w-full">
+              {TIMEFRAME_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setCashflowTimeframe(opt.value)}
+                  className={`px-2.5 py-1 text-xs font-semibold rounded-lg uppercase transition-all cursor-pointer shrink-0 ${
+                    cashflowTimeframe === opt.value
+                      ? 'bg-primary text-primary-foreground shadow-xs font-bold'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
                 >
-                  <defs>
-                    <linearGradient
-                      id="dashboardFillIncome"
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop
-                        offset="5%"
-                        stopColor="var(--primary)"
-                        stopOpacity={0.4}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor="var(--primary)"
-                        stopOpacity={0.0}
-                      />
-                    </linearGradient>
-                    <linearGradient
-                      id="dashboardFillExpense"
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop
-                        offset="5%"
-                        stopColor="var(--color-expense)"
-                        stopOpacity={0.25}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor="var(--color-expense)"
-                        stopOpacity={0.0}
-                      />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid
-                    vertical={false}
-                    strokeDasharray="3 3"
-                    stroke="var(--border)"
-                    opacity={0.6}
-                  />
-                  <XAxis
-                    dataKey="name"
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                    tick={{
-                      fill: 'var(--muted-foreground)',
-                      fontSize: 13,
-                      fontWeight: 500,
-                    }}
-                    dy={4}
-                  />
-                  <YAxis
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{
-                      fill: 'var(--muted-foreground)',
-                      fontSize: 12,
-                      fontWeight: 500,
-                    }}
-                    tickFormatter={(val) => `${symbol}${val >= 1000 ? (val / 1000).toFixed(0) + 'k' : val}`}
-                    dx={-5}
-                  />
-                  <ChartTooltip
-                    cursor={{
-                      stroke: 'var(--border)',
-                      strokeWidth: 1.5,
-                      strokeDasharray: '3 3',
-                    }}
-                    content={<ChartTooltipContent indicator="dot" />}
-                  />
-                  <Area
-                    dataKey="expense"
-                    type="monotone"
-                    fill="url(#dashboardFillExpense)"
-                    fillOpacity={1}
-                    stroke="var(--color-expense)"
-                    strokeWidth={2.5}
-                    dot={false}
-                    activeDot={{
-                      r: 5,
-                      strokeWidth: 2,
-                      fill: 'var(--card)',
-                      stroke: 'var(--color-expense)',
-                    }}
-                  />
-                  <Area
-                    dataKey="income"
-                    type="monotone"
-                    fill="url(#dashboardFillIncome)"
-                    fillOpacity={1}
-                    stroke="var(--color-income)"
-                    strokeWidth={2.5}
-                    dot={false}
-                    activeDot={{
-                      r: 5,
-                      strokeWidth: 2,
-                      fill: 'var(--card)',
-                      stroke: 'var(--color-income)',
-                    }}
-                  />
-                </AreaChart>
-              </ChartContainer>
-            </CardContent>
-            <CardFooter className="flex-col items-start gap-1.5 border-t border-border px-6 py-4 text-xs">
-              <div className="flex items-center gap-2 font-bold text-foreground">
-                Net profit: +{formatAmount(21670)} this month{' '}
-                <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div className="text-muted-foreground font-medium">
-                Average monthly spending: {formatAmount(11800)}.
-              </div>
-            </CardFooter>
-          </Card>
-        </motion.div>
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </CardHeader>
 
-        {/* Col-Span 4: Cash Runway */}
+          <CardContent className="px-2 pt-0 sm:px-6">
+            <ChartContainer
+              config={cashflowChartConfig}
+              className="aspect-auto h-[280px] w-full"
+            >
+              <AreaChart
+                accessibilityLayer
+                data={filteredCashflowData}
+                margin={{
+                  left: 0,
+                  right: 12,
+                  top: 10,
+                  bottom: 0,
+                }}
+              >
+                <CartesianGrid
+                  vertical={false}
+                  strokeDasharray="3 3"
+                  className="stroke-border/50"
+                />
+                <XAxis
+                  dataKey="name"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  tickCount={4}
+                  tickFormatter={(val: number) =>
+                    `${symbol}${val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val}`
+                  }
+                  className="text-[11px] font-mono fill-muted-foreground/70"
+                />
+                <ChartTooltip
+                  content={<ChartTooltipContent />}
+                  cursor={false}
+                  defaultIndex={1}
+                />
+                <defs>
+                  <linearGradient id="fillIncome" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-income)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-income)"
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                  <linearGradient id="fillExpense" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-expense)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-expense)"
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                </defs>
+                <Area
+                  dataKey="expense"
+                  type="natural"
+                  fill="url(#fillExpense)"
+                  fillOpacity={0.4}
+                  stroke="var(--color-expense)"
+                  stackId="a"
+                />
+                <Area
+                  dataKey="income"
+                  type="natural"
+                  fill="url(#fillIncome)"
+                  fillOpacity={0.4}
+                  stroke="var(--color-income)"
+                  stackId="a"
+                />
+              </AreaChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter>
+            <div className="flex w-full items-start gap-2 text-sm">
+              <div className="grid gap-1">
+                <div className="flex items-center gap-2 leading-none font-semibold text-foreground">
+                  <span>Net cashflow trending up by +12.4% this period</span>
+                  <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div className="flex items-center gap-2 leading-none text-xs text-muted-foreground">
+                  Average monthly income: {formatAmount(18500)} · Average
+                  spending: {formatAmount(11200)}
+                </div>
+              </div>
+            </div>
+          </CardFooter>
+        </Card>
+      </motion.div>
+
+      {/* ROW 3: CASH RUNWAY & CASH HEALTH (COMBINED SINGLE ROW) */}
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 items-stretch">
+        {/* Col 1: Cash Runway */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ ...m3Transition, delay: 0.28 }}
-          className="lg:col-span-4 flex flex-col"
+          transition={{ ...m3Transition, delay: 0.3 }}
+          className="flex flex-col"
         >
-          <div className="bg-card text-foreground border border-border shadow-none rounded-2xl p-6 flex-1 flex flex-col justify-between">
-            {/* Top Bar */}
+          <div className="bg-card text-foreground border border-border shadow-none rounded-2xl p-6 flex-1 flex flex-col justify-between h-full">
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-primary/10 text-primary border border-primary/20">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                   <div>
@@ -523,17 +585,17 @@ function Dashboard() {
                       Cash Runway
                     </h3>
                     <p className="text-[11px] text-muted-foreground">
-                      Zero Revenue Survival
+                      Zero Revenue Survival Horizon
                     </p>
                   </div>
                 </div>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                  Healthy (94/100)
+                  Buffer: 14+ Months
                 </span>
               </div>
 
               {/* Big Metric */}
-              <div className="my-6">
+              <div className="my-5">
                 <div className="flex items-baseline gap-2">
                   <span className="font-mono text-5xl font-extrabold tracking-tight text-foreground">
                     14.2
@@ -547,22 +609,56 @@ function Dashboard() {
                 </p>
               </div>
 
-              {/* Visual Safety Target Meter */}
+              {/* Visual Runway Trend (Line Chart with Dots) */}
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-semibold">
                   <span className="text-muted-foreground">
-                    Safety Target (6 mo)
+                    Historical Trend (6 Months)
                   </span>
                   <span className="text-emerald-600 dark:text-emerald-400 font-bold">
                     Strong (14.2 mo)
                   </span>
                 </div>
-                <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-linear-to-r from-emerald-500 to-primary rounded-full transition-all duration-500"
-                    style={{ width: '85%' }}
-                  />
-                </div>
+                <ChartContainer
+                  config={runwayChartConfig}
+                  className="aspect-auto h-[120px] w-full"
+                >
+                  <LineChart
+                    accessibilityLayer
+                    data={runwayChartData}
+                    margin={{
+                      left: 12,
+                      right: 12,
+                      top: 8,
+                      bottom: 4,
+                    }}
+                  >
+                    <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="month"
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={6}
+                      tickFormatter={(value) => value.slice(0, 3)}
+                    />
+                    <ChartTooltip
+                      cursor={false}
+                      content={<ChartTooltipContent hideLabel />}
+                    />
+                    <Line
+                      dataKey="runway"
+                      type="natural"
+                      stroke="var(--color-runway)"
+                      strokeWidth={2}
+                      dot={{
+                        fill: 'var(--color-runway)',
+                      }}
+                      activeDot={{
+                        r: 5,
+                      }}
+                    />
+                  </LineChart>
+                </ChartContainer>
                 <p className="text-[11px] text-muted-foreground leading-relaxed pt-1">
                   Your business can operate normally for{' '}
                   <strong className="text-foreground font-semibold">
@@ -594,13 +690,133 @@ function Dashboard() {
             </div>
           </div>
         </motion.div>
+
+        {/* Col 2: Cash Health Radial Chart */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...m3Transition, delay: 0.35 }}
+          className="flex flex-col"
+        >
+          <Card className="flex flex-col border border-border bg-card shadow-none rounded-2xl p-0 h-full justify-between">
+            <CardHeader className="items-center pb-0 pt-6 px-6 text-center">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary border border-primary/20">
+                  <Activity className="h-3.5 w-3.5" />
+                </div>
+                <CardTitle className="text-lg font-semibold text-foreground">
+                  Cash Health
+                </CardTitle>
+              </div>
+              <CardDescription className="text-xs text-muted-foreground">
+                Liquidity ratio, profit margin &amp; payment reliability
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex-1 pb-0 px-6 pt-2">
+              <ChartContainer
+                config={healthChartConfig}
+                className="mx-auto aspect-square max-h-[220px]"
+              >
+                <RadialBarChart
+                  data={healthChartData}
+                  startAngle={0}
+                  endAngle={240}
+                  outerRadius={90}
+                  innerRadius={76}
+                >
+                  <PolarGrid
+                    gridType="circle"
+                    radialLines={false}
+                    stroke="none"
+                    className="first:fill-muted/60 last:fill-background"
+                    polarRadius={[90, 76]}
+                  />
+                  <RadialBar dataKey="score" background cornerRadius={10} />
+                  <PolarRadiusAxis
+                    tick={false}
+                    tickLine={false}
+                    axisLine={false}
+                  >
+                    <Label
+                      content={({ viewBox }) => {
+                        if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
+                          return (
+                            <text
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              textAnchor="middle"
+                              dominantBaseline="middle"
+                            >
+                              <tspan
+                                x={viewBox.cx}
+                                y={viewBox.cy}
+                                className="fill-foreground text-4xl font-bold tracking-tight"
+                              >
+                                {healthChartData[0].score}%
+                              </tspan>
+                              <tspan
+                                x={viewBox.cx}
+                                y={(viewBox.cy || 0) + 24}
+                                className="fill-muted-foreground text-xs font-semibold uppercase tracking-wider"
+                              >
+                                Health Score
+                              </tspan>
+                            </text>
+                          )
+                        }
+                      }}
+                    />
+                  </PolarRadiusAxis>
+                </RadialBarChart>
+              </ChartContainer>
+
+              {/* Sub-metrics breakdown */}
+              <div className="grid grid-cols-3 gap-2 pt-1 pb-2">
+                <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
+                  <p className="text-[11px] text-muted-foreground font-medium">
+                    Margin
+                  </p>
+                  <p className="font-mono text-sm font-bold text-foreground mt-0.5">
+                    63.4%
+                  </p>
+                </div>
+                <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
+                  <p className="text-[11px] text-muted-foreground font-medium">
+                    On-Time
+                  </p>
+                  <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+                    96.5%
+                  </p>
+                </div>
+                <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
+                  <p className="text-[11px] text-muted-foreground font-medium">
+                    Avg Pay
+                  </p>
+                  <p className="font-mono text-sm font-bold text-primary mt-0.5">
+                    14 Days
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter className="flex items-center justify-between text-xs border-t border-border pt-4 px-6 pb-6 mt-2">
+              <div className="flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
+                <TrendingUp className="h-4 w-4" />
+                <span>Trending up by +4.1% this quarter</span>
+              </div>
+              <span className="flex items-center gap-1 text-muted-foreground text-[11px]">
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Audited
+                &amp; Verified
+              </span>
+            </CardFooter>
+          </Card>
+        </motion.div>
       </div>
 
-      {/* ROW 3: RECENT ACTIVITY (FULL WIDTH - COL-SPAN 12) */}
+      {/* ROW 4: RECENT ACTIVITY (FULL WIDTH) */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ ...m3Transition, delay: 0.35 }}
+        transition={{ ...m3Transition, delay: 0.4 }}
         className="w-full"
       >
         <div className="bg-card border border-border shadow-none rounded-2xl p-6 flex flex-col justify-between">
@@ -629,7 +845,7 @@ function Dashboard() {
                       onClick={() => setRecentTxFilter(filterType)}
                       className={`px-3 py-1 text-xs font-semibold rounded-lg capitalize transition-all cursor-pointer ${
                         recentTxFilter === filterType
-                          ? 'bg-card text-foreground shadow-none'
+                          ? 'bg-primary text-primary-foreground shadow-xs font-bold'
                           : 'text-muted-foreground hover:text-foreground'
                       }`}
                     >
@@ -670,56 +886,51 @@ function Dashboard() {
                       >
                         <tx.icon className="h-4 w-4" />
                       </div>
-                      <div className="min-w-0">
-                        <h4 className="font-semibold text-sm text-foreground truncate group-hover:text-primary transition-colors">
+                      <div className="truncate">
+                        <p className="text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                           {tx.name}
-                        </h4>
-                        <p className="text-xs text-muted-foreground truncate">
+                        </p>
+                        <p className="text-xs text-muted-foreground truncate mt-0.5">
                           {tx.category}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-8 shrink-0">
+                    <div className="flex items-center justify-between sm:justify-end gap-6 shrink-0 pl-13 sm:pl-0">
                       {/* Status / Receipt Badge */}
-                      <div>
-                        {tx.status === 'Paid' && (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                            Paid
-                          </span>
-                        )}
-                        {tx.status === 'Receipt' && (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-                            <FileText className="h-3 w-3" />
-                            Receipt
-                          </span>
-                        )}
-                        {tx.status === 'No Receipt' && (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                            No Receipt
-                          </span>
-                        )}
-                      </div>
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                          tx.status === 'Paid'
+                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                            : 'bg-muted text-muted-foreground border-border'
+                        }`}
+                      >
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${
+                            tx.status === 'Paid'
+                              ? 'bg-emerald-500'
+                              : 'bg-muted-foreground'
+                          }`}
+                        />
+                        {tx.status}
+                      </span>
 
                       {/* Date */}
-                      <span className="text-xs text-muted-foreground font-medium w-28 text-left sm:text-right">
+                      <span className="text-xs font-medium text-muted-foreground hidden md:inline-block">
                         {tx.date}
                       </span>
 
                       {/* Amount */}
-                      <div className="text-right w-28">
-                        <p
-                          className={`font-mono text-sm font-bold ${
-                            tx.type === 'income'
-                              ? 'text-emerald-600 dark:text-emerald-400'
-                              : 'text-foreground'
-                          }`}
-                        >
-                          {tx.type === 'income' ? '+' : '-'}
-                          {formatAmount(tx.amount)}
-                        </p>
-                      </div>
+                      <span
+                        className={`font-mono text-sm font-bold ${
+                          tx.type === 'income'
+                            ? 'text-emerald-600 dark:text-emerald-400'
+                            : 'text-foreground'
+                        }`}
+                      >
+                        {tx.type === 'income' ? '+' : '-'}
+                        {formatAmount(tx.amount)}
+                      </span>
                     </div>
                   </div>
                 ))
@@ -742,91 +953,14 @@ function Dashboard() {
         </div>
       </motion.div>
 
-      {/* ROW 4: ANALYTICS & CONVERTER (2 COLUMNS - 50% : 50%) */}
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-        {/* Col-Span 6: Business Health */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...m3Transition, delay: 0.4 }}
-          className="bg-card border border-border shadow-none rounded-2xl p-6 flex flex-col justify-between"
-        >
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
-                  <Activity className="h-4 w-4" />
-                </div>
-                <h2 className="text-lg font-semibold text-foreground">
-                  Business Health
-                </h2>
-              </div>
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                Score: 94 / 100
-              </span>
-            </div>
-
-            <div className="space-y-4">
-              <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground font-medium">
-                    Profit Margin
-                  </p>
-                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">
-                    63.4%
-                  </p>
-                </div>
-                <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                  <TrendingUp className="h-3 w-3" /> +4.1% vs last month
-                </span>
-              </div>
-
-              <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground font-medium">
-                    Average Invoice
-                  </p>
-                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">
-                    {formatAmount(4250)}
-                  </p>
-                </div>
-                <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                  14-Day Average Pay
-                </span>
-              </div>
-
-              <div className="p-3.5 bg-muted/40 rounded-xl border border-border flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground font-medium">
-                    On-Time Payments
-                  </p>
-                  <p className="font-mono text-lg font-bold text-foreground mt-0.5">
-                    96.5%
-                  </p>
-                </div>
-                <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                  Paid on Time
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Audited
-              &amp; Verified
-            </span>
-            <span className="font-mono">Finly OS v5.0</span>
-          </div>
-        </motion.div>
-
-        {/* Col-Span 6: Currency Converter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...m3Transition, delay: 0.45 }}
-          className="bg-card border border-border shadow-none rounded-2xl p-6 flex flex-col justify-between"
-        >
+      {/* ROW 5: CURRENCY CONVERTER */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...m3Transition, delay: 0.45 }}
+        className="w-full"
+      >
+        <div className="bg-card border border-border shadow-none rounded-2xl p-6 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5">
@@ -862,7 +996,7 @@ function Dashboard() {
               </span>
             </div>
 
-            <div className="space-y-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {[
                 {
                   pair: 'USD / IDR',
@@ -887,7 +1021,7 @@ function Dashboard() {
               ].map((fx, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-2.5 rounded-xl hover:bg-accent/40 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-xl border border-border bg-muted/30 hover:bg-accent/40 transition-colors"
                 >
                   <div>
                     <span className="text-xs font-semibold text-foreground block">
@@ -915,8 +1049,8 @@ function Dashboard() {
               Live Market Rates
             </span>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </div>
   )
 }

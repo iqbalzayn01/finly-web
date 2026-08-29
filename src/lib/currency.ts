@@ -1,14 +1,7 @@
 import * as React from 'react'
 
 export type CurrencyCode =
-  | 'USD'
-  | 'IDR'
-  | 'EUR'
-  | 'GBP'
-  | 'SGD'
-  | 'AUD'
-  | 'CAD'
-  | 'JPY'
+  'USD' | 'IDR' | 'EUR' | 'GBP' | 'SGD' | 'AUD' | 'CAD' | 'JPY'
 
 export interface CurrencyConfig {
   code: CurrencyCode
@@ -120,7 +113,7 @@ export function formatMoney(
     compact?: boolean
   },
 ): string {
-  const config = SUPPORTED_CURRENCIES[currencyCode] || SUPPORTED_CURRENCIES.USD
+  const config = SUPPORTED_CURRENCIES[currencyCode]
   const majorUnits = (amountInCents || 0) / 100
 
   if (currencyCode === 'IDR') {
@@ -152,26 +145,30 @@ export function formatAmount(
     showDecimals?: boolean
   },
 ): string {
-  return formatMoney(Math.round((amountInMajor || 0) * 100), currencyCode, options)
+  return formatMoney(
+    Math.round((amountInMajor || 0) * 100),
+    currencyCode,
+    options,
+  )
 }
 
 export function getCurrencySymbol(currencyCode: CurrencyCode = 'USD'): string {
-  return SUPPORTED_CURRENCIES[currencyCode]?.symbol || '$'
+  return SUPPORTED_CURRENCIES[currencyCode].symbol
 }
 
 /**
  * Global reactive hook for tenant base currency synchronization across all pages and features.
  */
 export function useCurrency() {
-  const [currency, setCurrencyState] = React.useState<CurrencyCode>(getSavedCurrency)
+  const [currency, setCurrencyState] = React.useState<CurrencyCode>('USD')
 
   React.useEffect(() => {
-    // Sync initial state on mount
+    // Sync initial state on mount after hydration
     setCurrencyState(getSavedCurrency())
 
     const handleCustomEvent = (e: Event) => {
       const customEvent = e as CustomEvent<CurrencyCode>
-      if (customEvent.detail && customEvent.detail in SUPPORTED_CURRENCIES) {
+      if (customEvent.detail in SUPPORTED_CURRENCIES) {
         setCurrencyState(customEvent.detail)
       } else {
         setCurrencyState(getSavedCurrency())
@@ -213,7 +210,7 @@ export function useCurrency() {
     }
   }, [])
 
-  const config = SUPPORTED_CURRENCIES[currency] || SUPPORTED_CURRENCIES.USD
+  const config = SUPPORTED_CURRENCIES[currency]
 
   const fmtMoney = React.useCallback(
     (amountInCents: number, options?: { showDecimals?: boolean }) => {

@@ -1,6 +1,6 @@
 # Finly Web — Frontend Product Requirements Document (PRD)
 
-**Document Version:** 2.6.0  
+**Document Version:** 2.7.0  
 **Scope:** Frontend Application Only (`finly-web` / `app.finly.io`)  
 **Target Audience:** Non-accountant operators (freelancers, consultants, agencies, solopreneurs, and micro-SME founders)  
 **Design Philosophy:** Function-Driven, Dribbble-grade FinTech Aesthetics, Zero Jargon, 0px Flat Architecture

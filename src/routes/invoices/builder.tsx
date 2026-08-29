@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { ArrowLeft, Plus, Save, Send, Trash2 } from 'lucide-react'
+import { ArrowLeft, Plus, Save, Send, Trash2 } from '../../components/ui/icon'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../../components/ui/button'
@@ -25,7 +25,7 @@ interface LineItem {
 }
 
 function InvoiceBuilder() {
-  const { currency, symbol, formatAmount } = useCurrency()
+  const { formatAmount } = useCurrency()
   const navigate = useNavigate()
   const [draftSavedModal, setDraftSavedModal] = useState(false)
   const [items, setItems] = useState<LineItem[]>([
@@ -231,8 +231,9 @@ function InvoiceBuilder() {
                       </td>
                       <td className="py-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
+                          type="button"
                           onClick={() => removeItem(item.id)}
-                          className="p-1.5 border border-transparent rounded-full hover:bg-destructive/10 text-destructive transition-all"
+                          className="flex h-8 w-8 items-center justify-center ml-auto border border-transparent rounded-full hover:bg-destructive/10 text-destructive transition-all cursor-pointer outline-none"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>

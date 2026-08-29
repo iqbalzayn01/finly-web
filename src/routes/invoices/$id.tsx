@@ -9,7 +9,7 @@ import {
   XCircle,
   Share2,
   DollarSign,
-} from 'lucide-react'
+} from '../../components/ui/icon'
 import { useState } from 'react'
 import { Button } from '../../components/ui/button'
 import { AlertModal } from '../../components/ui/alert-modal'

@@ -1,48 +1,71 @@
 import * as React from 'react'
-import * as AvatarPrimitive from '@radix-ui/react-avatar'
-
 import { cn } from '../../lib/utils'
 
-const Avatar = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Root
-    ref={ref}
-    className={cn(
-      'relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-accent text-accent-foreground font-semibold shadow-none',
-      className,
-    )}
-    {...props}
-  />
-))
-Avatar.displayName = AvatarPrimitive.Root.displayName
+export interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
+  size?: 'default' | 'sm' | 'lg'
+}
 
-const AvatarImage = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Image>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Image
-    ref={ref}
-    className={cn('aspect-square h-full w-full object-cover', className)}
-    {...props}
-  />
-))
-AvatarImage.displayName = AvatarPrimitive.Image.displayName
+export function Avatar({ className, size = 'default', ...props }: AvatarProps) {
+  const sizeClass = {
+    sm: 'size-6',
+    default: 'size-8',
+    lg: 'size-10',
+  }[size]
 
-const AvatarFallback = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Fallback>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Fallback
-    ref={ref}
-    className={cn(
-      'flex h-full w-full items-center justify-center bg-accent text-accent-foreground font-bold text-xs uppercase',
-      className,
-    )}
-    {...props}
-  />
-))
-AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
+  return (
+    <span
+      data-slot="avatar"
+      className={cn(
+        'relative flex shrink-0 overflow-hidden rounded-full select-none',
+        sizeClass,
+        className,
+      )}
+      {...props}
+    />
+  )
+}
 
-export { Avatar, AvatarImage, AvatarFallback }
+export interface AvatarImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {}
+
+export function AvatarImage({
+  className,
+  src,
+  alt = '',
+  ...props
+}: AvatarImageProps) {
+  const [hasError, setHasError] = React.useState(false)
+
+  if (!src || hasError) return null
+
+  return (
+    <img
+      data-slot="avatar-image"
+      src={src}
+      alt={alt}
+      onError={() => setHasError(true)}
+      className={cn('aspect-square size-full object-cover', className)}
+      {...props}
+    />
+  )
+}
+
+export interface AvatarFallbackProps extends React.HTMLAttributes<HTMLSpanElement> {}
+
+export function AvatarFallback({
+  className,
+  children,
+  ...props
+}: AvatarFallbackProps) {
+  return (
+    <span
+      data-slot="avatar-fallback"
+      className={cn(
+        'flex size-full items-center justify-center rounded-full bg-muted text-xs font-bold text-muted-foreground',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </span>
+  )
+}
