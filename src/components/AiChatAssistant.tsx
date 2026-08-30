@@ -247,13 +247,13 @@ export function AiChatAssistant() {
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-none shadow-primary/30 hover:bg-primary/90 transition-all outline-none"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-none hover:bg-primary/90 transition-all outline-none"
         aria-label="Toggle AI Assistant"
       >
-        <Sparkles className="h-6 w-6 animate-pulse" />
-        <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+        <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 animate-pulse" />
+        <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 flex h-3 w-3 sm:h-3.5 sm:w-3.5">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 sm:h-3.5 sm:w-3.5 bg-emerald-500"></span>
         </span>
       </motion.button>
 
@@ -274,22 +274,22 @@ export function AiChatAssistant() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 350 }}
-              className="relative w-full max-w-md h-full bg-card border-l border-border shadow-none flex flex-col z-10"
+              className="relative w-full max-w-full sm:max-w-md h-full bg-card border-l border-border shadow-none flex flex-col z-10"
             >
               {/* Panel Header */}
-              <div className="p-4 border-b border-border flex items-center justify-between bg-muted/30">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-none">
-                    <Sparkles className="h-5 w-5" />
+              <div className="p-3.5 sm:p-4 border-b border-border flex items-center justify-between bg-muted/30">
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-none shrink-0">
+                    <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
+                    <h3 className="font-bold text-xs sm:text-sm text-foreground flex items-center gap-1.5 sm:gap-2">
                       Finly AI Assistant
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                      <span className="text-[9px] sm:text-[10px] font-semibold px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                         Phase 2 API
                       </span>
                     </h3>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                    <p className="text-[11px] sm:text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
                       <ShieldCheck className="h-3 w-3 text-emerald-500" />
                       Human-in-the-Loop Safeguard Active
                     </p>
@@ -297,7 +297,8 @@ export function AiChatAssistant() {
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-full hover:bg-accent text-muted-foreground hover:text-foreground transition-all"
+                  className="p-1.5 rounded-full hover:bg-accent text-muted-foreground hover:text-foreground transition-all cursor-pointer"
+                  aria-label="Close Assistant"
                 >
                   <X className="h-5 w-5" />
                 </button>

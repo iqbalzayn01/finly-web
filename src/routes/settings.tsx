@@ -266,22 +266,22 @@ function Settings() {
   )!
 
   return (
-    <div className="max-w-4xl space-y-8 pb-12">
+    <div className="space-y-6 sm:space-y-8 max-w-5xl pb-12">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
           Workspace Settings
         </h1>
-        <p className="mt-1.5 text-muted-foreground text-sm">
+        <p className="mt-1 sm:mt-1.5 text-xs sm:text-sm text-muted-foreground">
           Manage business profile, defaults, and AI Agent API connections.
         </p>
       </div>
 
       {/* Tab Navigation Controls */}
-      <div className="flex items-center gap-2 border-b border-border pb-4 flex-wrap">
+      <div className="flex items-center gap-2 border-b border-border pb-3 sm:pb-4 overflow-x-auto no-scrollbar">
         <button
           onClick={() => setActiveTab('profile')}
           className={cn(
-            'flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer outline-none',
+            'flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer outline-none shrink-0',
             activeTab === 'profile'
               ? 'bg-primary text-primary-foreground shadow-none'
               : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-accent',
@@ -293,7 +293,7 @@ function Settings() {
         <button
           onClick={() => setActiveTab('ai')}
           className={cn(
-            'flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer outline-none',
+            'flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer outline-none shrink-0',
             activeTab === 'ai'
               ? 'bg-primary text-primary-foreground shadow-none'
               : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-accent',
@@ -306,15 +306,15 @@ function Settings() {
 
       {/* TAB 1: Profile & Workspace Settings */}
       {activeTab === 'profile' && (
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Business Profile Card */}
-          <div className="border border-border bg-card p-8 rounded-2xl shadow-none space-y-6">
+          <div className="border border-border bg-card p-4 sm:p-6 md:p-8 rounded-2xl shadow-none space-y-5 sm:space-y-6">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
                 <Building2 className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-foreground">
+                <h2 className="text-lg sm:text-xl font-semibold text-foreground">
                   Business Profile
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">

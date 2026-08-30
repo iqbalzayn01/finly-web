@@ -61,56 +61,56 @@ function InvoiceBuilder() {
   const total = subtotal + tax
 
   return (
-    <div className="space-y-8 max-w-[1000px] mx-auto pb-12">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+    <div className="space-y-6 sm:space-y-8 max-w-[1000px] mx-auto pb-12">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <Link
             to="/invoices"
-            className="flex h-10 w-10 items-center justify-center border border-border bg-card rounded-full text-foreground transition-all hover:bg-accent shadow-none"
+            className="flex h-10 w-10 shrink-0 items-center justify-center border border-border bg-card rounded-full text-foreground transition-all hover:bg-accent shadow-none"
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
             Create Invoice
           </h1>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="grid grid-cols-2 sm:flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
           <Button
             variant="outline"
-            className="px-5"
+            className="px-4 sm:px-5 h-11 justify-center text-xs sm:text-sm font-semibold"
             onClick={() => setDraftSavedModal(true)}
           >
-            <Save className="h-4 w-4 mr-2" /> Save Draft
+            <Save className="h-4 w-4 mr-1.5 sm:mr-2" /> Save Draft
           </Button>
           <Button
-            className="px-6"
+            className="px-4 sm:px-6 h-11 justify-center text-xs sm:text-sm font-semibold"
             onClick={() =>
               navigate({ to: '/invoices/$id', params: { id: 'INV-2026-001' } })
             }
           >
-            <Send className="h-4 w-4 mr-2" /> Issue Document
+            <Send className="h-4 w-4 mr-1.5 sm:mr-2" /> Issue Document
           </Button>
         </div>
       </div>
 
       <div className="border border-border bg-card shadow-none rounded-2xl overflow-hidden">
         {/* Document Header */}
-        <div className="p-6 md:p-10 border-b border-border">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12">
+        <div className="p-4 sm:p-6 md:p-10 border-b border-border">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 md:gap-12">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 sm:mb-3">
                 From
               </p>
-              <div className="border border-border bg-background p-6 rounded-2xl shadow-none">
-                <h3 className="font-semibold text-base text-foreground">
+              <div className="border border-border bg-background p-4 sm:p-6 rounded-2xl shadow-none">
+                <h3 className="font-semibold text-sm sm:text-base text-foreground">
                   Finly HQ
                 </h3>
-                <p className="text-muted-foreground mt-1.5 text-xs font-normal leading-relaxed">
+                <p className="text-muted-foreground mt-1 text-xs font-normal leading-relaxed">
                   123 Business Rd.
                   <br />
                   Tech City, TC 90210
                 </p>
-                <p className="text-muted-foreground mt-3 text-xs font-mono">
+                <p className="text-muted-foreground mt-2 sm:mt-3 text-xs font-mono">
                   Tax ID: 00-1234567
                 </p>
               </div>
@@ -229,11 +229,12 @@ function InvoiceBuilder() {
                       <td className="py-4 text-right font-mono text-sm font-semibold text-foreground">
                         {formatAmount(item.qty * item.price)}
                       </td>
-                      <td className="py-4 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+                      <td className="py-4 text-right opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                         <button
                           type="button"
                           onClick={() => removeItem(item.id)}
                           className="flex h-8 w-8 items-center justify-center ml-auto border border-transparent rounded-full hover:bg-destructive/10 text-destructive transition-all cursor-pointer outline-none"
+                          aria-label="Remove item"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -254,9 +255,9 @@ function InvoiceBuilder() {
           </Button>
 
           {/* Totals */}
-          <div className="mt-12 flex justify-end">
-            <div className="w-[300px] border border-border bg-background p-6 rounded-2xl shadow-none">
-              <div className="space-y-3">
+          <div className="mt-8 sm:mt-12 flex justify-end">
+            <div className="w-full sm:w-[320px] border border-border bg-background p-4 sm:p-6 rounded-2xl shadow-none">
+              <div className="space-y-2.5 sm:space-y-3">
                 <div className="flex justify-between text-xs font-medium text-muted-foreground">
                   <span>Subtotal</span>
                   <span className="font-mono text-foreground font-semibold">
@@ -270,11 +271,11 @@ function InvoiceBuilder() {
                   </span>
                 </div>
               </div>
-              <div className="mt-4 border-t border-border pt-4 flex justify-between items-end">
+              <div className="mt-3.5 sm:mt-4 border-t border-border pt-3.5 sm:pt-4 flex justify-between items-end">
                 <span className="text-xs font-semibold uppercase tracking-wider text-foreground">
                   Total
                 </span>
-                <span className="font-mono text-3xl font-bold tracking-tight text-primary">
+                <span className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-primary">
                   {formatAmount(total)}
                 </span>
               </div>

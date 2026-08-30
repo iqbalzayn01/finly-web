@@ -80,16 +80,16 @@ function InvoiceDetail() {
   }
 
   return (
-    <div className="space-y-8 max-w-[1000px] mx-auto pb-12">
+    <div className="space-y-6 sm:space-y-8 max-w-[1000px] mx-auto pb-12">
       {/* Header bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
           <Link to="/invoices">
-            <div className="flex h-10 w-10 items-center justify-center border border-border bg-card rounded-full text-foreground hover:bg-accent transition-colors shadow-none">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center border border-border bg-card rounded-full text-foreground hover:bg-accent transition-colors shadow-none">
               <ArrowLeft className="h-4 w-4" />
             </div>
           </Link>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground truncate">
             Invoice {invoice.id}
           </h1>
           <div>
@@ -97,20 +97,20 @@ function InvoiceDetail() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="grid grid-cols-3 sm:flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
           <Button
             variant="outline"
             size="sm"
-            className="px-4"
+            className="px-3 sm:px-4 h-10 justify-center text-xs font-semibold"
             onClick={() => window.print()}
           >
-            <Printer className="h-3.5 w-3.5 mr-2" /> Print
+            <Printer className="h-3.5 w-3.5 mr-1.5 sm:mr-2" /> Print
           </Button>
 
           <Button
             variant="outline"
             size="sm"
-            className="px-4"
+            className="px-3 sm:px-4 h-10 justify-center text-xs font-semibold"
             onClick={() =>
               setModalState({
                 open: true,
@@ -120,12 +120,12 @@ function InvoiceDetail() {
               })
             }
           >
-            <Download className="h-3.5 w-3.5 mr-2" /> PDF
+            <Download className="h-3.5 w-3.5 mr-1.5 sm:mr-2" /> PDF
           </Button>
 
           <Button
             size="sm"
-            className="px-5"
+            className="px-3 sm:px-5 h-10 justify-center text-xs font-semibold"
             onClick={() =>
               setModalState({
                 open: true,
@@ -135,14 +135,14 @@ function InvoiceDetail() {
               })
             }
           >
-            <Mail className="h-3.5 w-3.5 mr-2" /> Send Email
+            <Mail className="h-3.5 w-3.5 mr-1.5 sm:mr-2" /> Send
           </Button>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
         {/* Main Document Paper */}
-        <div className="md:col-span-2 border border-border bg-card p-6 md:p-10 rounded-2xl shadow-none">
+        <div className="md:col-span-2 border border-border bg-card p-4 sm:p-6 md:p-10 rounded-2xl shadow-none">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 pb-10 border-b border-border">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">

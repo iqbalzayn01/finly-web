@@ -25,13 +25,13 @@ function Account() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-4xl space-y-8"
+      className="max-w-4xl space-y-6 sm:space-y-8"
     >
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
           Account
         </h1>
-        <p className="mt-1.5 text-muted-foreground text-sm">
+        <p className="mt-1 sm:mt-1.5 text-xs sm:text-sm text-muted-foreground">
           Manage your profile and security settings.
         </p>
       </div>
@@ -40,10 +40,10 @@ function Account() {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.1 }}
-        className="border border-border bg-card p-8 rounded-2xl shadow-none"
+        className="border border-border bg-card p-4 sm:p-6 md:p-8 rounded-2xl shadow-none"
       >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-foreground">
+        <div className="flex items-center justify-between mb-5 sm:mb-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-foreground">
             Profile Information
           </h2>
           {isPro && (
@@ -54,10 +54,10 @@ function Account() {
           )}
         </div>
 
-        <div className="flex items-center gap-6 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Avatar
             className={cn(
-              'h-20 w-20 shadow-none transition-all',
+              'h-16 w-16 sm:h-20 sm:w-20 shadow-none transition-all',
               isPro
                 ? 'border-2 border-primary ring-4 ring-primary/20'
                 : 'border border-border',
@@ -73,7 +73,7 @@ function Account() {
             <Button
               variant="outline"
               size="sm"
-              className="mb-1.5"
+              className="mb-1.5 text-xs"
               onClick={() => setAvatarModalOpen(true)}
             >
               Change Avatar
@@ -84,39 +84,42 @@ function Account() {
           </div>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2">
-          <div className="space-y-2">
+        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <label className="text-xs font-semibold text-foreground">
               Full Name
             </label>
-            <div className="relative mt-1">
+            <div className="relative">
               <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Full Name"
                 defaultValue="Admin User"
-                className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
               />
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <label className="text-xs font-semibold text-foreground">
               Email Address
             </label>
-            <div className="relative mt-1">
+            <div className="relative">
               <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
               <input
                 type="email"
                 placeholder="Email Address"
                 defaultValue="admin@acmecorp.com"
-                className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
               />
             </div>
           </div>
         </div>
 
-        <div className="mt-8 flex justify-end">
-          <Button className="px-6" onClick={() => setSaveModalOpen(true)}>
+        <div className="mt-6 sm:mt-8 flex justify-end">
+          <Button
+            className="w-full sm:w-auto px-6"
+            onClick={() => setSaveModalOpen(true)}
+          >
             Save Changes
           </Button>
         </div>
@@ -126,12 +129,14 @@ function Account() {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 25, delay: 0.2 }}
-        className="border border-border bg-card p-8 rounded-2xl shadow-none"
+        className="border border-border bg-card p-4 sm:p-6 md:p-8 rounded-2xl shadow-none"
       >
-        <h2 className="text-xl font-semibold text-foreground mb-6">Security</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-foreground mb-4 sm:mb-6">
+          Security
+        </h2>
 
-        <div className="space-y-6">
-          <div className="flex items-center justify-between py-4 border-b border-border">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-3 sm:py-4 border-b border-border">
             <div>
               <h3 className="font-semibold text-sm text-foreground flex items-center gap-2">
                 <Key className="h-4 w-4 text-muted-foreground" /> Password
@@ -143,12 +148,13 @@ function Account() {
             <Button
               variant="outline"
               size="sm"
+              className="self-start sm:self-auto text-xs"
               onClick={() => setPasswordModalOpen(true)}
             >
               Change Password
             </Button>
           </div>
-          <div className="flex items-center justify-between py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-3 sm:py-4">
             <div>
               <h3 className="font-semibold text-sm text-foreground flex items-center gap-2">
                 <Shield
@@ -165,6 +171,7 @@ function Account() {
             <Button
               variant="outline"
               size="sm"
+              className="self-start sm:self-auto text-xs"
               onClick={() => setTwoFactorModalOpen(true)}
             >
               {twoFactorEnabled ? 'Manage 2FA' : 'Enable 2FA'}

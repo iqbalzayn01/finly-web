@@ -74,6 +74,13 @@ const initialCustomers = [
   },
 ]
 
+const TERM_OPTIONS = [
+  { value: 'all', label: 'All Terms' },
+  { value: '7', label: 'Net 7' },
+  { value: '14', label: 'Net 14' },
+  { value: '30', label: 'Net 30' },
+]
+
 function Customers() {
   const [showForm, setShowForm] = useState(false)
   const [openKebab, setOpenKebab] = useState<number | null>(null)
@@ -122,65 +129,62 @@ function Customers() {
   })
 
   return (
-    <div className="space-y-8 pb-12">
-      <div className="flex items-end justify-between">
+    <div className="space-y-6 sm:space-y-8 pb-12">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
             Customers
           </h1>
-          <p className="mt-2 text-muted-foreground">
+          <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-muted-foreground">
             Manage client profiles and billing terms.
           </p>
         </div>
         <Button
           onClick={() => setShowForm(true)}
-          className="h-11 px-6 rounded-full font-semibold shadow-none"
+          className="w-full sm:w-auto h-11 px-6 rounded-full font-semibold shadow-none"
         >
           <Plus className="h-5 w-5 mr-2" /> Add Customer
         </Button>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 max-w-2xl">
+      <div className="flex flex-col sm:flex-row gap-3 max-w-2xl">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
           <input
             type="text"
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
-            placeholder="Search by name or email (min 3 chars)..."
-            className="w-full h-full border border-border bg-background rounded-full pl-11 pr-24 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+            placeholder="Search by name or email..."
+            className="w-full h-11 border border-border bg-background rounded-xl pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
           />
           {isTooShort && (
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] sm:text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
               Min 3 chars
             </span>
           )}
         </div>
-        <div className="w-40">
-          <Select value={termFilter} onValueChange={setTermFilter}>
-            <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-card text-foreground rounded-full">
+        <div className="w-full sm:w-44 shrink-0">
+          <Select
+            items={TERM_OPTIONS}
+            value={termFilter}
+            onValueChange={(val) => setTermFilter(val || 'all')}
+          >
+            <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-xl">
               <SelectValue placeholder="Payment Terms" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="all" className="rounded-full">
-                All Terms
-              </SelectItem>
-              <SelectItem value="7" className="rounded-full">
-                Net 7
-              </SelectItem>
-              <SelectItem value="14" className="rounded-full">
-                Net 14
-              </SelectItem>
-              <SelectItem value="30" className="rounded-full">
-                Net 30
-              </SelectItem>
+              {TERM_OPTIONS.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
       </div>
 
       {filteredCustomers.length === 0 ? (
-        <div className="border border-border bg-card p-12 text-center rounded-2xl shadow-none flex flex-col items-center justify-center gap-3">
+        <div className="border border-border bg-card p-8 sm:p-12 text-center rounded-2xl shadow-none flex flex-col items-center justify-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-muted/60 text-muted-foreground border border-border">
             <Search className="h-5 w-5" />
           </div>
@@ -204,11 +208,7 @@ function Customers() {
           )}
         </div>
       ) : (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredCustomers.map((c, i) => (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -220,7 +220,7 @@ function Customers() {
                 delay: i * 0.06,
               }}
               key={c.id}
-              className="group relative border border-border bg-card p-6 rounded-2xl shadow-none"
+              className="group relative border border-border bg-card p-4 sm:p-6 rounded-2xl shadow-none"
             >
               <div className="flex items-start justify-between">
                 <div className="flex h-12 w-12 items-center justify-center border border-border bg-accent/40 text-accent-foreground text-lg font-bold rounded-2xl">
@@ -306,7 +306,7 @@ function Customers() {
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       )}
 
       <AnimatePresence>
