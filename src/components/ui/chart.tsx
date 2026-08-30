@@ -110,7 +110,10 @@ export type ChartTooltipPayloadItem = {
   [key: string]: unknown
 }
 
-export interface ChartTooltipContentProps extends React.ComponentProps<'div'> {
+export interface ChartTooltipContentProps extends Omit<
+  React.ComponentProps<'div'>,
+  'color'
+> {
   active?: boolean
   payload?: ChartTooltipPayloadItem[]
   label?: React.ReactNode
@@ -132,6 +135,31 @@ export interface ChartTooltipContentProps extends React.ComponentProps<'div'> {
   indicator?: 'line' | 'dot' | 'dashed'
   nameKey?: string
   labelKey?: string
+  // Recharts internal props passed when rendered as tooltip content
+  accessibilityLayer?: boolean
+  activeIndex?: number
+  allowEscapeViewBox?: boolean
+  animationDuration?: number
+  animationEasing?: string
+  contentStyle?: React.CSSProperties
+  coordinate?: { x?: number; y?: number }
+  cursor?: boolean | object
+  cursorStyle?: React.CSSProperties
+  filterNull?: boolean
+  isAnimationActive?: boolean
+  itemSorter?: unknown
+  itemStyle?: React.CSSProperties
+  labelStyle?: React.CSSProperties
+  offset?: number
+  portal?: unknown
+  position?: { x?: number; y?: number }
+  reverseDirection?: { x?: boolean; y?: boolean } | boolean
+  separator?: string
+  shared?: boolean
+  trigger?: 'hover' | 'click'
+  useTranslate3d?: boolean
+  viewBox?: { x?: number; y?: number; width?: number; height?: number }
+  wrapperStyle?: React.CSSProperties
 }
 
 const ChartTooltipContent = React.forwardRef<
@@ -153,6 +181,31 @@ const ChartTooltipContent = React.forwardRef<
       color,
       nameKey,
       labelKey,
+      // Recharts internal props to omit from spreading onto DOM <div>
+      accessibilityLayer: _accessibilityLayer,
+      activeIndex: _activeIndex,
+      allowEscapeViewBox: _allowEscapeViewBox,
+      animationDuration: _animationDuration,
+      animationEasing: _animationEasing,
+      contentStyle: _contentStyle,
+      coordinate: _coordinate,
+      cursor: _cursor,
+      cursorStyle: _cursorStyle,
+      filterNull: _filterNull,
+      isAnimationActive: _isAnimationActive,
+      itemSorter: _itemSorter,
+      itemStyle: _itemStyle,
+      labelStyle: _labelStyle,
+      offset: _offset,
+      portal: _portal,
+      position: _position,
+      reverseDirection: _reverseDirection,
+      separator: _separator,
+      shared: _shared,
+      trigger: _trigger,
+      useTranslate3d: _useTranslate3d,
+      viewBox: _viewBox,
+      wrapperStyle: _wrapperStyle,
       ...props
     },
     ref,
@@ -308,11 +361,24 @@ export type ChartLegendPayloadItem = {
   [key: string]: unknown
 }
 
-export interface ChartLegendContentProps extends React.ComponentProps<'div'> {
+export interface ChartLegendContentProps extends Omit<
+  React.ComponentProps<'div'>,
+  'content' | 'color'
+> {
   payload?: ChartLegendPayloadItem[]
   verticalAlign?: 'top' | 'middle' | 'bottom'
   hideIcon?: boolean
   nameKey?: string
+  // Recharts legend injected props
+  align?: 'left' | 'center' | 'right'
+  chartHeight?: number
+  chartWidth?: number
+  content?: React.ReactNode
+  iconSize?: number
+  iconType?: string
+  inactiveColor?: string
+  layout?: 'horizontal' | 'vertical'
+  margin?: { top?: number; left?: number; bottom?: number; right?: number }
 }
 
 const ChartLegendContent = React.forwardRef<
@@ -326,6 +392,16 @@ const ChartLegendContent = React.forwardRef<
       payload,
       verticalAlign = 'bottom',
       nameKey,
+      // Recharts internal props to omit from spreading onto DOM <div>
+      align: _align,
+      chartHeight: _chartHeight,
+      chartWidth: _chartWidth,
+      content: _content,
+      iconSize: _iconSize,
+      iconType: _iconType,
+      inactiveColor: _inactiveColor,
+      layout: _layout,
+      margin: _margin,
       ...props
     },
     ref,
