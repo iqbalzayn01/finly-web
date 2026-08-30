@@ -5,3 +5,8 @@ Use the latest version of Shadcn to install new components, like this command to
 ```bash
 pnpm dlx shadcn@latest add button
 ```
+
+# Git Operations
+
+- Do NOT perform `git commit` or `git push` unless explicitly instructed and authorized by the user.
+

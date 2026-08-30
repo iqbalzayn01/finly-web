@@ -309,13 +309,13 @@ export function QuickEntryModal({
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 12 }}
                     transition={{ type: 'spring', damping: 26, stiffness: 350 }}
-                    className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-card p-6 text-foreground shadow-none outline-none my-auto"
+                    className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-card p-4 sm:p-6 text-foreground shadow-none outline-none my-auto max-h-[90vh] overflow-y-auto"
                   >
                     {/* Header Bar */}
-                    <div className="flex items-center justify-between pb-4 border-b border-border mb-5">
+                    <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-border mb-4 sm:mb-5">
                       <div className="flex items-center gap-2.5">
                         <div
-                          className={`flex h-9 w-9 items-center justify-center rounded-xl border ${
+                          className={`flex h-9 w-9 items-center justify-center rounded-xl border shrink-0 ${
                             txType === 'income'
                               ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
                               : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20'
@@ -328,10 +328,10 @@ export function QuickEntryModal({
                           )}
                         </div>
                         <div>
-                          <BaseDialog.Title className="text-lg font-bold tracking-tight text-foreground">
+                          <BaseDialog.Title className="text-base sm:text-lg font-bold tracking-tight text-foreground">
                             Quick Entry
                           </BaseDialog.Title>
-                          <BaseDialog.Description className="text-xs text-muted-foreground">
+                          <BaseDialog.Description className="text-[11px] sm:text-xs text-muted-foreground">
                             Record a transaction to your ledger in{' '}
                             {activeConfig.name}.
                           </BaseDialog.Description>
@@ -347,13 +347,13 @@ export function QuickEntryModal({
                       </BaseDialog.Close>
                     </div>
 
-                    <form onSubmit={handleSave} className="space-y-5">
+                    <form onSubmit={handleSave} className="space-y-4 sm:space-y-5">
                       {/* Income vs Expense Pill Switcher */}
                       <div className="grid grid-cols-2 gap-1.5 p-1 bg-muted/50 border border-border rounded-xl">
                         <button
                           type="button"
                           onClick={() => setTxType('expense')}
-                          className={`flex items-center justify-center gap-1.5 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer outline-none ${
+                          className={`flex items-center justify-center gap-1.5 py-1.5 sm:py-2 text-xs font-bold rounded-lg transition-all cursor-pointer outline-none ${
                             txType === 'expense'
                               ? 'bg-card text-rose-600 dark:text-rose-400 shadow-none border border-border'
                               : 'text-muted-foreground hover:text-foreground'
@@ -368,7 +368,7 @@ export function QuickEntryModal({
                         <button
                           type="button"
                           onClick={() => setTxType('income')}
-                          className={`flex items-center justify-center gap-1.5 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer outline-none ${
+                          className={`flex items-center justify-center gap-1.5 py-1.5 sm:py-2 text-xs font-bold rounded-lg transition-all cursor-pointer outline-none ${
                             txType === 'income'
                               ? 'bg-card text-emerald-600 dark:text-emerald-400 shadow-none border border-border'
                               : 'text-muted-foreground hover:text-foreground'
@@ -385,11 +385,11 @@ export function QuickEntryModal({
                       {/* Prominent Amount Display with Keyboard / Numpad Guide */}
                       <div
                         data-quick-entry="amount"
-                        className="text-center py-3 px-4 rounded-xl bg-muted/30 border border-border transition-all"
+                        className="text-center py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl bg-muted/30 border border-border transition-all"
                       >
-                        <div className="flex items-center justify-center gap-1.5 mb-1 text-muted-foreground">
+                        <div className="flex items-center justify-center gap-1.5 mb-0.5 sm:mb-1 text-muted-foreground">
                           <Keyboard className="h-3.5 w-3.5" />
-                          <p className="text-[11px] font-semibold uppercase tracking-wider">
+                          <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider">
                             Amount ({activeCurrency})
                           </p>
                         </div>
@@ -402,7 +402,7 @@ export function QuickEntryModal({
                             stiffness: 500,
                             damping: 25,
                           }}
-                          className={`font-mono text-3xl sm:text-4xl font-bold tracking-tight ${
+                          className={`font-mono text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight truncate ${
                             txType === 'income'
                               ? 'text-emerald-600 dark:text-emerald-400'
                               : 'text-foreground'
@@ -413,7 +413,7 @@ export function QuickEntryModal({
                       </div>
 
                       {/* Tactile Numpad Grid with Keyboard Synchronization */}
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                         {[
                           { label: '1', val: '1' },
                           { label: '2', val: '2' },
@@ -436,10 +436,10 @@ export function QuickEntryModal({
                               key={item.label}
                               type="button"
                               onClick={() => handleNumpad(item.val)}
-                              className={`h-11 border border-border text-base font-semibold rounded-xl shadow-none transition-all cursor-pointer outline-none flex items-center justify-center ${
+                              className={`h-10 sm:h-11 border border-border text-sm sm:text-base font-semibold rounded-xl shadow-none transition-all cursor-pointer outline-none flex items-center justify-center ${
                                 isPressed
-                                  ? 'bg-primary text-primary-foreground border-primary scale-95 ring-2 ring-primary/40'
-                                  : 'bg-card text-foreground hover:bg-accent hover:text-accent-foreground active:scale-95'
+                                    ? 'bg-primary text-primary-foreground border-primary scale-95 ring-2 ring-primary/40'
+                                    : 'bg-card text-foreground hover:bg-accent hover:text-accent-foreground active:scale-95'
                               } ${item.isClear ? 'text-destructive font-bold' : ''}`}
                             >
                               {item.isBack ? (

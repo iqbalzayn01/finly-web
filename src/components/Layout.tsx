@@ -10,7 +10,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <AppSidebar />
       <SidebarInset>
         <Topbar />
-        <main className="flex-1 p-4 sm:p-6 md:p-8 w-full max-w-[1920px] mx-auto space-y-8">
+        <main className="flex-1 p-3.5 sm:p-6 md:p-8 w-full max-w-[1920px] mx-auto space-y-6 sm:space-y-8 min-w-0 overflow-x-hidden">
           {children}
         </main>
         <AiChatAssistant />

@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
   SelectContent,
+  SelectGroup,
   SelectItem,
 } from '../components/ui/select'
 import { useDebouncedSearch } from '../hooks/use-debounced-search'
@@ -254,6 +255,18 @@ const m3Transition = {
   duration: 0.35,
 }
 
+const TYPE_OPTIONS = [
+  { value: 'all', label: 'All Types' },
+  { value: 'income', label: 'Income' },
+  { value: 'expense', label: 'Expense' },
+]
+
+const SCOPE_OPTIONS = [
+  { value: 'all', label: 'All Scopes' },
+  { value: 'business', label: 'Business' },
+  { value: 'personal', label: 'Personal' },
+]
+
 function Cashbook() {
   const { currency, formatAmount } = useCurrency()
   const [quickEntryOpen, setQuickEntryOpen] = useState(false)
@@ -319,55 +332,57 @@ function Cashbook() {
   })
 
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-6 sm:space-y-8 pb-12">
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
             Cashbook
           </h1>
-          <p className="mt-2 text-muted-foreground">
+          <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-muted-foreground">
             Ledger of all business and personal transactions.
           </p>
         </div>
         <Button
           onClick={() => setQuickEntryOpen(true)}
-          className="h-11 px-6 rounded-full font-semibold shadow-none"
+          className="w-full sm:w-auto h-11 px-6 rounded-full font-semibold shadow-none"
         >
           <Plus className="h-5 w-5 mr-2" /> Quick Entry
         </Button>
       </div>
 
       {/* Cashbook Summary Cards with Staggered Entrance */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...m3Transition, delay: 0.05 }}
-          className="border border-border bg-card p-5 rounded-2xl shadow-none"
+          className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none"
         >
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Total Inflow (Income)
           </p>
-          <p className="font-mono text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
+          <p className="font-mono text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
             {formatAmount(totalInflow)}
           </p>
-          <p className="text-xs text-muted-foreground mt-1">2 Income Entries</p>
+          <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
+            2 Income Entries
+          </p>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...m3Transition, delay: 0.1 }}
-          className="border border-border bg-card p-5 rounded-2xl shadow-none"
+          className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none"
         >
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Total Outflow (Expense)
           </p>
-          <p className="font-mono text-2xl font-bold text-rose-600 dark:text-rose-400 mt-1">
+          <p className="font-mono text-xl sm:text-2xl font-bold text-rose-600 dark:text-rose-400 mt-1">
             {formatAmount(totalOutflow)}
           </p>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
             4 Expense Entries
           </p>
         </motion.div>
@@ -376,15 +391,15 @@ function Cashbook() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ...m3Transition, delay: 0.15 }}
-          className="border border-border bg-card p-5 rounded-2xl shadow-none"
+          className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none"
         >
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Net Ledger Balance
           </p>
-          <p className="font-mono text-2xl font-bold text-foreground mt-1">
+          <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">
             {formatAmount(netCashflow)}
           </p>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
             Cash Surplus Across Accounts
           </p>
         </motion.div>
@@ -395,47 +410,63 @@ function Cashbook() {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...m3Transition, delay: 0.2 }}
-        className="border border-border bg-card shadow-none rounded-2xl min-h-[600px] overflow-hidden"
+        className="border border-border bg-card shadow-none rounded-2xl min-h-[500px] overflow-hidden"
       >
-        <div className="p-4 border-b border-border flex flex-col md:flex-row gap-4">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
+        <div className="p-3.5 sm:p-4 border-b border-border flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
             <input
               type="text"
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
-              placeholder="Search transactions (min 3 chars)..."
-              className="w-full h-full border border-border bg-background rounded-full pl-11 pr-24 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+              placeholder="Search transactions..."
+              className="w-full h-11 border border-border bg-background rounded-xl pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
             />
             {isTooShort && (
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] sm:text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
                 Min 3 chars
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="w-40">
-              <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-card text-foreground rounded-xl">
+          <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-3 shrink-0">
+            <div className="w-full sm:w-36">
+              <Select
+                items={TYPE_OPTIONS}
+                value={typeFilter}
+                onValueChange={(val) => setTypeFilter(val || 'all')}
+              >
+                <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-xl">
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="income">Income</SelectItem>
-                  <SelectItem value="expense">Expense</SelectItem>
+                <SelectContent>
+                  <SelectGroup>
+                    {TYPE_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
-            <div className="w-40">
-              <Select value={scopeFilter} onValueChange={setScopeFilter}>
-                <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-card text-foreground rounded-xl">
+            <div className="w-full sm:w-36">
+              <Select
+                items={SCOPE_OPTIONS}
+                value={scopeFilter}
+                onValueChange={(val) => setScopeFilter(val || 'all')}
+              >
+                <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-xl">
                   <SelectValue placeholder="All Scopes" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                  <SelectItem value="all">All Scopes</SelectItem>
-                  <SelectItem value="business">Business</SelectItem>
-                  <SelectItem value="personal">Personal</SelectItem>
+                <SelectContent>
+                  <SelectGroup>
+                    {SCOPE_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
                 </SelectContent>
               </Select>
             </div>

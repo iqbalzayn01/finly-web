@@ -18,6 +18,42 @@ const SelectLabelContext = React.createContext<SelectLabelContextValue>({
   registerLabel: () => {},
 })
 
+/**
+ * Recursively scans React children to extract static labels from SelectItem components
+ * so SelectValue can render the correct label on initial mount before popups open.
+ */
+function extractStaticLabels(
+  children: React.ReactNode,
+): Record<string, React.ReactNode> {
+  const map: Record<string, React.ReactNode> = {}
+
+  function walk(node: React.ReactNode) {
+    if (!node) return
+    if (React.isValidElement(node)) {
+      const props = node.props as any
+      if (props) {
+        if (
+          'value' in props &&
+          props.value !== undefined &&
+          props.value !== null
+        ) {
+          if (props.children !== undefined) {
+            map[String(props.value)] = props.children
+          }
+        }
+        if (props.children) {
+          React.Children.forEach(props.children, walk)
+        }
+      }
+    } else if (Array.isArray(node)) {
+      node.forEach(walk)
+    }
+  }
+
+  React.Children.forEach(children, walk)
+  return map
+}
+
 export interface SelectProps extends Omit<
   React.ComponentProps<typeof BaseSelect.Root>,
   'onValueChange'
@@ -31,14 +67,23 @@ export interface SelectProps extends Omit<
  * Wraps BaseSelect.Root and provides label context for its children.
  */
 function Select({ items, children, ...props }: SelectProps) {
-  const [labels, setLabels] = React.useState<Record<string, React.ReactNode>>(
-    {},
+  const staticLabels = React.useMemo(
+    () => extractStaticLabels(children),
+    [children],
+  )
+  const [dynamicLabels, setDynamicLabels] = React.useState<
+    Record<string, React.ReactNode>
+  >({})
+
+  const labels = React.useMemo(
+    () => ({ ...staticLabels, ...dynamicLabels }),
+    [staticLabels, dynamicLabels],
   )
 
   const registerLabel = React.useCallback(
     (value: any, label: React.ReactNode) => {
       if (value !== undefined && value !== null) {
-        setLabels((prev) =>
+        setDynamicLabels((prev) =>
           prev[String(value)] === label
             ? prev
             : { ...prev, [String(value)]: label },

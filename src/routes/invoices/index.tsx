@@ -101,6 +101,14 @@ const StatusBadge = ({ status }: { status: string }) => {
   )
 }
 
+const STATUS_OPTIONS = [
+  { value: 'all', label: 'All Statuses' },
+  { value: 'draft', label: 'Draft' },
+  { value: 'unpaid', label: 'Unpaid' },
+  { value: 'paid', label: 'Paid' },
+  { value: 'void', label: 'Void' },
+]
+
 function Invoices() {
   const { formatAmount } = useCurrency()
   const [openKebab, setOpenKebab] = useState<string | null>(null)
@@ -145,86 +153,90 @@ function Invoices() {
   })
 
   return (
-    <div className="space-y-8 pb-12">
-      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
+    <div className="space-y-6 sm:space-y-8 pb-12">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
             Invoices & Billing
           </h1>
-          <p className="mt-2 text-muted-foreground">
+          <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-muted-foreground">
             Manage client billing, draft invoices, and automatic receivables.
           </p>
         </div>
-        <Link to="/invoices/builder">
-          <Button className="h-11 px-6 rounded-full font-semibold shadow-none">
+        <Link to="/invoices/builder" className="w-full sm:w-auto">
+          <Button className="w-full sm:w-auto h-11 px-6 rounded-full font-semibold shadow-none">
             <Plus className="h-5 w-5 mr-2" /> New Invoice
           </Button>
         </Link>
       </div>
 
       {/* Invoice Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="border border-border bg-card p-5 rounded-2xl shadow-none">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none">
+          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Total Receivables
           </p>
-          <p className="font-mono text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">
+          <p className="font-mono text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">
             {formatAmount(17000)}
           </p>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
             2 Unpaid Invoices
           </p>
         </div>
-        <div className="border border-border bg-card p-5 rounded-2xl shadow-none">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none">
+          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Paid This Month
           </p>
-          <p className="font-mono text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
+          <p className="font-mono text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
             {formatAmount(3500)}
           </p>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
             1 Settled Invoice
           </p>
         </div>
-        <div className="border border-border bg-card p-5 rounded-2xl shadow-none">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none">
+          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Draft Invoices
           </p>
-          <p className="font-mono text-2xl font-bold text-foreground mt-1">
+          <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">
             {formatAmount(200)}
           </p>
-          <p className="text-xs text-muted-foreground mt-1">1 Pending Review</p>
+          <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">1 Pending Review</p>
         </div>
       </div>
 
       <div className="border border-border bg-card shadow-none rounded-2xl min-h-[500px] overflow-hidden">
-        <div className="p-4 border-b border-border flex flex-col md:flex-row gap-4">
-          <div className="relative max-w-md w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
+        <div className="p-3.5 sm:p-4 border-b border-border flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
             <input
               type="text"
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
-              placeholder="Search by ID or Client (min 3 chars)..."
-              className="w-full h-full border border-border bg-background rounded-full pl-11 pr-24 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+              placeholder="Search by ID or Client..."
+              className="w-full h-11 border border-border bg-background rounded-xl pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
             />
             {isTooShort && (
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] sm:text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
                 Min 3 chars
               </span>
             )}
           </div>
-          <div className="w-40">
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-card text-foreground rounded-xl">
+          <div className="w-full sm:w-40 shrink-0">
+            <Select
+              items={STATUS_OPTIONS}
+              value={statusFilter}
+              onValueChange={(val) => setStatusFilter(val || 'all')}
+            >
+              <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-xl">
                 <SelectValue placeholder="All Statuses" />
               </SelectTrigger>
               <SelectContent className="rounded-xl">
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="draft">Draft</SelectItem>
-                <SelectItem value="unpaid">Unpaid</SelectItem>
-                <SelectItem value="paid">Paid</SelectItem>
-                <SelectItem value="void">Void</SelectItem>
+                {STATUS_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

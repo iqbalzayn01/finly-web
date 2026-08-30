@@ -303,7 +303,6 @@ function Dashboard() {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Period</SelectLabel>
                 {period.map((item) => (
                   <SelectItem key={item.label} value={item.value}>
                     {item.label}
@@ -316,7 +315,7 @@ function Dashboard() {
       </div>
 
       {/* ROW 1: TOP METRIC CARDS (3 COLUMNS) */}
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3">
         {[
           {
             title: 'Total Balance',
@@ -375,30 +374,30 @@ function Dashboard() {
             transition={{ ...m3Transition, delay: 0.15 + idx * 0.05 }}
           >
             <div
-              className={`p-6 ${card.containerClass} transition-colors flex flex-col justify-between h-52.5`}
+              className={`p-4 sm:p-6 ${card.containerClass} transition-colors flex flex-col justify-between min-h-[175px] sm:min-h-[195px] h-full`}
             >
               <div>
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <span className="text-xs font-semibold opacity-80 tracking-wide uppercase">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="space-y-1 min-w-0">
+                    <span className="text-[11px] sm:text-xs font-semibold opacity-80 tracking-wide uppercase truncate block">
                       {card.title}
                     </span>
-                    <h3 className="font-mono text-4xl font-medium tracking-tight">
+                    <h3 className="font-mono text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight truncate">
                       {card.value}
                     </h3>
                   </div>
                   <div
-                    className={`flex h-11 w-11 shrink-0 items-center justify-center ${card.iconClass}`}
+                    className={`flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center ${card.iconClass}`}
                   >
-                    <card.icon className="h-5 w-5" />
+                    <card.icon className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5 sm:space-y-3 pt-3">
                 {/* Progress bar */}
                 <div
-                  className={`h-6.5 w-full rounded-full ${card.progressBg} overflow-hidden`}
+                  className={`h-2 sm:h-2.5 w-full rounded-full ${card.progressBg} overflow-hidden`}
                 >
                   <div
                     className={`h-full rounded-full ${card.progressFill}`}
@@ -406,10 +405,12 @@ function Dashboard() {
                   />
                 </div>
 
-                <div className="flex items-center justify-between text-xs">
-                  <span className="opacity-75 font-medium">{card.subtext}</span>
+                <div className="flex items-center justify-between text-xs gap-2">
+                  <span className="opacity-75 font-medium truncate">
+                    {card.subtext}
+                  </span>
                   <span
-                    className={`inline-flex items-center gap-1 font-semibold px-2 py-0.5 ${card.trendClass}`}
+                    className={`inline-flex items-center gap-1 font-semibold px-2 py-0.5 shrink-0 ${card.trendClass}`}
                   >
                     {card.isUp ? (
                       <ArrowUpRight className="h-3 w-3" />
@@ -565,7 +566,7 @@ function Dashboard() {
       </motion.div>
 
       {/* ROW 3: CASH RUNWAY & CASH HEALTH (COMBINED SINGLE ROW) */}
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 items-stretch">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 items-stretch">
         {/* Col 1: Cash Runway */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -573,34 +574,34 @@ function Dashboard() {
           transition={{ ...m3Transition, delay: 0.3 }}
           className="flex flex-col"
         >
-          <div className="bg-card text-foreground border border-border shadow-none rounded-2xl p-6 flex-1 flex flex-col justify-between h-full">
+          <div className="bg-card text-foreground border border-border shadow-none rounded-2xl p-4 sm:p-6 flex-1 flex flex-col justify-between h-full">
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2.5">
+              <div className="flex items-center justify-between mb-4 gap-2">
+                <div className="flex items-center gap-2.5 min-w-0">
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
                     <ShieldCheck className="h-4 w-4" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-sm text-foreground">
+                  <div className="truncate">
+                    <h3 className="font-semibold text-sm text-foreground truncate">
                       Cash Runway
                     </h3>
-                    <p className="text-[11px] text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground truncate">
                       Zero Revenue Survival Horizon
                     </p>
                   </div>
                 </div>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                  Buffer: 14+ Months
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
+                  Buffer: 14+ Mo
                 </span>
               </div>
 
               {/* Big Metric */}
-              <div className="my-5">
+              <div className="my-4 sm:my-5">
                 <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-5xl font-extrabold tracking-tight text-foreground">
+                  <span className="font-mono text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground">
                     14.2
                   </span>
-                  <span className="text-base font-semibold text-muted-foreground">
+                  <span className="text-sm sm:text-base font-semibold text-muted-foreground">
                     Months
                   </span>
                 </div>
@@ -819,31 +820,31 @@ function Dashboard() {
         transition={{ ...m3Transition, delay: 0.4 }}
         className="w-full"
       >
-        <div className="bg-card border border-border shadow-none rounded-2xl p-6 flex flex-col justify-between">
+        <div className="bg-card border border-border shadow-none rounded-2xl p-4 sm:p-6 flex flex-col justify-between">
           <div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20 shrink-0">
                   <Receipt className="h-4 w-4" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-foreground">
+                  <h2 className="text-base sm:text-lg font-semibold text-foreground">
                     Recent Transactions
                   </h2>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[11px] sm:text-xs text-muted-foreground">
                     Latest incoming payments and outgoing bills
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto">
                 {/* Filter Pills */}
-                <div className="flex items-center gap-1.5 p-1 bg-muted/50 rounded-xl">
+                <div className="flex items-center gap-1 sm:gap-1.5 p-1 bg-muted/50 rounded-xl overflow-x-auto">
                   {(['all', 'income', 'expense'] as const).map((filterType) => (
                     <button
                       key={filterType}
                       onClick={() => setRecentTxFilter(filterType)}
-                      className={`px-3 py-1 text-xs font-semibold rounded-lg capitalize transition-all cursor-pointer ${
+                      className={`px-2.5 sm:px-3 py-1 text-xs font-semibold rounded-lg capitalize transition-all cursor-pointer ${
                         recentTxFilter === filterType
                           ? 'bg-primary text-primary-foreground shadow-xs font-bold'
                           : 'text-muted-foreground hover:text-foreground'
@@ -860,7 +861,7 @@ function Dashboard() {
 
                 <Link
                   to="/cashbook"
-                  className="text-xs font-bold text-primary hover:underline px-3 py-1 rounded-xl hover:bg-primary/5 transition-colors flex items-center gap-1"
+                  className="text-xs font-bold text-primary hover:underline px-2.5 py-1 rounded-xl hover:bg-primary/5 transition-colors flex items-center gap-1 shrink-0"
                 >
                   <span>View All</span>
                   <ArrowUpRight className="h-3.5 w-3.5" />
@@ -878,28 +879,33 @@ function Dashboard() {
                 filteredTx.map((tx, i) => (
                   <div
                     key={i}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 hover:bg-accent/40 transition-colors gap-3 group"
+                    className="flex items-center justify-between p-3 sm:p-4 hover:bg-accent/40 transition-colors gap-2.5 sm:gap-3 group"
                   >
-                    <div className="flex items-center gap-3.5 min-w-0">
+                    <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1">
                       <div
-                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${tx.color}`}
+                        className={`flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl border ${tx.color}`}
                       >
-                        <tx.icon className="h-4 w-4" />
+                        <tx.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                       </div>
-                      <div className="truncate">
-                        <p className="text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs sm:text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                           {tx.name}
                         </p>
-                        <p className="text-xs text-muted-foreground truncate mt-0.5">
-                          {tx.category}
-                        </p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <p className="text-[11px] sm:text-xs text-muted-foreground truncate">
+                            {tx.category}
+                          </p>
+                          <span className="text-[10px] text-muted-foreground sm:hidden">
+                            • {tx.date}
+                          </span>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between sm:justify-end gap-6 shrink-0 pl-13 sm:pl-0">
+                    <div className="flex items-center justify-end gap-2.5 sm:gap-6 shrink-0">
                       {/* Status / Receipt Badge */}
                       <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                        className={`hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
                           tx.status === 'Paid'
                             ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
                             : 'bg-muted text-muted-foreground border-border'
@@ -922,7 +928,7 @@ function Dashboard() {
 
                       {/* Amount */}
                       <span
-                        className={`font-mono text-sm font-bold ${
+                        className={`font-mono text-xs sm:text-sm font-bold text-right ${
                           tx.type === 'income'
                             ? 'text-emerald-600 dark:text-emerald-400'
                             : 'text-foreground'
