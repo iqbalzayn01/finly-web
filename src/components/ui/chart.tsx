@@ -100,6 +100,74 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip
 
+const RECHARTS_INTERNAL_PROPS = new Set([
+  'accessibilityLayer',
+  'activeIndex',
+  'active',
+  'activeCoordinate',
+  'activeLabel',
+  'activePayload',
+  'activeTooltipIndex',
+  'align',
+  'allowEscapeViewBox',
+  'animationDuration',
+  'animationEasing',
+  'axisId',
+  'brushBottom',
+  'chartHeight',
+  'chartWidth',
+  'content',
+  'contentStyle',
+  'coordinate',
+  'cursor',
+  'cursorStyle',
+  'defaultIndex',
+  'filterNull',
+  'iconSize',
+  'iconType',
+  'inactiveColor',
+  'includeHidden',
+  'isAnimationActive',
+  'isCustomRadius',
+  'itemSorter',
+  'itemStyle',
+  'label',
+  'labelFormatter',
+  'labelStyle',
+  'layout',
+  'legendType',
+  'margin',
+  'offset',
+  'payload',
+  'payloadUniqBy',
+  'portal',
+  'position',
+  'reverseDirection',
+  'separator',
+  'shared',
+  'stackOffset',
+  'syncId',
+  'tooltipAxisType',
+  'tooltipTicks',
+  'trigger',
+  'useTranslate3d',
+  'verticalAlign',
+  'viewBox',
+  'wrapperStyle',
+])
+
+function filterDOMProps<T extends Record<string, unknown>>(
+  props: T,
+): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(props)) {
+    if (!RECHARTS_INTERNAL_PROPS.has(key)) {
+      result[key] = value
+    }
+  }
+  return result
+}
+
 export type ChartTooltipPayloadItem = {
   dataKey?: string | number
   name?: string
@@ -110,7 +178,10 @@ export type ChartTooltipPayloadItem = {
   [key: string]: unknown
 }
 
-export interface ChartTooltipContentProps extends React.ComponentProps<'div'> {
+export interface ChartTooltipContentProps extends Omit<
+  React.ComponentProps<'div'>,
+  'color'
+> {
   active?: boolean
   payload?: ChartTooltipPayloadItem[]
   label?: React.ReactNode
@@ -132,6 +203,9 @@ export interface ChartTooltipContentProps extends React.ComponentProps<'div'> {
   indicator?: 'line' | 'dot' | 'dashed'
   nameKey?: string
   labelKey?: string
+  defaultIndex?: number
+  axisId?: string | number
+  includeHidden?: boolean
 }
 
 const ChartTooltipContent = React.forwardRef<
@@ -158,6 +232,7 @@ const ChartTooltipContent = React.forwardRef<
     ref,
   ) => {
     const { config } = useChart()
+    const domProps = React.useMemo(() => filterDOMProps(props), [props])
 
     const tooltipLabel = React.useMemo(() => {
       if (hideLabel || !payload?.length) {
@@ -212,7 +287,7 @@ const ChartTooltipContent = React.forwardRef<
           'grid min-w-[8rem] items-start gap-1.5 rounded-lg border border-border/80 bg-card/95 backdrop-blur-md px-3 py-2 text-xs shadow-xl text-foreground',
           className,
         )}
-        {...props}
+        {...domProps}
       >
         {!nestLabel ? tooltipLabel : null}
         <div className="grid gap-1.5">
@@ -308,7 +383,10 @@ export type ChartLegendPayloadItem = {
   [key: string]: unknown
 }
 
-export interface ChartLegendContentProps extends React.ComponentProps<'div'> {
+export interface ChartLegendContentProps extends Omit<
+  React.ComponentProps<'div'>,
+  'content' | 'color'
+> {
   payload?: ChartLegendPayloadItem[]
   verticalAlign?: 'top' | 'middle' | 'bottom'
   hideIcon?: boolean
@@ -331,6 +409,7 @@ const ChartLegendContent = React.forwardRef<
     ref,
   ) => {
     const { config } = useChart()
+    const domProps = React.useMemo(() => filterDOMProps(props), [props])
 
     if (!payload?.length) {
       return null
@@ -344,7 +423,7 @@ const ChartLegendContent = React.forwardRef<
           verticalAlign === 'top' ? 'pb-3' : 'pt-3',
           className,
         )}
-        {...props}
+        {...domProps}
       >
         {payload.map((item, index) => {
           const key = `${nameKey || item.dataKey || 'value'}`
