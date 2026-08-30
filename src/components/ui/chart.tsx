@@ -100,6 +100,74 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip
 
+const RECHARTS_INTERNAL_PROPS = new Set([
+  'accessibilityLayer',
+  'activeIndex',
+  'active',
+  'activeCoordinate',
+  'activeLabel',
+  'activePayload',
+  'activeTooltipIndex',
+  'align',
+  'allowEscapeViewBox',
+  'animationDuration',
+  'animationEasing',
+  'axisId',
+  'brushBottom',
+  'chartHeight',
+  'chartWidth',
+  'content',
+  'contentStyle',
+  'coordinate',
+  'cursor',
+  'cursorStyle',
+  'defaultIndex',
+  'filterNull',
+  'iconSize',
+  'iconType',
+  'inactiveColor',
+  'includeHidden',
+  'isAnimationActive',
+  'isCustomRadius',
+  'itemSorter',
+  'itemStyle',
+  'label',
+  'labelFormatter',
+  'labelStyle',
+  'layout',
+  'legendType',
+  'margin',
+  'offset',
+  'payload',
+  'payloadUniqBy',
+  'portal',
+  'position',
+  'reverseDirection',
+  'separator',
+  'shared',
+  'stackOffset',
+  'syncId',
+  'tooltipAxisType',
+  'tooltipTicks',
+  'trigger',
+  'useTranslate3d',
+  'verticalAlign',
+  'viewBox',
+  'wrapperStyle',
+])
+
+function filterDOMProps<T extends Record<string, unknown>>(
+  props: T,
+): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(props)) {
+    if (!RECHARTS_INTERNAL_PROPS.has(key)) {
+      result[key] = value
+    }
+  }
+  return result
+}
+
 export type ChartTooltipPayloadItem = {
   dataKey?: string | number
   name?: string
@@ -135,31 +203,9 @@ export interface ChartTooltipContentProps extends Omit<
   indicator?: 'line' | 'dot' | 'dashed'
   nameKey?: string
   labelKey?: string
-  // Recharts internal props passed when rendered as tooltip content
-  accessibilityLayer?: boolean
-  activeIndex?: number
-  allowEscapeViewBox?: boolean
-  animationDuration?: number
-  animationEasing?: string
-  contentStyle?: React.CSSProperties
-  coordinate?: { x?: number; y?: number }
-  cursor?: boolean | object
-  cursorStyle?: React.CSSProperties
-  filterNull?: boolean
-  isAnimationActive?: boolean
-  itemSorter?: unknown
-  itemStyle?: React.CSSProperties
-  labelStyle?: React.CSSProperties
-  offset?: number
-  portal?: unknown
-  position?: { x?: number; y?: number }
-  reverseDirection?: { x?: boolean; y?: boolean } | boolean
-  separator?: string
-  shared?: boolean
-  trigger?: 'hover' | 'click'
-  useTranslate3d?: boolean
-  viewBox?: { x?: number; y?: number; width?: number; height?: number }
-  wrapperStyle?: React.CSSProperties
+  defaultIndex?: number
+  axisId?: string | number
+  includeHidden?: boolean
 }
 
 const ChartTooltipContent = React.forwardRef<
@@ -181,36 +227,12 @@ const ChartTooltipContent = React.forwardRef<
       color,
       nameKey,
       labelKey,
-      // Recharts internal props to omit from spreading onto DOM <div>
-      accessibilityLayer: _accessibilityLayer,
-      activeIndex: _activeIndex,
-      allowEscapeViewBox: _allowEscapeViewBox,
-      animationDuration: _animationDuration,
-      animationEasing: _animationEasing,
-      contentStyle: _contentStyle,
-      coordinate: _coordinate,
-      cursor: _cursor,
-      cursorStyle: _cursorStyle,
-      filterNull: _filterNull,
-      isAnimationActive: _isAnimationActive,
-      itemSorter: _itemSorter,
-      itemStyle: _itemStyle,
-      labelStyle: _labelStyle,
-      offset: _offset,
-      portal: _portal,
-      position: _position,
-      reverseDirection: _reverseDirection,
-      separator: _separator,
-      shared: _shared,
-      trigger: _trigger,
-      useTranslate3d: _useTranslate3d,
-      viewBox: _viewBox,
-      wrapperStyle: _wrapperStyle,
       ...props
     },
     ref,
   ) => {
     const { config } = useChart()
+    const domProps = React.useMemo(() => filterDOMProps(props), [props])
 
     const tooltipLabel = React.useMemo(() => {
       if (hideLabel || !payload?.length) {
@@ -265,7 +287,7 @@ const ChartTooltipContent = React.forwardRef<
           'grid min-w-[8rem] items-start gap-1.5 rounded-lg border border-border/80 bg-card/95 backdrop-blur-md px-3 py-2 text-xs shadow-xl text-foreground',
           className,
         )}
-        {...props}
+        {...domProps}
       >
         {!nestLabel ? tooltipLabel : null}
         <div className="grid gap-1.5">
@@ -369,16 +391,6 @@ export interface ChartLegendContentProps extends Omit<
   verticalAlign?: 'top' | 'middle' | 'bottom'
   hideIcon?: boolean
   nameKey?: string
-  // Recharts legend injected props
-  align?: 'left' | 'center' | 'right'
-  chartHeight?: number
-  chartWidth?: number
-  content?: React.ReactNode
-  iconSize?: number
-  iconType?: string
-  inactiveColor?: string
-  layout?: 'horizontal' | 'vertical'
-  margin?: { top?: number; left?: number; bottom?: number; right?: number }
 }
 
 const ChartLegendContent = React.forwardRef<
@@ -392,21 +404,12 @@ const ChartLegendContent = React.forwardRef<
       payload,
       verticalAlign = 'bottom',
       nameKey,
-      // Recharts internal props to omit from spreading onto DOM <div>
-      align: _align,
-      chartHeight: _chartHeight,
-      chartWidth: _chartWidth,
-      content: _content,
-      iconSize: _iconSize,
-      iconType: _iconType,
-      inactiveColor: _inactiveColor,
-      layout: _layout,
-      margin: _margin,
       ...props
     },
     ref,
   ) => {
     const { config } = useChart()
+    const domProps = React.useMemo(() => filterDOMProps(props), [props])
 
     if (!payload?.length) {
       return null
@@ -420,7 +423,7 @@ const ChartLegendContent = React.forwardRef<
           verticalAlign === 'top' ? 'pb-3' : 'pt-3',
           className,
         )}
-        {...props}
+        {...domProps}
       >
         {payload.map((item, index) => {
           const key = `${nameKey || item.dataKey || 'value'}`
