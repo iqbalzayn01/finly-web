@@ -12,6 +12,8 @@ import {
   SelectItem,
 } from '../../components/ui/select'
 import { useCurrency } from '../../lib/currency'
+import { NumberTicker } from '../../components/ui/number-ticker'
+import customersData from '../../data/customers.json'
 
 export const Route = createFileRoute('/invoices/builder')({
   component: InvoiceBuilder,
@@ -94,7 +96,6 @@ function InvoiceBuilder() {
       </div>
 
       <div className="border border-border bg-card shadow-none rounded-2xl overflow-hidden">
-        {/* Document Header */}
         <div className="p-4 sm:p-6 md:p-10 border-b border-border">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 md:gap-12">
             <div>
@@ -124,9 +125,14 @@ function InvoiceBuilder() {
                   <SelectValue placeholder="Select a Customer..." />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
-                  <SelectItem value="acme">Acme Corp</SelectItem>
-                  <SelectItem value="global">GlobalTech</SelectItem>
-                  <SelectItem value="stark">Stark Industries</SelectItem>
+                  {customersData.map((c) => (
+                    <SelectItem
+                      key={c.id}
+                      value={c.name.toLowerCase().replace(/\s+/g, '-')}
+                    >
+                      {c.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 
@@ -156,7 +162,6 @@ function InvoiceBuilder() {
           </div>
         </div>
 
-        {/* Line Items */}
         <div className="p-6 md:p-10">
           <div className="overflow-x-auto w-full">
             <table className="w-full text-left min-w-[600px]">
@@ -227,7 +232,10 @@ function InvoiceBuilder() {
                         />
                       </td>
                       <td className="py-4 text-right font-mono text-sm font-semibold text-foreground">
-                        {formatAmount(item.qty * item.price)}
+                        <NumberTicker
+                          value={item.qty * item.price}
+                          formatter={(v) => formatAmount(v)}
+                        />
                       </td>
                       <td className="py-4 text-right opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                         <button
@@ -254,20 +262,25 @@ function InvoiceBuilder() {
             <Plus className="h-3.5 w-3.5 mr-2" /> Add Line Item
           </Button>
 
-          {/* Totals */}
           <div className="mt-8 sm:mt-12 flex justify-end">
             <div className="w-full sm:w-[320px] border border-border bg-background p-4 sm:p-6 rounded-2xl shadow-none">
               <div className="space-y-2.5 sm:space-y-3">
                 <div className="flex justify-between text-xs font-medium text-muted-foreground">
                   <span>Subtotal</span>
                   <span className="font-mono text-foreground font-semibold">
-                    {formatAmount(subtotal)}
+                    <NumberTicker
+                      value={subtotal}
+                      formatter={(v) => formatAmount(v)}
+                    />
                   </span>
                 </div>
                 <div className="flex justify-between text-xs font-medium text-muted-foreground">
                   <span>Tax (11%)</span>
                   <span className="font-mono text-foreground font-semibold">
-                    {formatAmount(tax)}
+                    <NumberTicker
+                      value={tax}
+                      formatter={(v) => formatAmount(v)}
+                    />
                   </span>
                 </div>
               </div>
@@ -276,7 +289,10 @@ function InvoiceBuilder() {
                   Total
                 </span>
                 <span className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-primary">
-                  {formatAmount(total)}
+                  <NumberTicker
+                    value={total}
+                    formatter={(v) => formatAmount(v)}
+                  />
                 </span>
               </div>
             </div>

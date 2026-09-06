@@ -1,0 +1,161 @@
+{
+  "runwayChartData": [
+    { "month": "Feb", "runway": 10.4 },
+    { "month": "Mar", "runway": 11.2 },
+    { "month": "Apr", "runway": 12.8 },
+    { "month": "May", "runway": 12.1 },
+    { "month": "Jun", "runway": 13.5 },
+    { "month": "Jul", "runway": 14.2 }
+  ],
+  "healthChartData": [
+    { "metric": "health", "score": 94, "fill": "var(--primary)" }
+  ],
+  "cashflowDataMap": {
+    "1d": [
+      { "name": "00:00", "income": 420, "expense": 120 },
+      { "name": "04:00", "income": 680, "expense": 210 },
+      { "name": "08:00", "income": 1950, "expense": 640 },
+      { "name": "12:00", "income": 3420, "expense": 1480 },
+      { "name": "16:00", "income": 2890, "expense": 1120 },
+      { "name": "20:00", "income": 1740, "expense": 590 }
+    ],
+    "1m": [
+      { "name": "Week 1", "income": 6400, "expense": 3100 },
+      { "name": "Week 2", "income": 7800, "expense": 3900 },
+      { "name": "Week 3", "income": 5900, "expense": 2800 },
+      { "name": "Week 4", "income": 8300, "expense": 4400 }
+    ],
+    "3m": [
+      { "name": "May", "income": 18900, "expense": 12100 },
+      { "name": "Jun", "income": 24500, "expense": 10800 },
+      { "name": "Jul", "income": 28400, "expense": 14200 }
+    ],
+    "6m": [
+      { "name": "Feb", "income": 15600, "expense": 9400 },
+      { "name": "Mar", "income": 14200, "expense": 11000 },
+      { "name": "Apr", "income": 21800, "expense": 13500 },
+      { "name": "May", "income": 18900, "expense": 12100 },
+      { "name": "Jun", "income": 24500, "expense": 10800 },
+      { "name": "Jul", "income": 28400, "expense": 14200 }
+    ],
+    "1y": [
+      { "name": "Aug 25", "income": 14500, "expense": 9100 },
+      { "name": "Sep 25", "income": 16200, "expense": 9800 },
+      { "name": "Oct 25", "income": 18400, "expense": 11200 },
+      { "name": "Nov 25", "income": 15100, "expense": 8900 },
+      { "name": "Dec 25", "income": 22400, "expense": 14500 },
+      { "name": "Jan 26", "income": 12400, "expense": 8200 },
+      { "name": "Feb 26", "income": 15600, "expense": 9400 },
+      { "name": "Mar 26", "income": 14200, "expense": 11000 },
+      { "name": "Apr 26", "income": 21800, "expense": 13500 },
+      { "name": "May 26", "income": 18900, "expense": 12100 },
+      { "name": "Jun 26", "income": 24500, "expense": 10800 },
+      { "name": "Jul 26", "income": 28400, "expense": 14200 }
+    ],
+    "5y": [
+      { "name": "2022", "income": 142000, "expense": 98000 },
+      { "name": "2023", "income": 188000, "expense": 122000 },
+      { "name": "2024", "income": 236000, "expense": 154000 },
+      { "name": "2025", "income": 295000, "expense": 186000 },
+      { "name": "2026", "income": 198500, "expense": 118400 }
+    ]
+  },
+  "recentTransactions": [
+    {
+      "name": "Acme Corp Q3 Retainer",
+      "category": "Design Systems & Strategy",
+      "date": "Aug 04, 2026",
+      "amount": 14500,
+      "type": "income",
+      "status": "Paid"
+    },
+    {
+      "name": "GlobalTech Cloud Migration",
+      "category": "Backend & Infrastructure",
+      "date": "Aug 02, 2026",
+      "amount": 28000,
+      "type": "income",
+      "status": "Paid"
+    },
+    {
+      "name": "AWS Cloud Infrastructure",
+      "category": "Server & Hosting Ops",
+      "date": "Aug 01, 2026",
+      "amount": 1420,
+      "type": "expense",
+      "status": "Receipt"
+    },
+    {
+      "name": "OpenAI API Platform",
+      "category": "LLM Compute Tokens",
+      "date": "Jul 30, 2026",
+      "amount": 480,
+      "type": "expense",
+      "status": "Receipt"
+    },
+    {
+      "name": "Figma Organization Seats",
+      "category": "Product Design Tools",
+      "date": "Jul 29, 2026",
+      "amount": 360,
+      "type": "expense",
+      "status": "Receipt"
+    },
+    {
+      "name": "Stark Industries Security SLA",
+      "category": "Cybersecurity Audit",
+      "date": "Jul 27, 2026",
+      "amount": 22500,
+      "type": "income",
+      "status": "Paid"
+    },
+    {
+      "name": "Vercel Edge Hosting",
+      "category": "Frontend Edge CDN",
+      "date": "Jul 26, 2026",
+      "amount": 240,
+      "type": "expense",
+      "status": "Receipt"
+    },
+    {
+      "name": "Google Ads Search Campaign",
+      "category": "B2B Client Acquisition",
+      "date": "Jul 25, 2026",
+      "amount": 850,
+      "type": "expense",
+      "status": "Receipt"
+    },
+    {
+      "name": "Stripe Merchant Payout",
+      "category": "SaaS Customer Billing",
+      "date": "Jul 23, 2026",
+      "amount": 9800,
+      "type": "income",
+      "status": "Paid"
+    },
+    {
+      "name": "WeWork Office Dedicated Desk",
+      "category": "Workspace & Facilities",
+      "date": "Jul 20, 2026",
+      "amount": 950,
+      "type": "expense",
+      "status": "No Receipt"
+    },
+    {
+      "name": "GitHub Enterprise Copilot",
+      "category": "Developer Tooling",
+      "date": "Jul 18, 2026",
+      "amount": 190,
+      "type": "expense",
+      "status": "Receipt"
+    },
+    {
+      "name": "Slack Business Grid",
+      "category": "Internal Team Comms",
+      "date": "Jul 15, 2026",
+      "amount": 125,
+      "type": "expense",
+      "status": "Receipt"
+    }
+  ]
+}

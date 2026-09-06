@@ -82,9 +82,6 @@ export const SUPPORTED_CURRENCIES: Record<CurrencyCode, CurrencyConfig> = {
 const STORAGE_KEY = 'finly_profile_settings'
 const EVENT_KEY = 'finly-currency-change'
 
-/**
- * Reads stored base currency safely from localStorage.
- */
 export function getSavedCurrency(): CurrencyCode {
   if (typeof window === 'undefined') return 'USD'
   try {
@@ -96,15 +93,10 @@ export function getSavedCurrency(): CurrencyCode {
       }
     }
   } catch {
-    // Fallback
   }
   return 'USD'
 }
 
-/**
- * Format money from integer minor units (Scale 100).
- * e.g., 5000 cents -> "$50.00" or "Rp 50.000"
- */
 export function formatMoney(
   amountInCents: number,
   currencyCode: CurrencyCode = 'USD',
@@ -135,9 +127,6 @@ export function formatMoney(
   }).format(majorUnits)
 }
 
-/**
- * Format money from standard major units (e.g. 148250 -> "$148,250.00" or "Rp 148.250").
- */
 export function formatAmount(
   amountInMajor: number,
   currencyCode: CurrencyCode = 'USD',
@@ -156,14 +145,10 @@ export function getCurrencySymbol(currencyCode: CurrencyCode = 'USD'): string {
   return SUPPORTED_CURRENCIES[currencyCode].symbol
 }
 
-/**
- * Global reactive hook for tenant base currency synchronization across all pages and features.
- */
 export function useCurrency() {
   const [currency, setCurrencyState] = React.useState<CurrencyCode>('USD')
 
   React.useEffect(() => {
-    // Sync initial state on mount after hydration
     setCurrencyState(getSavedCurrency())
 
     const handleCustomEvent = (e: Event) => {
@@ -200,7 +185,6 @@ export function useCurrency() {
       const updated = { ...existing, currency: newCurrency }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
     } catch {
-      // Ignored
     }
 
     if (typeof window !== 'undefined') {

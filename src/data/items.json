@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "name": "Senior Full-Stack Engineering",
+    "price": 175,
+    "unit": "hour",
+    "taxRate": 11,
+    "active": true
+  },
+  {
+    "id": 2,
+    "name": "Dedicated Tech Retainer (Monthly)",
+    "price": 12500,
+    "unit": "month",
+    "taxRate": 11,
+    "active": true
+  },
+  {
+    "id": 3,
+    "name": "Cloud Architecture & DevOps Advisory",
+    "price": 220,
+    "unit": "hour",
+    "taxRate": 11,
+    "active": true
+  },
+  {
+    "id": 4,
+    "name": "UI/UX Design System Package",
+    "price": 6500,
+    "unit": "pcs",
+    "taxRate": 11,
+    "active": true
+  },
+  {
+    "id": 5,
+    "name": "Growth & SEO Optimization Retainer",
+    "price": 2400,
+    "unit": "month",
+    "taxRate": 11,
+    "active": true
+  },
+  {
+    "id": 6,
+    "name": "Full-Stack SOC2 & Security Audit",
+    "price": 14000,
+    "unit": "pcs",
+    "taxRate": 11,
+    "active": true
+  },
+  {
+    "id": 7,
+    "name": "Managed High-Availability Hosting",
+    "price": 450,
+    "unit": "month",
+    "taxRate": 11,
+    "active": true
+  },
+  {
+    "id": 8,
+    "name": "Technical Copywriting & Documentation",
+    "price": 95,
+    "unit": "hour",
+    "taxRate": 11,
+    "active": true
+  },
+  {
+    "id": 9,
+    "name": "Enterprise SLA & 24/7 Incident Support",
+    "price": 3500,
+    "unit": "month",
+    "taxRate": 11,
+    "active": true
+  },
+  {
+    "id": 10,
+    "name": "Performance Profiling & Web Speed Sprint",
+    "price": 4800,
+    "unit": "pcs",
+    "taxRate": 11,
+    "active": true
+  },
+  {
+    "id": 11,
+    "name": "Legacy PHP Monolith Maintenance (Deprecated)",
+    "price": 80,
+    "unit": "hour",
+    "taxRate": 11,
+    "active": false
+  },
+  {
+    "id": 12,
+    "name": "Shared cPanel Shared Hosting (Legacy)",
+    "price": 35,
+    "unit": "month",
+    "taxRate": 11,
+    "active": false
+  }
+]

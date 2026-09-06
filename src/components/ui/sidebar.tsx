@@ -64,7 +64,6 @@ function SidebarProvider({
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
-  // Internal state of the sidebar
   const [_open, _setOpen] = React.useState(defaultOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
@@ -76,7 +75,6 @@ function SidebarProvider({
         _setOpen(openState)
       }
 
-      // Sets the cookie to keep the sidebar state
       if (typeof document !== 'undefined') {
         document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
       }
@@ -84,14 +82,12 @@ function SidebarProvider({
     [setOpenProp, open],
   )
 
-  // Helper to toggle the sidebar
   const toggleSidebar = React.useCallback(() => {
     return isMobile
       ? setOpenMobile((prevOpen) => !prevOpen)
       : setOpen((prevOpen) => !prevOpen)
   }, [isMobile, setOpen, setOpenMobile])
 
-  // Keyboard shortcut to toggle the sidebar
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
@@ -182,7 +178,6 @@ function Sidebar({
         <AnimatePresence>
           {openMobile && (
             <div className="fixed inset-0 z-50 flex">
-              {/* Mobile Backdrop */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -193,7 +188,6 @@ function Sidebar({
                 aria-hidden="true"
               />
 
-              {/* Mobile Slide-out Drawer */}
               <motion.div
                 initial={{ x: side === 'left' ? '-100%' : '100%' }}
                 animate={{ x: 0 }}
@@ -236,7 +230,6 @@ function Sidebar({
       data-slot="sidebar"
       {...props}
     >
-      {/* Desktop Gap Handler */}
       <motion.div
         data-slot="sidebar-gap"
         initial={false}
@@ -256,7 +249,6 @@ function Sidebar({
         className="relative bg-transparent shrink-0"
       />
 
-      {/* Desktop Animated Sidebar Container */}
       <motion.div
         data-slot="sidebar-container"
         data-side={side}

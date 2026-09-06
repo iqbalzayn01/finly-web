@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "date": "2026-08-05",
+    "desc": "Acme Corp Q3 Product Retainer",
+    "category": "General / Primary Income",
+    "scope": "Business",
+    "amount": 14500,
+    "type": "income",
+    "receipt": true
+  },
+  {
+    "id": 2,
+    "date": "2026-08-04",
+    "desc": "GlobalTech Cloud Migration Milestone",
+    "category": "General / Primary Income",
+    "scope": "Business",
+    "amount": 28000,
+    "type": "income",
+    "receipt": true
+  },
+  {
+    "id": 3,
+    "date": "2026-08-03",
+    "desc": "AWS Cloud EC2 & RDS Compute",
+    "category": "Software, apps, games",
+    "scope": "Business",
+    "amount": 1420,
+    "type": "expense",
+    "receipt": true
+  },
+  {
+    "id": 4,
+    "date": "2026-08-02",
+    "desc": "OpenAI API Token Consumption",
+    "category": "Software, apps, games",
+    "scope": "Business",
+    "amount": 480,
+    "type": "expense",
+    "receipt": true
+  },
+  {
+    "id": 5,
+    "date": "2026-08-01",
+    "desc": "Stark Industries Security Audit",
+    "category": "General / Primary Income",
+    "scope": "Business",
+    "amount": 22500,
+    "type": "income",
+    "receipt": true
+  },
+  {
+    "id": 6,
+    "date": "2026-07-31",
+    "desc": "Figma Enterprise Organization Plan",
+    "category": "Software, apps, games",
+    "scope": "Business",
+    "amount": 360,
+    "type": "expense",
+    "receipt": true
+  },
+  {
+    "id": 7,
+    "date": "2026-07-29",
+    "desc": "Executive Client Dinner at Nobu",
+    "category": "Restaurant, fast-food",
+    "scope": "Business",
+    "amount": 385,
+    "type": "expense",
+    "receipt": true
+  },
+  {
+    "id": 8,
+    "date": "2026-07-28",
+    "desc": "Google Workspace Enterprise Seats",
+    "category": "Software, apps, games",
+    "scope": "Business",
+    "amount": 180,
+    "type": "expense",
+    "receipt": true
+  },
+  {
+    "id": 9,
+    "date": "2026-07-26",
+    "desc": "Stripe SaaS Payout Batch #1094",
+    "category": "General / Primary Income",
+    "scope": "Business",
+    "amount": 9800,
+    "type": "income",
+    "receipt": true
+  },
+  {
+    "id": 10,
+    "date": "2026-07-25",
+    "desc": "Vercel Pro & Edge Network",
+    "category": "Internet",
+    "scope": "Business",
+    "amount": 240,
+    "type": "expense",
+    "receipt": true
+  },
+  {
+    "id": 11,
+    "date": "2026-07-24",
+    "desc": "Meta Ads B2B Campaign",
+    "category": "Advisory",
+    "scope": "Business",
+    "amount": 850,
+    "type": "expense",
+    "receipt": true
+  },
+  {
+    "id": 12,
+    "date": "2026-07-22",
+    "desc": "WeWork Private Office Rental",
+    "category": "Rent",
+    "scope": "Business",
+    "amount": 950,
+    "type": "expense",
+    "receipt": false
+  },
+  {
+    "id": 13,
+    "date": "2026-07-20",
+    "desc": "Umbrella Corp UI/UX Consultation",
+    "category": "General / Primary Income",
+    "scope": "Business",
+    "amount": 9200,
+    "type": "income",
+    "receipt": true
+  },
+  {
+    "id": 14,
+    "date": "2026-07-18",
+    "desc": "Apple MacBook Pro M4 Max (Asset)",
+    "category": "Electronics, accessories",
+    "scope": "Business",
+    "amount": 3499,
+    "type": "expense",
+    "receipt": true
+  },
+  {
+    "id": 15,
+    "date": "2026-07-16",
+    "desc": "Airport Taxi - Tech Summit NY",
+    "category": "Taxi",
+    "scope": "Business",
+    "amount": 72,
+    "type": "expense",
+    "receipt": true
+  },
+  {
+    "id": 16,
+    "date": "2026-07-14",
+    "desc": "Personal Artisan Coffee & Pastry",
+    "category": "Bar, cafe",
+    "scope": "Personal",
+    "amount": 14,
+    "type": "expense",
+    "receipt": false
+  },
+  {
+    "id": 17,
+    "date": "2026-07-12",
+    "desc": "Fitness Club Monthly Membership",
+    "category": "Active sport, fitness",
+    "scope": "Personal",
+    "amount": 120,
+    "type": "expense",
+    "receipt": false
+  },
+  {
+    "id": 18,
+    "date": "2026-07-10",
+    "desc": "Hardware Trade-in Refund",
+    "category": "Refunds (tax, purchase)",
+    "scope": "Business",
+    "amount": 450,
+    "type": "income",
+    "receipt": true
+  }
+]

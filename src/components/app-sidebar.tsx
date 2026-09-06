@@ -22,23 +22,19 @@ import {
   SidebarRail,
 } from './ui/sidebar'
 
-const finlyTeams: BusinessTeam[] = [
-  {
-    name: 'Finly Technologies',
-    logo: Wallet,
-    plan: 'Enterprise Pro',
-  },
-  {
-    name: 'Nexus Studio',
-    logo: Briefcase,
-    plan: 'Agency Growth',
-  },
-  {
-    name: 'Acme Consulting',
-    logo: FileText,
-    plan: 'Free Starter',
-  },
-]
+import teamsData from '../data/teams.json'
+
+const ICONS: Record<string, React.ElementType> = {
+  Wallet,
+  Briefcase,
+  FileText,
+}
+
+const finlyTeams: BusinessTeam[] = teamsData.teams.map((t) => ({
+  name: t.name,
+  logo: ICONS[t.iconName] || Wallet,
+  plan: t.plan,
+}))
 
 const finlyNavigationItems: NavigationItem[] = [
   {
@@ -73,12 +69,7 @@ const finlyNavigationItems: NavigationItem[] = [
   },
 ]
 
-const currentUserProfile: UserProfile = {
-  name: 'Iqbal Zayn',
-  email: 'iqbal@finly.io',
-  avatar: '',
-  role: 'Owner',
-}
+const currentUserProfile: UserProfile = teamsData.currentUser as UserProfile
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (

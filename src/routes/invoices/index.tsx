@@ -24,53 +24,14 @@ import {
 } from '../../components/ui/select'
 import { useCurrency } from '../../lib/currency'
 import { useDebouncedSearch } from '../../hooks/use-debounced-search'
+import { NumberTicker } from '../../components/ui/number-ticker'
+import invoicesData from '../../data/invoices.json'
 
 export const Route = createFileRoute('/invoices/')({
   component: Invoices,
 })
 
-const initialInvoices = [
-  {
-    id: 'INV-2026-001',
-    client: 'Acme Corp',
-    date: '2026-08-01',
-    due: '2026-08-15',
-    amount: 5000,
-    status: 'unpaid',
-  },
-  {
-    id: 'INV-2026-002',
-    client: 'GlobalTech',
-    date: '2026-07-20',
-    due: '2026-08-03',
-    amount: 3500,
-    status: 'paid',
-  },
-  {
-    id: 'INV-2026-003',
-    client: 'Stark Industries',
-    date: '2026-07-15',
-    due: '2026-07-29',
-    amount: 12000,
-    status: 'unpaid',
-  },
-  {
-    id: 'INV-2026-004',
-    client: 'Wayne Enterprises',
-    date: '2026-07-10',
-    due: '2026-07-24',
-    amount: 850,
-    status: 'void',
-  },
-  {
-    id: 'INV-2026-005',
-    client: 'Umbrella Corp',
-    date: '2026-08-01',
-    due: '2026-08-15',
-    amount: 200,
-    status: 'draft',
-  },
-]
+const initialInvoices = invoicesData.invoices
 
 const StatusBadge = ({ status }: { status: string }) => {
   if (status === 'paid') {
@@ -170,14 +131,16 @@ function Invoices() {
         </Link>
       </div>
 
-      {/* Invoice Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none">
           <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Total Receivables
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">
-            {formatAmount(17000)}
+            <NumberTicker
+              value={17000}
+              formatter={(v) => formatAmount(v)}
+            />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
             2 Unpaid Invoices
@@ -188,7 +151,10 @@ function Invoices() {
             Paid This Month
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
-            {formatAmount(3500)}
+            <NumberTicker
+              value={3500}
+              formatter={(v) => formatAmount(v)}
+            />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
             1 Settled Invoice
@@ -199,7 +165,10 @@ function Invoices() {
             Draft Invoices
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">
-            {formatAmount(200)}
+            <NumberTicker
+              value={200}
+              formatter={(v) => formatAmount(v)}
+            />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">1 Pending Review</p>
         </div>
@@ -322,7 +291,10 @@ function Invoices() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right font-mono font-semibold text-base text-foreground">
-                      {formatAmount(inv.amount)}
+                      <NumberTicker
+                        value={inv.amount}
+                        formatter={(v) => formatAmount(v)}
+                      />
                     </td>
                     <td className="px-6 py-4">
                       <StatusBadge status={inv.status} />

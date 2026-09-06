@@ -13,6 +13,7 @@ import {
 import { cn } from '../lib/utils'
 import { useSubscription } from '../lib/subscription'
 import { AlertModal } from '../components/ui/alert-modal'
+import { NumberTicker } from '../components/ui/number-ticker'
 
 export const Route = createFileRoute('/pricing')({
   component: PricingPage,
@@ -123,7 +124,6 @@ function PricingPage() {
 
   return (
     <div className="space-y-12 pb-16">
-      {/* Header Section */}
       <div className="text-center max-w-3xl mx-auto space-y-4 pt-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold">
           <Sparkles className="h-3.5 w-3.5" /> Simple, Transparent Pricing
@@ -136,7 +136,6 @@ function PricingPage() {
           monthly and annual billing at any time.
         </p>
 
-        {/* Billing Switcher */}
         <div className="pt-4 flex items-center justify-center gap-3">
           <span
             className={cn(
@@ -178,7 +177,6 @@ function PricingPage() {
         </div>
       </div>
 
-      {/* Pricing Grid */}
       <div className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto items-stretch">
         {plans.map((plan) => {
           const price =
@@ -214,7 +212,7 @@ function PricingPage() {
 
                 <div className="my-6 pt-4 border-t border-border flex items-baseline gap-1">
                   <span className="font-mono text-4xl font-extrabold text-foreground">
-                    ${price}
+                    <NumberTicker value={price} prefix="$" />
                   </span>
                   <span className="text-xs text-muted-foreground font-medium">
                     / month{' '}
@@ -224,7 +222,6 @@ function PricingPage() {
                   </span>
                 </div>
 
-                {/* Features List */}
                 <div className="space-y-3 mb-8">
                   <p className="text-xs font-bold text-foreground uppercase tracking-wider">
                     Included Features:
@@ -252,7 +249,6 @@ function PricingPage() {
                 </div>
               </div>
 
-              {/* Plan Action Button */}
               {plan.id === currentPlan ? (
                 <button
                   disabled
@@ -291,7 +287,6 @@ function PricingPage() {
         })}
       </div>
 
-      {/* Selected Plan Banner / Toast */}
       {selectedPlan && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -308,7 +303,6 @@ function PricingPage() {
         </motion.div>
       )}
 
-      {/* Security Trust Banner */}
       <div className="max-w-4xl mx-auto p-6 rounded-2xl bg-muted/40 border border-border flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-card border border-border shadow-none text-primary">
@@ -332,7 +326,6 @@ function PricingPage() {
         </button>
       </div>
 
-      {/* FAQ Section */}
       <div className="max-w-3xl mx-auto space-y-6 pt-6">
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-bold text-foreground">

@@ -7,6 +7,7 @@ import { TooltipSimple } from '../ui/tooltip'
 import { useSubscription } from '../../lib/subscription'
 import { SidebarTrigger } from '../ui/sidebar'
 import { Separator } from '../ui/separator'
+import notificationsData from '../../data/notifications.json'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -47,7 +48,6 @@ export function Topbar() {
 
   const { section, page } = getBreadcrumbInfo(location.pathname)
 
-  // Close notifications dropdown on click outside
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -63,7 +63,6 @@ export function Topbar() {
 
   return (
     <header className="flex h-14 sm:h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 border-b border-border bg-card/60 backdrop-blur-md px-3 sm:px-6 sticky top-0 z-20">
-      {/* Left: Sidebar Trigger & Dynamic Breadcrumbs */}
       <div className="flex items-center gap-2 min-w-0">
         <SidebarTrigger className="-ml-1 h-9 w-9" />
         <Separator
@@ -87,9 +86,7 @@ export function Topbar() {
         </Breadcrumb>
       </div>
 
-      {/* Right Section: Pro Upgrade / Active status, ThemeToggle, Notifications */}
       <div className="flex items-center gap-2 sm:gap-3">
-        {/* Pro Plan Indicator */}
         {isPro ? (
           <>
             <Link
@@ -126,68 +123,85 @@ export function Topbar() {
           </>
         )}
 
-        {/* Theme Switcher Toggle */}
         <ThemeToggle />
 
-        {/* Notifications Popover */}
         <div ref={notifRef} className="relative">
-          <TooltipSimple content="Notifications">
+          {notifOpen ? (
             <button
-              onClick={() => setNotifOpen(!notifOpen)}
-              className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-foreground hover:bg-accent hover:border-primary/40 transition-colors outline-none cursor-pointer"
+              onClick={() => setNotifOpen(false)}
+              className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-primary bg-primary/10 text-primary transition-colors outline-none cursor-pointer"
+              aria-label="Close Notifications"
             >
               <Bell className="h-4 w-4" />
               <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary ring-2 ring-card" />
             </button>
-          </TooltipSimple>
+          ) : (
+            <TooltipSimple content="Notifications">
+              <button
+                onClick={() => setNotifOpen(true)}
+                className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-foreground hover:bg-accent hover:border-primary/40 transition-colors outline-none cursor-pointer"
+                aria-label="Open Notifications"
+              >
+                <Bell className="h-4 w-4" />
+                <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary ring-2 ring-card" />
+              </button>
+            </TooltipSimple>
+          )}
 
           <AnimatePresence>
             {notifOpen && (
               <motion.div
-                initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                initial={{ opacity: 0, y: 6, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 6, scale: 0.96 }}
-                transition={{ type: 'spring', stiffness: 450, damping: 28 }}
-                className="absolute right-0 mt-2.5 w-[calc(100vw-1.5rem)] max-w-sm sm:w-80 bg-card border border-border rounded-2xl shadow-xl z-50 flex flex-col overflow-hidden"
+                exit={{ opacity: 0, y: 4, scale: 0.96 }}
+                transition={{ duration: 0.15, ease: 'easeOut' }}
+                style={{ transformOrigin: 'top right' }}
+                className="absolute right-0 mt-2.5 w-[calc(100vw-1.5rem)] max-w-sm sm:w-80 bg-card border border-border rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden"
               >
                 <div className="px-4 py-3 border-b border-border flex items-center justify-between bg-muted/40">
                   <h3 className="font-bold text-foreground text-xs">
                     Notifications
                   </h3>
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-                    2 Unread
+                    {notificationsData.filter((n) => n.unread).length} Unread
                   </span>
                 </div>
 
                 <div className="divide-y divide-border max-h-80 overflow-y-auto">
-                  <div className="p-3.5 hover:bg-accent/30 transition-colors cursor-pointer space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs text-foreground">
-                        Invoice #INV-2026-004 Paid
-                      </span>
-                      <span className="text-[10px] text-muted-foreground">
-                        10m ago
-                      </span>
+                  {notificationsData.map((notif) => (
+                    <div
+                      key={notif.id}
+                      className={cn(
+                        'p-3.5 hover:bg-accent/30 transition-colors cursor-pointer space-y-1',
+                        notif.unread && 'bg-primary/[0.03]',
+                      )}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          {notif.indicator === 'primary' && (
+                            <span className="size-1.5 rounded-full bg-primary shrink-0" />
+                          )}
+                          {notif.indicator === 'amber' && (
+                            <span className="size-1.5 rounded-full bg-amber-500 shrink-0" />
+                          )}
+                          <span
+                            className={cn(
+                              'font-bold text-xs text-foreground',
+                              !notif.indicator && 'pl-3',
+                            )}
+                          >
+                            {notif.title}
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-muted-foreground">
+                          {notif.time}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-muted-foreground line-clamp-2 pl-3">
+                        {notif.description}
+                      </p>
                     </div>
-                    <p className="text-[11px] text-muted-foreground line-clamp-2">
-                      Acme Corp completed payment of $4,500.00 via wire
-                      transfer.
-                    </p>
-                  </div>
-
-                  <div className="p-3.5 hover:bg-accent/30 transition-colors cursor-pointer space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs text-foreground">
-                        Overdue Alert: Client Billing
-                      </span>
-                      <span className="text-[10px] text-muted-foreground">
-                        2h ago
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-muted-foreground line-clamp-2">
-                      Invoice #INV-2026-002 is past due date by 3 days.
-                    </p>
-                  </div>
+                  ))}
                 </div>
 
                 <div className="p-2.5 border-t border-border bg-muted/20 text-center">

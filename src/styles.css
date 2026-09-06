@@ -236,7 +236,6 @@ body[data-scroll-locked] {
     flex-shrink: 0;
   }
 
-  /* Base UI Dropdown & Popover Smooth Spring Animation (matching Notification Popover) */
   [data-slot='dropdown-menu-content'] {
     opacity: 1;
     transform: scale(1) translate(0, 0);

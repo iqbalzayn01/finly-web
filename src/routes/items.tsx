@@ -20,61 +20,12 @@ import {
 } from '../components/ui/select'
 import { useDebouncedSearch } from '../hooks/use-debounced-search'
 import { useCurrency } from '../lib/currency'
+import { NumberTicker } from '../components/ui/number-ticker'
+import initialItems from '../data/items.json'
 
 export const Route = createFileRoute('/items')({
   component: Items,
 })
-
-const initialItems = [
-  {
-    id: 1,
-    name: 'Web Development (Hourly)',
-    price: 150,
-    unit: 'hour',
-    taxRate: 11,
-    active: true,
-  },
-  {
-    id: 2,
-    name: 'SEO Retainer',
-    price: 1500,
-    unit: 'month',
-    taxRate: 11,
-    active: true,
-  },
-  {
-    id: 3,
-    name: 'Logo Design',
-    price: 800,
-    unit: 'pcs',
-    taxRate: 11,
-    active: true,
-  },
-  {
-    id: 4,
-    name: 'Server Hosting',
-    price: 50,
-    unit: 'month',
-    taxRate: 11,
-    active: false,
-  },
-  {
-    id: 5,
-    name: 'Copywriting',
-    price: 75,
-    unit: 'hour',
-    taxRate: 11,
-    active: true,
-  },
-  {
-    id: 6,
-    name: 'Social Media Management',
-    price: 1200,
-    unit: 'month',
-    taxRate: 11,
-    active: true,
-  },
-]
 
 const STATUS_OPTIONS = [
   { value: 'all', label: 'All Statuses' },
@@ -260,10 +211,13 @@ function Items() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right font-mono font-semibold text-base text-foreground">
-                      {formatAmount(item.price)}
+                      <NumberTicker
+                        value={item.price}
+                        formatter={(v) => formatAmount(v)}
+                      />
                     </td>
                     <td className="px-6 py-4 text-right font-medium text-muted-foreground">
-                      {item.taxRate}%
+                      <NumberTicker value={item.taxRate} suffix="%" />
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span
@@ -418,7 +372,6 @@ function Items() {
         )}
       </AnimatePresence>
 
-      {/* Item Feedback Modal */}
       <AlertModal
         open={itemModal.open}
         onOpenChange={(open) => setItemModal((prev) => ({ ...prev, open }))}
@@ -428,7 +381,6 @@ function Items() {
         confirmText="Got it"
       />
 
-      {/* Delete Item Confirmation Modal */}
       <AlertModal
         open={deleteModal.open}
         onOpenChange={(open) => setDeleteModal((prev) => ({ ...prev, open }))}

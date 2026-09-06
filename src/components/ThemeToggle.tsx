@@ -37,7 +37,6 @@ export function ThemeToggle() {
     } else if (newMode === 'light') {
       document.documentElement.classList.remove('dark')
     } else {
-      // Auto / System
       if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.classList.add('dark')
       } else {

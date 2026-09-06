@@ -81,7 +81,6 @@ export function AiChatAssistant() {
     if (!textToSend) setInput('')
     setIsThinking(true)
 
-    // Simulate AI LLM Response latency (800ms)
     setTimeout(() => {
       const lower = query.toLowerCase()
       let aiResponse: ChatMessage
@@ -94,7 +93,6 @@ export function AiChatAssistant() {
         lower.includes('coffee') ||
         lower.includes('ads')
       ) {
-        // Parse expense intent
         let amount = 15
         const amountMatch = query.match(/\$?(\d+(?:\.\d{2})?)/)
         if (amountMatch) amount = parseFloat(amountMatch[1])
@@ -136,7 +134,6 @@ export function AiChatAssistant() {
         lower.includes('client') ||
         lower.includes('acme')
       ) {
-        // Parse invoice intent
         let amount = 5000
         const amountMatch = query.match(/\$?(\d+(?:\.\d{2})?)/)
         if (amountMatch) amount = parseFloat(amountMatch[1])
@@ -178,7 +175,6 @@ export function AiChatAssistant() {
         lower.includes('how much') ||
         lower.includes('analytics')
       ) {
-        // Parse quick insight intent
         aiResponse = {
           id: 'ai-' + Date.now(),
           sender: 'ai',
@@ -196,7 +192,6 @@ export function AiChatAssistant() {
           },
         }
       } else {
-        // Generic fallback AI conversation
         aiResponse = {
           id: 'ai-' + Date.now(),
           sender: 'ai',
@@ -242,7 +237,6 @@ export function AiChatAssistant() {
 
   return (
     <>
-      {/* Floating Launcher Button */}
       <motion.button
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
@@ -257,7 +251,6 @@ export function AiChatAssistant() {
         </span>
       </motion.button>
 
-      {/* Slide-over Drawer / Modal Panel */}
       <AnimatePresence>
         {isOpen && (
           <div className="fixed inset-0 z-50 flex justify-end">
@@ -265,6 +258,7 @@ export function AiChatAssistant() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
               onClick={() => setIsOpen(false)}
               className="absolute inset-0 bg-black/40 backdrop-blur-xs"
             />
@@ -273,10 +267,9 @@ export function AiChatAssistant() {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 350 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
               className="relative w-full max-w-full sm:max-w-md h-full bg-card border-l border-border shadow-none flex flex-col z-10"
             >
-              {/* Panel Header */}
               <div className="p-3.5 sm:p-4 border-b border-border flex items-center justify-between bg-muted/30">
                 <div className="flex items-center gap-2.5 sm:gap-3">
                   <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-none shrink-0">
@@ -304,7 +297,6 @@ export function AiChatAssistant() {
                 </button>
               </div>
 
-              {/* Chat Message List */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.map((msg) => (
                   <motion.div
@@ -334,7 +326,6 @@ export function AiChatAssistant() {
                         </div>
                       )}
 
-                      {/* Interactive Draft Card (Expense / Invoice / Insight) */}
                       {msg.intentCard && (
                         <motion.div
                           initial={{ scale: 0.95, opacity: 0 }}
@@ -428,7 +419,6 @@ export function AiChatAssistant() {
                             </div>
                           )}
 
-                          {/* Approval Actions */}
                           {msg.intentCard.type !== 'insight' && (
                             <div className="pt-2">
                               {msg.intentCard.isApproved ? (
@@ -491,7 +481,6 @@ export function AiChatAssistant() {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Suggested Prompt Chips */}
               <div className="p-3 border-t border-border bg-muted/20 space-y-2">
                 <p className="text-[11px] font-semibold text-muted-foreground px-1">
                   Suggested Prompts:
@@ -509,7 +498,6 @@ export function AiChatAssistant() {
                 </div>
               </div>
 
-              {/* Chat Input Bar */}
               <div className="p-4 border-t border-border bg-card">
                 <form
                   onSubmit={(e) => {
