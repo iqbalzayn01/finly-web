@@ -422,8 +422,8 @@ export function QuickEntryModal({
                               onClick={() => handleNumpad(item.val)}
                               className={`h-10 sm:h-11 border border-border text-sm sm:text-base font-semibold rounded-xl shadow-none transition-all cursor-pointer outline-none flex items-center justify-center ${
                                 isPressed
-                                  ? 'bg-primary text-primary-foreground border-primary scale-95 ring-2 ring-primary/40'
-                                  : 'bg-card text-foreground hover:bg-accent hover:text-accent-foreground active:scale-95'
+                                    ? 'bg-primary text-primary-foreground border-primary scale-95 ring-2 ring-primary/40'
+                                    : 'bg-card text-foreground hover:bg-accent hover:text-accent-foreground active:scale-95'
                               } ${item.isClear ? 'text-destructive font-bold' : ''}`}
                             >
                               {item.isBack ? (
