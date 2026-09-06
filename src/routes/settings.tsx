@@ -32,6 +32,7 @@ import {
 import { useCurrency, SUPPORTED_CURRENCIES } from '../lib/currency'
 import type { CurrencyCode } from '../lib/currency'
 import { useSubscription } from '../lib/subscription'
+import aiProvidersData from '../data/ai-providers.json'
 
 export const Route = createFileRoute('/settings')({
   component: Settings,
@@ -50,98 +51,12 @@ interface AIProvider {
   keyPlaceholder: string
 }
 
-const AI_PROVIDERS: AIProvider[] = [
-  {
-    id: 'gemini',
-    name: 'Google Gemini',
-    tagline: 'High-speed multimodal AI by Google DeepMind',
-    iconColor: 'text-blue-500 bg-blue-500/10 border-blue-500/20',
-    badgeColor:
-      'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-    defaultModel: 'gemini-2.0-flash',
-    keyPlaceholder: 'AIzaSy...',
-    models: [
-      { id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash (Recommended)' },
-      { id: 'gemini-2.0-pro-exp', name: 'Gemini 2.0 Pro Experimental' },
-      { id: 'gemini-1.5-pro', name: 'Gemini 1.5 Pro' },
-    ],
-  },
-  {
-    id: 'openai',
-    name: 'OpenAI ChatGPT',
-    tagline: 'GPT-4o reasoning & structured data parsing',
-    iconColor: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20',
-    badgeColor:
-      'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-    defaultModel: 'gpt-4o',
-    keyPlaceholder: 'sk-proj-...',
-    models: [
-      { id: 'gpt-4o', name: 'GPT-4o (Omni High Intelligence)' },
-      { id: 'gpt-4o-mini', name: 'GPT-4o Mini (Fast & Lightweight)' },
-      { id: 'o3-mini', name: 'o3-Mini Reasoning Engine' },
-    ],
-  },
-  {
-    id: 'anthropic',
-    name: 'Anthropic Claude',
-    tagline: 'Advanced financial analysis & document parsing',
-    iconColor: 'text-amber-500 bg-amber-500/10 border-amber-500/20',
-    badgeColor:
-      'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
-    defaultModel: 'claude-3-5-sonnet-20241022',
-    keyPlaceholder: 'sk-ant-api...',
-    models: [
-      {
-        id: 'claude-3-5-sonnet-20241022',
-        name: 'Claude 3.5 Sonnet (Best Code & Logic)',
-      },
-      {
-        id: 'claude-3-5-haiku-20241022',
-        name: 'Claude 3.5 Haiku (Sub-second speed)',
-      },
-      { id: 'claude-3-opus-20240229', name: 'Claude 3 Opus' },
-    ],
-  },
-  {
-    id: 'deepseek',
-    name: 'DeepSeek AI',
-    tagline: 'Open-weight & high-performance financial reasoning',
-    iconColor: 'text-violet-500 bg-violet-500/10 border-violet-500/20',
-    badgeColor:
-      'bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20',
-    defaultModel: 'deepseek-chat',
-    keyPlaceholder: 'sk-deepseek-...',
-    models: [
-      { id: 'deepseek-chat', name: 'DeepSeek V3 (Chat)' },
-      {
-        id: 'deepseek-reasoner',
-        name: 'DeepSeek R1 (Chain-of-Thought Reasoner)',
-      },
-    ],
-  },
-  {
-    id: 'custom',
-    name: 'Custom / Local LLM',
-    tagline: 'Connect self-hosted Ollama, LM Studio, or vLLM',
-    iconColor: 'text-slate-500 bg-slate-500/10 border-slate-500/20',
-    badgeColor:
-      'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20',
-    defaultModel: 'llama3.3:70b',
-    keyPlaceholder: 'Optional (Bearer Token)',
-    models: [
-      { id: 'llama3.3:70b', name: 'Llama 3.3 70B' },
-      { id: 'deepseek-r1:8b', name: 'DeepSeek R1 8B (Local)' },
-      { id: 'mistral-small', name: 'Mistral Small' },
-      { id: 'custom-model', name: 'Custom OpenAI-Compatible Model' },
-    ],
-  },
-]
+const AI_PROVIDERS = aiProvidersData as unknown as AIProvider[]
 
 function Settings() {
   const { isPro } = useSubscription()
   const [activeTab, setActiveTab] = useState<'profile' | 'ai'>('profile')
 
-  // AI Settings State
   const [selectedProvider, setSelectedProvider] = useState<ProviderId>('gemini')
   const [apiKeys, setApiKeys] = useState<Record<ProviderId, string>>({
     gemini: '',
@@ -162,7 +77,6 @@ function Settings() {
   const [testLatency, setTestLatency] = useState<number | null>(null)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
 
-  // Profile Settings State
   const { currency: globalCurrency, setCurrency: setGlobalCurrency } =
     useCurrency()
   const [businessName, setBusinessName] = useState('Finly HQ')
@@ -173,12 +87,10 @@ function Settings() {
   const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false)
   const [logoModalOpen, setLogoModalOpen] = useState(false)
 
-  // Sync currency state when global currency changes
   useEffect(() => {
     setCurrency(globalCurrency)
   }, [globalCurrency])
 
-  // Load from localStorage on mount
   useEffect(() => {
     try {
       const savedAI = localStorage.getItem('finly_ai_settings')
@@ -201,11 +113,9 @@ function Settings() {
         if (parsed.invoicePrefix) setInvoicePrefix(parsed.invoicePrefix)
       }
     } catch {
-      // Fallback
     }
   }, [])
 
-  // When provider changes, select its default model
   const handleProviderSelect = (provId: ProviderId) => {
     setSelectedProvider(provId)
     const provObj = AI_PROVIDERS.find((p) => p.id === provId)
@@ -225,7 +135,6 @@ function Settings() {
     setTestStatus('testing')
     setTestLatency(null)
 
-    // Simulate API connection ping test
     setTimeout(() => {
       const latency = Math.floor(Math.random() * 80) + 40
       setTestLatency(latency)
@@ -276,7 +185,6 @@ function Settings() {
         </p>
       </div>
 
-      {/* Tab Navigation Controls */}
       <div className="flex items-center gap-2 border-b border-border pb-3 sm:pb-4 overflow-x-auto no-scrollbar">
         <button
           onClick={() => setActiveTab('profile')}
@@ -304,10 +212,8 @@ function Settings() {
         </button>
       </div>
 
-      {/* TAB 1: Profile & Workspace Settings */}
       {activeTab === 'profile' && (
         <div className="space-y-6 sm:space-y-8">
-          {/* Business Profile Card */}
           <div className="border border-border bg-card p-4 sm:p-6 md:p-8 rounded-2xl shadow-none space-y-5 sm:space-y-6">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
@@ -384,7 +290,6 @@ function Settings() {
             </div>
           </div>
 
-          {/* Regional & Defaults Card */}
           <div className="border border-border bg-card p-8 rounded-2xl shadow-none space-y-6">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
@@ -457,7 +362,6 @@ function Settings() {
         </div>
       )}
 
-      {/* TAB 2: AI Agent Connection Settings */}
       {activeTab === 'ai' && (
         <div className="border border-border bg-card p-8 rounded-2xl shadow-none space-y-6">
           <div className="flex items-center justify-between">
@@ -480,7 +384,6 @@ function Settings() {
             </span>
           </div>
 
-          {/* Provider Cards Selection Grid */}
           <div className="space-y-3 pt-2">
             <label className="text-xs font-bold text-foreground uppercase tracking-wider">
               Select Active AI Provider:
@@ -538,7 +441,6 @@ function Settings() {
             </div>
           </div>
 
-          {/* Provider Detailed Configuration Form */}
           <div className="p-6 rounded-xl bg-muted/40 border border-border space-y-6">
             <div className="flex items-center justify-between border-b border-border pb-4">
               <div className="flex items-center gap-2">
@@ -560,7 +462,6 @@ function Settings() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
-              {/* API Key Input */}
               <div className="space-y-2 sm:col-span-2">
                 <div className="flex justify-between items-center">
                   <label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
@@ -600,7 +501,6 @@ function Settings() {
                 </div>
               </div>
 
-              {/* Custom Endpoint URL (For Custom / Local LLM) */}
               {selectedProvider === 'custom' && (
                 <div className="space-y-2 sm:col-span-2">
                   <label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
@@ -617,7 +517,6 @@ function Settings() {
                 </div>
               )}
 
-              {/* Model Selection Dropdown */}
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
                   <Globe className="h-3.5 w-3.5 text-muted-foreground" /> Model
@@ -637,7 +536,6 @@ function Settings() {
                 </Select>
               </div>
 
-              {/* Temperature Preset Control */}
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-foreground flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
@@ -672,7 +570,6 @@ function Settings() {
               </div>
             </div>
 
-            {/* Connection Test & Save Footer */}
             <div className="flex items-center justify-between pt-4 border-t border-border flex-wrap gap-3">
               <Button
                 type="button"
@@ -714,7 +611,6 @@ function Settings() {
         </div>
       )}
 
-      {/* Modals */}
       <ApiKeyModal
         open={apiKeyModalOpen}
         onOpenChange={setApiKeyModalOpen}

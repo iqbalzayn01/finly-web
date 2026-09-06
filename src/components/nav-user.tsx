@@ -59,7 +59,6 @@ export function NavUser({ user }: { user: UserProfile }) {
     .toUpperCase()
     .slice(0, 2)
 
-  // Dynamically calculate flexible floating position
   const updatePosition = React.useCallback(() => {
     if (!triggerRef.current) return
     const rect = triggerRef.current.getBoundingClientRect()
@@ -71,7 +70,6 @@ export function NavUser({ user }: { user: UserProfile }) {
     const menuHeight = 260
 
     if (isSmallScreen) {
-      // On smaller screens, appear at bottom if room, or neatly docked above the trigger
       const safeLeft = Math.max(
         12,
         Math.min(rect.left, window.innerWidth - menuWidth - 12),
@@ -94,7 +92,6 @@ export function NavUser({ user }: { user: UserProfile }) {
         })
       }
     } else if (collapsed) {
-      // Desktop collapsed: appear on right (or left if near right viewport edge)
       const fitsOnRight = rect.right + 10 + menuWidth <= window.innerWidth - 12
       const side: DropdownSide = fitsOnRight ? 'right' : 'left'
       const left = fitsOnRight ? rect.right + 10 : rect.left - menuWidth - 10
@@ -113,7 +110,6 @@ export function NavUser({ user }: { user: UserProfile }) {
         side,
       })
     } else {
-      // Desktop expanded: appear above footer
       const fitsAbove = rect.top - menuHeight - 8 >= 12
       if (fitsAbove) {
         setCoords({
@@ -145,7 +141,6 @@ export function NavUser({ user }: { user: UserProfile }) {
     }
   }, [isOpen, updatePosition])
 
-  // Close on outside click or Escape key
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node

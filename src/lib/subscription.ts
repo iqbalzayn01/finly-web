@@ -28,7 +28,6 @@ export function setStoredPlan(plan: SubscriptionPlan) {
 }
 
 export function useSubscription() {
-  // Always initialize with 'starter' to prevent SSR / Client Hydration mismatches
   const [plan, setPlan] = useState<SubscriptionPlan>('starter')
   const [mounted, setMounted] = useState(false)
 

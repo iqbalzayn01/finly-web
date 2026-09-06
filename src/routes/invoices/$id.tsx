@@ -14,10 +14,32 @@ import { useState } from 'react'
 import { Button } from '../../components/ui/button'
 import { AlertModal } from '../../components/ui/alert-modal'
 import { useCurrency } from '../../lib/currency'
+import { NumberTicker } from '../../components/ui/number-ticker'
+import invoicesData from '../../data/invoices.json'
 
 export const Route = createFileRoute('/invoices/$id')({
   component: InvoiceDetail,
 })
+
+const INVOICES_DATA = invoicesData.invoiceDetails as Record<
+  string,
+  {
+    id: string
+    status: 'paid' | 'unpaid' | 'draft' | 'void'
+    issueDate: string
+    dueDate: string
+    subtotal: number
+    tax: number
+    total: number
+    client: {
+      name: string
+      email: string
+      address: string
+      taxId: string
+    }
+    items: { desc: string; qty: number; price: number; total: number }[]
+  }
+>
 
 function InvoiceDetail() {
   const { formatAmount } = useCurrency()
@@ -34,9 +56,9 @@ function InvoiceDetail() {
     desc: '',
   })
 
-  const invoice = {
+  const invoice = INVOICES_DATA[id] || {
     id: id || 'INV-2026-001',
-    status: 'unpaid',
+    status: 'unpaid' as const,
     issueDate: '2026-08-01',
     dueDate: '2026-08-15',
     subtotal: 5000,
@@ -81,7 +103,6 @@ function InvoiceDetail() {
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-[1000px] mx-auto pb-12">
-      {/* Header bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
           <Link to="/invoices">
@@ -141,7 +162,6 @@ function InvoiceDetail() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-        {/* Main Document Paper */}
         <div className="md:col-span-2 border border-border bg-card p-4 sm:p-6 md:p-10 rounded-2xl shadow-none">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 pb-10 border-b border-border">
             <div>
@@ -195,13 +215,19 @@ function InvoiceDetail() {
                         {item.desc}
                       </td>
                       <td className="py-4 text-right font-mono text-sm text-muted-foreground">
-                        {item.qty}
+                        <NumberTicker value={item.qty} />
                       </td>
                       <td className="py-4 text-right font-mono text-sm text-muted-foreground">
-                        {formatAmount(item.price)}
+                        <NumberTicker
+                          value={item.price}
+                          formatter={(v) => formatAmount(v)}
+                        />
                       </td>
                       <td className="py-4 text-right font-mono font-semibold text-sm text-foreground">
-                        {formatAmount(item.total)}
+                        <NumberTicker
+                          value={item.total}
+                          formatter={(v) => formatAmount(v)}
+                        />
                       </td>
                     </tr>
                   ))}
@@ -215,13 +241,19 @@ function InvoiceDetail() {
                   <div className="flex justify-between text-xs font-medium text-muted-foreground">
                     <span>Subtotal</span>
                     <span className="font-mono text-foreground font-semibold">
-                      {formatAmount(invoice.subtotal)}
+                      <NumberTicker
+                        value={invoice.subtotal}
+                        formatter={(v) => formatAmount(v)}
+                      />
                     </span>
                   </div>
                   <div className="flex justify-between text-xs font-medium text-muted-foreground">
                     <span>Tax (11%)</span>
                     <span className="font-mono text-foreground font-semibold">
-                      {formatAmount(invoice.tax)}
+                      <NumberTicker
+                        value={invoice.tax}
+                        formatter={(v) => formatAmount(v)}
+                      />
                     </span>
                   </div>
                 </div>
@@ -230,7 +262,10 @@ function InvoiceDetail() {
                     Total
                   </span>
                   <span className="font-mono text-3xl font-bold tracking-tight text-primary">
-                    {formatAmount(invoice.total)}
+                    <NumberTicker
+                      value={invoice.total}
+                      formatter={(v) => formatAmount(v)}
+                    />
                   </span>
                 </div>
               </div>
@@ -238,7 +273,6 @@ function InvoiceDetail() {
           </div>
         </div>
 
-        {/* Sidebar Info & Action Cards */}
         <div className="space-y-6">
           <div className="border border-border bg-card p-6 rounded-2xl shadow-none">
             <h3 className="font-semibold text-sm text-foreground mb-4">

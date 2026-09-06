@@ -3,10 +3,6 @@ import { Select as BaseSelect } from '@base-ui/react'
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from './icon'
 import { cn } from '#/lib/utils'
 
-/**
- * Context that enables SelectValue to automatically resolve and render
- * human-readable labels from registered SelectItems or provided items config.
- */
 interface SelectLabelContextValue {
   labels: Record<string, React.ReactNode>
   registerLabel: (value: any, label: React.ReactNode) => void
@@ -18,10 +14,6 @@ const SelectLabelContext = React.createContext<SelectLabelContextValue>({
   registerLabel: () => {},
 })
 
-/**
- * Recursively scans React children to extract static labels from SelectItem components
- * so SelectValue can render the correct label on initial mount before popups open.
- */
 function extractStaticLabels(
   children: React.ReactNode,
 ): Record<string, React.ReactNode> {
@@ -62,10 +54,6 @@ export interface SelectProps extends Omit<
   onValueChange?: (value: any, eventDetails?: any) => void
 }
 
-/**
- * Root Select component powered by @base-ui/react.
- * Wraps BaseSelect.Root and provides label context for its children.
- */
 function Select({ items, children, ...props }: SelectProps) {
   const staticLabels = React.useMemo(
     () => extractStaticLabels(children),
@@ -121,10 +109,6 @@ export interface SelectValueProps extends React.ComponentProps<
   placeholder?: React.ReactNode
 }
 
-/**
- * Select value display component.
- * Automatically resolves and displays the item label matching the selected value.
- */
 function SelectValue({
   placeholder,
   className,

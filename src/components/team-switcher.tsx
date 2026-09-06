@@ -43,7 +43,6 @@ export function TeamSwitcher({ teams }: { teams: BusinessTeam[] }) {
   const isCollapsed = state === 'collapsed' && !isMobile
   const ActiveLogo = activeTeam.logo
 
-  // Dynamically calculate flexible floating position
   const updatePosition = React.useCallback(() => {
     if (!triggerRef.current) return
     const rect = triggerRef.current.getBoundingClientRect()
@@ -55,7 +54,6 @@ export function TeamSwitcher({ teams }: { teams: BusinessTeam[] }) {
     const menuHeight = 280
 
     if (isSmallScreen) {
-      // On smaller screens, dropdown appears at the bottom
       const safeLeft = Math.max(
         12,
         Math.min(rect.left, window.innerWidth - menuWidth - 12),
@@ -67,7 +65,6 @@ export function TeamSwitcher({ teams }: { teams: BusinessTeam[] }) {
         side: 'bottom',
       })
     } else if (collapsed) {
-      // Desktop collapsed: appear on right (or left if near right viewport edge)
       const fitsOnRight = rect.right + 10 + menuWidth <= window.innerWidth - 12
       const side: DropdownSide = fitsOnRight ? 'right' : 'left'
       const left = fitsOnRight ? rect.right + 10 : rect.left - menuWidth - 10
@@ -83,7 +80,6 @@ export function TeamSwitcher({ teams }: { teams: BusinessTeam[] }) {
         side,
       })
     } else {
-      // Desktop expanded: appear below header
       setCoords({
         top: rect.bottom + 8,
         left: rect.left,
@@ -105,7 +101,6 @@ export function TeamSwitcher({ teams }: { teams: BusinessTeam[] }) {
     }
   }, [isOpen, updatePosition])
 
-  // Close on outside click or Escape key
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node

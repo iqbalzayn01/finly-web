@@ -180,7 +180,6 @@ function Account() {
         </div>
       </motion.div>
 
-      {/* Upload Avatar Modal */}
       <AlertModal
         open={avatarModalOpen}
         onOpenChange={setAvatarModalOpen}
@@ -190,7 +189,6 @@ function Account() {
         confirmText="Done"
       />
 
-      {/* Save Settings Success Modal */}
       <AlertModal
         open={saveModalOpen}
         onOpenChange={setSaveModalOpen}
@@ -200,7 +198,6 @@ function Account() {
         confirmText="Got it"
       />
 
-      {/* Password Update Modal */}
       <Modal
         open={passwordModalOpen}
         onOpenChange={setPasswordModalOpen}
@@ -246,7 +243,6 @@ function Account() {
         </div>
       </Modal>
 
-      {/* 2FA Setup Modal */}
       <Modal
         open={twoFactorModalOpen}
         onOpenChange={setTwoFactorModalOpen}

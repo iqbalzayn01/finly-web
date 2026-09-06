@@ -1,0 +1,28 @@
+{
+  "teams": [
+    {
+      "id": "finly-tech",
+      "name": "Finly Technologies",
+      "iconName": "Wallet",
+      "plan": "Enterprise Pro"
+    },
+    {
+      "id": "nexus-studio",
+      "name": "Nexus Studio",
+      "iconName": "Briefcase",
+      "plan": "Agency Growth"
+    },
+    {
+      "id": "acme-consulting",
+      "name": "Acme Consulting",
+      "iconName": "FileText",
+      "plan": "Free Starter"
+    }
+  ],
+  "currentUser": {
+    "name": "Iqbal Zayn",
+    "email": "iqbal@finly.io",
+    "avatar": "",
+    "role": "Owner"
+  }
+}

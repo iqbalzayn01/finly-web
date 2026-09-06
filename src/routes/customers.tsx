@@ -21,58 +21,12 @@ import {
   SelectItem,
 } from '../components/ui/select'
 import { useDebouncedSearch } from '../hooks/use-debounced-search'
+import { NumberTicker } from '../components/ui/number-ticker'
+import initialCustomers from '../data/customers.json'
 
 export const Route = createFileRoute('/customers')({
   component: Customers,
 })
-
-const initialCustomers = [
-  {
-    id: 1,
-    name: 'Acme Corp',
-    email: 'billing@acmecorp.com',
-    phone: '+1 (555) 000-1234',
-    address: '123 Acme Way, NY',
-    term: 14,
-    spent: 45000,
-  },
-  {
-    id: 2,
-    name: 'GlobalTech',
-    email: 'accounts@globaltech.io',
-    phone: '+1 (555) 999-8888',
-    address: 'Tech Park, SF',
-    term: 30,
-    spent: 120500,
-  },
-  {
-    id: 3,
-    name: 'Stark Industries',
-    email: 'invoices@stark.com',
-    phone: '+1 (555) 123-4567',
-    address: 'Malibu Point, CA',
-    term: 7,
-    spent: 89000,
-  },
-  {
-    id: 4,
-    name: 'Wayne Enterprises',
-    email: 'finance@wayne.com',
-    phone: '+1 (555) 000-0000',
-    address: 'Gotham City',
-    term: 30,
-    spent: 15000,
-  },
-  {
-    id: 5,
-    name: 'Umbrella Corp',
-    email: 'billing@umbrella.com',
-    phone: '+1 (555) 666-7777',
-    address: 'Raccoon City',
-    term: 14,
-    spent: 25000,
-  },
-]
 
 const TERM_OPTIONS = [
   { value: 'all', label: 'All Terms' },
@@ -228,7 +182,7 @@ function Customers() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="flex items-center gap-1.5 border border-border bg-accent/40 px-3 py-1 text-xs font-semibold text-accent-foreground rounded-full">
-                    Net {c.term}
+                    Net <NumberTicker value={c.term} />
                   </span>
                   <div className="relative">
                     <button
@@ -411,7 +365,6 @@ function Customers() {
         )}
       </AnimatePresence>
 
-      {/* Success Modal */}
       <AlertModal
         open={successModal.open}
         onOpenChange={(open) => setSuccessModal((prev) => ({ ...prev, open }))}
@@ -421,7 +374,6 @@ function Customers() {
         confirmText="Got it"
       />
 
-      {/* Delete Confirmation Modal */}
       <AlertModal
         open={deleteModal.open}
         onOpenChange={(open) => setDeleteModal((prev) => ({ ...prev, open }))}

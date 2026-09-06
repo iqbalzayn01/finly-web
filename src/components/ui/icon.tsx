@@ -10,10 +10,6 @@ export interface IconProps extends React.HTMLAttributes<HTMLSpanElement> {
   size?: number | string
 }
 
-/**
- * Parses Tailwind size classes (e.g. `size-4`, `h-4 w-4`, `size-3.5`, `h-5`, `size-[18px]`)
- * to compute the exact pixel dimensions, 1:1 aspect ratio, optimal optical size, and font weight.
- */
 function parseIconDimensions(
   className?: string,
   explicitSize?: number | string,
@@ -40,7 +36,6 @@ function parseIconDimensions(
   }
 
   if (className) {
-    // Check for size-X, h-X, w-X anywhere in the className string
     const match = className.match(
       /(?:(?:^|\s)(?:size|h|w)-)(\[?[0-9.]+(?:px|rem)?\]?)/,
     )
@@ -56,7 +51,6 @@ function parseIconDimensions(
       } else {
         const num = parseFloat(val)
         if (!isNaN(num)) {
-          // Tailwind numeric scale: 1 = 4px, 2.5 = 10px, 3 = 12px, 3.5 = 14px, 4 = 16px, 5 = 20px, 6 = 24px, 8 = 32px, etc.
           px = num * 4
         }
       }
@@ -82,12 +76,6 @@ function parseIconDimensions(
   }
 }
 
-/**
- * Universal Google Material Symbols (Rounded) Icon Component
- * https://fonts.google.com/icons?icon.style=Rounded
- *
- * Guarantees strict 1:1 aspect ratio, centered font bounding box, and automatic optical sizing.
- */
 export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
   (
     {
@@ -157,11 +145,6 @@ export function createGoogleIcon(
   return Component
 }
 
-// ==========================================
-// Google Material Symbols (Rounded) Mappings
-// ==========================================
-
-// Core Navigation & Layout
 export const LayoutDashboard = createGoogleIcon('dashboard')
 export const Dashboard = createGoogleIcon('dashboard')
 export const Wallet = createGoogleIcon('account_balance_wallet')
@@ -180,7 +163,6 @@ export const Search = createGoogleIcon('search')
 export const PanelLeft = createGoogleIcon('dock_to_left')
 export const PanelLeftClose = createGoogleIcon('left_panel_close')
 
-// Finance & Analytics
 export const TrendingUp = createGoogleIcon('trending_up')
 export const ArrowUpRight = createGoogleIcon('north_east')
 export const ArrowDownRight = createGoogleIcon('south_east')
@@ -193,12 +175,10 @@ export const Globe = createGoogleIcon('language')
 export const RefreshCw = createGoogleIcon('sync')
 export const Building2 = createGoogleIcon('domain')
 
-// Keypad & Hardware Controls
 export const Keyboard = createGoogleIcon('keyboard')
 export const Delete = createGoogleIcon('backspace')
 export const BackspaceIcon = createGoogleIcon('backspace')
 
-// Actions & CRUD
 export const Plus = createGoogleIcon('add')
 export const Save = createGoogleIcon('save')
 export const Send = createGoogleIcon('send')
@@ -220,7 +200,6 @@ export const MapPin = createGoogleIcon('location_on')
 export const Eye = createGoogleIcon('visibility')
 export const EyeOff = createGoogleIcon('visibility_off')
 
-// Status & Feedback
 export const Check = createGoogleIcon('check')
 export const CheckIcon = createGoogleIcon('check')
 export const CheckCircle2 = createGoogleIcon('check_circle')
@@ -242,7 +221,6 @@ export const HelpCircle = createGoogleIcon('help')
 export const FileQuestion = createGoogleIcon('help_outline')
 export const Home = createGoogleIcon('home')
 
-// Security, Pro & Business
 export const Shield = createGoogleIcon('shield')
 export const ShieldCheck = createGoogleIcon('verified_user')
 export const ShieldAlert = createGoogleIcon('gpp_maybe')
@@ -265,7 +243,6 @@ export const GalleryVerticalEnd = createGoogleIcon('collections_bookmark')
 export const Command = createGoogleIcon('keyboard_command_key')
 export const Map = createGoogleIcon('map')
 
-// AI & System
 export const Bot = createGoogleIcon('smart_toy')
 export const Server = createGoogleIcon('dns')
 export const Sliders = createGoogleIcon('tune')

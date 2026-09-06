@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "name": "Acme Corp",
+    "email": "billing@acmecorp.com",
+    "phone": "+1 (555) 019-1234",
+    "address": "123 Acme Way, New York, NY",
+    "term": 14,
+    "spent": 68500
+  },
+  {
+    "id": 2,
+    "name": "GlobalTech Ltd",
+    "email": "accounts@globaltech.io",
+    "phone": "+1 (555) 342-8888",
+    "address": "500 Tech Park, San Francisco, CA",
+    "term": 30,
+    "spent": 145000
+  },
+  {
+    "id": 3,
+    "name": "Stark Industries",
+    "email": "invoices@starkindustries.com",
+    "phone": "+1 (555) 888-4567",
+    "address": "10880 Malibu Point, Malibu, CA",
+    "term": 7,
+    "spent": 289000
+  },
+  {
+    "id": 4,
+    "name": "Wayne Enterprises",
+    "email": "treasury@waynecorp.com",
+    "phone": "+1 (555) 902-1000",
+    "address": "1007 Mountain Drive, Gotham City, NJ",
+    "term": 30,
+    "spent": 95000
+  },
+  {
+    "id": 5,
+    "name": "Umbrella Corp",
+    "email": "finance@umbrellabiotech.com",
+    "phone": "+1 (555) 412-7777",
+    "address": "742 Evergreen Blvd, Chicago, IL",
+    "term": 14,
+    "spent": 42000
+  },
+  {
+    "id": 6,
+    "name": "Cyberdyne Systems",
+    "email": "accounts.payable@cyberdyne.ai",
+    "phone": "+1 (555) 670-3300",
+    "address": "18144 El Camino Real, Sunnyvale, CA",
+    "term": 30,
+    "spent": 184000
+  },
+  {
+    "id": 7,
+    "name": "Initech Software",
+    "email": "billing@initechcorp.com",
+    "phone": "+1 (555) 230-9191",
+    "address": "4120 Freidrich Lane, Austin, TX",
+    "term": 14,
+    "spent": 38500
+  },
+  {
+    "id": 8,
+    "name": "Hooli Media Group",
+    "email": "invoicing@hooli.xyz",
+    "phone": "+1 (555) 762-4400",
+    "address": "100 Innovation Way, Mountain View, CA",
+    "term": 30,
+    "spent": 112000
+  },
+  {
+    "id": 9,
+    "name": "Pied Piper Labs",
+    "email": "richard@piedpiper.com",
+    "phone": "+1 (555) 555-0143",
+    "address": "5230 Newell Rd, Palo Alto, CA",
+    "term": 7,
+    "spent": 78000
+  },
+  {
+    "id": 10,
+    "name": "Massive Dynamic",
+    "email": "contracts@massivedynamic.org",
+    "phone": "+1 (555) 890-7711",
+    "address": "65 Atlantic Ave, Boston, MA",
+    "term": 30,
+    "spent": 156000
+  }
+]

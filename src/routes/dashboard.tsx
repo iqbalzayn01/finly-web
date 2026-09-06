@@ -50,17 +50,10 @@ import {
   RadialBarChart,
 } from 'recharts'
 import { useCurrency } from '../lib/currency'
+import { NumberTicker } from '../components/ui/number-ticker'
+import dashboardData from '../data/dashboard.json'
 
 export const Route = createFileRoute('/dashboard')({ component: Dashboard })
-
-const runwayChartData = [
-  { month: 'Feb', runway: 10.4 },
-  { month: 'Mar', runway: 11.2 },
-  { month: 'Apr', runway: 12.8 },
-  { month: 'May', runway: 12.1 },
-  { month: 'Jun', runway: 13.5 },
-  { month: 'Jul', runway: 14.2 },
-]
 
 const runwayChartConfig = {
   runway: {
@@ -68,10 +61,6 @@ const runwayChartConfig = {
     color: 'var(--primary)',
   },
 } satisfies ChartConfig
-
-const healthChartData = [
-  { metric: 'health', score: 94, fill: 'var(--primary)' },
-]
 
 const healthChartConfig = {
   score: {
@@ -109,59 +98,8 @@ const TIMEFRAME_OPTIONS: { label: string; value: CashflowTimeframe }[] = [
   { label: '5Y', value: '5y' },
 ]
 
-const cashflowDataMap: Record<
-  CashflowTimeframe,
-  { name: string; income: number; expense: number }[]
-> = {
-  '1d': [
-    { name: '00:00', income: 420, expense: 120 },
-    { name: '04:00', income: 680, expense: 210 },
-    { name: '08:00', income: 1950, expense: 640 },
-    { name: '12:00', income: 3420, expense: 1480 },
-    { name: '16:00', income: 2890, expense: 1120 },
-    { name: '20:00', income: 1740, expense: 590 },
-  ],
-  '1m': [
-    { name: 'Week 1', income: 6400, expense: 3100 },
-    { name: 'Week 2', income: 7800, expense: 3900 },
-    { name: 'Week 3', income: 5900, expense: 2800 },
-    { name: 'Week 4', income: 8300, expense: 4400 },
-  ],
-  '3m': [
-    { name: 'May', income: 18900, expense: 12100 },
-    { name: 'Jun', income: 24500, expense: 10800 },
-    { name: 'Jul', income: 28400, expense: 14200 },
-  ],
-  '6m': [
-    { name: 'Feb', income: 15600, expense: 9400 },
-    { name: 'Mar', income: 14200, expense: 11000 },
-    { name: 'Apr', income: 21800, expense: 13500 },
-    { name: 'May', income: 18900, expense: 12100 },
-    { name: 'Jun', income: 24500, expense: 10800 },
-    { name: 'Jul', income: 28400, expense: 14200 },
-  ],
-  '1y': [
-    { name: 'Aug 25', income: 14500, expense: 9100 },
-    { name: 'Sep 25', income: 16200, expense: 9800 },
-    { name: 'Oct 25', income: 18400, expense: 11200 },
-    { name: 'Nov 25', income: 15100, expense: 8900 },
-    { name: 'Dec 25', income: 22400, expense: 14500 },
-    { name: 'Jan 26', income: 12400, expense: 8200 },
-    { name: 'Feb 26', income: 15600, expense: 9400 },
-    { name: 'Mar 26', income: 14200, expense: 11000 },
-    { name: 'Apr 26', income: 21800, expense: 13500 },
-    { name: 'May 26', income: 18900, expense: 12100 },
-    { name: 'Jun 26', income: 24500, expense: 10800 },
-    { name: 'Jul 26', income: 28400, expense: 14200 },
-  ],
-  '5y': [
-    { name: '2022', income: 142000, expense: 98000 },
-    { name: '2023', income: 188000, expense: 122000 },
-    { name: '2024', income: 236000, expense: 154000 },
-    { name: '2025', income: 295000, expense: 186000 },
-    { name: '2026', income: 198500, expense: 118400 },
-  ],
-}
+const { runwayChartData, healthChartData, cashflowDataMap, recentTransactions } =
+  dashboardData
 
 function Dashboard() {
   const { symbol, formatAmount } = useCurrency()
@@ -181,85 +119,16 @@ function Dashboard() {
     ease: [0.2, 0, 0, 1] as [number, number, number, number],
   }
 
-  const allRecentTx = [
-    {
-      name: 'Acme Corp Q3 Retainer',
-      category: 'Design Systems & Strategy',
-      date: 'Jul 28, 2026',
-      amount: 14500,
-      type: 'income',
-      status: 'Paid',
-      icon: ArrowUpRight,
+  const allRecentTx = useMemo(() => {
+    return recentTransactions.map((tx) => ({
+      ...tx,
+      icon: tx.type === 'income' ? ArrowUpRight : ArrowDownRight,
       color:
-        'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-    },
-    {
-      name: 'AWS Cloud Infrastructure',
-      category: 'Server & Hosting Ops',
-      date: 'Jul 27, 2026',
-      amount: 1250,
-      type: 'expense',
-      status: 'Receipt',
-      icon: ArrowDownRight,
-      color:
-        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
-    },
-    {
-      name: 'Vercel Enterprise Plan',
-      category: 'Frontend Edge Hosting',
-      date: 'Jul 26, 2026',
-      amount: 240,
-      type: 'expense',
-      status: 'Receipt',
-      icon: ArrowDownRight,
-      color:
-        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
-    },
-    {
-      name: 'Meta Ads Campaign',
-      category: 'Online Marketing Ads',
-      date: 'Jul 25, 2026',
-      amount: 450,
-      type: 'expense',
-      status: 'Receipt',
-      icon: ArrowDownRight,
-      color:
-        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
-    },
-    {
-      name: 'Stripe Payout',
-      category: 'E-commerce Store Sales',
-      date: 'Jul 22, 2026',
-      amount: 8200,
-      type: 'income',
-      status: 'Paid',
-      icon: ArrowUpRight,
-      color:
-        'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-    },
-    {
-      name: 'WeWork Office Space',
-      category: 'Monthly Desk & Utilities',
-      date: 'Jul 20, 2026',
-      amount: 850,
-      type: 'expense',
-      status: 'No Receipt',
-      icon: ArrowDownRight,
-      color:
-        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
-    },
-    {
-      name: 'Slack Subscription',
-      category: 'Team Chat Software',
-      date: 'Jul 24, 2026',
-      amount: 85,
-      type: 'expense',
-      status: 'Receipt',
-      icon: ArrowDownRight,
-      color:
-        'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
-    },
-  ]
+        tx.type === 'income'
+          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+          : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    }))
+  }, [])
 
   const period = [
     { label: 'Select a period', value: null },
@@ -275,7 +144,6 @@ function Dashboard() {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Header Area */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -314,12 +182,11 @@ function Dashboard() {
         </motion.div>
       </div>
 
-      {/* ROW 1: TOP METRIC CARDS (3 COLUMNS) */}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3">
         {[
           {
             title: 'Total Balance',
-            value: formatAmount(148250),
+            amount: 148250,
             trend: '+12.5%',
             isUp: true,
             icon: Wallet,
@@ -334,7 +201,7 @@ function Dashboard() {
           },
           {
             title: 'Total Income',
-            value: formatAmount(34120),
+            amount: 34120,
             trend: '+8.2% vs last month',
             isUp: true,
             icon: ArrowUpRight,
@@ -351,7 +218,7 @@ function Dashboard() {
           },
           {
             title: 'Total Expenses',
-            value: formatAmount(12450),
+            amount: 12450,
             trend: '-2.4% vs last month',
             isUp: false,
             icon: ArrowDownRight,
@@ -383,7 +250,10 @@ function Dashboard() {
                       {card.title}
                     </span>
                     <h3 className="font-mono text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight truncate">
-                      {card.value}
+                      <NumberTicker
+                        value={card.amount}
+                        formatter={(v) => formatAmount(v)}
+                      />
                     </h3>
                   </div>
                   <div
@@ -395,7 +265,6 @@ function Dashboard() {
               </div>
 
               <div className="space-y-2.5 sm:space-y-3 pt-3">
-                {/* Progress bar */}
                 <div
                   className={`h-2 sm:h-2.5 w-full rounded-full ${card.progressBg} overflow-hidden`}
                 >
@@ -426,7 +295,6 @@ function Dashboard() {
         ))}
       </div>
 
-      {/* ROW 2: CASH FLOW OVERVIEW CHART (FULL WIDTH) */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -444,7 +312,6 @@ function Dashboard() {
               </CardDescription>
             </div>
 
-            {/* Timeframe selector pills */}
             <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-xl self-start sm:self-auto overflow-x-auto max-w-full">
               {TIMEFRAME_OPTIONS.map((opt) => (
                 <button
@@ -556,8 +423,16 @@ function Dashboard() {
                   <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div className="flex items-center gap-2 leading-none text-xs text-muted-foreground">
-                  Average monthly income: {formatAmount(18500)} · Average
-                  spending: {formatAmount(11200)}
+                  Average monthly income:{' '}
+                  <NumberTicker
+                    value={18500}
+                    formatter={(v) => formatAmount(v)}
+                  />{' '}
+                  · Average spending:{' '}
+                  <NumberTicker
+                    value={11200}
+                    formatter={(v) => formatAmount(v)}
+                  />
                 </div>
               </div>
             </div>
@@ -565,9 +440,7 @@ function Dashboard() {
         </Card>
       </motion.div>
 
-      {/* ROW 3: CASH RUNWAY & CASH HEALTH (COMBINED SINGLE ROW) */}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 items-stretch">
-        {/* Col 1: Cash Runway */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -595,22 +468,22 @@ function Dashboard() {
                 </span>
               </div>
 
-              {/* Big Metric */}
               <div className="my-4 sm:my-5">
                 <div className="flex items-baseline gap-2">
                   <span className="font-mono text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground">
-                    14.2
+                    <NumberTicker value={14.2} decimalPlaces={1} />
                   </span>
                   <span className="text-sm sm:text-base font-semibold text-muted-foreground">
                     Months
                   </span>
                 </div>
                 <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1 flex items-center gap-1">
-                  <TrendingUp className="h-3 w-3" /> +1.5 mo vs last month
+                  <TrendingUp className="h-3 w-3" /> +
+                  <NumberTicker value={1.5} decimalPlaces={1} /> mo vs last
+                  month
                 </p>
               </div>
 
-              {/* Visual Runway Trend (Line Chart with Dots) */}
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-semibold">
                   <span className="text-muted-foreground">
@@ -670,14 +543,16 @@ function Dashboard() {
               </div>
             </div>
 
-            {/* Footer Breakdown */}
             <div className="pt-4 border-t border-border mt-5 grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-0.5">
                 <p className="text-[11px] font-medium opacity-75">
                   Monthly Spending
                 </p>
                 <p className="font-mono text-sm font-bold text-foreground">
-                  {formatAmount(12450)}
+                  <NumberTicker
+                    value={12450}
+                    formatter={(v) => formatAmount(v)}
+                  />
                 </p>
               </div>
               <div className="space-y-0.5 text-right">
@@ -685,14 +560,16 @@ function Dashboard() {
                   Available Cash
                 </p>
                 <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400">
-                  {formatAmount(148250)}
+                  <NumberTicker
+                    value={148250}
+                    formatter={(v) => formatAmount(v)}
+                  />
                 </p>
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Col 2: Cash Health Radial Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -771,14 +648,17 @@ function Dashboard() {
                 </RadialBarChart>
               </ChartContainer>
 
-              {/* Sub-metrics breakdown */}
               <div className="grid grid-cols-3 gap-2 pt-1 pb-2">
                 <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
                   <p className="text-[11px] text-muted-foreground font-medium">
                     Margin
                   </p>
                   <p className="font-mono text-sm font-bold text-foreground mt-0.5">
-                    63.4%
+                    <NumberTicker
+                      value={63.4}
+                      decimalPlaces={1}
+                      suffix="%"
+                    />
                   </p>
                 </div>
                 <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
@@ -786,7 +666,11 @@ function Dashboard() {
                     On-Time
                   </p>
                   <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
-                    96.5%
+                    <NumberTicker
+                      value={96.5}
+                      decimalPlaces={1}
+                      suffix="%"
+                    />
                   </p>
                 </div>
                 <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
@@ -794,7 +678,7 @@ function Dashboard() {
                     Avg Pay
                   </p>
                   <p className="font-mono text-sm font-bold text-primary mt-0.5">
-                    14 Days
+                    <NumberTicker value={14} suffix=" Days" />
                   </p>
                 </div>
               </div>
@@ -813,7 +697,6 @@ function Dashboard() {
         </motion.div>
       </div>
 
-      {/* ROW 4: RECENT ACTIVITY (FULL WIDTH) */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -838,7 +721,6 @@ function Dashboard() {
               </div>
 
               <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto">
-                {/* Filter Pills */}
                 <div className="flex items-center gap-1 sm:gap-1.5 p-1 bg-muted/50 rounded-xl overflow-x-auto">
                   {(['all', 'income', 'expense'] as const).map((filterType) => (
                     <button
@@ -869,7 +751,6 @@ function Dashboard() {
               </div>
             </div>
 
-            {/* Filtered Transaction List (Full Width Rows) */}
             <div className="divide-y divide-border rounded-xl border border-border overflow-hidden bg-background/50">
               {filteredTx.length === 0 ? (
                 <p className="py-10 text-center text-xs text-muted-foreground font-medium">
@@ -903,7 +784,6 @@ function Dashboard() {
                     </div>
 
                     <div className="flex items-center justify-end gap-2.5 sm:gap-6 shrink-0">
-                      {/* Status / Receipt Badge */}
                       <span
                         className={`hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
                           tx.status === 'Paid'
@@ -921,12 +801,10 @@ function Dashboard() {
                         {tx.status}
                       </span>
 
-                      {/* Date */}
                       <span className="text-xs font-medium text-muted-foreground hidden md:inline-block">
                         {tx.date}
                       </span>
 
-                      {/* Amount */}
                       <span
                         className={`font-mono text-xs sm:text-sm font-bold text-right ${
                           tx.type === 'income'
@@ -934,8 +812,12 @@ function Dashboard() {
                             : 'text-foreground'
                         }`}
                       >
-                        {tx.type === 'income' ? '+' : '-'}
-                        {formatAmount(tx.amount)}
+                        <NumberTicker
+                          value={tx.amount}
+                          formatter={(v) =>
+                            `${tx.type === 'income' ? '+' : '-'}${formatAmount(v)}`
+                          }
+                        />
                       </span>
                     </div>
                   </div>
@@ -959,7 +841,6 @@ function Dashboard() {
         </div>
       </motion.div>
 
-      {/* ROW 5: CURRENCY CONVERTER */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -983,7 +864,6 @@ function Dashboard() {
               </span>
             </div>
 
-            {/* Interactive Amount Converter Input */}
             <div className="relative mb-4">
               <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
                 $

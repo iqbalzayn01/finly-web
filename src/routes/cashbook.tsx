@@ -24,153 +24,13 @@ import {
   SelectItem,
 } from '../components/ui/select'
 import { useDebouncedSearch } from '../hooks/use-debounced-search'
+import { NumberTicker } from '../components/ui/number-ticker'
+import CATEGORIES from '../data/categories.json'
+import initialTransactions from '../data/transactions.json'
 
 export const Route = createFileRoute('/cashbook')({
   component: Cashbook,
 })
-
-const CATEGORIES = [
-  {
-    group: 'Income',
-    badge:
-      'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300',
-    dot: 'bg-emerald-500',
-    items: [
-      'General / Primary Income',
-      'Checks, coupons',
-      'Child Support (Income)',
-      'Dues & grants',
-      'Gifts (Income)',
-      'Interests, dividends',
-      'Lending, renting',
-      'Lottery, gambling (Income)',
-      'Refunds (tax, purchase)',
-    ],
-  },
-  {
-    group: 'Communication, PC',
-    badge: 'bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-300',
-    dot: 'bg-blue-500',
-    items: [
-      'Internet',
-      'Phone, cell phone',
-      'Postal services',
-      'Software, apps, games',
-    ],
-  },
-  {
-    group: 'Financial Expenses',
-    badge: 'bg-red-100 text-red-800 dark:bg-red-500/20 dark:text-red-300',
-    dot: 'bg-red-500',
-    items: [
-      'Advisory',
-      'Charges, Fees',
-      'Child Support (Expense)',
-      'Fines',
-      'Insurances',
-      'Loan, interests',
-      'Taxes',
-    ],
-  },
-  {
-    group: 'Food & Drinks',
-    badge:
-      'bg-orange-100 text-orange-800 dark:bg-orange-500/20 dark:text-orange-300',
-    dot: 'bg-orange-500',
-    items: ['Bar, cafe', 'Groceries', 'Restaurant, fast-food'],
-  },
-  {
-    group: 'Housing',
-    badge:
-      'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/20 dark:text-yellow-300',
-    dot: 'bg-yellow-500',
-    items: [
-      'Energy, utilities',
-      'Maintenance, repairs',
-      'Mortgage',
-      'Property insurance',
-      'Rent',
-      'Services',
-    ],
-  },
-  {
-    group: 'Investments',
-    badge:
-      'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/20 dark:text-indigo-300',
-    dot: 'bg-indigo-500',
-    items: [
-      'Collections',
-      'Financial investments',
-      'Realty',
-      'Savings',
-      'Vehicles, chattels',
-    ],
-  },
-  {
-    group: 'Life & Entertainment',
-    badge:
-      'bg-purple-100 text-purple-800 dark:bg-purple-500/20 dark:text-purple-300',
-    dot: 'bg-purple-500',
-    items: [
-      'Active sport, fitness',
-      'Alcohol, tobacco',
-      'Books, audio, subscriptions',
-      'Charity, gifts',
-      'Culture, sport events',
-      'Education, development',
-      'Health care, doctor',
-      'Hobbies',
-      'Holiday, trips, hotels',
-      'Life events',
-      'Lottery, gambling',
-      'TV, Streaming',
-      'Wellness, beauty',
-    ],
-  },
-  {
-    group: 'Shopping',
-    badge: 'bg-rose-100 text-rose-800 dark:bg-rose-500/20 dark:text-rose-300',
-    dot: 'bg-rose-500',
-    items: [
-      'Clothes & shoes',
-      'Drug-store, chemist',
-      'Electronics, accessories',
-      'Free time',
-      'Gifts, joy',
-      'Health and beauty',
-      'Home, garden',
-      'Jewels, accessories',
-      'Kids',
-      'Pets, animals',
-      'Stationery, tools',
-    ],
-  },
-  {
-    group: 'Transportation',
-    badge: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-500/20 dark:text-cyan-300',
-    dot: 'bg-cyan-500',
-    items: [
-      'Business trips',
-      'Long distance',
-      'Public transport',
-      'Taxi',
-      'Vehicle',
-      'Fuel',
-      'Leasing',
-      'Parking',
-      'Rentals',
-      'Vehicle insurance',
-      'Vehicle maintenance',
-    ],
-  },
-  {
-    group: 'Others',
-    badge:
-      'bg-slate-100 text-slate-800 dark:bg-slate-500/20 dark:text-slate-300',
-    dot: 'bg-slate-500',
-    items: ['General', 'Missing'],
-  },
-]
 
 const getCategoryBadge = (categoryName: string) => {
   for (const group of CATEGORIES) {
@@ -185,69 +45,6 @@ const getCategoryDot = (categoryName: string) => {
   }
   return 'bg-slate-500'
 }
-
-const initialTransactions = [
-  {
-    id: 1,
-    date: '2026-08-01',
-    desc: 'Acme Corp Web Dev',
-    category: 'General / Primary Income',
-    scope: 'Business',
-    amount: 5000,
-    type: 'income',
-    receipt: true,
-  },
-  {
-    id: 2,
-    date: '2026-07-28',
-    desc: 'AWS Hosting',
-    category: 'Software, apps, games',
-    scope: 'Business',
-    amount: 120,
-    type: 'expense',
-    receipt: true,
-  },
-  {
-    id: 3,
-    date: '2026-07-25',
-    desc: 'Lunch meeting with client',
-    category: 'Restaurant, fast-food',
-    scope: 'Business',
-    amount: 45,
-    type: 'expense',
-    receipt: false,
-  },
-  {
-    id: 4,
-    date: '2026-07-20',
-    desc: 'Q3 Retainer GlobalTech',
-    category: 'General / Primary Income',
-    scope: 'Business',
-    amount: 3500,
-    type: 'income',
-    receipt: true,
-  },
-  {
-    id: 5,
-    date: '2026-07-15',
-    desc: 'Office Supplies Depot',
-    category: 'Stationery, tools',
-    scope: 'Business',
-    amount: 210,
-    type: 'expense',
-    receipt: false,
-  },
-  {
-    id: 6,
-    date: '2026-07-10',
-    desc: 'Personal Coffee',
-    category: 'Bar, cafe',
-    scope: 'Personal',
-    amount: 5,
-    type: 'expense',
-    receipt: false,
-  },
-]
 
 const m3Transition = {
   type: 'tween' as const,
@@ -291,7 +88,6 @@ function Cashbook() {
     open: false,
   })
 
-  // Summary Metrics calculations
   const totalInflow = initialTransactions
     .filter((tx) => tx.type === 'income')
     .reduce((acc, tx) => acc + tx.amount, 0)
@@ -333,7 +129,6 @@ function Cashbook() {
 
   return (
     <div className="space-y-6 sm:space-y-8 pb-12">
-      {/* Header Bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
@@ -351,7 +146,6 @@ function Cashbook() {
         </Button>
       </div>
 
-      {/* Cashbook Summary Cards with Staggered Entrance */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -363,7 +157,10 @@ function Cashbook() {
             Total Inflow (Income)
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
-            {formatAmount(totalInflow)}
+            <NumberTicker
+              value={totalInflow}
+              formatter={(v) => formatAmount(v)}
+            />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
             2 Income Entries
@@ -380,7 +177,10 @@ function Cashbook() {
             Total Outflow (Expense)
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-rose-600 dark:text-rose-400 mt-1">
-            {formatAmount(totalOutflow)}
+            <NumberTicker
+              value={totalOutflow}
+              formatter={(v) => formatAmount(v)}
+            />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
             4 Expense Entries
@@ -397,7 +197,10 @@ function Cashbook() {
             Net Ledger Balance
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">
-            {formatAmount(netCashflow)}
+            <NumberTicker
+              value={netCashflow}
+              formatter={(v) => formatAmount(v)}
+            />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
             Cash Surplus Across Accounts
@@ -405,7 +208,6 @@ function Cashbook() {
         </motion.div>
       </div>
 
-      {/* Main Ledger Table Card */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
@@ -563,7 +365,10 @@ function Cashbook() {
                         ) : (
                           <ArrowDownRight className="h-4 w-4 text-rose-500" />
                         )}
-                        {formatAmount(tx.amount)}
+                        <NumberTicker
+                          value={tx.amount}
+                          formatter={(v) => formatAmount(v)}
+                        />
                       </div>
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -654,7 +459,6 @@ function Cashbook() {
         </div>
       </motion.div>
 
-      {/* Quick Entry Modal */}
       <QuickEntryModal
         open={quickEntryOpen}
         onOpenChange={setQuickEntryOpen}
@@ -669,7 +473,6 @@ function Cashbook() {
         }}
       />
 
-      {/* Feedback Modal */}
       <AlertModal
         open={feedbackModal.open}
         onOpenChange={(open) => setFeedbackModal((prev) => ({ ...prev, open }))}
@@ -679,7 +482,6 @@ function Cashbook() {
         confirmText="Got it"
       />
 
-      {/* Delete Transaction Confirmation Modal */}
       <AlertModal
         open={deleteModal.open}
         onOpenChange={(open) => setDeleteModal((prev) => ({ ...prev, open }))}

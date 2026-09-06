@@ -121,7 +121,6 @@ export function QuickEntryModal({
 
   const descriptionInputRef = React.useRef<HTMLInputElement>(null)
 
-  // Reset form when modal opens
   React.useEffect(() => {
     if (open) {
       setEntryAmount('0')
@@ -132,7 +131,6 @@ export function QuickEntryModal({
 
   const maxDigits = activeConfig.maxDigits || 9
 
-  // Handle keypad and keyboard numbers with tactile feedback
   const handleNumpad = React.useCallback(
     (val: string) => {
       setActiveKey(val)
@@ -201,12 +199,10 @@ export function QuickEntryModal({
     submitTransaction()
   }
 
-  // Global Keyboard & Numeric Keypad Listener
   React.useEffect(() => {
     if (!open) return
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't intercept number keys if user is typing in the description text input
       const activeEl = document.activeElement
       if (
         activeEl === descriptionInputRef.current ||
@@ -222,7 +218,6 @@ export function QuickEntryModal({
         return
       }
 
-      // Check numeric keys: top row (0-9) or Numeric Keypad (Numpad0-Numpad9)
       if (
         (e.key >= '0' && e.key <= '9') ||
         (e.code && e.code.startsWith('Numpad') && !isNaN(Number(e.key)))
@@ -232,21 +227,18 @@ export function QuickEntryModal({
         return
       }
 
-      // Backspace: delete last entered digit
       if (e.key === 'Backspace') {
         e.preventDefault()
         handleNumpad('BACK')
         return
       }
 
-      // Clear shortcut: 'c', 'C', 'Delete'
       if (e.key === 'c' || e.key === 'C' || e.key === 'Delete') {
         e.preventDefault()
         handleNumpad('C')
         return
       }
 
-      // Fast toggle type: 'e' for Expense, 'i' for Income
       if (e.key === 'e' || e.key === 'E') {
         e.preventDefault()
         setTxType('expense')
@@ -258,7 +250,6 @@ export function QuickEntryModal({
         return
       }
 
-      // Enter key or NumpadEnter to submit
       if (e.key === 'Enter' || e.code === 'NumpadEnter') {
         const parsed = parseInt(entryAmount, 10) || 0
         if (parsed > 0) {
@@ -272,7 +263,6 @@ export function QuickEntryModal({
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [open, handleNumpad, submitTransaction, entryAmount])
 
-  // Formatted amount preview
   const displayFormatted = React.useMemo(() => {
     const num = parseInt(entryAmount || '0', 10)
     return `${symbol} ${num.toLocaleString(activeConfig.locale)}`
@@ -283,7 +273,6 @@ export function QuickEntryModal({
       <AnimatePresence>
         {open && (
           <BaseDialog.Portal keepMounted>
-            {/* Backdrop Blur Overlay */}
             <BaseDialog.Backdrop
               render={(props: any) => (
                 <motion.div
@@ -297,7 +286,6 @@ export function QuickEntryModal({
               )}
             />
 
-            {/* Modal Dialog Body */}
             <BaseDialog.Popup
               render={(props) => (
                 <div
@@ -311,7 +299,6 @@ export function QuickEntryModal({
                     transition={{ type: 'spring', damping: 26, stiffness: 350 }}
                     className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-border bg-card p-4 sm:p-6 text-foreground shadow-none outline-none my-auto max-h-[90vh] overflow-y-auto"
                   >
-                    {/* Header Bar */}
                     <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-border mb-4 sm:mb-5">
                       <div className="flex items-center gap-2.5">
                         <div
@@ -348,7 +335,6 @@ export function QuickEntryModal({
                     </div>
 
                     <form onSubmit={handleSave} className="space-y-4 sm:space-y-5">
-                      {/* Income vs Expense Pill Switcher */}
                       <div className="grid grid-cols-2 gap-1.5 p-1 bg-muted/50 border border-border rounded-xl">
                         <button
                           type="button"
@@ -382,7 +368,6 @@ export function QuickEntryModal({
                         </button>
                       </div>
 
-                      {/* Prominent Amount Display with Keyboard / Numpad Guide */}
                       <div
                         data-quick-entry="amount"
                         className="text-center py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl bg-muted/30 border border-border transition-all"
@@ -412,7 +397,6 @@ export function QuickEntryModal({
                         </motion.div>
                       </div>
 
-                      {/* Tactile Numpad Grid with Keyboard Synchronization */}
                       <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                         {[
                           { label: '1', val: '1' },
@@ -438,8 +422,8 @@ export function QuickEntryModal({
                               onClick={() => handleNumpad(item.val)}
                               className={`h-10 sm:h-11 border border-border text-sm sm:text-base font-semibold rounded-xl shadow-none transition-all cursor-pointer outline-none flex items-center justify-center ${
                                 isPressed
-                                    ? 'bg-primary text-primary-foreground border-primary scale-95 ring-2 ring-primary/40'
-                                    : 'bg-card text-foreground hover:bg-accent hover:text-accent-foreground active:scale-95'
+                                  ? 'bg-primary text-primary-foreground border-primary scale-95 ring-2 ring-primary/40'
+                                  : 'bg-card text-foreground hover:bg-accent hover:text-accent-foreground active:scale-95'
                               } ${item.isClear ? 'text-destructive font-bold' : ''}`}
                             >
                               {item.isBack ? (
@@ -452,7 +436,6 @@ export function QuickEntryModal({
                         })}
                       </div>
 
-                      {/* Keyboard Shortcuts Hint Bar */}
                       <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[11px] text-muted-foreground select-none">
                         <span className="inline-flex items-center gap-1">
                           <kbd className="px-1.5 py-0.5 rounded bg-muted border border-border font-mono text-[10px] text-foreground font-semibold">
@@ -483,10 +466,8 @@ export function QuickEntryModal({
                         </span>
                       </div>
 
-                      {/* Metadata Form Controls: Category, Scope, Description */}
                       <div className="space-y-3 pt-1">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          {/* Category Selector */}
                           <div>
                             <label className="block text-[11px] font-semibold text-muted-foreground mb-1">
                               Category
@@ -532,7 +513,6 @@ export function QuickEntryModal({
                             </Select>
                           </div>
 
-                          {/* Scope Selector */}
                           <div>
                             <label className="block text-[11px] font-semibold text-muted-foreground mb-1">
                               Scope
@@ -565,7 +545,6 @@ export function QuickEntryModal({
                           </div>
                         </div>
 
-                        {/* Description / Notes */}
                         <div>
                           <label className="block text-[11px] font-semibold text-muted-foreground mb-1">
                             Description / Merchant (Optional)
@@ -581,7 +560,6 @@ export function QuickEntryModal({
                         </div>
                       </div>
 
-                      {/* Footer Action Buttons */}
                       <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-border mt-5">
                         <Button
                           type="button"

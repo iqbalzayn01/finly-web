@@ -1,0 +1,358 @@
+{
+  "invoices": [
+    {
+      "id": "INV-2026-001",
+      "client": "Acme Corp",
+      "date": "2026-08-01",
+      "due": "2026-08-15",
+      "amount": 14500,
+      "status": "paid"
+    },
+    {
+      "id": "INV-2026-002",
+      "client": "GlobalTech Ltd",
+      "date": "2026-07-28",
+      "due": "2026-08-11",
+      "amount": 28000,
+      "status": "unpaid"
+    },
+    {
+      "id": "INV-2026-003",
+      "client": "Stark Industries",
+      "date": "2026-07-25",
+      "due": "2026-08-08",
+      "amount": 22500,
+      "status": "paid"
+    },
+    {
+      "id": "INV-2026-004",
+      "client": "Wayne Enterprises",
+      "date": "2026-07-20",
+      "due": "2026-08-03",
+      "amount": 8500,
+      "status": "unpaid"
+    },
+    {
+      "id": "INV-2026-005",
+      "client": "Umbrella Corp",
+      "date": "2026-07-18",
+      "due": "2026-08-01",
+      "amount": 9200,
+      "status": "void"
+    },
+    {
+      "id": "INV-2026-006",
+      "client": "Cyberdyne Systems",
+      "date": "2026-07-15",
+      "due": "2026-07-29",
+      "amount": 32000,
+      "status": "paid"
+    },
+    {
+      "id": "INV-2026-007",
+      "client": "Initech Software",
+      "date": "2026-07-12",
+      "due": "2026-07-26",
+      "amount": 6400,
+      "status": "unpaid"
+    },
+    {
+      "id": "INV-2026-008",
+      "client": "Hooli Media Group",
+      "date": "2026-07-10",
+      "due": "2026-07-24",
+      "amount": 12800,
+      "status": "paid"
+    },
+    {
+      "id": "INV-2026-009",
+      "client": "Pied Piper Labs",
+      "date": "2026-07-05",
+      "due": "2026-07-19",
+      "amount": 19500,
+      "status": "unpaid"
+    },
+    {
+      "id": "INV-2026-010",
+      "client": "Massive Dynamic",
+      "date": "2026-06-30",
+      "due": "2026-07-14",
+      "amount": 15800,
+      "status": "paid"
+    }
+  ],
+  "invoiceDetails": {
+    "INV-2026-001": {
+      "id": "INV-2026-001",
+      "status": "paid",
+      "issueDate": "2026-08-01",
+      "dueDate": "2026-08-15",
+      "subtotal": 13063,
+      "tax": 1437,
+      "total": 14500,
+      "client": {
+        "name": "Acme Corp",
+        "email": "billing@acmecorp.com",
+        "address": "100 Enterprise Way, Suite 400, New York, NY 10001",
+        "taxId": "US-987654321"
+      },
+      "items": [
+        {
+          "desc": "Custom Web Application Development (Phase 1)",
+          "qty": 1,
+          "price": 9500,
+          "total": 9500
+        },
+        {
+          "desc": "UI/UX Design System & Prototyping",
+          "qty": 1,
+          "price": 3563,
+          "total": 3563
+        }
+      ]
+    },
+    "INV-2026-002": {
+      "id": "INV-2026-002",
+      "status": "unpaid",
+      "issueDate": "2026-07-28",
+      "dueDate": "2026-08-11",
+      "subtotal": 25225,
+      "tax": 2775,
+      "total": 28000,
+      "client": {
+        "name": "GlobalTech Ltd",
+        "email": "accounts@globaltech.co.uk",
+        "address": "45 Finsbury Square, London, EC2A 1PX, UK",
+        "taxId": "GB-123456789"
+      },
+      "items": [
+        {
+          "desc": "Enterprise Cloud Migration & Infrastructure Setup",
+          "qty": 1,
+          "price": 18000,
+          "total": 18000
+        },
+        {
+          "desc": "Kubernetes Cluster Architecture & CI/CD Pipeline",
+          "qty": 1,
+          "price": 7225,
+          "total": 7225
+        }
+      ]
+    },
+    "INV-2026-003": {
+      "id": "INV-2026-003",
+      "status": "paid",
+      "issueDate": "2026-07-25",
+      "dueDate": "2026-08-08",
+      "subtotal": 20270,
+      "tax": 2230,
+      "total": 22500,
+      "client": {
+        "name": "Stark Industries",
+        "email": "procurement@starkindustries.com",
+        "address": "10880 Wilshire Blvd, Los Angeles, CA 90024",
+        "taxId": "US-887766554"
+      },
+      "items": [
+        {
+          "desc": "High-Performance Distributed Data Engine",
+          "qty": 1,
+          "price": 15500,
+          "total": 15500
+        },
+        {
+          "desc": "Embedded Real-time Telemetry Processing API",
+          "qty": 1,
+          "price": 4770,
+          "total": 4770
+        }
+      ]
+    },
+    "INV-2026-004": {
+      "id": "INV-2026-004",
+      "status": "unpaid",
+      "issueDate": "2026-07-20",
+      "dueDate": "2026-08-03",
+      "subtotal": 7658,
+      "tax": 842,
+      "total": 8500,
+      "client": {
+        "name": "Wayne Enterprises",
+        "email": "finance@wayneenterprises.com",
+        "address": "1007 Mountain Drive, Gotham, NJ 07001",
+        "taxId": "US-443322110"
+      },
+      "items": [
+        {
+          "desc": "Smart Contract & Application Security Audit",
+          "qty": 1,
+          "price": 5500,
+          "total": 5500
+        },
+        {
+          "desc": "Penetration Testing & Remediation Report",
+          "qty": 1,
+          "price": 2158,
+          "total": 2158
+        }
+      ]
+    },
+    "INV-2026-005": {
+      "id": "INV-2026-005",
+      "status": "void",
+      "issueDate": "2026-07-18",
+      "dueDate": "2026-08-01",
+      "subtotal": 8288,
+      "tax": 912,
+      "total": 9200,
+      "client": {
+        "name": "Umbrella Corp",
+        "email": "ap@umbrellacorp.de",
+        "address": "Kaiser-Wilhelm-Ring 27, 50672 Cologne, Germany",
+        "taxId": "DE-998877665"
+      },
+      "items": [
+        {
+          "desc": "Legacy Pipeline Replacement Study (Cancelled)",
+          "qty": 1,
+          "price": 8288,
+          "total": 8288
+        }
+      ]
+    },
+    "INV-2026-006": {
+      "id": "INV-2026-006",
+      "status": "paid",
+      "issueDate": "2026-07-15",
+      "dueDate": "2026-07-29",
+      "subtotal": 28829,
+      "tax": 3171,
+      "total": 32000,
+      "client": {
+        "name": "Cyberdyne Systems",
+        "email": "billing@cyberdyne.io",
+        "address": "2111 North 1st Street, San Jose, CA 95131",
+        "taxId": "US-556677889"
+      },
+      "items": [
+        {
+          "desc": "Custom LLM Financial Copilot Fine-Tuning",
+          "qty": 1,
+          "price": 20000,
+          "total": 20000
+        },
+        {
+          "desc": "Vector Search & Automated Semantic Routing Engine",
+          "qty": 1,
+          "price": 8829,
+          "total": 8829
+        }
+      ]
+    },
+    "INV-2026-007": {
+      "id": "INV-2026-007",
+      "status": "unpaid",
+      "issueDate": "2026-07-12",
+      "dueDate": "2026-07-26",
+      "subtotal": 5766,
+      "tax": 634,
+      "total": 6400,
+      "client": {
+        "name": "Initech Software",
+        "email": "accounting@initech.com",
+        "address": "4120 Freidrich Lane, Austin, TX 78744",
+        "taxId": "US-112233445"
+      },
+      "items": [
+        {
+          "desc": "Front-end Component Library & M3 Design Tokens",
+          "qty": 1,
+          "price": 5766,
+          "total": 5766
+        }
+      ]
+    },
+    "INV-2026-008": {
+      "id": "INV-2026-008",
+      "status": "paid",
+      "issueDate": "2026-07-10",
+      "dueDate": "2026-07-24",
+      "subtotal": 11532,
+      "tax": 1268,
+      "total": 12800,
+      "client": {
+        "name": "Hooli Media Group",
+        "email": "vendorpay@hooli.com",
+        "address": "3000 Sand Hill Rd, Menlo Park, CA 94025",
+        "taxId": "US-667788990"
+      },
+      "items": [
+        {
+          "desc": "Live Video Transcoding & Distribution Pipeline",
+          "qty": 1,
+          "price": 11532,
+          "total": 11532
+        }
+      ]
+    },
+    "INV-2026-009": {
+      "id": "INV-2026-009",
+      "status": "unpaid",
+      "issueDate": "2026-07-05",
+      "dueDate": "2026-07-19",
+      "subtotal": 17568,
+      "tax": 1932,
+      "total": 19500,
+      "client": {
+        "name": "Pied Piper Labs",
+        "email": "richard@piedpiper.com",
+        "address": "5230 Newell Rd, Palo Alto, CA 94303",
+        "taxId": "US-334455667"
+      },
+      "items": [
+        {
+          "desc": "Middle-Out Cloud Compression SDK Integration",
+          "qty": 1,
+          "price": 12500,
+          "total": 12500
+        },
+        {
+          "desc": "Performance Benchmarking & Optimization Retainer",
+          "qty": 1,
+          "price": 5068,
+          "total": 5068
+        }
+      ]
+    },
+    "INV-2026-010": {
+      "id": "INV-2026-010",
+      "status": "paid",
+      "issueDate": "2026-06-30",
+      "dueDate": "2026-07-14",
+      "subtotal": 14234,
+      "tax": 1566,
+      "total": 15800,
+      "client": {
+        "name": "Massive Dynamic",
+        "email": "accounts@massivedynamic.org",
+        "address": "650 Massachusetts Ave, Cambridge, MA 02139",
+        "taxId": "US-778899001"
+      },
+      "items": [
+        {
+          "desc": "Fractional CTO Advisory & Engineering Architecture",
+          "qty": 1,
+          "price": 10000,
+          "total": 10000
+        },
+        {
+          "desc": "Enterprise Multi-Tenant Security Framework",
+          "qty": 1,
+          "price": 4234,
+          "total": 4234
+        }
+      ]
+    }
+  }
+}

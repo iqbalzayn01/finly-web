@@ -1,0 +1,81 @@
+[
+  {
+    "id": "gemini",
+    "name": "Google Gemini",
+    "tagline": "High-speed multimodal AI by Google DeepMind",
+    "iconColor": "text-blue-500 bg-blue-500/10 border-blue-500/20",
+    "badgeColor": "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+    "defaultModel": "gemini-2.0-flash",
+    "keyPlaceholder": "AIzaSy...",
+    "models": [
+      { "id": "gemini-2.0-flash", "name": "Gemini 2.0 Flash (Recommended)" },
+      { "id": "gemini-2.0-pro-exp", "name": "Gemini 2.0 Pro Experimental" },
+      { "id": "gemini-1.5-pro", "name": "Gemini 1.5 Pro" }
+    ]
+  },
+  {
+    "id": "openai",
+    "name": "OpenAI ChatGPT",
+    "tagline": "GPT-4o reasoning & structured data parsing",
+    "iconColor": "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
+    "badgeColor": "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+    "defaultModel": "gpt-4o",
+    "keyPlaceholder": "sk-proj-...",
+    "models": [
+      { "id": "gpt-4o", "name": "GPT-4o (Omni High Intelligence)" },
+      { "id": "gpt-4o-mini", "name": "GPT-4o Mini (Fast & Lightweight)" },
+      { "id": "o3-mini", "name": "o3-Mini Reasoning Engine" }
+    ]
+  },
+  {
+    "id": "anthropic",
+    "name": "Anthropic Claude",
+    "tagline": "Advanced financial analysis & document parsing",
+    "iconColor": "text-amber-500 bg-amber-500/10 border-amber-500/20",
+    "badgeColor": "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+    "defaultModel": "claude-3-5-sonnet-20241022",
+    "keyPlaceholder": "sk-ant-api...",
+    "models": [
+      {
+        "id": "claude-3-5-sonnet-20241022",
+        "name": "Claude 3.5 Sonnet (Best Code & Logic)"
+      },
+      {
+        "id": "claude-3-5-haiku-20241022",
+        "name": "Claude 3.5 Haiku (Sub-second speed)"
+      },
+      { "id": "claude-3-opus-20240229", "name": "Claude 3 Opus" }
+    ]
+  },
+  {
+    "id": "deepseek",
+    "name": "DeepSeek AI",
+    "tagline": "Open-weight & high-performance financial reasoning",
+    "iconColor": "text-violet-500 bg-violet-500/10 border-violet-500/20",
+    "badgeColor": "bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20",
+    "defaultModel": "deepseek-chat",
+    "keyPlaceholder": "sk-deepseek-...",
+    "models": [
+      { "id": "deepseek-chat", "name": "DeepSeek V3 (Chat)" },
+      {
+        "id": "deepseek-reasoner",
+        "name": "DeepSeek R1 (Chain-of-Thought Reasoner)"
+      }
+    ]
+  },
+  {
+    "id": "custom",
+    "name": "Custom / Local LLM",
+    "tagline": "Connect self-hosted Ollama, LM Studio, or vLLM",
+    "iconColor": "text-slate-500 bg-slate-500/10 border-slate-500/20",
+    "badgeColor": "bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20",
+    "defaultModel": "llama3.3:70b",
+    "keyPlaceholder": "Optional (Bearer Token)",
+    "models": [
+      { "id": "llama3.3:70b", "name": "Llama 3.3 70B" },
+      { "id": "deepseek-r1:8b", "name": "DeepSeek R1 8B (Local)" },
+      { "id": "mistral-small", "name": "Mistral Small" },
+      { "id": "custom-model", "name": "Custom OpenAI-Compatible Model" }
+    ]
+  }
+]

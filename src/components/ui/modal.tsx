@@ -15,35 +15,19 @@ const sizeClasses: Record<ModalSize, string> = {
 }
 
 export interface ModalProps {
-  /** Optional trigger element (button, link, custom component). */
   trigger?: React.ReactNode
-  /** Controlled open state. */
   open?: boolean
-  /** Controlled open change handler. */
   onOpenChange?: (open: boolean) => void
-  /** Initial open state when uncontrolled. */
   defaultOpen?: boolean
-  /** Modal header title. */
   title?: React.ReactNode
-  /** Modal header description/subtitle. */
   description?: React.ReactNode
-  /** Main modal content. */
   children: React.ReactNode
-  /** Optional footer content (buttons, action links). */
   footer?: React.ReactNode
-  /** Modal width size. Defaults to 'md'. */
   size?: ModalSize
-  /** Additional classes for the modal container card. */
   className?: string
-  /** Whether to show top-right close icon. Defaults to true. */
   showCloseButton?: boolean
 }
 
-/**
- * Universal Motion Modal component powered by Base UI & Motion.
- * Supports smooth spring-physics scale & opacity transitions, backdrop blur,
- * keyboard ESC, focus trapping, and responsive sizing.
- */
 export function Modal({
   trigger,
   open: controlledOpen,
@@ -91,7 +75,6 @@ export function Modal({
       <AnimatePresence>
         {isOpen && (
           <BaseDialog.Portal keepMounted data-slot="modal-portal">
-            {/* Backdrop Overlay */}
             <BaseDialog.Backdrop
               render={(props: any) => (
                 <motion.div
@@ -106,7 +89,6 @@ export function Modal({
               )}
             />
 
-            {/* Modal Dialog Card */}
             <BaseDialog.Popup
               render={(props: any) => (
                 <motion.div

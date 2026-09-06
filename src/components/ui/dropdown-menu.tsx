@@ -8,10 +8,6 @@ export interface DropdownMenuProps extends React.ComponentProps<
   modal?: boolean
 }
 
-/**
- * DropdownMenu built on @base-ui/react.
- * Default `modal={false}` prevents scroll-locking and layout shifts across the UI.
- */
 export function DropdownMenu({ modal = false, ...props }: DropdownMenuProps) {
   return <BaseMenu.Root modal={modal} {...props} />
 }

@@ -50,9 +50,6 @@ const alertConfig: Record<
   },
 }
 
-/**
- * Modern Motion-powered replacement for browser alert() and confirm() dialogs.
- */
 export function AlertModal({
   trigger,
   open,

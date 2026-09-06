@@ -21,7 +21,6 @@ export function useDebouncedSearch<T>({
   const [inputQuery, setInputQuery] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
 
-  // 1. Debounce input query (300ms default)
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(inputQuery)
@@ -33,18 +32,15 @@ export function useDebouncedSearch<T>({
   }, [inputQuery, debounceMs])
 
   const trimmed = debouncedQuery.trim()
-
-  // 2. Minimum character check (block < 3 characters)
   const isTooShort = trimmed.length > 0 && trimmed.length < minChars
   const effectiveQuery = trimmed.length >= minChars ? trimmed : ''
 
-  // 3. TanStack Query caching for search results
   const { data: filteredResults = [] } = useQuery({
     queryKey: [resourceKey, effectiveQuery, extraFilters],
     queryFn: () => {
       return filterFn(data, effectiveQuery, extraFilters)
     },
-    staleTime: 5 * 60 * 1000, // 5 mins in memory cache
+    staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   })
 
