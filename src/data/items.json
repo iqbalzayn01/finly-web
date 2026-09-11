@@ -81,7 +81,7 @@
   },
   {
     "id": 11,
-    "name": "Legacy PHP Monolith Maintenance (Deprecated)",
+    "name": "Legacy Infrastructure Maintenance",
     "price": 80,
     "unit": "hour",
     "taxRate": 11,
@@ -89,7 +89,7 @@
   },
   {
     "id": 12,
-    "name": "Shared cPanel Shared Hosting (Legacy)",
+    "name": "Standard Shared Hosting Support",
     "price": 35,
     "unit": "month",
     "taxRate": 11,

@@ -181,7 +181,7 @@ function Settings() {
           Workspace Settings
         </h1>
         <p className="mt-1 sm:mt-1.5 text-xs sm:text-sm text-muted-foreground">
-          Manage business profile, defaults, and AI Agent API connections.
+          Manage business profile, defaults, and AI provider connections.
         </p>
       </div>
 
@@ -196,7 +196,7 @@ function Settings() {
           )}
         >
           <User className="h-4 w-4" />
-          Profile & Workspace
+          Workspace Profile
         </button>
         <button
           onClick={() => setActiveTab('ai')}
@@ -208,7 +208,7 @@ function Settings() {
           )}
         >
           <Bot className="h-4 w-4" />
-          AI Agent Connections
+          AI Connections
         </button>
       </div>
 
@@ -224,8 +224,7 @@ function Settings() {
                   Business Profile
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Update business name, tax identification, and logo displayed
-                  on customer invoices.
+                  Business name, tax registration, and logo for client invoices and receipts.
                 </p>
               </div>
             </div>
@@ -251,7 +250,7 @@ function Settings() {
                   Upload Logo
                 </Button>
                 <p className="text-xs text-muted-foreground">
-                  Suggested: 512x512px (PNG, SVG). Displays on issued PDFs.
+                  PNG or SVG up to 1 MB. Rendered on issued invoice PDFs.
                 </p>
               </div>
             </div>
@@ -267,14 +266,14 @@ function Settings() {
                     type="text"
                     value={businessName}
                     onChange={(e) => setBusinessName(e.target.value)}
-                    placeholder="Workspace Name"
+                    placeholder="Legal business name"
                     className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-foreground">
-                  Tax Number / EIN
+                  Tax Registration Number (NPWP / EIN / VAT)
                 </label>
                 <div className="relative mt-1">
                   <FileText className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
@@ -282,7 +281,7 @@ function Settings() {
                     type="text"
                     value={taxId}
                     onChange={(e) => setTaxId(e.target.value)}
-                    placeholder="Tax ID"
+                    placeholder="e.g. 01.234.567.8-901.000"
                     className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
@@ -300,8 +299,7 @@ function Settings() {
                   Regional & Defaults
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Configure default base currency and invoice numbering
-                  prefixes.
+                  Set default currency and invoice numbering sequence.
                 </p>
               </div>
             </div>
@@ -324,7 +322,7 @@ function Settings() {
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
-                  Note: Stored in minor integer units (Scale 100).
+                  Stored in integer minor units (scale 100) per currency.
                 </p>
               </div>
 
@@ -345,7 +343,7 @@ function Settings() {
             <div className="flex items-center justify-between pt-4 border-t border-border">
               {profileSaveSuccess ? (
                 <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                  <Check className="h-3.5 w-3.5" /> Profile Saved
+                  <Check className="h-3.5 w-3.5" /> Settings saved
                 </span>
               ) : (
                 <span />
@@ -355,7 +353,7 @@ function Settings() {
                 onClick={handleSaveProfileSettings}
                 className="px-6 text-xs font-bold"
               >
-                Save Profile Settings
+                Save Profile
               </Button>
             </div>
           </div>
@@ -371,22 +369,21 @@ function Settings() {
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-foreground">
-                  AI Agent API Connections
+                  AI Provider Connections
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Connect external LLM engines (Gemini, ChatGPT, Claude,
-                  DeepSeek, or Local Ollama) to power Finly AI Assistant.
+                  Connect your API key to enable invoice drafting, receipt data extraction, and natural language queries.
                 </p>
               </div>
             </div>
             <span className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/20">
-              <CheckCircle2 className="h-3.5 w-3.5" /> Ready for Parsing
+              <CheckCircle2 className="h-3.5 w-3.5" /> Connection Active
             </span>
           </div>
 
           <div className="space-y-3 pt-2">
             <label className="text-xs font-bold text-foreground uppercase tracking-wider">
-              Select Active AI Provider:
+              Select Provider:
             </label>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {AI_PROVIDERS.map((prov) => {
@@ -455,8 +452,8 @@ function Settings() {
               </div>
               {testStatus === 'success' && testLatency && (
                 <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4" /> Connection Verified (
-                  {testLatency}ms)
+                  <CheckCircle2 className="h-4 w-4" /> Connected (
+                  {testLatency} ms)
                 </span>
               )}
             </div>
@@ -582,7 +579,7 @@ function Settings() {
                 {testStatus === 'testing' ? (
                   <>
                     <RefreshCw className="h-3.5 w-3.5 animate-spin text-primary" />{' '}
-                    Testing API Ping...
+                    Testing connection...
                   </>
                 ) : (
                   <>
@@ -595,7 +592,7 @@ function Settings() {
               <div className="flex items-center gap-3">
                 {saveSuccess && (
                   <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 animate-pulse">
-                    <Check className="h-3.5 w-3.5" /> Saved to Storage
+                    <Check className="h-3.5 w-3.5" /> Settings saved
                   </span>
                 )}
                 <Button
@@ -603,7 +600,7 @@ function Settings() {
                   onClick={handleSaveAISettings}
                   className="px-5 text-xs font-bold"
                 >
-                  Save AI Connections
+                  Save Configuration
                 </Button>
               </div>
             </div>
@@ -624,7 +621,7 @@ function Settings() {
         onOpenChange={setLogoModalOpen}
         type="info"
         title="Upload Business Logo"
-        description="Select a PNG, SVG, or JPEG file under 1MB to display on your customer invoices."
+        description="Select a PNG or SVG file under 1 MB to include on customer invoice headers."
         confirmText="Got it"
       />
     </div>

@@ -2,22 +2,22 @@
   {
     "id": "notif-1",
     "title": "Invoice #INV-2026-006 Paid",
-    "description": "Cyberdyne Systems settled payment of $32,000.00 via wire.",
+    "description": "Solace AI Labs settled payment of $32,000.00 via wire transfer.",
     "time": "5m ago",
     "unread": true,
     "indicator": "primary"
   },
   {
     "id": "notif-2",
-    "title": "Stripe Payout Settled",
-    "description": "$18,450.00 transfer deposited to Silicon Valley Bank.",
+    "title": "Payout Deposited",
+    "description": "$18,450.00 transfer deposited to business operating account.",
     "time": "45m ago",
     "unread": true,
     "indicator": "primary"
   },
   {
     "id": "notif-3",
-    "title": "Due Date: GlobalTech Ltd",
+    "title": "Due Today: GlobalTech Ltd",
     "description": "Invoice #INV-2026-002 ($28,000.00) is scheduled for receipt today.",
     "time": "3h ago",
     "unread": true,
@@ -25,16 +25,16 @@
   },
   {
     "id": "notif-4",
-    "title": "New Customer Added",
-    "description": "Massive Dynamic profile created with Net 30 payment terms.",
+    "title": "Customer Profile Added",
+    "description": "Beacon Global Advisory profile created with Net 30 terms.",
     "time": "1d ago",
     "unread": false,
     "indicator": null
   },
   {
     "id": "notif-5",
-    "title": "Runway Health Milestone",
-    "description": "Cash reserves projected above 18-month minimum runway baseline.",
+    "title": "Runway Update",
+    "description": "Operating cash reserves cover 14.2 months at current burn rate.",
     "time": "2d ago",
     "unread": false,
     "indicator": null
