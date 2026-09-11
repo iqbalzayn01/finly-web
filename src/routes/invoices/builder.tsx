@@ -90,7 +90,7 @@ function InvoiceBuilder() {
               navigate({ to: '/invoices/$id', params: { id: 'INV-2026-001' } })
             }
           >
-            <Send className="h-4 w-4 mr-1.5 sm:mr-2" /> Issue Document
+            <Send className="h-4 w-4 mr-1.5 sm:mr-2" /> Issue Invoice
           </Button>
         </div>
       </div>
@@ -122,7 +122,7 @@ function InvoiceBuilder() {
               </p>
               <Select>
                 <SelectTrigger className="w-full h-12 border border-border bg-background px-4 font-semibold text-base rounded-xl shadow-none">
-                  <SelectValue placeholder="Select a Customer..." />
+                  <SelectValue placeholder="Select customer" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
                   {customersData.map((c) => (
@@ -305,7 +305,7 @@ function InvoiceBuilder() {
         onOpenChange={setDraftSavedModal}
         type="success"
         title="Draft Saved"
-        description="Invoice draft has been saved to your workspace records."
+        description="Invoice draft saved to workspace."
         confirmText="Got it"
       />
     </div>

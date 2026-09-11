@@ -32,7 +32,7 @@ function Account() {
           Account
         </h1>
         <p className="mt-1 sm:mt-1.5 text-xs sm:text-sm text-muted-foreground">
-          Manage your profile and security settings.
+          Manage user credentials, personal details, and authentication security.
         </p>
       </div>
 
@@ -67,7 +67,7 @@ function Account() {
               src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
               alt="Avatar"
             />
-            <AvatarFallback>AU</AvatarFallback>
+            <AvatarFallback>AM</AvatarFallback>
           </Avatar>
           <div>
             <Button
@@ -79,7 +79,7 @@ function Account() {
               Change Avatar
             </Button>
             <p className="text-xs text-muted-foreground">
-              JPG, GIF or PNG. 1MB max.
+              PNG or JPG up to 1 MB.
             </p>
           </div>
         </div>
@@ -94,7 +94,7 @@ function Account() {
               <input
                 type="text"
                 placeholder="Full Name"
-                defaultValue="Admin User"
+                defaultValue="Alex Morgan"
                 className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
               />
             </div>
@@ -108,7 +108,7 @@ function Account() {
               <input
                 type="email"
                 placeholder="Email Address"
-                defaultValue="admin@acmecorp.com"
+                defaultValue="alex.morgan@finly.io"
                 className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
               />
             </div>
@@ -142,7 +142,7 @@ function Account() {
                 <Key className="h-4 w-4 text-muted-foreground" /> Password
               </h3>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Last changed 3 months ago.
+                Updated 90 days ago.
               </p>
             </div>
             <Button
@@ -164,8 +164,8 @@ function Account() {
               </h3>
               <p className="text-xs text-muted-foreground mt-0.5">
                 {twoFactorEnabled
-                  ? 'Active: Authenticator app verification enabled.'
-                  : 'Add an extra layer of security to your account.'}
+                  ? 'Enabled with authenticator app.'
+                  : 'Require TOTP verification code on sign-in.'}
               </p>
             </div>
             <Button
@@ -185,7 +185,7 @@ function Account() {
         onOpenChange={setAvatarModalOpen}
         type="info"
         title="Upload Profile Picture"
-        description="Choose a high-resolution image in PNG, JPEG, or GIF format up to 1MB."
+        description="Upload a photo in PNG or JPG format under 1 MB."
         confirmText="Done"
       />
 
@@ -194,7 +194,7 @@ function Account() {
         onOpenChange={setSaveModalOpen}
         type="success"
         title="Settings Saved"
-        description="Your profile information and contact details have been updated successfully."
+        description="Your profile information and contact details have been updated."
         confirmText="Got it"
       />
 
@@ -202,7 +202,7 @@ function Account() {
         open={passwordModalOpen}
         onOpenChange={setPasswordModalOpen}
         title="Change Account Password"
-        description="Enter your current password and choose a strong new password."
+        description="Enter your current password followed by your new password."
         size="md"
         footer={
           <div className="flex w-full items-center justify-end gap-2 pt-2">
@@ -247,7 +247,7 @@ function Account() {
         open={twoFactorModalOpen}
         onOpenChange={setTwoFactorModalOpen}
         title="Two-Factor Authentication"
-        description="Protect your account with Time-based One-Time Password (TOTP)."
+        description="Require a TOTP verification code from your authenticator app on sign-in."
         size="md"
         footer={
           <div className="flex w-full items-center justify-end gap-2 pt-2">
@@ -274,8 +274,7 @@ function Account() {
           <div className="flex items-center gap-3 p-3.5 rounded-xl bg-muted/40 border border-border">
             <ShieldAlert className="h-6 w-6 text-primary shrink-0" />
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Scan the QR code with your authenticator app (Google
-              Authenticator, 1Password, or Authy) and enter the 6-digit code.
+              Scan this code with an authenticator app (such as Google Authenticator or 1Password), then confirm.
             </p>
           </div>
           <div className="flex justify-center p-4 bg-white dark:bg-card border border-border rounded-xl">

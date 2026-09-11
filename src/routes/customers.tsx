@@ -90,7 +90,7 @@ function Customers() {
             Customers
           </h1>
           <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-muted-foreground">
-            Manage client profiles and billing terms.
+            Manage client profiles, contact information, and billing terms.
           </p>
         </div>
         <Button
@@ -147,7 +147,7 @@ function Customers() {
               No customers found
             </h3>
             <p className="text-xs text-muted-foreground max-w-sm">
-              We couldn&apos;t find any customer accounts matching your query.
+              No customer profiles match the active search query.
             </p>
           </div>
           {inputQuery && (
@@ -212,7 +212,7 @@ function Customers() {
                               setSuccessModal({
                                 open: true,
                                 title: 'Customer Updated',
-                                desc: `Customer ${c.name} has been updated successfully.`,
+                                desc: `Customer ${c.name} has been updated.`,
                               })
                             }}
                             className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-accent/50 font-medium rounded-lg transition-all"
@@ -353,7 +353,7 @@ function Customers() {
                     setSuccessModal({
                       open: true,
                       title: 'Customer Added',
-                      desc: 'New customer account has been created and added to your directory.',
+                      desc: 'Customer created and saved to directory.',
                     })
                   }}
                 >
@@ -379,14 +379,14 @@ function Customers() {
         onOpenChange={(open) => setDeleteModal((prev) => ({ ...prev, open }))}
         type="error"
         title="Delete Customer"
-        description={`Are you sure you want to delete ${deleteModal.customerName || 'this customer'}? All associated draft records will be archived.`}
+        description={`Permanently delete ${deleteModal.customerName || 'this customer'}? Associated invoices will remain in your archive.`}
         confirmText="Delete Customer"
         cancelText="Cancel"
         onConfirm={() => {
           setSuccessModal({
             open: true,
             title: 'Customer Deleted',
-            desc: 'The customer record was removed.',
+            desc: 'Customer profile deleted.',
           })
         }}
       />

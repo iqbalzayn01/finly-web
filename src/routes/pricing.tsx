@@ -44,7 +44,7 @@ function PricingPage() {
       id: 'starter',
       name: 'Starter',
       description:
-        'Essential cashbook and manual invoicing for freelancers & micro-SMEs.',
+        'Core cashbook and invoicing for freelancers and solo consultants.',
       monthlyPrice: 0,
       annualPrice: 0,
       popular: false,
@@ -62,20 +62,20 @@ function PricingPage() {
       id: 'pro',
       name: 'Pro',
       description:
-        'Supercharge agency cashflow with AI assistant, live FX, and smart parsing.',
+        'Cashflow forecasting, multi-currency invoicing, and receipt parsing for growing agencies.',
       monthlyPrice: 29,
       annualPrice: 23,
       popular: true,
-      buttonText: 'Start 14-Day Free Trial',
+      buttonText: 'Start 14-Day Trial',
       buttonVariant: 'primary' as const,
       features: [
-        'Unlimited Invoices & Receipts',
-        'Unlimited AI Invoice Parsing & Drafts',
-        'Live Multi-Currency FX Engine (150+ FX)',
-        'Real-time Cashflow Forecasting',
-        'Custom PDF & Email Branding',
-        'Role Governance (Owner, Admin, Editor)',
-        'Priority 24/7 Support',
+        'Unlimited invoices and receipts',
+        'AI invoice parsing and drafts',
+        'Multi-currency FX engine',
+        'Cashflow runway forecasting',
+        'Custom PDF and email branding',
+        'Role-based permissions (Owner, Admin, Editor)',
+        'Priority support',
       ],
     },
     {
@@ -90,11 +90,11 @@ function PricingPage() {
       buttonVariant: 'outline' as const,
       features: [
         'Everything in Pro',
-        'Strict RLS Isolation & Audit Logs',
-        'Multi-Business Account Management',
-        'Custom Webhooks & REST API Access',
-        'Dedicated Account Manager',
-        '99.9% Uptime SLA',
+        'Tenant-level audit log exports',
+        'Multi-business management',
+        'Webhooks and REST API access',
+        'Dedicated account manager',
+        '99.9% uptime SLA',
       ],
     },
   ]
@@ -103,22 +103,22 @@ function PricingPage() {
     {
       question: 'Can I upgrade or downgrade my plan at any time?',
       answer:
-        'Yes! You can upgrade, downgrade, or cancel your subscription at any time directly from your Account Settings. Changes take effect at the start of your next billing cycle.',
+        'Yes. You can upgrade, downgrade, or cancel your subscription at any time from your Account Settings. Changes take effect at the start of your next billing cycle.',
     },
     {
-      question: 'How does the Live Multi-Currency FX Engine work?',
+      question: 'How does multi-currency conversion work?',
       answer:
-        'Finly automatically fetches live central bank exchange rates (USD, IDR, EUR, GBP, SGD, etc.) every hour. All ledger calculations are accurately computed using integer minor units.',
+        'Finly fetches central bank exchange rates hourly. All ledger arithmetic uses integer minor units at a fixed scale to eliminate rounding discrepancies.',
     },
     {
       question: 'Is my financial data secure and private?',
       answer:
-        'Absolutely. Finly enforces PostgreSQL Row-Level Security (RLS) and strict tenant-scoped repositories. Your invoice data is never used to train public AI models.',
+        'Yes. Finly isolates tenant data with PostgreSQL Row-Level Security and tenant-scoped repositories. Your financial records are never used to train machine learning models.',
     },
     {
       question: 'What happens when my 14-day free trial ends?',
       answer:
-        'You can test all Pro features for 14 days without entering a credit card. At the end of the trial, you can choose to subscribe to Pro or continue on the free Starter plan.',
+        'You can explore Pro features for 14 days without entering payment details. When the trial ends, your workspace switches to the Starter plan unless you choose to subscribe.',
     },
   ]
 
@@ -126,13 +126,13 @@ function PricingPage() {
     <div className="space-y-12 pb-16">
       <div className="text-center max-w-3xl mx-auto space-y-4 pt-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold">
-          <Sparkles className="h-3.5 w-3.5" /> Simple, Transparent Pricing
+          <Sparkles className="h-3.5 w-3.5" /> Plans &amp; Subscriptions
         </div>
         <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground">
-          Predictable plans for growing agencies & teams
+          Subscription plans for agencies and consultants
         </h1>
         <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
-          Scale your cashflow management with zero hidden fees. Switch between
+          Choose the plan that fits your business size. Switch between
           monthly and annual billing at any time.
         </p>
 
@@ -196,7 +196,7 @@ function PricingPage() {
             >
               {plan.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[11px] font-bold shadow-none tracking-wider uppercase flex items-center gap-1">
-                  <Zap className="h-3 w-3 fill-current" /> Most Popular
+                  <Zap className="h-3 w-3 fill-current" /> Recommended
                 </div>
               )}
 
@@ -298,7 +298,7 @@ function PricingPage() {
             {billingCycle})
           </p>
           <p className="text-[11px] text-muted-foreground">
-            Thank you for choosing Finly Pro! Redirecting to setup...
+            Updating subscription tier...
           </p>
         </motion.div>
       )}
@@ -310,11 +310,10 @@ function PricingPage() {
           </div>
           <div>
             <h4 className="text-sm font-bold text-foreground">
-              Enterprise-Grade Bank Security
+              Data Security and Tenant Isolation
             </h4>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Strict PostgreSQL RLS tenant isolation, encrypted Redis session
-              tokens, and automated nightly backups.
+              PostgreSQL Row-Level Security, Redis session storage, and immutable audit logs.
             </p>
           </div>
         </div>
@@ -332,7 +331,7 @@ function PricingPage() {
             Frequently Asked Questions
           </h2>
           <p className="text-xs text-muted-foreground">
-            Everything you need to know about Finly plans and billing.
+            Answers to common questions about billing and account tiers.
           </p>
         </div>
 
@@ -383,7 +382,7 @@ function PricingPage() {
         onOpenChange={setEnterpriseModalOpen}
         type="info"
         title="Enterprise Plan Inquiry"
-        description="Our enterprise concierge team will contact you within 24 hours with custom volume pricing, dedicated VPC deployment, and SLA support."
+        description="Our sales team will contact you within one business day with custom pricing, deployment options, and SLA terms."
         confirmText="Got it"
       />
     </div>

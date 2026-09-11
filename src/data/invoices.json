@@ -18,7 +18,7 @@
     },
     {
       "id": "INV-2026-003",
-      "client": "Stark Industries",
+      "client": "Vertex Dynamics",
       "date": "2026-07-25",
       "due": "2026-08-08",
       "amount": 22500,
@@ -26,7 +26,7 @@
     },
     {
       "id": "INV-2026-004",
-      "client": "Wayne Enterprises",
+      "client": "Nexus Advisory Group",
       "date": "2026-07-20",
       "due": "2026-08-03",
       "amount": 8500,
@@ -34,7 +34,7 @@
     },
     {
       "id": "INV-2026-005",
-      "client": "Umbrella Corp",
+      "client": "Horizon Health Tech",
       "date": "2026-07-18",
       "due": "2026-08-01",
       "amount": 9200,
@@ -42,7 +42,7 @@
     },
     {
       "id": "INV-2026-006",
-      "client": "Cyberdyne Systems",
+      "client": "Solace AI Labs",
       "date": "2026-07-15",
       "due": "2026-07-29",
       "amount": 32000,
@@ -50,7 +50,7 @@
     },
     {
       "id": "INV-2026-007",
-      "client": "Initech Software",
+      "client": "Cascade Digital Systems",
       "date": "2026-07-12",
       "due": "2026-07-26",
       "amount": 6400,
@@ -58,7 +58,7 @@
     },
     {
       "id": "INV-2026-008",
-      "client": "Hooli Media Group",
+      "client": "Apex Media Group",
       "date": "2026-07-10",
       "due": "2026-07-24",
       "amount": 12800,
@@ -66,7 +66,7 @@
     },
     {
       "id": "INV-2026-009",
-      "client": "Pied Piper Labs",
+      "client": "Prism Cloud Systems",
       "date": "2026-07-05",
       "due": "2026-07-19",
       "amount": 19500,
@@ -74,7 +74,7 @@
     },
     {
       "id": "INV-2026-010",
-      "client": "Massive Dynamic",
+      "client": "Beacon Global Advisory",
       "date": "2026-06-30",
       "due": "2026-07-14",
       "amount": 15800,
@@ -149,8 +149,8 @@
       "tax": 2230,
       "total": 22500,
       "client": {
-        "name": "Stark Industries",
-        "email": "procurement@starkindustries.com",
+        "name": "Vertex Dynamics",
+        "email": "procurement@vertexdynamics.com",
         "address": "10880 Wilshire Blvd, Los Angeles, CA 90024",
         "taxId": "US-887766554"
       },
@@ -178,8 +178,8 @@
       "tax": 842,
       "total": 8500,
       "client": {
-        "name": "Wayne Enterprises",
-        "email": "finance@wayneenterprises.com",
+        "name": "Nexus Advisory Group",
+        "email": "finance@nexusadvisory.com",
         "address": "1007 Mountain Drive, Gotham, NJ 07001",
         "taxId": "US-443322110"
       },
@@ -207,8 +207,8 @@
       "tax": 912,
       "total": 9200,
       "client": {
-        "name": "Umbrella Corp",
-        "email": "ap@umbrellacorp.de",
+        "name": "Horizon Health Tech",
+        "email": "ap@horizonhealth.de",
         "address": "Kaiser-Wilhelm-Ring 27, 50672 Cologne, Germany",
         "taxId": "DE-998877665"
       },
@@ -230,8 +230,8 @@
       "tax": 3171,
       "total": 32000,
       "client": {
-        "name": "Cyberdyne Systems",
-        "email": "billing@cyberdyne.io",
+        "name": "Solace AI Labs",
+        "email": "billing@solaceai.io",
         "address": "2111 North 1st Street, San Jose, CA 95131",
         "taxId": "US-556677889"
       },
@@ -259,8 +259,8 @@
       "tax": 634,
       "total": 6400,
       "client": {
-        "name": "Initech Software",
-        "email": "accounting@initech.com",
+        "name": "Cascade Digital Systems",
+        "email": "accounting@cascadedigital.com",
         "address": "4120 Freidrich Lane, Austin, TX 78744",
         "taxId": "US-112233445"
       },
@@ -282,8 +282,8 @@
       "tax": 1268,
       "total": 12800,
       "client": {
-        "name": "Hooli Media Group",
-        "email": "vendorpay@hooli.com",
+        "name": "Apex Media Group",
+        "email": "vendorpay@apexmediagroup.com",
         "address": "3000 Sand Hill Rd, Menlo Park, CA 94025",
         "taxId": "US-667788990"
       },
@@ -305,14 +305,14 @@
       "tax": 1932,
       "total": 19500,
       "client": {
-        "name": "Pied Piper Labs",
-        "email": "richard@piedpiper.com",
+        "name": "Prism Cloud Systems",
+        "email": "accounts@prismcloud.io",
         "address": "5230 Newell Rd, Palo Alto, CA 94303",
         "taxId": "US-334455667"
       },
       "items": [
         {
-          "desc": "Middle-Out Cloud Compression SDK Integration",
+          "desc": "Distributed Object Storage SDK Integration",
           "qty": 1,
           "price": 12500,
           "total": 12500
@@ -334,8 +334,8 @@
       "tax": 1566,
       "total": 15800,
       "client": {
-        "name": "Massive Dynamic",
-        "email": "accounts@massivedynamic.org",
+        "name": "Beacon Global Advisory",
+        "email": "accounts@beaconglobal.org",
         "address": "650 Massachusetts Ave, Cambridge, MA 02139",
         "taxId": "US-778899001"
       },

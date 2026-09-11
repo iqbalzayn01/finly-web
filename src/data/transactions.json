@@ -42,7 +42,7 @@
   {
     "id": 5,
     "date": "2026-08-01",
-    "desc": "Stark Industries Security Audit",
+    "desc": "Vertex Dynamics Security Audit",
     "category": "General / Primary Income",
     "scope": "Business",
     "amount": 22500,
@@ -62,7 +62,7 @@
   {
     "id": 7,
     "date": "2026-07-29",
-    "desc": "Executive Client Dinner at Nobu",
+    "desc": "Client Dinner - Project Review",
     "category": "Restaurant, fast-food",
     "scope": "Business",
     "amount": 385,
@@ -122,7 +122,7 @@
   {
     "id": 13,
     "date": "2026-07-20",
-    "desc": "Umbrella Corp UI/UX Consultation",
+    "desc": "Horizon Health Tech UI/UX Consultation",
     "category": "General / Primary Income",
     "scope": "Business",
     "amount": 9200,
@@ -152,7 +152,7 @@
   {
     "id": 16,
     "date": "2026-07-14",
-    "desc": "Personal Artisan Coffee & Pastry",
+    "desc": "Coffee & Refreshments",
     "category": "Bar, cafe",
     "scope": "Personal",
     "amount": 14,

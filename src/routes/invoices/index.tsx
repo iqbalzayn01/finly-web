@@ -118,10 +118,10 @@ function Invoices() {
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
-            Invoices & Billing
+            Invoices
           </h1>
           <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-muted-foreground">
-            Manage client billing, draft invoices, and automatic receivables.
+            Create, track, and manage client invoices and receivables.
           </p>
         </div>
         <Link to="/invoices/builder" className="w-full sm:w-auto">
@@ -143,7 +143,7 @@ function Invoices() {
             />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
-            2 Unpaid Invoices
+            2 unpaid invoices
           </p>
         </div>
         <div className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none">
@@ -157,7 +157,7 @@ function Invoices() {
             />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
-            1 Settled Invoice
+            1 paid invoice
           </p>
         </div>
         <div className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none">
@@ -170,7 +170,7 @@ function Invoices() {
               formatter={(v) => formatAmount(v)}
             />
           </p>
-          <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">1 Pending Review</p>
+          <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">1 draft invoice</p>
         </div>
       </div>
 
@@ -182,7 +182,7 @@ function Invoices() {
               type="text"
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
-              placeholder="Search by ID or Client..."
+              placeholder="Search by invoice ID or client..."
               className="w-full h-11 border border-border bg-background rounded-xl pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
             />
             {isTooShort && (
@@ -220,7 +220,7 @@ function Invoices() {
                 </th>
                 <th className="px-6 py-4 font-semibold text-xs">Client</th>
                 <th className="px-6 py-4 font-semibold text-xs">
-                  Issue & Due Date
+                  Issue &amp; Due Date
                 </th>
                 <th className="px-6 py-4 font-semibold text-xs text-right">
                   Amount
@@ -241,8 +241,7 @@ function Invoices() {
                         No invoices found
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        No customer invoices matched your active search and
-                        status filter.
+                        No invoices match the active filters.
                       </p>
                       {inputQuery && (
                         <Button
@@ -335,7 +334,7 @@ function Invoices() {
                                   open: true,
                                   type: 'success',
                                   title: 'Invoice Updated',
-                                  desc: `Invoice ${inv.id} has been saved with latest modifications.`,
+                                  desc: `Invoice ${inv.id} has been updated.`,
                                 })
                               }}
                               className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-accent/50 font-medium rounded-lg transition-all"
@@ -350,7 +349,7 @@ function Invoices() {
                                   open: true,
                                   type: 'warning',
                                   title: 'Invoice Voided',
-                                  desc: `Invoice ${inv.id} has been marked as void.`,
+                                  desc: `Invoice ${inv.id} has been voided.`,
                                 })
                               }}
                               className="w-full flex items-center gap-2 px-3 py-2 text-xs text-destructive hover:bg-destructive/10 font-medium rounded-lg transition-all"

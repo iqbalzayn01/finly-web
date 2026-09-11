@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { cn } from '#/lib'
 import { Link, useLocation } from '@tanstack/react-router'
 import { Bell, Sparkles } from '../ui/icon'
 import { motion, AnimatePresence } from 'motion/react'

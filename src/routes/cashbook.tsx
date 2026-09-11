@@ -135,7 +135,7 @@ function Cashbook() {
             Cashbook
           </h1>
           <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-muted-foreground">
-            Ledger of all business and personal transactions.
+            Track and filter business and personal cash inflows and outflows.
           </p>
         </div>
         <Button
@@ -154,7 +154,7 @@ function Cashbook() {
           className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none"
         >
           <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Total Inflow (Income)
+            Total Inflow
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
             <NumberTicker
@@ -174,7 +174,7 @@ function Cashbook() {
           className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none"
         >
           <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Total Outflow (Expense)
+            Total Outflow
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-rose-600 dark:text-rose-400 mt-1">
             <NumberTicker
@@ -194,7 +194,7 @@ function Cashbook() {
           className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none"
         >
           <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Net Ledger Balance
+            Net Cashflow
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">
             <NumberTicker
@@ -203,7 +203,7 @@ function Cashbook() {
             />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
-            Cash Surplus Across Accounts
+            Net cash position this period
           </p>
         </motion.div>
       </div>
@@ -277,9 +277,9 @@ function Cashbook() {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm whitespace-nowrap min-w-[800px]">
-            <thead className="bg-muted/40 text-muted-foreground border-b border-border">
+            <thead className="bg-muted/40 text-muted-foreground border-border border-b">
               <tr>
-                <th className="px-6 py-4 font-semibold text-xs">Date & Desc</th>
+                <th className="px-6 py-4 font-semibold text-xs">Date &amp; Description</th>
                 <th className="px-6 py-4 font-semibold text-xs">Category</th>
                 <th className="px-6 py-4 font-semibold text-xs">Scope</th>
                 <th className="px-6 py-4 font-semibold text-xs text-right">
@@ -303,8 +303,7 @@ function Cashbook() {
                         No transactions found
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        No ledger transactions matched your active search query
-                        and scope.
+                        No ledger transactions match the active filters.
                       </p>
                       {inputQuery && (
                         <Button
@@ -379,7 +378,7 @@ function Cashbook() {
                               open: true,
                               type: 'info',
                               title: 'Receipt Verified',
-                              desc: `Receipt attachment for ${tx.desc} is verified and encrypted in secure storage.`,
+                              desc: `Receipt for ${tx.desc} is stored securely.`,
                             })
                           }
                           className="flex h-8 w-8 items-center justify-center mx-auto border border-transparent rounded-full hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-all cursor-pointer outline-none"
@@ -468,7 +467,7 @@ function Cashbook() {
             open: true,
             type: 'success',
             title: 'Transaction Saved',
-            desc: `Ledger entry of ${formatAmount(data.amount)} (${data.type.toUpperCase()}) has been recorded to cashbook.`,
+            desc: `Transaction of ${formatAmount(data.amount)} recorded to cashbook.`,
           })
         }}
       />
@@ -487,7 +486,7 @@ function Cashbook() {
         onOpenChange={(open) => setDeleteModal((prev) => ({ ...prev, open }))}
         type="error"
         title="Delete Transaction"
-        description={`Are you sure you want to delete ${deleteModal.txDesc || 'this entry'}? This will adjust your ledger cash balance.`}
+        description={`Permanently remove ${deleteModal.txDesc || 'this entry'} from the cashbook? This will recalculate your ledger balances.`}
         confirmText="Delete Entry"
         cancelText="Cancel"
         onConfirm={() => {
@@ -495,7 +494,7 @@ function Cashbook() {
             open: true,
             type: 'success',
             title: 'Transaction Deleted',
-            desc: 'The ledger entry was deleted and balances updated.',
+            desc: 'Ledger entry removed and balances updated.',
           })
         }}
       />

@@ -88,7 +88,7 @@ function Items() {
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
-            Product Catalog
+            Items Catalog
           </h1>
           <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-muted-foreground">
             Manage products, services, and default pricing.
@@ -169,8 +169,7 @@ function Items() {
                         No items found
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        No catalog services or products matched your active
-                        search query.
+                        No catalog items match the active filters.
                       </p>
                       {inputQuery && (
                         <Button
@@ -258,7 +257,7 @@ function Items() {
                                   open: true,
                                   type: 'success',
                                   title: 'Item Updated',
-                                  desc: `Item ${item.name} pricing and details updated.`,
+                                  desc: `Item ${item.name} updated.`,
                                 })
                               }}
                               className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-accent/50 font-medium rounded-lg transition-all"
@@ -359,7 +358,7 @@ function Items() {
                         open: true,
                         type: 'success',
                         title: 'Item Created',
-                        desc: 'Catalog item has been successfully added to your inventory.',
+                        desc: 'Catalog item added.',
                       })
                     }}
                   >
@@ -386,7 +385,7 @@ function Items() {
         onOpenChange={(open) => setDeleteModal((prev) => ({ ...prev, open }))}
         type="error"
         title="Delete Item"
-        description={`Are you sure you want to delete ${deleteModal.itemName || 'this item'} from your catalog? Existing issued invoices will retain snapshot pricing.`}
+        description={`Permanently delete ${deleteModal.itemName || 'this item'}? Existing issued invoices will retain snapshot pricing.`}
         confirmText="Delete Item"
         cancelText="Cancel"
         onConfirm={() => {
@@ -394,7 +393,7 @@ function Items() {
             open: true,
             type: 'success',
             title: 'Item Deleted',
-            desc: 'The catalog item has been removed.',
+            desc: 'Catalog item deleted.',
           })
         }}
       />

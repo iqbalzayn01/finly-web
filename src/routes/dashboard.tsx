@@ -17,7 +17,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '../components/ui/select'
@@ -156,7 +155,7 @@ function Dashboard() {
             </h1>
           </div>
           <p className="text-muted-foreground">
-            Track your cash flow, runway, and daily business activity.
+            Track cashflow, runway, and operating liquidity.
           </p>
         </motion.div>
         <motion.div
@@ -197,7 +196,7 @@ function Dashboard() {
             progress: 82,
             progressBg: 'bg-white/20',
             progressFill: 'bg-white',
-            subtext: 'Available cash across accounts',
+            subtext: 'Liquid cash across bank accounts',
           },
           {
             title: 'Total Income',
@@ -214,7 +213,7 @@ function Dashboard() {
             progress: 68,
             progressBg: 'bg-muted',
             progressFill: 'bg-emerald-500',
-            subtext: 'Paid invoices & client payments',
+            subtext: 'Collected revenue and receipts',
           },
           {
             title: 'Total Expenses',
@@ -231,7 +230,7 @@ function Dashboard() {
             progress: 42,
             progressBg: 'bg-muted',
             progressFill: 'bg-rose-500',
-            subtext: 'Bills, tools & operational spend',
+            subtext: 'Operating expenses and payouts',
           },
         ].map((card, idx) => (
           <motion.div
@@ -305,10 +304,10 @@ function Dashboard() {
           <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 gap-4">
             <div>
               <CardTitle className="text-xl font-medium tracking-tight text-foreground">
-                Cash Flow Overview
+                Cashflow Overview
               </CardTitle>
               <CardDescription className="text-xs text-muted-foreground mt-0.5">
-                Monthly cash influx vs outgoing expenditures
+                Monthly operating cash inflows and outflows
               </CardDescription>
             </div>
 
@@ -419,7 +418,7 @@ function Dashboard() {
             <div className="flex w-full items-start gap-2 text-sm">
               <div className="grid gap-1">
                 <div className="flex items-center gap-2 leading-none font-semibold text-foreground">
-                  <span>Net cashflow trending up by +12.4% this period</span>
+                  <span>Net cashflow increased 12.4% this period</span>
                   <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div className="flex items-center gap-2 leading-none text-xs text-muted-foreground">
@@ -428,7 +427,7 @@ function Dashboard() {
                     value={18500}
                     formatter={(v) => formatAmount(v)}
                   />{' '}
-                  · Average spending:{' '}
+                  · Average expenses:{' '}
                   <NumberTicker
                     value={11200}
                     formatter={(v) => formatAmount(v)}
@@ -459,12 +458,12 @@ function Dashboard() {
                       Cash Runway
                     </h3>
                     <p className="text-[11px] text-muted-foreground truncate">
-                      Zero Revenue Survival Horizon
+                      Runway at zero revenue
                     </p>
                   </div>
                 </div>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
-                  Buffer: 14+ Mo
+                  Coverage: 14.2 Mo
                 </span>
               </div>
 
@@ -479,7 +478,7 @@ function Dashboard() {
                 </div>
                 <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1 flex items-center gap-1">
                   <TrendingUp className="h-3 w-3" /> +
-                  <NumberTicker value={1.5} decimalPlaces={1} /> mo vs last
+                  <NumberTicker value={1.5} decimalPlaces={1} /> mo vs previous
                   month
                 </p>
               </div>
@@ -490,7 +489,7 @@ function Dashboard() {
                     Historical Trend (6 Months)
                   </span>
                   <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                    Strong (14.2 mo)
+                    14.2 months
                   </span>
                 </div>
                 <ChartContainer
@@ -534,11 +533,7 @@ function Dashboard() {
                   </LineChart>
                 </ChartContainer>
                 <p className="text-[11px] text-muted-foreground leading-relaxed pt-1">
-                  Your business can operate normally for{' '}
-                  <strong className="text-foreground font-semibold">
-                    14+ months
-                  </strong>{' '}
-                  with zero additional revenue.
+                  14.2 months of operating expenses covered at current burn rate.
                 </p>
               </div>
             </div>
@@ -546,7 +541,7 @@ function Dashboard() {
             <div className="pt-4 border-t border-border mt-5 grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-0.5">
                 <p className="text-[11px] font-medium opacity-75">
-                  Monthly Spending
+                  Monthly Burn Rate
                 </p>
                 <p className="font-mono text-sm font-bold text-foreground">
                   <NumberTicker
@@ -557,7 +552,7 @@ function Dashboard() {
               </div>
               <div className="space-y-0.5 text-right">
                 <p className="text-[11px] font-medium opacity-75">
-                  Available Cash
+                  Liquid Cash
                 </p>
                 <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400">
                   <NumberTicker
@@ -587,7 +582,7 @@ function Dashboard() {
                 </CardTitle>
               </div>
               <CardDescription className="text-xs text-muted-foreground">
-                Liquidity ratio, profit margin &amp; payment reliability
+                Liquidity, operating margin, and payment collection rate
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 pb-0 px-6 pt-2">
@@ -651,7 +646,7 @@ function Dashboard() {
               <div className="grid grid-cols-3 gap-2 pt-1 pb-2">
                 <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
                   <p className="text-[11px] text-muted-foreground font-medium">
-                    Margin
+                    Operating Margin
                   </p>
                   <p className="font-mono text-sm font-bold text-foreground mt-0.5">
                     <NumberTicker
@@ -663,7 +658,7 @@ function Dashboard() {
                 </div>
                 <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
                   <p className="text-[11px] text-muted-foreground font-medium">
-                    On-Time
+                    Collection Rate
                   </p>
                   <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
                     <NumberTicker
@@ -675,7 +670,7 @@ function Dashboard() {
                 </div>
                 <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
                   <p className="text-[11px] text-muted-foreground font-medium">
-                    Avg Pay
+                    DSO
                   </p>
                   <p className="font-mono text-sm font-bold text-primary mt-0.5">
                     <NumberTicker value={14} suffix=" Days" />
@@ -686,11 +681,11 @@ function Dashboard() {
             <CardFooter className="flex items-center justify-between text-xs border-t border-border pt-4 px-6 pb-6 mt-2">
               <div className="flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
                 <TrendingUp className="h-4 w-4" />
-                <span>Trending up by +4.1% this quarter</span>
+                <span>Improved 4.1% this quarter</span>
               </div>
               <span className="flex items-center gap-1 text-muted-foreground text-[11px]">
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" /> Audited
-                &amp; Verified
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
+                Calculated from ledger
               </span>
             </CardFooter>
           </Card>
@@ -715,7 +710,7 @@ function Dashboard() {
                     Recent Transactions
                   </h2>
                   <p className="text-[11px] sm:text-xs text-muted-foreground">
-                    Latest incoming payments and outgoing bills
+                    Latest operating cash entries and settled invoices
                   </p>
                 </div>
               </div>
@@ -855,12 +850,12 @@ function Dashboard() {
                   <Globe className="h-4 w-4" />
                 </div>
                 <h2 className="text-lg font-semibold text-foreground">
-                  Currency Converter
+                  Currency Calculator
                 </h2>
               </div>
               <span className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />{' '}
-                Live Rates
+                Indicative Rates
               </span>
             </div>
 
@@ -929,10 +924,10 @@ function Dashboard() {
 
           <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
-              <RefreshCw className="h-3 w-3" /> Updated every minute
+              <RefreshCw className="h-3 w-3" /> Updated hourly
             </span>
             <span className="font-mono text-primary font-semibold">
-              Live Market Rates
+              Indicative Exchange Rates
             </span>
           </div>
         </div>

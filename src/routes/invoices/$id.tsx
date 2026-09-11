@@ -21,24 +21,25 @@ export const Route = createFileRoute('/invoices/$id')({
   component: InvoiceDetail,
 })
 
-const INVOICES_DATA = invoicesData.invoiceDetails as Record<
+const INVOICES_DATA = invoicesData.invoiceDetails as unknown as Record<
   string,
-  {
-    id: string
-    status: 'paid' | 'unpaid' | 'draft' | 'void'
-    issueDate: string
-    dueDate: string
-    subtotal: number
-    tax: number
-    total: number
-    client: {
-      name: string
-      email: string
-      address: string
-      taxId: string
+  | {
+      id: string
+      status: 'paid' | 'unpaid' | 'draft' | 'void'
+      issueDate: string
+      dueDate: string
+      subtotal: number
+      tax: number
+      total: number
+      client: {
+        name: string
+        email: string
+        address: string
+        taxId: string
+      }
+      items: { desc: string; qty: number; price: number; total: number }[]
     }
-    items: { desc: string; qty: number; price: number; total: number }[]
-  }
+  | undefined
 >
 
 function InvoiceDetail() {
@@ -56,7 +57,7 @@ function InvoiceDetail() {
     desc: '',
   })
 
-  const invoice = INVOICES_DATA[id] || {
+  const invoice = INVOICES_DATA[id] ?? {
     id: id || 'INV-2026-001',
     status: 'unpaid' as const,
     issueDate: '2026-08-01',
@@ -136,8 +137,8 @@ function InvoiceDetail() {
               setModalState({
                 open: true,
                 type: 'info',
-                title: 'PDF Download Started',
-                desc: 'Your invoice PDF document has been compiled and is ready for export.',
+                title: 'PDF Export',
+                desc: 'Invoice PDF generated and downloaded.',
               })
             }
           >
@@ -151,8 +152,8 @@ function InvoiceDetail() {
               setModalState({
                 open: true,
                 type: 'success',
-                title: 'Invoice Dispatched',
-                desc: `Invoice ${invoice.id} was successfully emailed to ${invoice.client.email}.`,
+                title: 'Invoice Sent',
+                desc: `Invoice ${invoice.id} emailed to ${invoice.client.email}.`,
               })
             }
           >
@@ -309,8 +310,8 @@ function InvoiceDetail() {
                   setModalState({
                     open: true,
                     type: 'success',
-                    title: 'Payment Confirmed',
-                    desc: `Invoice ${invoice.id} has been recorded as paid in full in your cashbook.`,
+                    title: 'Payment Recorded',
+                    desc: `Invoice ${invoice.id} marked as paid and cashbook transaction created.`,
                   })
                 }
               >
@@ -326,7 +327,7 @@ function InvoiceDetail() {
                     open: true,
                     type: 'info',
                     title: 'Link Copied',
-                    desc: 'Direct invoice payment link has been copied to your clipboard.',
+                    desc: 'Invoice link copied to clipboard.',
                   })
                 }}
               >
