@@ -222,7 +222,7 @@ function Cashbook() {
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
               placeholder="Search transactions..."
-              className="w-full h-11 border border-border bg-background rounded-xl pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+              className="w-full h-11 border border-border bg-background rounded-md pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
             />
             {isTooShort && (
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] sm:text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
@@ -238,7 +238,7 @@ function Cashbook() {
                 value={typeFilter}
                 onValueChange={(val) => setTypeFilter(val || 'all')}
               >
-                <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-xl">
+                <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-md">
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
                 <SelectContent>
@@ -258,7 +258,7 @@ function Cashbook() {
                 value={scopeFilter}
                 onValueChange={(val) => setScopeFilter(val || 'all')}
               >
-                <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-xl">
+                <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-md">
                   <SelectValue placeholder="All Scopes" />
                 </SelectTrigger>
                 <SelectContent>
@@ -279,7 +279,9 @@ function Cashbook() {
           <table className="w-full text-left text-sm whitespace-nowrap min-w-[800px]">
             <thead className="bg-muted/40 text-muted-foreground border-border border-b">
               <tr>
-                <th className="px-6 py-4 font-semibold text-xs">Date &amp; Description</th>
+                <th className="px-6 py-4 font-semibold text-xs">
+                  Date &amp; Description
+                </th>
                 <th className="px-6 py-4 font-semibold text-xs">Category</th>
                 <th className="px-6 py-4 font-semibold text-xs">Scope</th>
                 <th className="px-6 py-4 font-semibold text-xs text-right">
@@ -412,7 +414,7 @@ function Cashbook() {
                               stiffness: 450,
                               damping: 28,
                             }}
-                            className="absolute right-12 top-10 w-36 border border-border bg-card p-1.5 rounded-xl shadow-none z-20 text-left flex flex-col gap-0.5"
+                            className="absolute right-12 top-10 w-36 border border-border bg-card p-1.5 rounded-md shadow-none z-20 text-left flex flex-col gap-0.5"
                           >
                             <button
                               onClick={() => {

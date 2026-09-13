@@ -167,7 +167,7 @@ export function TeamSwitcher({ teams }: { teams: BusinessTeam[] }) {
           onClick={() => setIsOpen((prev) => !prev)}
           aria-expanded={isOpen}
           className={cn(
-            'group-data-[collapsible=icon]:!size-10 group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:mx-auto cursor-pointer rounded-xl h-12 transition-all duration-150',
+            'group-data-[collapsible=icon]:!size-10 group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:mx-auto cursor-pointer rounded-md h-12 transition-all duration-150',
             isOpen
               ? 'bg-sidebar-accent text-sidebar-accent-foreground border border-primary/20'
               : 'hover:bg-accent/50',
@@ -175,7 +175,7 @@ export function TeamSwitcher({ teams }: { teams: BusinessTeam[] }) {
         >
           <div
             className={cn(
-              'flex aspect-square size-8 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-indigo-600 text-white font-black shrink-0 shadow-xs transition-all',
+              'flex aspect-square size-8 items-center justify-center rounded-md bg-gradient-to-br from-primary to-indigo-600 text-white font-black shrink-0 shadow-xs transition-all',
               isPro
                 ? 'border-2 border-primary ring-2 ring-primary/20'
                 : 'border border-border',
@@ -250,7 +250,7 @@ export function TeamSwitcher({ teams }: { teams: BusinessTeam[] }) {
                             setIsOpen(false)
                           }}
                           className={cn(
-                            'flex items-center gap-2.5 p-2 rounded-xl cursor-pointer text-left transition-all duration-150 w-full',
+                            'flex items-center gap-2.5 p-2 rounded-md cursor-pointer text-left transition-all duration-150 w-full',
                             isCurrent
                               ? 'bg-primary/10 text-primary font-bold border border-primary/20'
                               : 'hover:bg-accent/60 hover:text-foreground text-foreground border border-transparent',
@@ -276,7 +276,7 @@ export function TeamSwitcher({ teams }: { teams: BusinessTeam[] }) {
                     <div className="-mx-1.5 my-0.5 h-px bg-border/60" />
                     <button
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-2 p-2 rounded-xl cursor-pointer hover:bg-accent hover:text-accent-foreground text-muted-foreground text-left w-full transition-colors text-xs font-semibold"
+                      className="flex items-center gap-2 p-2 rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground text-muted-foreground text-left w-full transition-colors text-xs font-semibold"
                     >
                       <div className="flex size-6.5 items-center justify-center rounded-lg border border-border bg-background shrink-0">
                         <Plus className="size-3.5 text-muted-foreground" />

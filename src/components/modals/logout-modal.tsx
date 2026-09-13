@@ -55,7 +55,8 @@ export function LogoutModal({
             Sign out of Finly?
           </h3>
           <p className="text-xs leading-relaxed text-muted-foreground">
-            End your current active session? You will need to sign in again to access your workspace.
+            End your current active session? You will need to sign in again to
+            access your workspace.
           </p>
         </div>
       </div>

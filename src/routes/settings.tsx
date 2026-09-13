@@ -32,6 +32,7 @@ import {
 import { useCurrency, SUPPORTED_CURRENCIES } from '../lib/currency'
 import type { CurrencyCode } from '../lib/currency'
 import { useSubscription } from '../lib/subscription'
+import { runValidation, businessProfileSchema } from '../lib/validation'
 import aiProvidersData from '../data/ai-providers.json'
 
 export const Route = createFileRoute('/settings')({
@@ -84,6 +85,7 @@ function Settings() {
   const [currency, setCurrency] = useState<string>(globalCurrency)
   const [invoicePrefix, setInvoicePrefix] = useState('INV')
   const [profileSaveSuccess, setProfileSaveSuccess] = useState<boolean>(false)
+  const [profileErrors, setProfileErrors] = useState<Record<string, string>>({})
   const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false)
   const [logoModalOpen, setLogoModalOpen] = useState(false)
 
@@ -112,8 +114,7 @@ function Settings() {
         if (parsed.currency) setCurrency(parsed.currency)
         if (parsed.invoicePrefix) setInvoicePrefix(parsed.invoicePrefix)
       }
-    } catch {
-    }
+    } catch {}
   }, [])
 
   const handleProviderSelect = (provId: ProviderId) => {
@@ -156,12 +157,20 @@ function Settings() {
   }
 
   const handleSaveProfileSettings = () => {
-    const dataToSave = {
+    const res = runValidation(businessProfileSchema, {
       businessName,
       taxId,
       currency,
       invoicePrefix,
+    })
+
+    if (!res.success) {
+      setProfileErrors(res.errors)
+      return
     }
+
+    setProfileErrors({})
+    const dataToSave = res.data
     localStorage.setItem('finly_profile_settings', JSON.stringify(dataToSave))
     if (currency in SUPPORTED_CURRENCIES) {
       setGlobalCurrency(currency as CurrencyCode)
@@ -189,7 +198,7 @@ function Settings() {
         <button
           onClick={() => setActiveTab('profile')}
           className={cn(
-            'flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer outline-none shrink-0',
+            'flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-md text-xs font-bold transition-all cursor-pointer outline-none shrink-0',
             activeTab === 'profile'
               ? 'bg-primary text-primary-foreground shadow-none'
               : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-accent',
@@ -201,7 +210,7 @@ function Settings() {
         <button
           onClick={() => setActiveTab('ai')}
           className={cn(
-            'flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer outline-none shrink-0',
+            'flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-md text-xs font-bold transition-all cursor-pointer outline-none shrink-0',
             activeTab === 'ai'
               ? 'bg-primary text-primary-foreground shadow-none'
               : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-accent',
@@ -216,7 +225,7 @@ function Settings() {
         <div className="space-y-6 sm:space-y-8">
           <div className="border border-border bg-card p-4 sm:p-6 md:p-8 rounded-2xl shadow-none space-y-5 sm:space-y-6">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20">
                 <Building2 className="h-5 w-5" />
               </div>
               <div>
@@ -224,7 +233,8 @@ function Settings() {
                   Business Profile
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Business name, tax registration, and logo for client invoices and receipts.
+                  Business name, tax registration, and logo for client invoices
+                  and receipts.
                 </p>
               </div>
             </div>
@@ -258,40 +268,77 @@ function Settings() {
             <div className="grid gap-6 sm:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-foreground">
-                  Business Name
+                  Business Name <span className="text-destructive">*</span>
                 </label>
                 <div className="relative mt-1">
                   <Building2 className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
                   <input
                     type="text"
                     value={businessName}
-                    onChange={(e) => setBusinessName(e.target.value)}
+                    onChange={(e) => {
+                      setBusinessName(e.target.value)
+                      if (profileErrors.businessName) {
+                        setProfileErrors((prev) => {
+                          const updated = { ...prev }
+                          delete updated.businessName
+                          return updated
+                        })
+                      }
+                    }}
                     placeholder="Legal business name"
-                    className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                    className={`h-11 w-full border bg-background rounded-md pl-10 pr-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                      profileErrors.businessName
+                        ? 'border-destructive'
+                        : 'border-border'
+                    }`}
                   />
                 </div>
+                {profileErrors.businessName && (
+                  <p className="text-[11px] font-semibold text-destructive mt-1">
+                    {profileErrors.businessName}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-foreground">
-                  Tax Registration Number (NPWP / EIN / VAT)
+                  Tax Registration Number (NPWP / EIN / VAT){' '}
+                  <span className="text-destructive">*</span>
                 </label>
                 <div className="relative mt-1">
                   <FileText className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
                   <input
                     type="text"
                     value={taxId}
-                    onChange={(e) => setTaxId(e.target.value)}
+                    onChange={(e) => {
+                      setTaxId(e.target.value)
+                      if (profileErrors.taxId) {
+                        setProfileErrors((prev) => {
+                          const updated = { ...prev }
+                          delete updated.taxId
+                          return updated
+                        })
+                      }
+                    }}
                     placeholder="e.g. 01.234.567.8-901.000"
-                    className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                    className={`h-11 w-full border bg-background rounded-md pl-10 pr-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                      profileErrors.taxId
+                        ? 'border-destructive'
+                        : 'border-border'
+                    }`}
                   />
                 </div>
+                {profileErrors.taxId && (
+                  <p className="text-[11px] font-semibold text-destructive mt-1">
+                    {profileErrors.taxId}
+                  </p>
+                )}
               </div>
             </div>
           </div>
 
           <div className="border border-border bg-card p-8 rounded-2xl shadow-none space-y-6">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20">
                 <SlidersHorizontal className="h-5 w-5" />
               </div>
               <div>
@@ -310,10 +357,10 @@ function Settings() {
                   Base Currency
                 </label>
                 <Select value={currency} onValueChange={setCurrency}>
-                  <SelectTrigger className="w-full h-11 border border-border rounded-xl shadow-none bg-background text-foreground text-sm font-medium">
+                  <SelectTrigger className="w-full h-11 border border-border rounded-md shadow-none bg-background text-foreground text-sm font-medium">
                     <SelectValue placeholder="Select currency" />
                   </SelectTrigger>
-                  <SelectContent className="rounded-xl">
+                  <SelectContent className="rounded-md">
                     {Object.values(SUPPORTED_CURRENCIES).map((c) => (
                       <SelectItem key={c.code} value={c.code}>
                         {c.name} ({c.symbol})
@@ -328,15 +375,34 @@ function Settings() {
 
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-foreground">
-                  Invoice Number Prefix
+                  Invoice Number Prefix{' '}
+                  <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
                   value={invoicePrefix}
-                  onChange={(e) => setInvoicePrefix(e.target.value)}
+                  onChange={(e) => {
+                    setInvoicePrefix(e.target.value)
+                    if (profileErrors.invoicePrefix) {
+                      setProfileErrors((prev) => {
+                        const updated = { ...prev }
+                        delete updated.invoicePrefix
+                        return updated
+                      })
+                    }
+                  }}
                   placeholder="INV"
-                  className="h-11 w-full border border-border bg-background rounded-xl px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                  className={`h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                    profileErrors.invoicePrefix
+                      ? 'border-destructive'
+                      : 'border-border'
+                  }`}
                 />
+                {profileErrors.invoicePrefix && (
+                  <p className="text-[11px] font-semibold text-destructive mt-1">
+                    {profileErrors.invoicePrefix}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -364,7 +430,7 @@ function Settings() {
         <div className="border border-border bg-card p-8 rounded-2xl shadow-none space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20">
                 <Bot className="h-5 w-5" />
               </div>
               <div>
@@ -372,7 +438,8 @@ function Settings() {
                   AI Provider Connections
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Connect your API key to enable invoice drafting, receipt data extraction, and natural language queries.
+                  Connect your API key to enable invoice drafting, receipt data
+                  extraction, and natural language queries.
                 </p>
               </div>
             </div>
@@ -395,7 +462,7 @@ function Settings() {
                     key={prov.id}
                     onClick={() => handleProviderSelect(prov.id)}
                     className={cn(
-                      'relative text-left p-4 rounded-xl border transition-all cursor-pointer outline-none flex flex-col justify-between',
+                      'relative text-left p-4 rounded-md border transition-all cursor-pointer outline-none flex flex-col justify-between',
                       isSelected
                         ? 'border-primary ring-2 ring-primary/20 bg-primary/5 shadow-none'
                         : 'border-border bg-card hover:bg-accent/40',
@@ -438,7 +505,7 @@ function Settings() {
             </div>
           </div>
 
-          <div className="p-6 rounded-xl bg-muted/40 border border-border space-y-6">
+          <div className="p-6 rounded-md bg-muted/40 border border-border space-y-6">
             <div className="flex items-center justify-between border-b border-border pb-4">
               <div className="flex items-center gap-2">
                 <span
@@ -452,8 +519,8 @@ function Settings() {
               </div>
               {testStatus === 'success' && testLatency && (
                 <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4" /> Connected (
-                  {testLatency} ms)
+                  <CheckCircle2 className="h-4 w-4" /> Connected ({testLatency}{' '}
+                  ms)
                 </span>
               )}
             </div>
@@ -482,7 +549,7 @@ function Settings() {
                     value={apiKeys[selectedProvider]}
                     onChange={(e) => handleKeyChange(e.target.value)}
                     placeholder={currentProviderObj.keyPlaceholder}
-                    className="h-11 w-full border border-border bg-background rounded-xl pl-4 pr-12 text-sm font-mono font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                    className="h-11 w-full border border-border bg-background rounded-md pl-4 pr-12 text-sm font-mono font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
                   />
                   <button
                     type="button"
@@ -509,7 +576,7 @@ function Settings() {
                     value={customEndpoint}
                     onChange={(e) => setCustomEndpoint(e.target.value)}
                     placeholder="http://localhost:11434/v1"
-                    className="h-11 w-full border border-border bg-background rounded-xl px-4 text-sm font-mono font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                    className="h-11 w-full border border-border bg-background rounded-md px-4 text-sm font-mono font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
               )}
@@ -520,10 +587,10 @@ function Settings() {
                   Selection
                 </label>
                 <Select value={selectedModel} onValueChange={setSelectedModel}>
-                  <SelectTrigger className="w-full h-11 border border-border rounded-xl shadow-none bg-background text-foreground text-sm font-medium">
+                  <SelectTrigger className="w-full h-11 border border-border rounded-md shadow-none bg-background text-foreground text-sm font-medium">
                     <SelectValue placeholder="Select Model" />
                   </SelectTrigger>
-                  <SelectContent className="rounded-xl">
+                  <SelectContent className="rounded-md">
                     {currentProviderObj.models.map((m) => (
                       <SelectItem key={m.id} value={m.id}>
                         {m.name}

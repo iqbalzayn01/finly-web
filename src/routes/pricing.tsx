@@ -132,8 +132,8 @@ function PricingPage() {
           Subscription plans for agencies and consultants
         </h1>
         <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
-          Choose the plan that fits your business size. Switch between
-          monthly and annual billing at any time.
+          Choose the plan that fits your business size. Switch between monthly
+          and annual billing at any time.
         </p>
 
         <div className="pt-4 flex items-center justify-center gap-3">
@@ -252,7 +252,7 @@ function PricingPage() {
               {plan.id === currentPlan ? (
                 <button
                   disabled
-                  className="w-full py-3 rounded-xl text-xs font-bold transition-all shadow-none outline-none flex items-center justify-center gap-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 cursor-default"
+                  className="w-full py-3 rounded-md text-xs font-bold transition-all shadow-none outline-none flex items-center justify-center gap-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 cursor-default"
                 >
                   <Check className="h-3.5 w-3.5" /> Current Plan
                 </button>
@@ -272,7 +272,7 @@ function PricingPage() {
                     }
                   }}
                   className={cn(
-                    'w-full py-3 rounded-xl text-xs font-bold transition-all shadow-none outline-none cursor-pointer flex items-center justify-center gap-2 active:scale-[0.98]',
+                    'w-full py-3 rounded-md text-xs font-bold transition-all shadow-none outline-none cursor-pointer flex items-center justify-center gap-2 active:scale-[0.98]',
                     plan.id === 'pro'
                       ? 'bg-primary text-primary-foreground hover:opacity-95 shadow-none'
                       : 'bg-muted/60 hover:bg-accent text-foreground border border-border',
@@ -305,7 +305,7 @@ function PricingPage() {
 
       <div className="max-w-4xl mx-auto p-6 rounded-2xl bg-muted/40 border border-border flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-card border border-border shadow-none text-primary">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-card border border-border shadow-none text-primary">
             <Shield className="h-5 w-5" />
           </div>
           <div>
@@ -313,13 +313,14 @@ function PricingPage() {
               Data Security and Tenant Isolation
             </h4>
             <p className="text-xs text-muted-foreground mt-0.5">
-              PostgreSQL Row-Level Security, Redis session storage, and immutable audit logs.
+              PostgreSQL Row-Level Security, Redis session storage, and
+              immutable audit logs.
             </p>
           </div>
         </div>
         <button
           onClick={() => navigate({ to: '/settings' })}
-          className="shrink-0 px-4 py-2 text-xs font-semibold rounded-xl bg-card border border-border hover:bg-accent text-foreground transition-all cursor-pointer"
+          className="shrink-0 px-4 py-2 text-xs font-semibold rounded-md bg-card border border-border hover:bg-accent text-foreground transition-all cursor-pointer"
         >
           Learn More
         </button>

@@ -208,7 +208,7 @@ export function NavUser({ user }: { user: UserProfile }) {
             onClick={() => setIsOpen((prev) => !prev)}
             aria-expanded={isOpen}
             className={cn(
-              'group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:mx-auto cursor-pointer rounded-xl h-12 transition-all duration-150',
+              'group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:mx-auto cursor-pointer rounded-md h-12 transition-all duration-150',
               isOpen
                 ? 'bg-sidebar-accent text-sidebar-accent-foreground border border-primary/20'
                 : 'hover:bg-accent/50',
@@ -216,14 +216,14 @@ export function NavUser({ user }: { user: UserProfile }) {
           >
             <Avatar
               className={cn(
-                'size-8.5 rounded-xl shrink-0 shadow-2xs transition-all',
+                'size-8.5 rounded-md shrink-0 shadow-2xs transition-all',
                 isPro
                   ? 'border-2 border-primary ring-2 ring-primary/20'
                   : 'border border-border',
               )}
             >
               <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-bold text-xs">
+              <AvatarFallback className="rounded-md bg-primary/10 text-primary font-bold text-xs">
                 {userInitials || 'US'}
               </AvatarFallback>
             </Avatar>
@@ -282,14 +282,14 @@ export function NavUser({ user }: { user: UserProfile }) {
                       <div className="flex items-center gap-2.5 px-2.5 py-2 text-left text-xs border-b border-border/60 mb-0.5">
                         <Avatar
                           className={cn(
-                            'size-8 rounded-xl shrink-0 shadow-2xs transition-all',
+                            'size-8 rounded-md shrink-0 shadow-2xs transition-all',
                             isPro
                               ? 'border-2 border-primary ring-2 ring-primary/20'
                               : 'border border-border',
                           )}
                         >
                           <AvatarImage src={user.avatar} alt={user.name} />
-                          <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-bold text-xs">
+                          <AvatarFallback className="rounded-md bg-primary/10 text-primary font-bold text-xs">
                             {userInitials || 'US'}
                           </AvatarFallback>
                         </Avatar>
@@ -314,7 +314,7 @@ export function NavUser({ user }: { user: UserProfile }) {
                         to="/pricing"
                         onClick={() => setIsOpen(false)}
                         className={cn(
-                          'flex items-center gap-2 px-2.5 py-2 text-xs font-semibold rounded-xl transition-colors cursor-pointer w-full border',
+                          'flex items-center gap-2 px-2.5 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer w-full border',
                           isPro
                             ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
                             : 'bg-primary/5 text-primary border-primary/15 hover:bg-primary/15',
@@ -331,7 +331,7 @@ export function NavUser({ user }: { user: UserProfile }) {
                       <Link
                         to="/account"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-xl hover:bg-accent/60 transition-colors cursor-pointer w-full"
+                        className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-md hover:bg-accent/60 transition-colors cursor-pointer w-full"
                       >
                         <BadgeCheck className="size-3.5 text-muted-foreground shrink-0" />
                         <span>Account Profile</span>
@@ -340,7 +340,7 @@ export function NavUser({ user }: { user: UserProfile }) {
                       <Link
                         to="/settings"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-xl hover:bg-accent/60 transition-colors cursor-pointer w-full"
+                        className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-md hover:bg-accent/60 transition-colors cursor-pointer w-full"
                       >
                         <Settings2 className="size-3.5 text-muted-foreground shrink-0" />
                         <span>Settings</span>
@@ -353,7 +353,7 @@ export function NavUser({ user }: { user: UserProfile }) {
                           setIsOpen(false)
                           setLogoutOpen(true)
                         }}
-                        className="flex items-center gap-2 px-2.5 py-2 text-xs text-destructive font-semibold rounded-xl hover:bg-destructive/10 transition-colors cursor-pointer w-full text-left"
+                        className="flex items-center gap-2 px-2.5 py-2 text-xs text-destructive font-semibold rounded-md hover:bg-destructive/10 transition-colors cursor-pointer w-full text-left"
                       >
                         <LogOut className="size-3.5 shrink-0" />
                         <span>Sign out</span>

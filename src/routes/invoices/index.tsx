@@ -137,10 +137,7 @@ function Invoices() {
             Total Receivables
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">
-            <NumberTicker
-              value={17000}
-              formatter={(v) => formatAmount(v)}
-            />
+            <NumberTicker value={17000} formatter={(v) => formatAmount(v)} />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
             2 unpaid invoices
@@ -151,10 +148,7 @@ function Invoices() {
             Paid This Month
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
-            <NumberTicker
-              value={3500}
-              formatter={(v) => formatAmount(v)}
-            />
+            <NumberTicker value={3500} formatter={(v) => formatAmount(v)} />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
             1 paid invoice
@@ -165,12 +159,11 @@ function Invoices() {
             Draft Invoices
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">
-            <NumberTicker
-              value={200}
-              formatter={(v) => formatAmount(v)}
-            />
+            <NumberTicker value={200} formatter={(v) => formatAmount(v)} />
           </p>
-          <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">1 draft invoice</p>
+          <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
+            1 draft invoice
+          </p>
         </div>
       </div>
 
@@ -183,7 +176,7 @@ function Invoices() {
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
               placeholder="Search by invoice ID or client..."
-              className="w-full h-11 border border-border bg-background rounded-xl pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+              className="w-full h-11 border border-border bg-background rounded-md pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
             />
             {isTooShort && (
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] sm:text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
@@ -197,10 +190,10 @@ function Invoices() {
               value={statusFilter}
               onValueChange={(val) => setStatusFilter(val || 'all')}
             >
-              <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-xl">
+              <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-md">
                 <SelectValue placeholder="All Statuses" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl">
+              <SelectContent className="rounded-md">
                 {STATUS_OPTIONS.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -267,7 +260,7 @@ function Invoices() {
                     className="transition-colors"
                   >
                     <td className="px-6 py-4 font-mono font-semibold text-foreground flex items-center gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-border bg-accent/40 text-accent-foreground rounded-xl">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-border bg-accent/40 text-accent-foreground rounded-md">
                         <FileText className="h-4 w-4" />
                       </div>
                       <Link
@@ -318,7 +311,7 @@ function Invoices() {
                               stiffness: 450,
                               damping: 28,
                             }}
-                            className="absolute right-12 top-10 w-40 border border-border bg-card p-1.5 rounded-xl shadow-none z-20 flex flex-col gap-0.5 text-left"
+                            className="absolute right-12 top-10 w-40 border border-border bg-card p-1.5 rounded-md shadow-none z-20 flex flex-col gap-0.5 text-left"
                           >
                             <Link
                               to={`/invoices/$id`}

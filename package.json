@@ -1,6 +1,6 @@
 {
   "name": "finly-web",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "Finly Web — B2B Cashflow & Financial Operating System (OS) for agencies, consultants, freelancers, and micro-SMEs",
   "private": true,
   "type": "module",
@@ -14,7 +14,9 @@
     "preview": "vite preview",
     "lint": "eslint",
     "format": "prettier --write . && eslint --fix",
-    "check": "prettier --check ."
+    "check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -57,6 +59,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9.20.0",
     "prettier": "^3.8.1",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "vitest": "^5.0.0"
   }
 }

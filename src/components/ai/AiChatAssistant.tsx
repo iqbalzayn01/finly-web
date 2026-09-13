@@ -422,7 +422,7 @@ export function AiChatAssistant() {
                           {msg.intentCard.type !== 'insight' && (
                             <div className="pt-2">
                               {msg.intentCard.isApproved ? (
-                                <div className="flex items-center justify-center gap-2 py-2 px-3 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl text-xs font-semibold border border-emerald-500/20">
+                                <div className="flex items-center justify-center gap-2 py-2 px-3 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-md text-xs font-semibold border border-emerald-500/20">
                                   <CheckCircle2 className="h-4 w-4" />
                                   {msg.intentCard.type === 'expense'
                                     ? 'Saved to cashbook'

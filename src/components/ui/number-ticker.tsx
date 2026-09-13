@@ -2,8 +2,7 @@ import * as React from 'react'
 import { useInView, useMotionValue, useSpring } from 'motion/react'
 import { cn } from '#/lib/utils'
 
-export interface NumberTickerProps
-  extends React.ComponentPropsWithoutRef<'span'> {
+export interface NumberTickerProps extends React.ComponentPropsWithoutRef<'span'> {
   value: number
   startValue?: number
   direction?: 'up' | 'down'
@@ -79,7 +78,14 @@ export function NumberTicker({
         }
       }
     })
-  }, [springValue, decimalPlaces, formatter, prefix, suffix, defaultIntlFormatter])
+  }, [
+    springValue,
+    decimalPlaces,
+    formatter,
+    prefix,
+    suffix,
+    defaultIntlFormatter,
+  ])
 
   const initialRenderText = formatter
     ? `${prefix}${formatter(direction === 'down' ? value : startValue)}${suffix}`

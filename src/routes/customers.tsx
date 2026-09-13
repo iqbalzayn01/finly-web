@@ -22,6 +22,7 @@ import {
 } from '../components/ui/select'
 import { useDebouncedSearch } from '../hooks/use-debounced-search'
 import { NumberTicker } from '../components/ui/number-ticker'
+import { runValidation, customerFormSchema } from '../lib/validation'
 import initialCustomers from '../data/customers.json'
 
 export const Route = createFileRoute('/customers')({
@@ -54,6 +55,31 @@ function Customers() {
   }>({
     open: false,
   })
+  const [newCustomer, setNewCustomer] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    term: 'net30' as 'net7' | 'net14' | 'net30',
+    address: '',
+    taxId: '',
+  })
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({})
+
+  const handleCreateCustomer = () => {
+    const res = runValidation(customerFormSchema, newCustomer)
+    if (!res.success) {
+      setFormErrors(res.errors)
+      return
+    }
+
+    setFormErrors({})
+    setShowForm(false)
+    setSuccessModal({
+      open: true,
+      title: 'Customer Added',
+      desc: `Customer ${res.data.name} created and saved to directory.`,
+    })
+  }
 
   const {
     inputQuery,
@@ -109,7 +135,7 @@ function Customers() {
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             placeholder="Search by name or email..."
-            className="w-full h-11 border border-border bg-background rounded-xl pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+            className="w-full h-11 border border-border bg-background rounded-md pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
           />
           {isTooShort && (
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] sm:text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
@@ -123,10 +149,10 @@ function Customers() {
             value={termFilter}
             onValueChange={(val) => setTermFilter(val || 'all')}
           >
-            <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-xl">
+            <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-md">
               <SelectValue placeholder="Payment Terms" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
+            <SelectContent className="rounded-md">
               {TERM_OPTIONS.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>
                   {opt.label}
@@ -204,7 +230,7 @@ function Customers() {
                             stiffness: 450,
                             damping: 28,
                           }}
-                          className="absolute right-0 top-10 w-36 border border-border bg-card p-1.5 rounded-xl shadow-none z-20 flex flex-col gap-0.5"
+                          className="absolute right-0 top-10 w-36 border border-border bg-card p-1.5 rounded-md shadow-none z-20 flex flex-col gap-0.5"
                         >
                           <button
                             onClick={() => {
@@ -277,7 +303,7 @@ function Customers() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-lg border border-border bg-card p-8 rounded-2xl shadow-none"
+              className="relative w-full max-w-lg border border-border bg-card p-6 sm:p-8 rounded-2xl shadow-none max-h-[90vh] overflow-y-auto"
             >
               <h2 className="text-xl font-bold text-foreground mb-6">
                 New Customer
@@ -285,35 +311,84 @@ function Customers() {
               <div className="space-y-4">
                 <div>
                   <label className="text-xs font-semibold text-foreground">
-                    Company Name
+                    Company Name <span className="text-destructive">*</span>
                   </label>
                   <input
                     type="text"
+                    value={newCustomer.name}
+                    onChange={(e) => {
+                      setNewCustomer((prev) => ({
+                        ...prev,
+                        name: e.target.value,
+                      }))
+                      if (formErrors.name) {
+                        setFormErrors((prev) => {
+                          const updated = { ...prev }
+                          delete updated.name
+                          return updated
+                        })
+                      }
+                    }}
                     placeholder="Enter company name"
-                    className="mt-1.5 h-11 w-full border border-border bg-background rounded-xl px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                    className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                      formErrors.name ? 'border-destructive' : 'border-border'
+                    }`}
                   />
+                  {formErrors.name && (
+                    <p className="text-[11px] font-semibold text-destructive mt-1">
+                      {formErrors.name}
+                    </p>
+                  )}
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs font-semibold text-foreground">
-                      Email
+                      Email <span className="text-destructive">*</span>
                     </label>
                     <input
                       type="email"
+                      value={newCustomer.email}
+                      onChange={(e) => {
+                        setNewCustomer((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
+                        if (formErrors.email) {
+                          setFormErrors((prev) => {
+                            const updated = { ...prev }
+                            delete updated.email
+                            return updated
+                          })
+                        }
+                      }}
                       placeholder="email@example.com"
-                      className="mt-1.5 h-11 w-full border border-border bg-background rounded-xl px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                      className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                        formErrors.email
+                          ? 'border-destructive'
+                          : 'border-border'
+                      }`}
                     />
+                    {formErrors.email && (
+                      <p className="text-[11px] font-semibold text-destructive mt-1">
+                        {formErrors.email}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label className="text-xs font-semibold text-foreground">
                       Payment Terms
                     </label>
                     <div className="mt-1.5">
-                      <Select defaultValue="net30">
-                        <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-background text-foreground rounded-xl">
+                      <Select
+                        value={newCustomer.term}
+                        onValueChange={(val: 'net7' | 'net14' | 'net30') =>
+                          setNewCustomer((prev) => ({ ...prev, term: val }))
+                        }
+                      >
+                        <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-background text-foreground rounded-md">
                           <SelectValue placeholder="Select terms" />
                         </SelectTrigger>
-                        <SelectContent className="rounded-xl">
+                        <SelectContent className="rounded-md">
                           <SelectItem value="net7">Net 7</SelectItem>
                           <SelectItem value="net14">Net 14</SelectItem>
                           <SelectItem value="net30">Net 30</SelectItem>
@@ -328,37 +403,50 @@ function Customers() {
                   </label>
                   <input
                     type="text"
+                    value={newCustomer.phone}
+                    onChange={(e) =>
+                      setNewCustomer((prev) => ({
+                        ...prev,
+                        phone: e.target.value,
+                      }))
+                    }
                     placeholder="+1 (555) 000-0000"
-                    className="mt-1.5 h-11 w-full border border-border bg-background rounded-xl px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                    className="mt-1.5 h-11 w-full border border-border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
                   />
+                  {formErrors.phone && (
+                    <p className="text-[11px] font-semibold text-destructive mt-1">
+                      {formErrors.phone}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-foreground">
                     Address
                   </label>
                   <textarea
+                    value={newCustomer.address}
+                    onChange={(e) =>
+                      setNewCustomer((prev) => ({
+                        ...prev,
+                        address: e.target.value,
+                      }))
+                    }
                     placeholder="Enter street address, city, country"
                     rows={2}
-                    className="mt-1.5 w-full border border-border bg-background rounded-xl p-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground resize-none"
+                    className="mt-1.5 w-full border border-border bg-background rounded-md p-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground resize-none"
                   />
+                  {formErrors.address && (
+                    <p className="text-[11px] font-semibold text-destructive mt-1">
+                      {formErrors.address}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="mt-8 flex justify-end gap-3">
                 <Button variant="outline" onClick={() => setShowForm(false)}>
                   Cancel
                 </Button>
-                <Button
-                  onClick={() => {
-                    setShowForm(false)
-                    setSuccessModal({
-                      open: true,
-                      title: 'Customer Added',
-                      desc: 'Customer created and saved to directory.',
-                    })
-                  }}
-                >
-                  Create Customer
-                </Button>
+                <Button onClick={handleCreateCustomer}>Create Customer</Button>
               </div>
             </motion.div>
           </div>
