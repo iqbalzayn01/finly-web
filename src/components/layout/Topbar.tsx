@@ -109,7 +109,7 @@ export function Topbar() {
           <>
             <Link
               to="/pricing"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all cursor-pointer shadow-none"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all cursor-pointer shadow-none"
             >
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               <span>Upgrade to Pro</span>

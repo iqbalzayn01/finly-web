@@ -89,7 +89,7 @@ export function ThemeToggle() {
             <button
               onClick={() => selectMode('light')}
               className={cn(
-                'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all',
+                'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-md transition-all',
                 mode === 'light'
                   ? 'bg-primary text-primary-foreground font-semibold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent/50',
@@ -100,7 +100,7 @@ export function ThemeToggle() {
             <button
               onClick={() => selectMode('dark')}
               className={cn(
-                'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all',
+                'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-md transition-all',
                 mode === 'dark'
                   ? 'bg-primary text-primary-foreground font-semibold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent/50',
@@ -111,7 +111,7 @@ export function ThemeToggle() {
             <button
               onClick={() => selectMode('auto')}
               className={cn(
-                'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all',
+                'flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold rounded-md transition-all',
                 mode === 'auto'
                   ? 'bg-primary text-primary-foreground font-semibold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent/50',

@@ -1,9 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
-@import 'material-symbols/rounded.css';
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
 @import 'tw-animate-css';
+
+.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -17,8 +32,8 @@
   --popover: #ffffff;
   --popover-foreground: #0f172a;
 
-  --primary: #463cff;
-  --primary-foreground: #ffffff;
+  --primary: oklch(89.7% 0.196 126.665);
+  --primary-foreground: #0f172a;
 
   --secondary: #f1f5f9;
   --secondary-foreground: #0f172a;
@@ -26,8 +41,8 @@
   --muted: #f8fafc;
   --muted-foreground: #64748b;
 
-  --accent: #ebeaff;
-  --accent-foreground: #463cff;
+  --accent: oklch(89.7% 0.196 126.665 / 0.18);
+  --accent-foreground: #1a2e05;
 
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
@@ -35,7 +50,7 @@
   --border: #e2e8f0;
   --input: #e2e8f0;
 
-  --ring: #463cff;
+  --ring: oklch(89.7% 0.196 126.665);
 
   --chart-1: #ef4444;
   --chart-2: #f97316;
@@ -51,12 +66,12 @@
 
   --sidebar: #ffffff;
   --sidebar-foreground: #0f172a;
-  --sidebar-primary: #463cff;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ebeaff;
-  --sidebar-accent-foreground: #463cff;
+  --sidebar-primary: oklch(89.7% 0.196 126.665);
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-accent: oklch(89.7% 0.196 126.665 / 0.18);
+  --sidebar-accent-foreground: #1a2e05;
   --sidebar-border: #e2e8f0;
-  --sidebar-ring: #463cff;
+  --sidebar-ring: oklch(89.7% 0.196 126.665);
 
   --shadow-card: none;
   --shadow-sm: none;
@@ -73,8 +88,8 @@
   --popover: #101010;
   --popover-foreground: #f8fafc;
 
-  --primary: #5c52ff;
-  --primary-foreground: #ffffff;
+  --primary: oklch(89.7% 0.196 126.665);
+  --primary-foreground: #0a0a0a;
 
   --secondary: #0a0a0a;
   --secondary-foreground: #f8fafc;
@@ -82,8 +97,8 @@
   --muted: #0a0a0a;
   --muted-foreground: #94a3b8;
 
-  --accent: rgba(70, 60, 255, 0.25);
-  --accent-foreground: #a19dff;
+  --accent: oklch(89.7% 0.196 126.665 / 0.18);
+  --accent-foreground: oklch(89.7% 0.196 126.665);
 
   --destructive: #f87171;
   --destructive-foreground: #ffffff;
@@ -91,7 +106,7 @@
   --border: rgba(255, 255, 255, 0.12);
   --input: rgba(255, 255, 255, 0.12);
 
-  --ring: #5c52ff;
+  --ring: oklch(89.7% 0.196 126.665);
 
   --chart-1: #b91c1c;
   --chart-2: #c2410c;
@@ -105,12 +120,12 @@
 
   --sidebar: #101010;
   --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #5c52ff;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: rgba(70, 60, 255, 0.25);
-  --sidebar-accent-foreground: #a19dff;
+  --sidebar-primary: oklch(89.7% 0.196 126.665);
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: oklch(89.7% 0.196 126.665 / 0.18);
+  --sidebar-accent-foreground: oklch(89.7% 0.196 126.665);
   --sidebar-border: rgba(255, 255, 255, 0.12);
-  --sidebar-ring: #5c52ff;
+  --sidebar-ring: oklch(89.7% 0.196 126.665);
 
   --shadow-card: none;
   --shadow-sm: none;
@@ -207,6 +222,93 @@ body[data-scroll-locked] {
   :focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+  }
+
+  .recharts-responsive-container,
+  .recharts-wrapper,
+  .recharts-surface,
+  .recharts-layer,
+  .recharts-sector,
+  .recharts-curve,
+  .recharts-dot,
+  .recharts-rectangle,
+  .recharts-line,
+  .recharts-area,
+  .recharts-bar,
+  .recharts-bar-rectangle,
+  .recharts-bar-rectangles,
+  .recharts-pie,
+  .recharts-radial-bar,
+  [data-slot='chart'],
+  [data-chart] {
+    outline: none !important;
+    border: none !important;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .recharts-responsive-container:focus,
+  .recharts-responsive-container:focus-visible,
+  .recharts-responsive-container:active,
+  .recharts-wrapper:focus,
+  .recharts-wrapper:focus-visible,
+  .recharts-wrapper:active,
+  .recharts-surface:focus,
+  .recharts-surface:focus-visible,
+  .recharts-surface:active,
+  .recharts-layer:focus,
+  .recharts-layer:focus-visible,
+  .recharts-layer:active,
+  .recharts-sector:focus,
+  .recharts-sector:focus-visible,
+  .recharts-sector:active,
+  .recharts-curve:focus,
+  .recharts-curve:focus-visible,
+  .recharts-curve:active,
+  .recharts-dot:focus,
+  .recharts-dot:focus-visible,
+  .recharts-dot:active,
+  .recharts-rectangle:focus,
+  .recharts-rectangle:focus-visible,
+  .recharts-rectangle:active,
+  .recharts-line:focus,
+  .recharts-line:focus-visible,
+  .recharts-line:active,
+  .recharts-area:focus,
+  .recharts-area:focus-visible,
+  .recharts-area:active,
+  .recharts-bar:focus,
+  .recharts-bar:focus-visible,
+  .recharts-bar:active,
+  .recharts-bar-rectangle:focus,
+  .recharts-bar-rectangle:focus-visible,
+  .recharts-bar-rectangle:active,
+  .recharts-bar-rectangles:focus,
+  .recharts-bar-rectangles:focus-visible,
+  .recharts-bar-rectangles:active,
+  .recharts-pie:focus,
+  .recharts-pie:focus-visible,
+  .recharts-pie:active,
+  .recharts-radial-bar:focus,
+  .recharts-radial-bar:focus-visible,
+  .recharts-radial-bar:active,
+  [data-slot='chart']:focus,
+  [data-slot='chart']:focus-visible,
+  [data-slot='chart']:active,
+  [data-chart]:focus,
+  [data-chart]:focus-visible,
+  [data-chart]:active,
+  .recharts-wrapper *:focus,
+  .recharts-wrapper *:focus-visible,
+  .recharts-wrapper *:active,
+  .recharts-surface *:focus,
+  .recharts-surface *:focus-visible,
+  .recharts-surface *:active {
+    outline: none !important;
+    outline-offset: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
   }
 
   body {
