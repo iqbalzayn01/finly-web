@@ -125,7 +125,7 @@ function Invoices() {
           </p>
         </div>
         <Link to="/invoices/builder" className="w-full sm:w-auto">
-          <Button className="w-full sm:w-auto h-11 px-6 rounded-full font-semibold shadow-none">
+          <Button className="w-full sm:w-auto h-11 px-6 font-semibold shadow-none">
             <Plus className="h-5 w-5 mr-2" /> New Invoice
           </Button>
         </Link>
@@ -133,10 +133,10 @@ function Invoices() {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none">
-          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-base sm:text-xs font-semibold tracking-wide text-muted-foreground">
             Total Receivables
           </p>
-          <p className="font-mono text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400 mt-1">
+          <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">
             <NumberTicker value={17000} formatter={(v) => formatAmount(v)} />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
@@ -144,10 +144,10 @@ function Invoices() {
           </p>
         </div>
         <div className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none">
-          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-base sm:text-xs font-semibold tracking-wide text-muted-foreground">
             Paid This Month
           </p>
-          <p className="font-mono text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
+          <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">
             <NumberTicker value={3500} formatter={(v) => formatAmount(v)} />
           </p>
           <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">
@@ -155,7 +155,7 @@ function Invoices() {
           </p>
         </div>
         <div className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none">
-          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-base sm:text-xs font-semibold tracking-wide text-muted-foreground">
             Draft Invoices
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">

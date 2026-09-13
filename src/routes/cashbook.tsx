@@ -140,7 +140,7 @@ function Cashbook() {
         </div>
         <Button
           onClick={() => setQuickEntryOpen(true)}
-          className="w-full sm:w-auto h-11 px-6 rounded-full font-semibold shadow-none"
+          className="w-full sm:w-auto h-11 px-6 font-semibold shadow-none"
         >
           <Plus className="h-5 w-5 mr-2" /> Quick Entry
         </Button>
@@ -153,10 +153,10 @@ function Cashbook() {
           transition={{ ...m3Transition, delay: 0.05 }}
           className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none"
         >
-          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-base sm:text-xs font-semibold tracking-wide text-muted-foreground">
             Total Inflow
           </p>
-          <p className="font-mono text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
+          <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">
             <NumberTicker
               value={totalInflow}
               formatter={(v) => formatAmount(v)}
@@ -173,10 +173,10 @@ function Cashbook() {
           transition={{ ...m3Transition, delay: 0.1 }}
           className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none"
         >
-          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-base sm:text-xs font-semibold tracking-wide text-muted-foreground">
             Total Outflow
           </p>
-          <p className="font-mono text-xl sm:text-2xl font-bold text-rose-600 dark:text-rose-400 mt-1">
+          <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">
             <NumberTicker
               value={totalOutflow}
               formatter={(v) => formatAmount(v)}
@@ -193,7 +193,7 @@ function Cashbook() {
           transition={{ ...m3Transition, delay: 0.15 }}
           className="border border-border bg-card p-4 sm:p-5 rounded-2xl shadow-none"
         >
-          <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-base sm:text-xs font-semibold tracking-wide text-muted-foreground">
             Net Cashflow
           </p>
           <p className="font-mono text-xl sm:text-2xl font-bold text-foreground mt-1">
@@ -225,7 +225,7 @@ function Cashbook() {
               className="w-full h-11 border border-border bg-background rounded-md pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
             />
             {isTooShort && (
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] sm:text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] sm:text-base font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
                 Min 3 chars
               </span>
             )}

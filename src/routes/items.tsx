@@ -122,7 +122,7 @@ function Items() {
         </div>
         <Button
           onClick={() => setShowForm(true)}
-          className="w-full sm:w-auto h-11 px-6 rounded-full font-semibold shadow-none"
+          className="w-full sm:w-auto h-11 px-6 font-semibold shadow-none"
         >
           <Plus className="h-5 w-5 mr-2" /> Add Item
         </Button>
@@ -156,7 +156,11 @@ function Items() {
               </SelectTrigger>
               <SelectContent className="rounded-md">
                 {STATUS_OPTIONS.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
+                  <SelectItem
+                    key={opt.value}
+                    value={opt.value}
+                    className="rounded-md"
+                  >
                     {opt.label}
                   </SelectItem>
                 ))}

@@ -11,7 +11,7 @@ import {
   RefreshCw,
   ShieldCheck,
 } from '../components/ui/icon'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import {
   Select,
   SelectContent,
@@ -42,9 +42,7 @@ import {
   Area,
   Line,
   LineChart,
-  Label,
   PolarGrid,
-  PolarRadiusAxis,
   RadialBar,
   RadialBarChart,
 } from 'recharts'
@@ -97,6 +95,64 @@ const TIMEFRAME_OPTIONS: { label: string; value: CashflowTimeframe }[] = [
   { label: '5Y', value: '5y' },
 ]
 
+const PERIOD_OPTIONS = [
+  { label: 'Select a period', value: null },
+  { label: 'This Month', value: 'this_month' },
+  { label: 'This Quarter', value: 'this_quarter' },
+  { label: 'This Year', value: 'this_year' },
+]
+
+const KPI_CARDS = [
+  {
+    title: 'My Balance',
+    amount: 148250,
+    trend: '+12.5%',
+    isUp: true,
+    icon: Wallet,
+    containerClass:
+      'bg-primary text-primary-foreground border border-primary/20 shadow-none rounded-2xl',
+    iconClass: 'bg-black/10 text-primary-foreground rounded-md',
+    trendClass: 'bg-black/10 text-primary-foreground rounded-md',
+    progress: 82,
+    progressBg: 'bg-black/10',
+    progressFill: 'bg-primary-foreground',
+    subtext: 'Liquid cash across bank accounts',
+  },
+  {
+    title: 'My Income',
+    amount: 34120,
+    trend: '+8.2% vs last month',
+    isUp: true,
+    icon: ArrowUpRight,
+    containerClass:
+      'bg-card text-foreground border border-border shadow-none rounded-2xl',
+    iconClass:
+      'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-md',
+    trendClass:
+      'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-md',
+    progress: 68,
+    progressBg: 'bg-muted',
+    progressFill: 'bg-emerald-500',
+    subtext: 'Collected revenue and receipts',
+  },
+  {
+    title: 'Total Expenses',
+    amount: 12450,
+    trend: '-2.4% vs last month',
+    isUp: false,
+    icon: ArrowDownRight,
+    containerClass:
+      'bg-card text-foreground border border-border shadow-none rounded-2xl',
+    iconClass:
+      'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-md',
+    trendClass: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-md',
+    progress: 42,
+    progressBg: 'bg-muted',
+    progressFill: 'bg-rose-500',
+    subtext: 'Operating expenses and payouts',
+  },
+]
+
 const {
   runwayChartData,
   healthChartData,
@@ -112,6 +168,23 @@ function Dashboard() {
     'all' | 'income' | 'expense'
   >('all')
   const [fxInput, setFxInput] = useState<number>(100)
+  const [animatedHealthScore, setAnimatedHealthScore] = useState<number>(0)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimatedHealthScore(healthChartData[0].score)
+    }, 120)
+    return () => clearTimeout(timer)
+  }, [])
+
+  const currentHealthChartData = useMemo(() => {
+    return [
+      {
+        ...healthChartData[0],
+        score: animatedHealthScore,
+      },
+    ]
+  }, [animatedHealthScore])
 
   const filteredCashflowData = useMemo(() => {
     return cashflowDataMap[cashflowTimeframe]
@@ -133,17 +206,12 @@ function Dashboard() {
     }))
   }, [])
 
-  const period = [
-    { label: 'Select a period', value: null },
-    { label: 'This Month', value: 'this_month' },
-    { label: 'This Quarter', value: 'this_quarter' },
-    { label: 'This Year', value: 'this_year' },
-  ]
-
-  const filteredTx = allRecentTx.filter((tx) => {
-    if (recentTxFilter === 'all') return true
-    return tx.type === recentTxFilter
-  })
+  const filteredTx = useMemo(() => {
+    return allRecentTx.filter((tx) => {
+      if (recentTxFilter === 'all') return true
+      return tx.type === recentTxFilter
+    })
+  }, [allRecentTx, recentTxFilter])
 
   return (
     <div className="space-y-6 pb-12">
@@ -168,14 +236,18 @@ function Dashboard() {
           transition={{ ...m3Transition, delay: 0.1 }}
           className="flex items-center gap-3"
         >
-          <Select items={period}>
+          <Select items={PERIOD_OPTIONS}>
             <SelectTrigger className="w-full max-w-48 bg-card text-foreground font-semibold">
               <SelectValue placeholder="Select a Period" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {period.map((item) => (
-                  <SelectItem key={item.label} value={item.value}>
+                {PERIOD_OPTIONS.map((item) => (
+                  <SelectItem
+                    key={item.label}
+                    value={item.value}
+                    className="rounded-md"
+                  >
                     {item.label}
                   </SelectItem>
                 ))}
@@ -186,57 +258,7 @@ function Dashboard() {
       </div>
 
       <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3">
-        {[
-          {
-            title: 'Total Balance',
-            amount: 148250,
-            trend: '+12.5%',
-            isUp: true,
-            icon: Wallet,
-            containerClass:
-              'bg-primary text-primary-foreground border border-primary/20 shadow-none rounded-2xl',
-            iconClass: 'bg-white/20 text-white rounded-md',
-            trendClass: 'bg-white/20 text-white rounded-full',
-            progress: 82,
-            progressBg: 'bg-white/20',
-            progressFill: 'bg-white',
-            subtext: 'Liquid cash across bank accounts',
-          },
-          {
-            title: 'Total Income',
-            amount: 34120,
-            trend: '+8.2% vs last month',
-            isUp: true,
-            icon: ArrowUpRight,
-            containerClass:
-              'bg-card text-foreground border border-border shadow-none rounded-2xl',
-            iconClass:
-              'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-md',
-            trendClass:
-              'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full',
-            progress: 68,
-            progressBg: 'bg-muted',
-            progressFill: 'bg-emerald-500',
-            subtext: 'Collected revenue and receipts',
-          },
-          {
-            title: 'Total Expenses',
-            amount: 12450,
-            trend: '-2.4% vs last month',
-            isUp: false,
-            icon: ArrowDownRight,
-            containerClass:
-              'bg-card text-foreground border border-border shadow-none rounded-2xl',
-            iconClass:
-              'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-md',
-            trendClass:
-              'bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-full',
-            progress: 42,
-            progressBg: 'bg-muted',
-            progressFill: 'bg-rose-500',
-            subtext: 'Operating expenses and payouts',
-          },
-        ].map((card, idx) => (
+        {KPI_CARDS.map((card, idx) => (
           <motion.div
             key={idx}
             initial={{ opacity: 0, y: 20 }}
@@ -249,10 +271,10 @@ function Dashboard() {
               <div>
                 <div className="flex items-center justify-between gap-2">
                   <div className="space-y-1 min-w-0">
-                    <span className="text-[11px] sm:text-xs font-semibold opacity-80 tracking-wide uppercase truncate block">
+                    <span className="text-base sm:text-xs font-semibold opacity-80 tracking-wide truncate block">
                       {card.title}
                     </span>
-                    <h3 className="font-mono text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight truncate">
+                    <h3 className="font-mono text-3xl sm:text-3xl lg:text-4xl font-medium tracking-tight truncate">
                       <NumberTicker
                         value={card.amount}
                         formatter={(v) => formatAmount(v)}
@@ -268,14 +290,14 @@ function Dashboard() {
               </div>
 
               <div className="space-y-2.5 sm:space-y-3 pt-3">
-                <div
+                {/* <div
                   className={`h-2 sm:h-2.5 w-full rounded-full ${card.progressBg} overflow-hidden`}
                 >
                   <div
                     className={`h-full rounded-full ${card.progressFill}`}
                     style={{ width: `${card.progress}%` }}
                   />
-                </div>
+                </div> */}
 
                 <div className="flex items-center justify-between text-xs gap-2">
                   <span className="opacity-75 font-medium truncate">
@@ -591,62 +613,50 @@ function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 pb-0 px-6 pt-2">
-              <ChartContainer
-                config={healthChartConfig}
-                className="mx-auto aspect-square max-h-[250px]"
-              >
-                <RadialBarChart
-                  data={healthChartData}
-                  startAngle={0}
-                  endAngle={250}
-                  outerRadius={90}
-                  innerRadius={68}
+              <div className="relative mx-auto aspect-square max-h-[250px] w-full flex items-center justify-center">
+                <ChartContainer
+                  config={healthChartConfig}
+                  className="mx-auto aspect-square max-h-[250px] w-full select-none outline-none"
                 >
-                  <PolarGrid
-                    gridType="circle"
-                    radialLines={false}
-                    stroke="none"
-                    className="first:fill-muted last:fill-background"
-                    polarRadius={[90, 68]}
-                  />
-                  <RadialBar dataKey="score" background cornerRadius={10} />
-                  <PolarRadiusAxis
-                    tick={false}
-                    tickLine={false}
-                    axisLine={false}
+                  <RadialBarChart
+                    data={currentHealthChartData}
+                    startAngle={0}
+                    endAngle={250}
+                    outerRadius={90}
+                    innerRadius={68}
                   >
-                    <Label
-                      content={({ viewBox }) => {
-                        if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                          return (
-                            <text
-                              x={viewBox.cx}
-                              y={viewBox.cy}
-                              textAnchor="middle"
-                              dominantBaseline="middle"
-                            >
-                              <tspan
-                                x={viewBox.cx}
-                                y={viewBox.cy}
-                                className="fill-foreground text-4xl font-bold tracking-tight"
-                              >
-                                {healthChartData[0].score}%
-                              </tspan>
-                              <tspan
-                                x={viewBox.cx}
-                                y={(viewBox.cy || 0) + 24}
-                                className="fill-muted-foreground text-xs"
-                              >
-                                Health Score
-                              </tspan>
-                            </text>
-                          )
-                        }
-                      }}
+                    <PolarGrid
+                      gridType="circle"
+                      radialLines={false}
+                      stroke="none"
+                      className="first:fill-muted last:fill-background"
+                      polarRadius={[90, 68]}
                     />
-                  </PolarRadiusAxis>
-                </RadialBarChart>
-              </ChartContainer>
+                    <RadialBar
+                      dataKey="score"
+                      background
+                      cornerRadius={10}
+                      isAnimationActive={true}
+                      animationDuration={1500}
+                      animationEasing="ease-out"
+                      animationBegin={100}
+                    />
+                  </RadialBarChart>
+                </ChartContainer>
+
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none text-center">
+                  <span className="text-4xl font-bold tracking-tight font-mono text-foreground flex items-center justify-center">
+                    <NumberTicker
+                      value={healthChartData[0].score}
+                      suffix="%"
+                      delay={0.12}
+                    />
+                  </span>
+                  <span className="text-xs text-muted-foreground font-medium mt-1">
+                    Health Score
+                  </span>
+                </div>
+              </div>
 
               <div className="grid grid-cols-3 gap-2 pt-1 pb-2">
                 <div className="p-2.5 bg-muted/40 rounded-md border border-border text-center">

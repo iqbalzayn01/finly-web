@@ -31,6 +31,10 @@ export function AvatarImage({
   className,
   src,
   alt = '',
+  width = 32,
+  height = 32,
+  loading = 'lazy',
+  decoding = 'async',
   ...props
 }: AvatarImageProps) {
   const [hasError, setHasError] = React.useState(false)
@@ -42,6 +46,10 @@ export function AvatarImage({
       data-slot="avatar-image"
       src={src}
       alt={alt}
+      width={width}
+      height={height}
+      loading={loading}
+      decoding={decoding}
       onError={() => setHasError(true)}
       className={cn('aspect-square size-full object-cover', className)}
       {...props}
