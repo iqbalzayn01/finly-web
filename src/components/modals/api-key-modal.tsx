@@ -81,10 +81,11 @@ export function ApiKeyModal({
       }
     >
       <div className="space-y-4 py-2">
-        <div className="flex items-start gap-3 rounded-xl border border-border bg-muted/40 p-3.5">
+        <div className="flex items-start gap-3 rounded-md border border-border bg-muted/40 p-3.5">
           <ShieldCheck className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
           <div className="text-xs leading-relaxed text-muted-foreground">
-            Your API key is stored locally in your browser and transmitted directly to the model provider.
+            Your API key is stored locally in your browser and transmitted
+            directly to the model provider.
           </div>
         </div>
 
@@ -98,7 +99,7 @@ export function ApiKeyModal({
             value={keyInput}
             onChange={(e) => setKeyInput(e.target.value)}
             placeholder={`Enter your ${providerName} API key...`}
-            className="h-11 w-full border border-border bg-background rounded-xl px-4 text-sm font-mono font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+            className="h-11 w-full border border-border bg-background rounded-md px-4 text-sm font-mono font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
           />
         </div>
       </div>

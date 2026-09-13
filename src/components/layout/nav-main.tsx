@@ -2,7 +2,6 @@ import * as React from 'react'
 import { Link, useLocation } from '@tanstack/react-router'
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -24,9 +23,6 @@ export function NavMain({ items }: { items: NavigationItem[] }) {
 
   return (
     <SidebarGroup className="p-0 w-full">
-      <SidebarGroupLabel className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
-        {!isCollapsed && 'Platform'}
-      </SidebarGroupLabel>
       <SidebarMenu className="gap-1.5 w-full">
         {items.map((item) => {
           const Icon = item.icon
@@ -45,7 +41,7 @@ export function NavMain({ items }: { items: NavigationItem[] }) {
                 asChild
                 tooltip={item.title}
                 className={cn(
-                  'w-full justify-start h-9 sm:h-10 px-3 text-xs sm:text-sm font-semibold rounded-xl transition-all cursor-pointer select-none',
+                  'w-full justify-start h-9 sm:h-10 px-3 text-xs sm:text-sm font-semibold rounded-md transition-all cursor-pointer select-none',
                   isActive
                     ? 'bg-primary text-primary-foreground font-bold hover:bg-primary hover:text-primary-foreground'
                     : 'text-muted-foreground hover:bg-muted/70 hover:text-foreground',

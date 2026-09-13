@@ -22,6 +22,7 @@ import {
 } from '../ui/select'
 import { useCurrency } from '../../lib/currency'
 import type { CurrencyCode } from '../../lib/currency'
+import { runValidation, quickEntrySchema } from '../../lib/validation'
 
 export const QUICK_ENTRY_CATEGORIES = [
   {
@@ -123,6 +124,7 @@ export function QuickEntryModal({
   const [scope, setScope] = React.useState<'business' | 'personal'>('business')
   const [description, setDescription] = React.useState<string>('')
   const [activeKey, setActiveKey] = React.useState<string | null>(null)
+  const [errors, setErrors] = React.useState<Record<string, string>>({})
 
   const descriptionInputRef = React.useRef<HTMLInputElement>(null)
 
@@ -131,6 +133,7 @@ export function QuickEntryModal({
       setEntryAmount('0')
       setDescription('')
       setActiveKey(null)
+      setErrors({})
     }
   }, [open])
 
@@ -142,6 +145,13 @@ export function QuickEntryModal({
       setTimeout(() => {
         setActiveKey((curr) => (curr === val ? null : curr))
       }, 150)
+
+      setErrors((prev) => {
+        if (!prev.amount) return prev
+        const updated = { ...prev }
+        delete updated.amount
+        return updated
+      })
 
       if (val === 'C') {
         setEntryAmount('0')
@@ -170,18 +180,33 @@ export function QuickEntryModal({
 
   const submitTransaction = React.useCallback(() => {
     const parsedAmount = parseInt(entryAmount, 10) || 0
-    if (parsedAmount <= 0) return
+    const selectedCategory =
+      category ||
+      (txType === 'income'
+        ? 'General / Primary Income'
+        : 'Software, apps, games')
 
-    onSave?.({
+    const validation = runValidation(quickEntrySchema, {
       type: txType,
       amount: parsedAmount,
       currency: activeCurrency,
-      category:
-        category ||
-        (txType === 'income'
-          ? 'General / Primary Income'
-          : 'Software, SaaS & Subscriptions'),
+      category: selectedCategory,
       scope,
+      description: description.trim(),
+    })
+
+    if (!validation.success) {
+      setErrors(validation.errors)
+      return
+    }
+
+    setErrors({})
+    onSave?.({
+      type: validation.data.type,
+      amount: validation.data.amount,
+      currency: activeCurrency,
+      category: selectedCategory,
+      scope: validation.data.scope,
       description:
         description.trim() ||
         (txType === 'income' ? 'Client Payment' : 'Operating Expense'),
@@ -307,7 +332,7 @@ export function QuickEntryModal({
                     <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-border mb-4 sm:mb-5">
                       <div className="flex items-center gap-2.5">
                         <div
-                          className={`flex h-9 w-9 items-center justify-center rounded-xl border shrink-0 ${
+                          className={`flex h-9 w-9 items-center justify-center rounded-md border shrink-0 ${
                             txType === 'income'
                               ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
                               : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20'
@@ -338,8 +363,11 @@ export function QuickEntryModal({
                       </BaseDialog.Close>
                     </div>
 
-                    <form onSubmit={handleSave} className="space-y-4 sm:space-y-5">
-                      <div className="grid grid-cols-2 gap-1.5 p-1 bg-muted/50 border border-border rounded-xl">
+                    <form
+                      onSubmit={handleSave}
+                      className="space-y-4 sm:space-y-5"
+                    >
+                      <div className="grid grid-cols-2 gap-1.5 p-1 bg-muted/50 border border-border rounded-md">
                         <button
                           type="button"
                           onClick={() => setTxType('expense')}
@@ -374,7 +402,11 @@ export function QuickEntryModal({
 
                       <div
                         data-quick-entry="amount"
-                        className="text-center py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl bg-muted/30 border border-border transition-all"
+                        className={`text-center py-2.5 sm:py-3 px-3 sm:px-4 rounded-md bg-muted/30 border transition-all ${
+                          errors.amount
+                            ? 'border-destructive ring-2 ring-destructive/20'
+                            : 'border-border'
+                        }`}
                       >
                         <div className="flex items-center justify-center gap-1.5 mb-0.5 sm:mb-1 text-muted-foreground">
                           <Keyboard className="h-3.5 w-3.5" />
@@ -399,6 +431,11 @@ export function QuickEntryModal({
                         >
                           {displayFormatted}
                         </motion.div>
+                        {errors.amount && (
+                          <p className="text-[11px] font-semibold text-destructive mt-1">
+                            {errors.amount}
+                          </p>
+                        )}
                       </div>
 
                       <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
@@ -424,7 +461,7 @@ export function QuickEntryModal({
                               key={item.label}
                               type="button"
                               onClick={() => handleNumpad(item.val)}
-                              className={`h-10 sm:h-11 border border-border text-sm sm:text-base font-semibold rounded-xl shadow-none transition-all cursor-pointer outline-none flex items-center justify-center ${
+                              className={`h-10 sm:h-11 border border-border text-sm sm:text-base font-semibold rounded-md shadow-none transition-all cursor-pointer outline-none flex items-center justify-center ${
                                 isPressed
                                   ? 'bg-primary text-primary-foreground border-primary scale-95 ring-2 ring-primary/40'
                                   : 'bg-card text-foreground hover:bg-accent hover:text-accent-foreground active:scale-95'
@@ -485,10 +522,10 @@ export function QuickEntryModal({
                                   : 'software-apps-games'
                               }
                             >
-                              <SelectTrigger className="w-full h-10 rounded-xl border border-border bg-card text-xs font-semibold">
+                              <SelectTrigger className="w-full h-10 rounded-md border border-border bg-card text-xs font-semibold">
                                 <SelectValue placeholder="Select category" />
                               </SelectTrigger>
-                              <SelectContent className="rounded-xl">
+                              <SelectContent className="rounded-md">
                                 {QUICK_ENTRY_CATEGORIES.map((catGroup) => (
                                   <SelectGroup key={catGroup.group}>
                                     <SelectLabel className="font-bold text-[10px] text-muted-foreground uppercase">
@@ -528,10 +565,10 @@ export function QuickEntryModal({
                               }
                               defaultValue="business"
                             >
-                              <SelectTrigger className="w-full h-10 rounded-xl border border-border bg-card text-xs font-semibold">
+                              <SelectTrigger className="w-full h-10 rounded-md border border-border bg-card text-xs font-semibold">
                                 <SelectValue placeholder="Scope" />
                               </SelectTrigger>
-                              <SelectContent className="rounded-xl">
+                              <SelectContent className="rounded-md">
                                 <SelectItem value="business">
                                   <div className="flex items-center gap-2">
                                     <Building2 className="h-3.5 w-3.5 text-primary" />
@@ -557,10 +594,28 @@ export function QuickEntryModal({
                             ref={descriptionInputRef}
                             type="text"
                             value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            onChange={(e) => {
+                              setDescription(e.target.value)
+                              if (errors.description) {
+                                setErrors((prev) => {
+                                  const updated = { ...prev }
+                                  delete updated.description
+                                  return updated
+                                })
+                              }
+                            }}
                             placeholder="e.g. AWS Cloud, Client Retainer, Office Supplies"
-                            className="w-full h-10 border border-border bg-background rounded-xl px-3.5 text-xs font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                            className={`w-full h-10 border bg-background rounded-md px-3.5 text-xs font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                              errors.description
+                                ? 'border-destructive'
+                                : 'border-border'
+                            }`}
                           />
+                          {errors.description && (
+                            <p className="text-[11px] font-semibold text-destructive mt-1">
+                              {errors.description}
+                            </p>
+                          )}
                         </div>
                       </div>
 
@@ -569,14 +624,14 @@ export function QuickEntryModal({
                           type="button"
                           variant="outline"
                           onClick={() => onOpenChange(false)}
-                          className="rounded-xl h-10 text-xs px-4 font-semibold"
+                          className="rounded-md h-10 text-xs px-4 font-semibold"
                         >
                           Cancel
                         </Button>
                         <Button
                           type="submit"
                           disabled={parseInt(entryAmount, 10) <= 0}
-                          className="rounded-xl h-10 text-xs px-5 font-bold"
+                          className="rounded-md h-10 text-xs px-5 font-bold"
                         >
                           Record Transaction
                         </Button>

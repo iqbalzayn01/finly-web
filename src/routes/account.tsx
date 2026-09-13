@@ -8,6 +8,11 @@ import { AlertModal } from '../components/ui/alert-modal'
 import { Modal } from '../components/ui/modal'
 import { useSubscription } from '../lib/subscription'
 import { cn } from '../lib/utils'
+import {
+  runValidation,
+  accountProfileSchema,
+  changePasswordSchema,
+} from '../lib/validation'
 
 export const Route = createFileRoute('/account')({
   component: Account,
@@ -18,8 +23,50 @@ function Account() {
   const [avatarModalOpen, setAvatarModalOpen] = useState(false)
   const [saveModalOpen, setSaveModalOpen] = useState(false)
   const [passwordModalOpen, setPasswordModalOpen] = useState(false)
+  const [passwordSuccessModal, setPasswordSuccessModal] = useState(false)
   const [twoFactorModalOpen, setTwoFactorModalOpen] = useState(false)
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false)
+
+  const [fullName, setFullName] = useState('Alex Morgan')
+  const [email, setEmail] = useState('alex.morgan@finly.io')
+  const [profileErrors, setProfileErrors] = useState<Record<string, string>>({})
+
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  })
+  const [passwordErrors, setPasswordErrors] = useState<Record<string, string>>(
+    {},
+  )
+
+  const handleSaveProfile = () => {
+    const res = runValidation(accountProfileSchema, { fullName, email })
+    if (!res.success) {
+      setProfileErrors(res.errors)
+      return
+    }
+
+    setProfileErrors({})
+    setSaveModalOpen(true)
+  }
+
+  const handleUpdatePassword = () => {
+    const res = runValidation(changePasswordSchema, passwordForm)
+    if (!res.success) {
+      setPasswordErrors(res.errors)
+      return
+    }
+
+    setPasswordErrors({})
+    setPasswordModalOpen(false)
+    setPasswordForm({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    })
+    setPasswordSuccessModal(true)
+  }
 
   return (
     <motion.div
@@ -32,7 +79,8 @@ function Account() {
           Account
         </h1>
         <p className="mt-1 sm:mt-1.5 text-xs sm:text-sm text-muted-foreground">
-          Manage user credentials, personal details, and authentication security.
+          Manage user credentials, personal details, and authentication
+          security.
         </p>
       </div>
 
@@ -87,38 +135,74 @@ function Account() {
         <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
           <div className="space-y-1.5 sm:space-y-2">
             <label className="text-xs font-semibold text-foreground">
-              Full Name
+              Full Name <span className="text-destructive">*</span>
             </label>
             <div className="relative">
               <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
               <input
                 type="text"
+                value={fullName}
+                onChange={(e) => {
+                  setFullName(e.target.value)
+                  if (profileErrors.fullName) {
+                    setProfileErrors((prev) => {
+                      const updated = { ...prev }
+                      delete updated.fullName
+                      return updated
+                    })
+                  }
+                }}
                 placeholder="Full Name"
-                defaultValue="Alex Morgan"
-                className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                className={`h-11 w-full border bg-background rounded-md pl-10 pr-4 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                  profileErrors.fullName
+                    ? 'border-destructive'
+                    : 'border-border'
+                }`}
               />
             </div>
+            {profileErrors.fullName && (
+              <p className="text-[11px] font-semibold text-destructive mt-1">
+                {profileErrors.fullName}
+              </p>
+            )}
           </div>
           <div className="space-y-1.5 sm:space-y-2">
             <label className="text-xs font-semibold text-foreground">
-              Email Address
+              Email Address <span className="text-destructive">*</span>
             </label>
             <div className="relative">
               <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
               <input
                 type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  if (profileErrors.email) {
+                    setProfileErrors((prev) => {
+                      const updated = { ...prev }
+                      delete updated.email
+                      return updated
+                    })
+                  }
+                }}
                 placeholder="Email Address"
-                defaultValue="alex.morgan@finly.io"
-                className="h-11 w-full border border-border bg-background rounded-xl pl-10 pr-4 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                className={`h-11 w-full border bg-background rounded-md pl-10 pr-4 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                  profileErrors.email ? 'border-destructive' : 'border-border'
+                }`}
               />
             </div>
+            {profileErrors.email && (
+              <p className="text-[11px] font-semibold text-destructive mt-1">
+                {profileErrors.email}
+              </p>
+            )}
           </div>
         </div>
 
         <div className="mt-6 sm:mt-8 flex justify-end">
           <Button
-            className="w-full sm:w-auto px-6"
-            onClick={() => setSaveModalOpen(true)}
+            className="w-full sm:w-auto px-6 font-semibold"
+            onClick={handleSaveProfile}
           >
             Save Changes
           </Button>
@@ -149,7 +233,10 @@ function Account() {
               variant="outline"
               size="sm"
               className="self-start sm:self-auto text-xs"
-              onClick={() => setPasswordModalOpen(true)}
+              onClick={() => {
+                setPasswordErrors({})
+                setPasswordModalOpen(true)
+              }}
             >
               Change Password
             </Button>
@@ -198,6 +285,15 @@ function Account() {
         confirmText="Got it"
       />
 
+      <AlertModal
+        open={passwordSuccessModal}
+        onOpenChange={setPasswordSuccessModal}
+        type="success"
+        title="Password Updated"
+        description="Your account password has been successfully changed."
+        confirmText="Got it"
+      />
+
       <Modal
         open={passwordModalOpen}
         onOpenChange={setPasswordModalOpen}
@@ -213,7 +309,7 @@ function Account() {
             >
               Cancel
             </Button>
-            <Button size="sm" onClick={() => setPasswordModalOpen(false)}>
+            <Button size="sm" onClick={handleUpdatePassword}>
               Update Password
             </Button>
           </div>
@@ -222,23 +318,102 @@ function Account() {
         <div className="space-y-4 py-2">
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-foreground">
-              Current Password
+              Current Password <span className="text-destructive">*</span>
             </label>
             <input
               type="password"
+              value={passwordForm.currentPassword}
+              onChange={(e) => {
+                setPasswordForm((prev) => ({
+                  ...prev,
+                  currentPassword: e.target.value,
+                }))
+                if (passwordErrors.currentPassword) {
+                  setPasswordErrors((prev) => {
+                    const updated = { ...prev }
+                    delete updated.currentPassword
+                    return updated
+                  })
+                }
+              }}
               placeholder="••••••••••••"
-              className="h-10 w-full border border-border bg-background rounded-xl px-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground"
+              className={`h-10 w-full border bg-background rounded-md px-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground ${
+                passwordErrors.currentPassword
+                  ? 'border-destructive'
+                  : 'border-border'
+              }`}
             />
+            {passwordErrors.currentPassword && (
+              <p className="text-[11px] font-semibold text-destructive mt-1">
+                {passwordErrors.currentPassword}
+              </p>
+            )}
           </div>
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-foreground">
-              New Password
+              New Password <span className="text-destructive">*</span>
             </label>
             <input
               type="password"
-              placeholder="Minimum 8 characters"
-              className="h-10 w-full border border-border bg-background rounded-xl px-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground"
+              value={passwordForm.newPassword}
+              onChange={(e) => {
+                setPasswordForm((prev) => ({
+                  ...prev,
+                  newPassword: e.target.value,
+                }))
+                if (passwordErrors.newPassword) {
+                  setPasswordErrors((prev) => {
+                    const updated = { ...prev }
+                    delete updated.newPassword
+                    return updated
+                  })
+                }
+              }}
+              placeholder="Minimum 8 characters (mixed case + number)"
+              className={`h-10 w-full border bg-background rounded-md px-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground ${
+                passwordErrors.newPassword
+                  ? 'border-destructive'
+                  : 'border-border'
+              }`}
             />
+            {passwordErrors.newPassword && (
+              <p className="text-[11px] font-semibold text-destructive mt-1">
+                {passwordErrors.newPassword}
+              </p>
+            )}
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-foreground">
+              Confirm New Password <span className="text-destructive">*</span>
+            </label>
+            <input
+              type="password"
+              value={passwordForm.confirmPassword}
+              onChange={(e) => {
+                setPasswordForm((prev) => ({
+                  ...prev,
+                  confirmPassword: e.target.value,
+                }))
+                if (passwordErrors.confirmPassword) {
+                  setPasswordErrors((prev) => {
+                    const updated = { ...prev }
+                    delete updated.confirmPassword
+                    return updated
+                  })
+                }
+              }}
+              placeholder="Re-enter new password"
+              className={`h-10 w-full border bg-background rounded-md px-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground ${
+                passwordErrors.confirmPassword
+                  ? 'border-destructive'
+                  : 'border-border'
+              }`}
+            />
+            {passwordErrors.confirmPassword && (
+              <p className="text-[11px] font-semibold text-destructive mt-1">
+                {passwordErrors.confirmPassword}
+              </p>
+            )}
           </div>
         </div>
       </Modal>
@@ -271,13 +446,14 @@ function Account() {
         }
       >
         <div className="space-y-4 py-2">
-          <div className="flex items-center gap-3 p-3.5 rounded-xl bg-muted/40 border border-border">
+          <div className="flex items-center gap-3 p-3.5 rounded-md bg-muted/40 border border-border">
             <ShieldAlert className="h-6 w-6 text-primary shrink-0" />
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Scan this code with an authenticator app (such as Google Authenticator or 1Password), then confirm.
+              Scan this code with an authenticator app (such as Google
+              Authenticator or 1Password), then confirm.
             </p>
           </div>
-          <div className="flex justify-center p-4 bg-white dark:bg-card border border-border rounded-xl">
+          <div className="flex justify-center p-4 bg-white dark:bg-card border border-border rounded-md">
             <div className="h-28 w-28 bg-muted rounded-lg flex items-center justify-center font-mono text-xs text-muted-foreground border border-dashed border-border">
               [ QR Code ]
             </div>

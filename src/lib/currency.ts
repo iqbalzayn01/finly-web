@@ -92,8 +92,7 @@ export function getSavedCurrency(): CurrencyCode {
         return parsed.currency as CurrencyCode
       }
     }
-  } catch {
-  }
+  } catch {}
   return 'USD'
 }
 
@@ -141,6 +140,14 @@ export function formatAmount(
   )
 }
 
+export function majorToMinor(amountInMajor: number): number {
+  return Math.round((amountInMajor || 0) * 100)
+}
+
+export function minorToMajor(amountInCents: number): number {
+  return (amountInCents || 0) / 100
+}
+
 export function getCurrencySymbol(currencyCode: CurrencyCode = 'USD'): string {
   return SUPPORTED_CURRENCIES[currencyCode].symbol
 }
@@ -184,8 +191,7 @@ export function useCurrency() {
       const existing = raw ? JSON.parse(raw) : {}
       const updated = { ...existing, currency: newCurrency }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
-    } catch {
-    }
+    } catch {}
 
     if (typeof window !== 'undefined') {
       window.dispatchEvent(

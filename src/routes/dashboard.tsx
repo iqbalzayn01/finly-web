@@ -97,8 +97,12 @@ const TIMEFRAME_OPTIONS: { label: string; value: CashflowTimeframe }[] = [
   { label: '5Y', value: '5y' },
 ]
 
-const { runwayChartData, healthChartData, cashflowDataMap, recentTransactions } =
-  dashboardData
+const {
+  runwayChartData,
+  healthChartData,
+  cashflowDataMap,
+  recentTransactions,
+} = dashboardData
 
 function Dashboard() {
   const { symbol, formatAmount } = useCurrency()
@@ -191,7 +195,7 @@ function Dashboard() {
             icon: Wallet,
             containerClass:
               'bg-primary text-primary-foreground border border-primary/20 shadow-none rounded-2xl',
-            iconClass: 'bg-white/20 text-white rounded-xl',
+            iconClass: 'bg-white/20 text-white rounded-md',
             trendClass: 'bg-white/20 text-white rounded-full',
             progress: 82,
             progressBg: 'bg-white/20',
@@ -207,7 +211,7 @@ function Dashboard() {
             containerClass:
               'bg-card text-foreground border border-border shadow-none rounded-2xl',
             iconClass:
-              'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-xl',
+              'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-md',
             trendClass:
               'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full',
             progress: 68,
@@ -224,7 +228,7 @@ function Dashboard() {
             containerClass:
               'bg-card text-foreground border border-border shadow-none rounded-2xl',
             iconClass:
-              'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-xl',
+              'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-md',
             trendClass:
               'bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-full',
             progress: 42,
@@ -311,7 +315,7 @@ function Dashboard() {
               </CardDescription>
             </div>
 
-            <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-xl self-start sm:self-auto overflow-x-auto max-w-full">
+            <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-md self-start sm:self-auto overflow-x-auto max-w-full">
               {TIMEFRAME_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
@@ -450,7 +454,7 @@ function Dashboard() {
             <div>
               <div className="flex items-center justify-between mb-4 gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20">
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                   <div className="truncate">
@@ -533,7 +537,8 @@ function Dashboard() {
                   </LineChart>
                 </ChartContainer>
                 <p className="text-[11px] text-muted-foreground leading-relaxed pt-1">
-                  14.2 months of operating expenses covered at current burn rate.
+                  14.2 months of operating expenses covered at current burn
+                  rate.
                 </p>
               </div>
             </div>
@@ -588,21 +593,21 @@ function Dashboard() {
             <CardContent className="flex-1 pb-0 px-6 pt-2">
               <ChartContainer
                 config={healthChartConfig}
-                className="mx-auto aspect-square max-h-[220px]"
+                className="mx-auto aspect-square max-h-[250px]"
               >
                 <RadialBarChart
                   data={healthChartData}
                   startAngle={0}
-                  endAngle={240}
+                  endAngle={250}
                   outerRadius={90}
-                  innerRadius={76}
+                  innerRadius={68}
                 >
                   <PolarGrid
                     gridType="circle"
                     radialLines={false}
                     stroke="none"
-                    className="first:fill-muted/60 last:fill-background"
-                    polarRadius={[90, 76]}
+                    className="first:fill-muted last:fill-background"
+                    polarRadius={[90, 68]}
                   />
                   <RadialBar dataKey="score" background cornerRadius={10} />
                   <PolarRadiusAxis
@@ -630,7 +635,7 @@ function Dashboard() {
                               <tspan
                                 x={viewBox.cx}
                                 y={(viewBox.cy || 0) + 24}
-                                className="fill-muted-foreground text-xs font-semibold uppercase tracking-wider"
+                                className="fill-muted-foreground text-xs"
                               >
                                 Health Score
                               </tspan>
@@ -644,31 +649,23 @@ function Dashboard() {
               </ChartContainer>
 
               <div className="grid grid-cols-3 gap-2 pt-1 pb-2">
-                <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
+                <div className="p-2.5 bg-muted/40 rounded-md border border-border text-center">
                   <p className="text-[11px] text-muted-foreground font-medium">
                     Operating Margin
                   </p>
                   <p className="font-mono text-sm font-bold text-foreground mt-0.5">
-                    <NumberTicker
-                      value={63.4}
-                      decimalPlaces={1}
-                      suffix="%"
-                    />
+                    <NumberTicker value={63.4} decimalPlaces={1} suffix="%" />
                   </p>
                 </div>
-                <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
+                <div className="p-2.5 bg-muted/40 rounded-md border border-border text-center">
                   <p className="text-[11px] text-muted-foreground font-medium">
                     Collection Rate
                   </p>
                   <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
-                    <NumberTicker
-                      value={96.5}
-                      decimalPlaces={1}
-                      suffix="%"
-                    />
+                    <NumberTicker value={96.5} decimalPlaces={1} suffix="%" />
                   </p>
                 </div>
-                <div className="p-2.5 bg-muted/40 rounded-xl border border-border text-center">
+                <div className="p-2.5 bg-muted/40 rounded-md border border-border text-center">
                   <p className="text-[11px] text-muted-foreground font-medium">
                     DSO
                   </p>
@@ -702,7 +699,7 @@ function Dashboard() {
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20 shrink-0">
+                <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20 shrink-0">
                   <Receipt className="h-4 w-4" />
                 </div>
                 <div>
@@ -716,7 +713,7 @@ function Dashboard() {
               </div>
 
               <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto">
-                <div className="flex items-center gap-1 sm:gap-1.5 p-1 bg-muted/50 rounded-xl overflow-x-auto">
+                <div className="flex items-center gap-1 sm:gap-1.5 p-1 bg-muted/50 rounded-md overflow-x-auto">
                   {(['all', 'income', 'expense'] as const).map((filterType) => (
                     <button
                       key={filterType}
@@ -738,7 +735,7 @@ function Dashboard() {
 
                 <Link
                   to="/cashbook"
-                  className="text-xs font-bold text-primary hover:underline px-2.5 py-1 rounded-xl hover:bg-primary/5 transition-colors flex items-center gap-1 shrink-0"
+                  className="text-xs font-bold text-primary hover:underline px-2.5 py-1 rounded-md hover:bg-primary/5 transition-colors flex items-center gap-1 shrink-0"
                 >
                   <span>View All</span>
                   <ArrowUpRight className="h-3.5 w-3.5" />
@@ -746,7 +743,7 @@ function Dashboard() {
               </div>
             </div>
 
-            <div className="divide-y divide-border rounded-xl border border-border overflow-hidden bg-background/50">
+            <div className="divide-y divide-border rounded-md border border-border overflow-hidden bg-background/50">
               {filteredTx.length === 0 ? (
                 <p className="py-10 text-center text-xs text-muted-foreground font-medium">
                   No transactions recorded.
@@ -759,7 +756,7 @@ function Dashboard() {
                   >
                     <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1">
                       <div
-                        className={`flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl border ${tx.color}`}
+                        className={`flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-md border ${tx.color}`}
                       >
                         <tx.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                       </div>
@@ -846,7 +843,7 @@ function Dashboard() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
+                <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20">
                   <Globe className="h-4 w-4" />
                 </div>
                 <h2 className="text-lg font-semibold text-foreground">
@@ -869,7 +866,7 @@ function Dashboard() {
                 onChange={(e) =>
                   setFxInput(Math.max(0, parseFloat(e.target.value) || 0))
                 }
-                className="w-full h-10 bg-background border border-border rounded-xl pl-8 pr-16 text-sm font-bold font-mono outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground"
+                className="w-full h-10 bg-background border border-border rounded-md pl-8 pr-16 text-sm font-bold font-mono outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground"
                 placeholder="Enter USD amount..."
               />
               <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-primary">
@@ -902,7 +899,7 @@ function Dashboard() {
               ].map((fx, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-3 rounded-xl border border-border bg-muted/30 hover:bg-accent/40 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-md border border-border bg-muted/30 hover:bg-accent/40 transition-colors"
                 >
                   <div>
                     <span className="text-xs font-semibold text-foreground block">

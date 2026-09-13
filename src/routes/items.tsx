@@ -21,6 +21,7 @@ import {
 import { useDebouncedSearch } from '../hooks/use-debounced-search'
 import { useCurrency } from '../lib/currency'
 import { NumberTicker } from '../components/ui/number-ticker'
+import { runValidation, itemFormSchema } from '../lib/validation'
 import initialItems from '../data/items.json'
 
 export const Route = createFileRoute('/items')({
@@ -55,6 +56,31 @@ function Items() {
   }>({
     open: false,
   })
+  const [newItem, setNewItem] = useState({
+    name: '',
+    price: 0,
+    unit: '',
+    taxRate: 11,
+    active: true,
+  })
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({})
+
+  const handleCreateItem = () => {
+    const res = runValidation(itemFormSchema, newItem)
+    if (!res.success) {
+      setFormErrors(res.errors)
+      return
+    }
+
+    setFormErrors({})
+    setShowForm(false)
+    setItemModal({
+      open: true,
+      type: 'success',
+      title: 'Item Created',
+      desc: `Catalog item ${res.data.name} added.`,
+    })
+  }
 
   const {
     inputQuery,
@@ -111,7 +137,7 @@ function Items() {
               value={inputQuery}
               onChange={(e) => setInputQuery(e.target.value)}
               placeholder="Search catalog..."
-              className="w-full h-11 border border-border bg-background rounded-xl pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+              className="w-full h-11 border border-border bg-background rounded-md pl-10 pr-24 text-xs sm:text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
             />
             {isTooShort && (
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] sm:text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 border border-amber-300 dark:border-amber-800 rounded-full">
@@ -125,10 +151,10 @@ function Items() {
               value={statusFilter}
               onValueChange={(val) => setStatusFilter(val || 'all')}
             >
-              <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-xl">
+              <SelectTrigger className="w-full h-11 border border-border shadow-none text-xs sm:text-sm font-medium bg-card text-foreground rounded-md">
                 <SelectValue placeholder="All Statuses" />
               </SelectTrigger>
-              <SelectContent className="rounded-xl">
+              <SelectContent className="rounded-md">
                 {STATUS_OPTIONS.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -196,7 +222,7 @@ function Items() {
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center border border-border bg-accent/40 text-accent-foreground rounded-xl transition-all">
+                        <div className="flex h-10 w-10 items-center justify-center border border-border bg-accent/40 text-accent-foreground rounded-md transition-all">
                           <Box className="h-4 w-4" />
                         </div>
                         <span className="font-semibold text-sm text-foreground">
@@ -248,7 +274,7 @@ function Items() {
                               stiffness: 450,
                               damping: 28,
                             }}
-                            className="absolute right-12 top-10 w-36 border border-border bg-card p-1.5 rounded-xl shadow-none z-20 text-left flex flex-col gap-0.5"
+                            className="absolute right-12 top-10 w-36 border border-border bg-card p-1.5 rounded-md shadow-none z-20 text-left flex flex-col gap-0.5"
                           >
                             <button
                               onClick={() => {
@@ -308,7 +334,7 @@ function Items() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-lg border border-border bg-card p-8 rounded-2xl shadow-none"
+              className="relative w-full max-w-lg border border-border bg-card p-6 sm:p-8 rounded-2xl shadow-none max-h-[90vh] overflow-y-auto"
             >
               <h2 className="text-xl font-bold text-foreground mb-6">
                 New Item
@@ -316,52 +342,103 @@ function Items() {
               <div className="space-y-4">
                 <div>
                   <label className="text-xs font-semibold text-foreground">
-                    Item Name
+                    Item Name <span className="text-destructive">*</span>
                   </label>
                   <input
                     type="text"
+                    value={newItem.name}
+                    onChange={(e) => {
+                      setNewItem((prev) => ({ ...prev, name: e.target.value }))
+                      if (formErrors.name) {
+                        setFormErrors((prev) => {
+                          const updated = { ...prev }
+                          delete updated.name
+                          return updated
+                        })
+                      }
+                    }}
                     placeholder="Enter item name"
-                    className="mt-1.5 h-11 w-full border border-border bg-background rounded-xl px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                    className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                      formErrors.name ? 'border-destructive' : 'border-border'
+                    }`}
                   />
+                  {formErrors.name && (
+                    <p className="text-[11px] font-semibold text-destructive mt-1">
+                      {formErrors.name}
+                    </p>
+                  )}
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs font-semibold text-foreground">
-                      Price (USD)
+                      Price <span className="text-destructive">*</span>
                     </label>
                     <input
                       type="number"
+                      value={newItem.price || ''}
+                      onChange={(e) => {
+                        setNewItem((prev) => ({
+                          ...prev,
+                          price: parseFloat(e.target.value) || 0,
+                        }))
+                        if (formErrors.price) {
+                          setFormErrors((prev) => {
+                            const updated = { ...prev }
+                            delete updated.price
+                            return updated
+                          })
+                        }
+                      }}
                       placeholder="0.00"
-                      className="mt-1.5 h-11 w-full border border-border bg-background rounded-xl px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground font-mono"
+                      className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground font-mono ${
+                        formErrors.price
+                          ? 'border-destructive'
+                          : 'border-border'
+                      }`}
                     />
+                    {formErrors.price && (
+                      <p className="text-[11px] font-semibold text-destructive mt-1">
+                        {formErrors.price}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label className="text-xs font-semibold text-foreground">
-                      Unit
+                      Unit <span className="text-destructive">*</span>
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. hour, month"
-                      className="mt-1.5 h-11 w-full border border-border bg-background rounded-xl px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+                      value={newItem.unit}
+                      onChange={(e) => {
+                        setNewItem((prev) => ({
+                          ...prev,
+                          unit: e.target.value,
+                        }))
+                        if (formErrors.unit) {
+                          setFormErrors((prev) => {
+                            const updated = { ...prev }
+                            delete updated.unit
+                            return updated
+                          })
+                        }
+                      }}
+                      placeholder="e.g. hour, project, month"
+                      className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                        formErrors.unit ? 'border-destructive' : 'border-border'
+                      }`}
                     />
+                    {formErrors.unit && (
+                      <p className="text-[11px] font-semibold text-destructive mt-1">
+                        {formErrors.unit}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex justify-end gap-3 mt-8">
                   <Button variant="outline" onClick={() => setShowForm(false)}>
                     Cancel
                   </Button>
-                  <Button
-                    className="px-6"
-                    onClick={() => {
-                      setShowForm(false)
-                      setItemModal({
-                        open: true,
-                        type: 'success',
-                        title: 'Item Created',
-                        desc: 'Catalog item added.',
-                      })
-                    }}
-                  >
+                  <Button className="px-6" onClick={handleCreateItem}>
                     Save Item
                   </Button>
                 </div>

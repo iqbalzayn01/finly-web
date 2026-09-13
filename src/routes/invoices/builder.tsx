@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { ArrowLeft, Plus, Save, Send, Trash2 } from '../../components/ui/icon'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../../components/ui/button'
 import { AlertModal } from '../../components/ui/alert-modal'
@@ -13,6 +13,8 @@ import {
 } from '../../components/ui/select'
 import { useCurrency } from '../../lib/currency'
 import { NumberTicker } from '../../components/ui/number-ticker'
+import { calculateInvoiceTotals } from '../../lib/invoicing'
+import { runValidation, invoiceBuilderSchema } from '../../lib/validation'
 import customersData from '../../data/customers.json'
 
 export const Route = createFileRoute('/invoices/builder')({
@@ -30,6 +32,20 @@ function InvoiceBuilder() {
   const { formatAmount } = useCurrency()
   const navigate = useNavigate()
   const [draftSavedModal, setDraftSavedModal] = useState(false)
+  const [errorModal, setErrorModal] = useState<{
+    open: boolean
+    message: string
+  }>({
+    open: false,
+    message: '',
+  })
+  const [customer, setCustomer] = useState<string>(
+    customersData[0]?.name.toLowerCase().replace(/\s+/g, '-') || '',
+  )
+  const [issueDate, setIssueDate] = useState<string>('2026-08-01')
+  const [dueDate, setDueDate] = useState<string>('2026-08-15')
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
   const [items, setItems] = useState<LineItem[]>([
     {
       id: '1',
@@ -44,6 +60,14 @@ function InvoiceBuilder() {
     setItems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
     )
+    setErrors((prev) => {
+      const updated = { ...prev }
+      const index = items.findIndex((i) => i.id === id)
+      if (index !== -1) {
+        delete updated[`items.${index}.${field}`]
+      }
+      return updated
+    })
   }
 
   const addItem = () => {
@@ -56,11 +80,57 @@ function InvoiceBuilder() {
   const removeItem = (id: string) => {
     if (items.length <= 1) return
     setItems((prev) => prev.filter((item) => item.id !== id))
+    setErrors({})
   }
 
-  const subtotal = items.reduce((acc, item) => acc + item.qty * item.price, 0)
-  const tax = Math.round(subtotal * 0.11)
-  const total = subtotal + tax
+  const totals = useMemo(() => {
+    return calculateInvoiceTotals({
+      items: items.map((i) => ({
+        description: i.description,
+        quantityMilli: Math.round(i.qty * 1000),
+        unitPriceInCents: Math.round(i.price * 100),
+        taxBps: 1100,
+      })),
+      taxBps: 1100,
+    })
+  }, [items])
+
+  const subtotal = totals.subtotalInCents / 100
+  const tax = totals.taxAmountInCents / 100
+  const total = totals.totalInCents / 100
+
+  const handleIssueInvoice = () => {
+    const res = runValidation(invoiceBuilderSchema, {
+      customerId: customer,
+      issueDate,
+      dueDate,
+      items,
+      taxRate: 11,
+      discountRate: 0,
+    })
+
+    if (!res.success) {
+      setErrors(res.errors)
+      setErrorModal({
+        open: true,
+        message:
+          res.firstError ||
+          'Please complete all required fields with valid values.',
+      })
+      return
+    }
+
+    setErrors({})
+    navigate({ to: '/invoices/$id', params: { id: 'INV-2026-001' } })
+  }
+
+  const handleSaveDraft = () => {
+    if (!customer) {
+      setErrors({ customerId: 'Please select a customer before saving' })
+      return
+    }
+    setDraftSavedModal(true)
+  }
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-[1000px] mx-auto pb-12">
@@ -80,15 +150,13 @@ function InvoiceBuilder() {
           <Button
             variant="outline"
             className="px-4 sm:px-5 h-11 justify-center text-xs sm:text-sm font-semibold"
-            onClick={() => setDraftSavedModal(true)}
+            onClick={handleSaveDraft}
           >
             <Save className="h-4 w-4 mr-1.5 sm:mr-2" /> Save Draft
           </Button>
           <Button
             className="px-4 sm:px-6 h-11 justify-center text-xs sm:text-sm font-semibold"
-            onClick={() =>
-              navigate({ to: '/invoices/$id', params: { id: 'INV-2026-001' } })
-            }
+            onClick={handleIssueInvoice}
           >
             <Send className="h-4 w-4 mr-1.5 sm:mr-2" /> Issue Invoice
           </Button>
@@ -120,11 +188,15 @@ function InvoiceBuilder() {
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                 To
               </p>
-              <Select>
-                <SelectTrigger className="w-full h-12 border border-border bg-background px-4 font-semibold text-base rounded-xl shadow-none">
+              <Select value={customer} onValueChange={setCustomer}>
+                <SelectTrigger
+                  className={`w-full h-12 border bg-background px-4 font-semibold text-base rounded-md shadow-none ${
+                    errors.customerId ? 'border-destructive' : 'border-border'
+                  }`}
+                >
                   <SelectValue placeholder="Select customer" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl">
+                <SelectContent className="rounded-md">
                   {customersData.map((c) => (
                     <SelectItem
                       key={c.id}
@@ -135,6 +207,11 @@ function InvoiceBuilder() {
                   ))}
                 </SelectContent>
               </Select>
+              {errors.customerId && (
+                <p className="text-[11px] font-semibold text-destructive mt-1.5">
+                  {errors.customerId}
+                </p>
+              )}
 
               <div className="mt-6 grid grid-cols-2 gap-4">
                 <div>
@@ -143,9 +220,27 @@ function InvoiceBuilder() {
                   </label>
                   <input
                     type="date"
-                    defaultValue="2026-08-01"
-                    className="mt-1.5 w-full h-11 border border-border bg-background px-3 font-mono text-sm font-medium outline-none rounded-xl text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                    value={issueDate}
+                    onChange={(e) => {
+                      setIssueDate(e.target.value)
+                      if (errors.issueDate || errors.dueDate) {
+                        setErrors((prev) => {
+                          const updated = { ...prev }
+                          delete updated.issueDate
+                          delete updated.dueDate
+                          return updated
+                        })
+                      }
+                    }}
+                    className={`mt-1.5 w-full h-11 border bg-background px-3 font-mono text-sm font-medium outline-none rounded-md text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all ${
+                      errors.issueDate ? 'border-destructive' : 'border-border'
+                    }`}
                   />
+                  {errors.issueDate && (
+                    <p className="text-[11px] font-semibold text-destructive mt-1">
+                      {errors.issueDate}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="text-xs font-semibold uppercase tracking-wider text-foreground">
@@ -153,16 +248,33 @@ function InvoiceBuilder() {
                   </label>
                   <input
                     type="date"
-                    defaultValue="2026-08-15"
-                    className="mt-1.5 w-full h-11 border border-border bg-background px-3 font-mono text-sm font-medium outline-none rounded-xl text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                    value={dueDate}
+                    onChange={(e) => {
+                      setDueDate(e.target.value)
+                      if (errors.dueDate) {
+                        setErrors((prev) => {
+                          const updated = { ...prev }
+                          delete updated.dueDate
+                          return updated
+                        })
+                      }
+                    }}
+                    className={`mt-1.5 w-full h-11 border bg-background px-3 font-mono text-sm font-medium outline-none rounded-md text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all ${
+                      errors.dueDate ? 'border-destructive' : 'border-border'
+                    }`}
                   />
+                  {errors.dueDate && (
+                    <p className="text-[11px] font-semibold text-destructive mt-1">
+                      {errors.dueDate}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="p-6 md:p-10">
+        <div className="p-4 sm:p-6 md:p-10">
           <div className="overflow-x-auto w-full">
             <table className="w-full text-left min-w-[600px]">
               <thead>
@@ -176,79 +288,108 @@ function InvoiceBuilder() {
               </thead>
               <tbody className="divide-y divide-border">
                 <AnimatePresence initial={false}>
-                  {items.map((item) => (
-                    <motion.tr
-                      key={item.id}
-                      layout
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{
-                        type: 'spring',
-                        stiffness: 400,
-                        damping: 28,
-                      }}
-                      className="group"
-                    >
-                      <td className="py-4">
-                        <input
-                          type="text"
-                          value={item.description}
-                          onChange={(e) =>
-                            updateItem(item.id, 'description', e.target.value)
-                          }
-                          placeholder="Item description"
-                          className="w-full bg-transparent text-sm font-semibold outline-none placeholder:font-normal text-foreground focus:border-b focus:border-primary"
-                        />
-                      </td>
-                      <td className="py-4 text-right">
-                        <input
-                          type="number"
-                          value={item.qty}
-                          onChange={(e) =>
-                            updateItem(
-                              item.id,
-                              'qty',
-                              parseFloat(e.target.value) || 0,
-                            )
-                          }
-                          placeholder="Qty"
-                          className="w-16 bg-transparent text-right font-mono text-sm font-medium outline-none text-foreground focus:border-b focus:border-primary"
-                        />
-                      </td>
-                      <td className="py-4 text-right">
-                        <input
-                          type="number"
-                          value={item.price}
-                          onChange={(e) =>
-                            updateItem(
-                              item.id,
-                              'price',
-                              parseFloat(e.target.value) || 0,
-                            )
-                          }
-                          placeholder="Price"
-                          className="w-32 bg-transparent text-right font-mono text-sm font-medium outline-none text-foreground focus:border-b focus:border-primary"
-                        />
-                      </td>
-                      <td className="py-4 text-right font-mono text-sm font-semibold text-foreground">
-                        <NumberTicker
-                          value={item.qty * item.price}
-                          formatter={(v) => formatAmount(v)}
-                        />
-                      </td>
-                      <td className="py-4 text-right opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                        <button
-                          type="button"
-                          onClick={() => removeItem(item.id)}
-                          className="flex h-8 w-8 items-center justify-center ml-auto border border-transparent rounded-full hover:bg-destructive/10 text-destructive transition-all cursor-pointer outline-none"
-                          aria-label="Remove item"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </td>
-                    </motion.tr>
-                  ))}
+                  {items.map((item, index) => {
+                    const descError = errors[`items.${index}.description`]
+                    const qtyError = errors[`items.${index}.qty`]
+                    const priceError = errors[`items.${index}.price`]
+
+                    return (
+                      <motion.tr
+                        key={item.id}
+                        layout
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 400,
+                          damping: 28,
+                        }}
+                        className="group"
+                      >
+                        <td className="py-4">
+                          <input
+                            type="text"
+                            value={item.description}
+                            onChange={(e) =>
+                              updateItem(item.id, 'description', e.target.value)
+                            }
+                            placeholder="Item description"
+                            className={`w-full bg-transparent text-sm font-semibold outline-none placeholder:font-normal text-foreground focus:border-b focus:border-primary ${
+                              descError
+                                ? 'border-b border-destructive text-destructive'
+                                : ''
+                            }`}
+                          />
+                          {descError && (
+                            <p className="text-[10px] font-medium text-destructive mt-1">
+                              {descError}
+                            </p>
+                          )}
+                        </td>
+                        <td className="py-4 text-right">
+                          <input
+                            type="number"
+                            value={item.qty}
+                            onChange={(e) =>
+                              updateItem(
+                                item.id,
+                                'qty',
+                                parseFloat(e.target.value) || 0,
+                              )
+                            }
+                            placeholder="Qty"
+                            className={`w-16 bg-transparent text-right font-mono text-sm font-medium outline-none text-foreground focus:border-b focus:border-primary ${
+                              qtyError ? 'border-b border-destructive' : ''
+                            }`}
+                          />
+                          {qtyError && (
+                            <p className="text-[10px] font-medium text-destructive mt-1">
+                              {qtyError}
+                            </p>
+                          )}
+                        </td>
+                        <td className="py-4 text-right">
+                          <input
+                            type="number"
+                            value={item.price}
+                            onChange={(e) =>
+                              updateItem(
+                                item.id,
+                                'price',
+                                parseFloat(e.target.value) || 0,
+                              )
+                            }
+                            placeholder="Price"
+                            className={`w-32 bg-transparent text-right font-mono text-sm font-medium outline-none text-foreground focus:border-b focus:border-primary ${
+                              priceError ? 'border-b border-destructive' : ''
+                            }`}
+                          />
+                          {priceError && (
+                            <p className="text-[10px] font-medium text-destructive mt-1">
+                              {priceError}
+                            </p>
+                          )}
+                        </td>
+                        <td className="py-4 text-right font-mono text-sm font-semibold text-foreground">
+                          <NumberTicker
+                            value={item.qty * item.price}
+                            formatter={(v) => formatAmount(v)}
+                          />
+                        </td>
+                        <td className="py-4 text-right opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                          <button
+                            type="button"
+                            onClick={() => removeItem(item.id)}
+                            className="flex h-8 w-8 items-center justify-center ml-auto border border-transparent rounded-full hover:bg-destructive/10 text-destructive transition-all cursor-pointer outline-none"
+                            aria-label="Remove item"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </td>
+                      </motion.tr>
+                    )
+                  })}
                 </AnimatePresence>
               </tbody>
             </table>
@@ -307,6 +448,15 @@ function InvoiceBuilder() {
         title="Draft Saved"
         description="Invoice draft saved to workspace."
         confirmText="Got it"
+      />
+
+      <AlertModal
+        open={errorModal.open}
+        onOpenChange={(open) => setErrorModal((prev) => ({ ...prev, open }))}
+        type="error"
+        title="Validation Error"
+        description={errorModal.message}
+        confirmText="Review Form"
       />
     </div>
   )

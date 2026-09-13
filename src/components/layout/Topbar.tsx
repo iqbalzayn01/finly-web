@@ -99,7 +99,7 @@ export function Topbar() {
             </Link>
             <Link
               to="/pricing"
-              className="sm:hidden flex items-center justify-center h-9 w-9 rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+              className="sm:hidden flex items-center justify-center h-9 w-9 rounded-md border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
               aria-label="Pro Plan Active"
             >
               <Sparkles className="h-4 w-4" />
@@ -116,7 +116,7 @@ export function Topbar() {
             </Link>
             <Link
               to="/pricing"
-              className="sm:hidden flex items-center justify-center h-9 w-9 rounded-xl border border-primary/20 bg-primary/10 text-primary"
+              className="sm:hidden flex items-center justify-center h-9 w-9 rounded-md border border-primary/20 bg-primary/10 text-primary"
               aria-label="Upgrade to Pro"
             >
               <Sparkles className="h-4 w-4" />
@@ -130,7 +130,7 @@ export function Topbar() {
           {notifOpen ? (
             <button
               onClick={() => setNotifOpen(false)}
-              className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-primary bg-primary/10 text-primary transition-colors outline-none cursor-pointer"
+              className="relative flex h-9 w-9 items-center justify-center rounded-md border border-primary bg-primary/10 text-primary transition-colors outline-none cursor-pointer"
               aria-label="Close Notifications"
             >
               <Bell className="h-4 w-4" />
@@ -140,7 +140,7 @@ export function Topbar() {
             <TooltipSimple content="Notifications">
               <button
                 onClick={() => setNotifOpen(true)}
-                className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-foreground hover:bg-accent hover:border-primary/40 transition-colors outline-none cursor-pointer"
+                className="relative flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-foreground hover:bg-accent hover:border-primary/40 transition-colors outline-none cursor-pointer"
                 aria-label="Open Notifications"
               >
                 <Bell className="h-4 w-4" />
