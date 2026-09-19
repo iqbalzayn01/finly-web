@@ -301,7 +301,7 @@ function Settings() {
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-foreground">
-                  Tax Registration Number (NPWP / EIN / VAT){' '}
+                  Tax Registration Number (VAT){' '}
                   <span className="text-destructive">*</span>
                 </label>
                 <div className="relative mt-1">
@@ -538,7 +538,7 @@ function Settings() {
                       e.preventDefault()
                       setApiKeyModalOpen(true)
                     }}
-                    className="text-xs font-semibold text-primary hover:underline"
+                    className="text-xs font-semibold text-foreground hover:underline"
                   >
                     Get Key →
                   </a>
@@ -606,7 +606,7 @@ function Settings() {
                     <Sliders className="h-3.5 w-3.5 text-muted-foreground" />{' '}
                     Temperature
                   </span>
-                  <span className="font-mono text-xs text-primary font-bold">
+                  <span className="font-mono text-xs text-foreground font-bold">
                     {temperature}
                   </span>
                 </label>

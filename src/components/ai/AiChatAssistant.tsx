@@ -333,7 +333,7 @@ export function AiChatAssistant() {
                           className="border border-border bg-background p-4 rounded-2xl shadow-none space-y-3 mt-2"
                         >
                           <div className="flex items-center justify-between border-b border-border pb-2.5">
-                            <span className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
+                            <span className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
                               {msg.intentCard.type === 'expense' && (
                                 <Receipt className="h-3.5 w-3.5" />
                               )}
@@ -396,7 +396,7 @@ export function AiChatAssistant() {
                                 <span className="text-xs font-semibold text-foreground">
                                   Total Payable
                                 </span>
-                                <span className="font-mono text-base font-bold text-primary">
+                                <span className="font-mono text-base font-bold text-foreground">
                                   ${msg.intentCard.amount.toFixed(2)}
                                 </span>
                               </div>

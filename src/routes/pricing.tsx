@@ -125,7 +125,7 @@ function PricingPage() {
   return (
     <div className="space-y-12 pb-16">
       <div className="text-center max-w-3xl mx-auto space-y-4 pt-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-foreground text-xs font-semibold">
           <Sparkles className="h-3.5 w-3.5" /> Plans &amp; Subscriptions
         </div>
         <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground">
@@ -294,8 +294,11 @@ function PricingPage() {
           className="max-w-md mx-auto p-4 rounded-2xl bg-card border border-primary/30 shadow-none text-center space-y-2"
         >
           <p className="text-xs font-bold text-foreground">
-            Selected <span className="text-primary">{selectedPlan} Plan</span> (
-            {billingCycle})
+            Selected{' '}
+            <span className="text-foreground font-extrabold underline decoration-primary decoration-2 underline-offset-2">
+              {selectedPlan} Plan
+            </span>{' '}
+            ({billingCycle})
           </p>
           <p className="text-[11px] text-muted-foreground">
             Updating subscription tier...

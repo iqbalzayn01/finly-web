@@ -6,14 +6,11 @@ import {
   Users,
   Package,
   Settings2,
-  Briefcase,
 } from '../ui/icon'
 import { NavMain } from './nav-main'
 import type { NavigationItem } from './nav-main'
 import { NavUser } from './nav-user'
 import type { UserProfile } from './nav-user'
-import { TeamSwitcher } from './team-switcher'
-import type { BusinessTeam } from './team-switcher'
 import {
   Sidebar,
   SidebarContent,
@@ -22,18 +19,6 @@ import {
   SidebarRail,
 } from '../ui/sidebar'
 import teamsData from '../../data/teams.json'
-
-const ICONS: Record<string, React.ElementType | undefined> = {
-  Wallet,
-  Briefcase,
-  FileText,
-}
-
-const finlyTeams: BusinessTeam[] = teamsData.teams.map((t) => ({
-  name: t.name,
-  logo: ICONS[t.iconName] ?? Wallet,
-  plan: t.plan,
-}))
 
 const finlyNavigationItems: NavigationItem[] = [
   {
@@ -74,7 +59,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={finlyTeams} />
+        <div className="bg-primary aspect-square flex items-center justify-center rounded-md h-9 sm:h-10">
+          <span className="font-black">F</span>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={finlyNavigationItems} />

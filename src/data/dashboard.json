@@ -1,63 +1,86 @@
 {
   "runwayChartData": [
-    { "month": "Feb", "runway": 10.4 },
-    { "month": "Mar", "runway": 11.2 },
-    { "month": "Apr", "runway": 12.8 },
-    { "month": "May", "runway": 12.1 },
-    { "month": "Jun", "runway": 13.5 },
-    { "month": "Jul", "runway": 14.2 }
+    { "month": "Mar", "runway": 6.1 },
+    { "month": "Apr", "runway": 6.5 },
+    { "month": "May", "runway": 7.0 },
+    { "month": "Jun", "runway": 7.3 },
+    { "month": "Jul", "runway": 7.7 },
+    { "month": "Aug", "runway": 8.1 }
   ],
   "healthChartData": [
-    { "metric": "health", "score": 94, "fill": "var(--primary)" }
+    { "metric": "health", "score": 96, "fill": "var(--primary)" }
   ],
   "cashflowDataMap": {
     "1d": [
-      { "name": "00:00", "income": 420, "expense": 120 },
-      { "name": "04:00", "income": 680, "expense": 210 },
-      { "name": "08:00", "income": 1950, "expense": 640 },
-      { "name": "12:00", "income": 3420, "expense": 1480 },
-      { "name": "16:00", "income": 2890, "expense": 1120 },
-      { "name": "20:00", "income": 1740, "expense": 590 }
+      { "name": "00:00", "income": 450, "expense": 120 },
+      { "name": "04:00", "income": 780, "expense": 210 },
+      { "name": "08:00", "income": 2450, "expense": 780 },
+      { "name": "12:00", "income": 4850, "expense": 1920 },
+      { "name": "16:00", "income": 3600, "expense": 1340 },
+      { "name": "20:00", "income": 2120, "expense": 680 }
+    ],
+    "7d": [
+      { "name": "Mon", "income": 4800, "expense": 1850 },
+      { "name": "Tue", "income": 5200, "expense": 2100 },
+      { "name": "Wed", "income": 6400, "expense": 2450 },
+      { "name": "Thu", "income": 4600, "expense": 1650 },
+      { "name": "Fri", "income": 7800, "expense": 3100 },
+      { "name": "Sat", "income": 1400, "expense": 650 },
+      { "name": "Sun", "income": 1100, "expense": 450 }
+    ],
+    "30d": [
+      { "name": "Day 1", "income": 1150, "expense": 680 },
+      { "name": "Day 3", "income": 1800, "expense": 920 },
+      { "name": "Day 6", "income": 2400, "expense": 1350 },
+      { "name": "Day 9", "income": 3200, "expense": 1700 },
+      { "name": "Day 12", "income": 2100, "expense": 1250 },
+      { "name": "Day 15", "income": 4500, "expense": 2400 },
+      { "name": "Day 18", "income": 2900, "expense": 1650 },
+      { "name": "Day 21", "income": 3800, "expense": 2100 },
+      { "name": "Day 24", "income": 2400, "expense": 1450 },
+      { "name": "Day 27", "income": 4900, "expense": 2700 },
+      { "name": "Day 30", "income": 4100, "expense": 2250 }
     ],
     "1m": [
-      { "name": "Week 1", "income": 6400, "expense": 3100 },
-      { "name": "Week 2", "income": 7800, "expense": 3900 },
-      { "name": "Week 3", "income": 5900, "expense": 2800 },
-      { "name": "Week 4", "income": 8300, "expense": 4400 }
+      { "name": "Week 1", "income": 8200, "expense": 4800 },
+      { "name": "Week 2", "income": 9400, "expense": 5600 },
+      { "name": "Week 3", "income": 7800, "expense": 4500 },
+      { "name": "Week 4", "income": 9400, "expense": 5500 }
     ],
     "3m": [
-      { "name": "May", "income": 18900, "expense": 12100 },
-      { "name": "Jun", "income": 24500, "expense": 10800 },
-      { "name": "Jul", "income": 28400, "expense": 14200 }
+      { "name": "Jun", "income": 34800, "expense": 20500 },
+      { "name": "Jul", "income": 37500, "expense": 21800 },
+      { "name": "Aug", "income": 34800, "expense": 20400 }
     ],
     "6m": [
-      { "name": "Feb", "income": 15600, "expense": 9400 },
-      { "name": "Mar", "income": 14200, "expense": 11000 },
-      { "name": "Apr", "income": 21800, "expense": 13500 },
-      { "name": "May", "income": 18900, "expense": 12100 },
-      { "name": "Jun", "income": 24500, "expense": 10800 },
-      { "name": "Jul", "income": 28400, "expense": 14200 }
+      { "name": "Mar", "income": 28400, "expense": 17100 },
+      { "name": "Apr", "income": 31500, "expense": 18600 },
+      { "name": "May", "income": 30200, "expense": 18200 },
+      { "name": "Jun", "income": 34800, "expense": 20500 },
+      { "name": "Jul", "income": 37500, "expense": 21800 },
+      { "name": "Aug", "income": 34800, "expense": 20400 }
     ],
     "1y": [
-      { "name": "Aug 25", "income": 14500, "expense": 9100 },
-      { "name": "Sep 25", "income": 16200, "expense": 9800 },
-      { "name": "Oct 25", "income": 18400, "expense": 11200 },
-      { "name": "Nov 25", "income": 15100, "expense": 8900 },
-      { "name": "Dec 25", "income": 22400, "expense": 14500 },
-      { "name": "Jan 26", "income": 12400, "expense": 8200 },
-      { "name": "Feb 26", "income": 15600, "expense": 9400 },
-      { "name": "Mar 26", "income": 14200, "expense": 11000 },
-      { "name": "Apr 26", "income": 21800, "expense": 13500 },
-      { "name": "May 26", "income": 18900, "expense": 12100 },
-      { "name": "Jun 26", "income": 24500, "expense": 10800 },
-      { "name": "Jul 26", "income": 28400, "expense": 14200 }
+      { "name": "Sep 25", "income": 27400, "expense": 16800 },
+      { "name": "Oct 25", "income": 29200, "expense": 17500 },
+      { "name": "Nov 25", "income": 26800, "expense": 16200 },
+      { "name": "Dec 25", "income": 35400, "expense": 22400 },
+      { "name": "Jan 26", "income": 24500, "expense": 15800 },
+      { "name": "Feb 26", "income": 26800, "expense": 16400 },
+      { "name": "Mar 26", "income": 28400, "expense": 17100 },
+      { "name": "Apr 26", "income": 31500, "expense": 18600 },
+      { "name": "May 26", "income": 30200, "expense": 18200 },
+      { "name": "Jun 26", "income": 34800, "expense": 20500 },
+      { "name": "Jul 26", "income": 37500, "expense": 21800 },
+      { "name": "Aug 26", "income": 34800, "expense": 20400 }
     ],
     "5y": [
-      { "name": "2022", "income": 142000, "expense": 98000 },
-      { "name": "2023", "income": 188000, "expense": 122000 },
-      { "name": "2024", "income": 236000, "expense": 154000 },
-      { "name": "2025", "income": 295000, "expense": 186000 },
-      { "name": "2026", "income": 198500, "expense": 118400 }
+      { "name": "2021", "income": 118000, "expense": 78500 },
+      { "name": "2022", "income": 156000, "expense": 104200 },
+      { "name": "2023", "income": 208500, "expense": 136400 },
+      { "name": "2024", "income": 268000, "expense": 169500 },
+      { "name": "2025", "income": 335000, "expense": 206800 },
+      { "name": "2026", "income": 248500, "expense": 148800 }
     ]
   },
   "recentTransactions": [

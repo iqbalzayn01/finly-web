@@ -352,7 +352,7 @@ function Cashbook() {
                     </td>
                     <td className="px-6 py-4 font-medium text-xs">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${tx.scope === 'Business' ? 'bg-primary/10 text-primary border-primary/20' : 'bg-muted text-muted-foreground border-border'}`}
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${tx.scope === 'Business' ? 'bg-primary/15 text-foreground border-primary/30' : 'bg-muted text-muted-foreground border-border'}`}
                       >
                         {tx.scope}
                       </span>

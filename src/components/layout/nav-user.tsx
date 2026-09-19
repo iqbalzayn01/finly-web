@@ -223,7 +223,7 @@ export function NavUser({ user }: { user: UserProfile }) {
               )}
             >
               <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="rounded-md bg-primary/10 text-primary font-bold text-xs">
+              <AvatarFallback className="rounded-md bg-primary/10 text-foreground font-bold text-xs">
                 {userInitials || 'US'}
               </AvatarFallback>
             </Avatar>
@@ -289,7 +289,7 @@ export function NavUser({ user }: { user: UserProfile }) {
                           )}
                         >
                           <AvatarImage src={user.avatar} alt={user.name} />
-                          <AvatarFallback className="rounded-md bg-primary/10 text-primary font-bold text-xs">
+                          <AvatarFallback className="rounded-md bg-primary/10 text-foreground font-bold text-xs">
                             {userInitials || 'US'}
                           </AvatarFallback>
                         </Avatar>
@@ -317,7 +317,7 @@ export function NavUser({ user }: { user: UserProfile }) {
                           'flex items-center gap-2 px-2.5 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer w-full border',
                           isPro
                             ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
-                            : 'bg-primary/5 text-primary border-primary/15 hover:bg-primary/15',
+                            : 'bg-primary/15 text-foreground border-primary/30 hover:bg-primary/25',
                         )}
                       >
                         <Sparkles className="size-3.5 shrink-0" />

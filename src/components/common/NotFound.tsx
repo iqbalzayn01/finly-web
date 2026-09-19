@@ -8,7 +8,7 @@ export function NotFound() {
         <FileQuestion className="h-8 w-8" />
       </div>
 
-      <span className="px-3 py-1 text-xs font-bold rounded-full bg-primary/10 text-primary border border-primary/20 mb-3">
+      <span className="px-3 py-1 text-xs font-bold rounded-full bg-primary/15 text-foreground border border-primary/30 mb-3">
         404 • Page Not Found
       </span>
 

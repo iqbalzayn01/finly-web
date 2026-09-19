@@ -95,7 +95,7 @@ function Account() {
             Profile Information
           </h2>
           {isPro && (
-            <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20 flex items-center gap-1.5">
+            <span className="px-2.5 py-1 rounded-full bg-primary/15 text-foreground text-xs font-bold border border-primary/30 flex items-center gap-1.5">
               <span className="size-1.5 rounded-full bg-primary animate-pulse" />
               Pro Account
             </span>

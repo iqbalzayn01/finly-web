@@ -16,35 +16,7 @@ interface MyRouterContext {
 
 const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getItem('theme');var mode=(stored==='light'||stored==='dark'||stored==='auto')?stored:'auto';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var resolved=mode==='auto'?(prefersDark?'dark':'light'):mode;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(resolved);if(mode==='auto'){root.removeAttribute('data-theme')}else{root.setAttribute('data-theme',mode)}root.style.colorScheme=resolved;}catch(e){}try{window.addEventListener('error',function(e){if(e&&e.message&&e.message.indexOf('startTime')!==-1){e.preventDefault();return true;}});window.addEventListener('unhandledrejection',function(e){if(e&&e.reason&&e.reason.message&&e.reason.message.indexOf('startTime')!==-1){e.preventDefault();}});}catch(e){}})();`
 
-const Devtools = import.meta.env.DEV
-  ? React.lazy(async () => {
-      const [
-        { TanStackDevtools },
-        { TanStackRouterDevtoolsPanel },
-        TanStackQueryDevtools,
-      ] = await Promise.all([
-        import('@tanstack/react-devtools'),
-        import('@tanstack/react-router-devtools'),
-        import('../integrations/tanstack-query/devtools'),
-      ])
-      return {
-        default: () => (
-          <TanStackDevtools
-            config={{
-              position: 'bottom-right',
-            }}
-            plugins={[
-              {
-                name: 'Tanstack Router',
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-              TanStackQueryDevtools.default,
-            ]}
-          />
-        ),
-      }
-    })
-  : () => null
+const Devtools = () => null
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({

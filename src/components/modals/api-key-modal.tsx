@@ -61,7 +61,7 @@ export function ApiKeyModal({
             href={targetUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground hover:underline"
           >
             Get API Key from Dashboard <ExternalLink className="h-3.5 w-3.5" />
           </a>

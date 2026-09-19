@@ -175,13 +175,11 @@ export function TeamSwitcher({ teams }: { teams: BusinessTeam[] }) {
         >
           <div
             className={cn(
-              'flex aspect-square size-8 items-center justify-center rounded-md bg-gradient-to-br from-primary to-indigo-600 text-white font-black shrink-0 shadow-xs transition-all',
-              isPro
-                ? 'border-2 border-primary ring-2 ring-primary/20'
-                : 'border border-border',
+              'flex aspect-square size-8 items-center justify-center rounded-md bg-primary/50 text-black font-black shrink-0 transition-all',
+              isPro ? 'ring-1 ring-primary' : 'border border-border',
             )}
           >
-            <ActiveLogo className="size-4 shrink-0 text-white" />
+            <ActiveLogo className="size-4 shrink-0" />
           </div>
           {!isCollapsed && (
             <>
@@ -252,7 +250,7 @@ export function TeamSwitcher({ teams }: { teams: BusinessTeam[] }) {
                           className={cn(
                             'flex items-center gap-2.5 p-2 rounded-md cursor-pointer text-left transition-all duration-150 w-full',
                             isCurrent
-                              ? 'bg-primary/10 text-primary font-bold border border-primary/20'
+                              ? 'bg-primary/15 text-foreground font-bold border border-primary/30'
                               : 'hover:bg-accent/60 hover:text-foreground text-foreground border border-transparent',
                           )}
                         >

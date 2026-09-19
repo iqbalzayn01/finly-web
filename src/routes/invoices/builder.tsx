@@ -429,7 +429,7 @@ function InvoiceBuilder() {
                 <span className="text-xs font-semibold uppercase tracking-wider text-foreground">
                   Total
                 </span>
-                <span className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-primary">
+                <span className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
                   <NumberTicker
                     value={total}
                     formatter={(v) => formatAmount(v)}

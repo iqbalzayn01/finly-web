@@ -109,9 +109,9 @@ export function Topbar() {
           <>
             <Link
               to="/pricing"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all cursor-pointer shadow-none"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold bg-primary/15 text-foreground border border-primary/30 hover:bg-primary/25 transition-all cursor-pointer shadow-none"
             >
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              <Sparkles className="h-3.5 w-3.5 text-foreground" />
               <span>Upgrade to Pro</span>
             </Link>
             <Link
@@ -163,7 +163,7 @@ export function Topbar() {
                   <h3 className="font-bold text-foreground text-xs">
                     Notifications
                   </h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/15 text-foreground border border-primary/30">
                     {notificationsData.filter((n) => n.unread).length} Unread
                   </span>
                 </div>
@@ -208,7 +208,7 @@ export function Topbar() {
                 <div className="p-2.5 border-t border-border bg-muted/20 text-center">
                   <button
                     onClick={() => setNotifOpen(false)}
-                    className="text-xs font-semibold text-primary hover:underline cursor-pointer"
+                    className="text-xs font-semibold text-foreground hover:underline cursor-pointer"
                   >
                     Mark all as read
                   </button>

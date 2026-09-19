@@ -262,7 +262,7 @@ function InvoiceDetail() {
                   <span className="text-xs font-semibold uppercase tracking-wider text-foreground">
                     Total
                   </span>
-                  <span className="font-mono text-3xl font-bold tracking-tight text-primary">
+                  <span className="font-mono text-3xl font-bold tracking-tight text-foreground">
                     <NumberTicker
                       value={invoice.total}
                       formatter={(v) => formatAmount(v)}

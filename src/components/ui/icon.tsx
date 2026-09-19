@@ -164,6 +164,7 @@ export const PanelLeft = createGoogleIcon('dock_to_left')
 export const PanelLeftClose = createGoogleIcon('left_panel_close')
 
 export const TrendingUp = createGoogleIcon('trending_up')
+export const TrendingDown = createGoogleIcon('trending_down')
 export const ArrowUpRight = createGoogleIcon('north_east')
 export const ArrowDownRight = createGoogleIcon('south_east')
 export const ArrowLeft = createGoogleIcon('arrow_back')

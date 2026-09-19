@@ -266,7 +266,7 @@ function Invoices() {
                       <Link
                         to={`/invoices/$id`}
                         params={{ id: inv.id }}
-                        className="hover:text-primary transition-colors"
+                        className="hover:underline transition-colors"
                       >
                         {inv.id}
                       </Link>
