@@ -146,9 +146,10 @@ function SidebarProvider({
 function Sidebar({
   side = 'left',
   variant = 'sidebar',
-  collapsible = 'icon',
+  collapsible = 'offcanvas',
   className,
   children,
+  dir,
   ...props
 }: React.ComponentProps<'div'> & {
   side?: 'left' | 'right'
@@ -162,7 +163,7 @@ function Sidebar({
       <div
         data-slot="sidebar"
         className={cn(
-          'flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border',
+          'flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground',
           className,
         )}
         {...props}
@@ -242,9 +243,8 @@ function Sidebar({
               : 'var(--sidebar-width)',
         }}
         transition={{
-          type: 'spring',
-          stiffness: 450,
-          damping: 32,
+          duration: 0.22,
+          ease: [0.2, 0, 0, 1],
         }}
         className="relative bg-transparent shrink-0"
       />
@@ -262,9 +262,8 @@ function Sidebar({
               : 'var(--sidebar-width)',
         }}
         transition={{
-          type: 'spring',
-          stiffness: 450,
-          damping: 32,
+          duration: 0.22,
+          ease: [0.2, 0, 0, 1],
         }}
         className={cn(
           'fixed inset-y-0 z-10 hidden h-svh overflow-hidden bg-sidebar border-r border-sidebar-border md:flex md:flex-col',
@@ -363,10 +362,7 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="sidebar-header"
       data-sidebar="header"
-      className={cn(
-        'flex flex-col gap-2 p-3 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:items-center',
-        className,
-      )}
+      className={cn('flex flex-col gap-2 px-3.5 py-3', className)}
       {...props}
     />
   )
@@ -377,10 +373,7 @@ function SidebarFooter({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="sidebar-footer"
       data-sidebar="footer"
-      className={cn(
-        'flex flex-col gap-2 p-3 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:items-center',
-        className,
-      )}
+      className={cn('flex flex-col gap-2 px-3.5 py-3', className)}
       {...props}
     />
   )
@@ -406,7 +399,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
-        'flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto overflow-x-hidden p-2 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:overflow-hidden',
+        'flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto overflow-x-hidden px-3.5 py-2 group-data-[collapsible=icon]:overflow-hidden',
         className,
       )}
       {...props}
@@ -419,10 +412,7 @@ function SidebarGroup({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="sidebar-group"
       data-sidebar="group"
-      className={cn(
-        'relative flex w-full min-w-0 flex-col p-0 group-data-[collapsible=icon]:items-center',
-        className,
-      )}
+      className={cn('relative flex w-full min-w-0 flex-col p-0', className)}
       {...props}
     />
   )
@@ -490,10 +480,7 @@ function SidebarMenu({ className, ...props }: React.ComponentProps<'ul'>) {
     <ul
       data-slot="sidebar-menu"
       data-sidebar="menu"
-      className={cn(
-        'flex w-full min-w-0 flex-col gap-1.5 group-data-[collapsible=icon]:items-center',
-        className,
-      )}
+      className={cn('flex w-full min-w-0 flex-col gap-1.5', className)}
       {...props}
     />
   )
@@ -505,7 +492,7 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<'li'>) {
       data-slot="sidebar-menu-item"
       data-sidebar="menu-item"
       className={cn(
-        'group/menu-item relative flex w-full items-center group-data-[collapsible=icon]:justify-center',
+        'group/menu-item relative flex w-full items-center',
         className,
       )}
       {...props}
@@ -514,7 +501,7 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<'li'>) {
 }
 
 const sidebarMenuButtonVariants = cva(
-  'peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-all group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:mx-auto hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4.5 [&>svg]:shrink-0',
+  'peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-colors group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-10 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:justify-center hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4.5 [&>svg]:shrink-0',
   {
     variants: {
       variant: {

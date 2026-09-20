@@ -8,8 +8,6 @@ import {
   TrendingDown,
   Receipt,
   Activity,
-  Globe,
-  RefreshCw,
   ShieldCheck,
 } from '../components/ui/icon'
 import { useState, useMemo, useEffect } from 'react'
@@ -186,7 +184,7 @@ function CashflowTooltip({ active, payload, label }: CashflowTooltipProps) {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-xs bg-slate-500/20 border border-slate-500/40 shrink-0" />
+            <span className="h-2.5 w-2.5 rounded-xs bg-slate-500/20 border border-slate-500/30 shrink-0" />
             <span className="text-muted-foreground font-medium">
               Expense (Outflow)
             </span>
@@ -291,7 +289,6 @@ function Dashboard() {
   const [recentTxFilter, setRecentTxFilter] = useState<
     'all' | 'income' | 'expense'
   >('all')
-  const [fxInput, setFxInput] = useState<number>(100)
   const [animatedHealthScore, setAnimatedHealthScore] = useState<number>(0)
 
   useEffect(() => {
@@ -578,10 +575,10 @@ function Dashboard() {
             </div>
 
             <div className="w-full overflow-x-auto">
-              <div className="min-w-[680px] sm:min-w-0">
+              <div className="min-w-170 sm:min-w-0">
                 <ChartContainer
                   config={cashflowChartConfig}
-                  className="aspect-auto h-[340px] w-full"
+                  className="aspect-auto h-85 w-full"
                 >
                   <ComposedChart
                     key={`cashflow-chart-${cashflowViewMode}`}
@@ -637,7 +634,7 @@ function Dashboard() {
                       dataKey="income"
                       name="Inflow"
                       radius={[6, 6, 0, 0]}
-                      maxBarSize={110}
+                      maxBarSize={80}
                       className="fill-primary"
                     />
                     <Bar
@@ -649,7 +646,7 @@ function Dashboard() {
                       }
                       name="Outflow"
                       radius={[6, 6, 0, 0]}
-                      maxBarSize={110}
+                      maxBarSize={80}
                       className="fill-slate-500/10 dark:fill-slate-500/50"
                     />
                   </ComposedChart>
@@ -666,7 +663,7 @@ function Dashboard() {
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-xs bg-slate-500/20 border border-slate-500/40" />
+                  <span className="h-2.5 w-2.5 rounded-xs bg-slate-500/20 border border-slate-500/30" />
                   <span className="font-medium text-foreground">
                     Total Outflow (Expense)
                   </span>
@@ -856,10 +853,10 @@ function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 pb-0 px-6 pt-2">
-              <div className="relative mx-auto aspect-square max-h-[250px] w-full flex items-center justify-center">
+              <div className="relative mx-auto aspect-square max-h-62.5 w-full flex items-center justify-center">
                 <ChartContainer
                   config={healthChartConfig}
-                  className="mx-auto aspect-square max-h-[250px] w-full select-none outline-none"
+                  className="mx-auto aspect-square max-h-62.5 w-full select-none outline-none"
                 >
                   <RadialBarChart
                     data={currentHealthChartData}
@@ -1082,103 +1079,6 @@ function Dashboard() {
             >
               Open Cashbook <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
-          </div>
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ ...m3Transition, delay: 0.45 }}
-        className="w-full"
-      >
-        <div className="bg-card border border-border shadow-none rounded-2xl p-6 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20">
-                  <Globe className="h-4 w-4" />
-                </div>
-                <h2 className="text-lg font-semibold text-foreground">
-                  Currency Calculator
-                </h2>
-              </div>
-              <span className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />{' '}
-                Indicative Rates
-              </span>
-            </div>
-
-            <div className="relative mb-4">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
-                $
-              </span>
-              <input
-                type="number"
-                value={fxInput || ''}
-                onChange={(e) =>
-                  setFxInput(Math.max(0, parseFloat(e.target.value) || 0))
-                }
-                className="w-full h-10 bg-background border border-border rounded-md pl-8 pr-16 text-sm font-bold font-mono outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground"
-                placeholder="Enter USD amount..."
-              />
-              <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-foreground">
-                USD
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {[
-                {
-                  pair: 'USD / IDR',
-                  label: 'Indonesian Rupiah',
-                  rate: `Rp ${(fxInput * 16250).toLocaleString()}`,
-                },
-                {
-                  pair: 'EUR / USD',
-                  label: 'Euro',
-                  rate: `€ ${(fxInput * 0.915).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-                },
-                {
-                  pair: 'GBP / USD',
-                  label: 'British Pound',
-                  rate: `£ ${(fxInput * 0.78).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-                },
-                {
-                  pair: 'SGD / IDR',
-                  label: 'Singapore Dollar',
-                  rate: `S$ ${(fxInput * 1.34).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-                },
-              ].map((fx, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between p-3 rounded-md border border-border bg-muted/30 hover:bg-accent/40 transition-colors"
-                >
-                  <div>
-                    <span className="text-xs font-semibold text-foreground block">
-                      {fx.pair}
-                    </span>
-                    <span className="text-[10px] text-muted-foreground">
-                      {fx.label}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-mono text-sm font-bold text-foreground">
-                      {fx.rate}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <RefreshCw className="h-3 w-3" /> Updated hourly
-            </span>
-            <span className="font-mono text-foreground font-semibold">
-              Indicative Exchange Rates
-            </span>
           </div>
         </div>
       </motion.div>

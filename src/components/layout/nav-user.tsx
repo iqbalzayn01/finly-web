@@ -37,7 +37,13 @@ interface Coords {
   side: DropdownSide
 }
 
-export function NavUser({ user }: { user: UserProfile }) {
+export function NavUser({
+  user,
+  variant = 'sidebar',
+}: {
+  user: UserProfile
+  variant?: 'sidebar' | 'topbar'
+}) {
   const { isMobile, state } = useSidebar()
   const { isPro } = useSubscription()
   const [isOpen, setIsOpen] = React.useState(false)
@@ -63,6 +69,24 @@ export function NavUser({ user }: { user: UserProfile }) {
     if (!triggerRef.current) return
     const rect = triggerRef.current.getBoundingClientRect()
     const isSmallScreen = isMobile || window.innerWidth < 768
+
+    if (variant === 'topbar') {
+      const menuWidth = isSmallScreen
+        ? Math.min(window.innerWidth - 24, 250)
+        : 250
+      const safeLeft = Math.max(
+        12,
+        Math.min(rect.right - menuWidth, window.innerWidth - menuWidth - 12),
+      )
+      setCoords({
+        top: rect.bottom + 8,
+        left: safeLeft,
+        width: menuWidth,
+        side: 'bottom',
+      })
+      return
+    }
+
     const collapsed = state === 'collapsed' && !isSmallScreen
     const menuWidth = isSmallScreen
       ? Math.min(window.innerWidth - 24, Math.max(rect.width, 260))
@@ -127,7 +151,7 @@ export function NavUser({ user }: { user: UserProfile }) {
         })
       }
     }
-  }, [state, isMobile])
+  }, [state, isMobile, variant])
 
   React.useEffect(() => {
     if (isOpen) {
@@ -198,40 +222,131 @@ export function NavUser({ user }: { user: UserProfile }) {
     }
   }
 
-  return (
-    <>
-      <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton
-            ref={triggerRef}
-            size="lg"
-            onClick={() => setIsOpen((prev) => !prev)}
-            aria-expanded={isOpen}
-            className={cn(
-              'group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:mx-auto cursor-pointer rounded-md h-12 transition-all duration-150',
-              isOpen
-                ? 'bg-sidebar-accent text-sidebar-accent-foreground border border-primary/20'
-                : 'hover:bg-accent/50',
-            )}
-          >
-            <Avatar
-              className={cn(
-                'size-8.5 rounded-md shrink-0 shadow-2xs transition-all',
-                isPro
-                  ? 'border-2 border-primary ring-2 ring-primary/20'
-                  : 'border border-border',
+  const topbarTrigger = (
+    <button
+      ref={triggerRef}
+      onClick={() => setIsOpen((prev) => !prev)}
+      aria-expanded={isOpen}
+      aria-label="User profile menu"
+      className={cn(
+        'flex h-9 items-center gap-2 pl-1 pr-1.5 sm:pr-2.5 rounded-md border border-border bg-card text-foreground hover:bg-accent hover:border-primary/40 transition-all outline-none cursor-pointer shrink-0 shadow-none',
+        isOpen && 'border-primary ring-2 ring-primary/20 bg-accent',
+      )}
+    >
+      <Avatar
+        className={cn(
+          'size-7 rounded-md shrink-0 shadow-none transition-all',
+          isPro
+            ? 'border-2 border-primary ring-1 ring-primary/20'
+            : 'border border-border',
+        )}
+      >
+        <AvatarImage src={user.avatar} alt={user.name} />
+        <AvatarFallback className="rounded-md bg-primary/10 text-foreground font-bold text-[10px]">
+          {userInitials || 'US'}
+        </AvatarFallback>
+      </Avatar>
+      <span className="hidden sm:inline-block text-xs font-semibold text-foreground max-w-[90px] truncate">
+        {user.name}
+      </span>
+      <ChevronsUpDown className="size-3 text-muted-foreground shrink-0" />
+    </button>
+  )
+
+  const sidebarTrigger = (
+    <SidebarMenuButton
+      ref={triggerRef}
+      size="lg"
+      onClick={() => setIsOpen((prev) => !prev)}
+      aria-expanded={isOpen}
+      className={cn(
+        'group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center cursor-pointer rounded-md h-12 transition-colors',
+        isOpen
+          ? 'bg-sidebar-accent text-sidebar-accent-foreground border border-primary/20'
+          : 'hover:bg-accent/50',
+      )}
+    >
+      <Avatar
+        className={cn(
+          'size-8.5 rounded-md shrink-0 shadow-2xs transition-all',
+          isPro
+            ? 'border-2 border-primary ring-2 ring-primary/20'
+            : 'border border-border',
+        )}
+      >
+        <AvatarImage src={user.avatar} alt={user.name} />
+        <AvatarFallback className="rounded-md bg-primary/10 text-foreground font-bold text-xs">
+          {userInitials || 'US'}
+        </AvatarFallback>
+      </Avatar>
+      {!isCollapsed && (
+        <>
+          <div className="grid flex-1 text-left text-xs leading-tight min-w-0">
+            <div className="flex items-center gap-1.5 truncate">
+              <span className="truncate font-bold text-foreground tracking-tight">
+                {user.name}
+              </span>
+              {isPro && (
+                <span className="px-1.5 py-0.2 rounded-md bg-primary text-primary-foreground text-[9px] font-black tracking-wider uppercase shrink-0">
+                  PRO
+                </span>
               )}
+            </div>
+            <span className="truncate text-[10px] text-muted-foreground font-medium">
+              {user.email}
+            </span>
+          </div>
+          <ChevronsUpDown className="ml-auto size-3.5 text-muted-foreground shrink-0" />
+        </>
+      )}
+    </SidebarMenuButton>
+  )
+
+  const dropdownMenu =
+    typeof document !== 'undefined' &&
+    createPortal(
+      <AnimatePresence>
+        {isOpen && (
+          <div ref={menuRef}>
+            <motion.div
+              initial={getInitialAnimation(coords.side)}
+              animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+              exit={getExitAnimation(coords.side)}
+              transition={{
+                type: 'spring',
+                stiffness: 450,
+                damping: 28,
+              }}
+              style={{
+                position: 'fixed',
+                top: coords.top !== undefined ? `${coords.top}px` : undefined,
+                bottom:
+                  coords.bottom !== undefined
+                    ? `${coords.bottom}px`
+                    : undefined,
+                left: `${coords.left}px`,
+                width: `${coords.width}px`,
+                zIndex: 9999,
+              }}
+              className="bg-card/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl p-1.5 flex flex-col gap-1 select-none overflow-hidden"
             >
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="rounded-md bg-primary/10 text-foreground font-bold text-xs">
-                {userInitials || 'US'}
-              </AvatarFallback>
-            </Avatar>
-            {!isCollapsed && (
-              <>
+              <div className="flex items-center gap-2.5 px-2.5 py-2 text-left text-xs border-b border-border/60 mb-0.5">
+                <Avatar
+                  className={cn(
+                    'size-8 rounded-md shrink-0 shadow-2xs transition-all',
+                    isPro
+                      ? 'border-2 border-primary ring-2 ring-primary/20'
+                      : 'border border-border',
+                  )}
+                >
+                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarFallback className="rounded-md bg-primary/10 text-foreground font-bold text-xs">
+                    {userInitials || 'US'}
+                  </AvatarFallback>
+                </Avatar>
                 <div className="grid flex-1 text-left text-xs leading-tight min-w-0">
                   <div className="flex items-center gap-1.5 truncate">
-                    <span className="truncate font-bold text-foreground tracking-tight">
+                    <span className="truncate font-bold text-foreground">
                       {user.name}
                     </span>
                     {isPro && (
@@ -244,128 +359,72 @@ export function NavUser({ user }: { user: UserProfile }) {
                     {user.email}
                   </span>
                 </div>
-                <ChevronsUpDown className="ml-auto size-3.5 text-muted-foreground shrink-0" />
-              </>
-            )}
-          </SidebarMenuButton>
+              </div>
 
-          {typeof document !== 'undefined' &&
-            createPortal(
-              <AnimatePresence>
-                {isOpen && (
-                  <div ref={menuRef}>
-                    <motion.div
-                      initial={getInitialAnimation(coords.side)}
-                      animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-                      exit={getExitAnimation(coords.side)}
-                      transition={{
-                        type: 'spring',
-                        stiffness: 450,
-                        damping: 28,
-                      }}
-                      style={{
-                        position: 'fixed',
-                        top:
-                          coords.top !== undefined
-                            ? `${coords.top}px`
-                            : undefined,
-                        bottom:
-                          coords.bottom !== undefined
-                            ? `${coords.bottom}px`
-                            : undefined,
-                        left: `${coords.left}px`,
-                        width: `${coords.width}px`,
-                        zIndex: 9999,
-                      }}
-                      className="bg-card/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl p-1.5 flex flex-col gap-1 select-none overflow-hidden"
-                    >
-                      <div className="flex items-center gap-2.5 px-2.5 py-2 text-left text-xs border-b border-border/60 mb-0.5">
-                        <Avatar
-                          className={cn(
-                            'size-8 rounded-md shrink-0 shadow-2xs transition-all',
-                            isPro
-                              ? 'border-2 border-primary ring-2 ring-primary/20'
-                              : 'border border-border',
-                          )}
-                        >
-                          <AvatarImage src={user.avatar} alt={user.name} />
-                          <AvatarFallback className="rounded-md bg-primary/10 text-foreground font-bold text-xs">
-                            {userInitials || 'US'}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="grid flex-1 text-left text-xs leading-tight min-w-0">
-                          <div className="flex items-center gap-1.5 truncate">
-                            <span className="truncate font-bold text-foreground">
-                              {user.name}
-                            </span>
-                            {isPro && (
-                              <span className="px-1.5 py-0.2 rounded-md bg-primary text-primary-foreground text-[9px] font-black tracking-wider uppercase shrink-0">
-                                PRO
-                              </span>
-                            )}
-                          </div>
-                          <span className="truncate text-[10px] text-muted-foreground font-medium">
-                            {user.email}
-                          </span>
-                        </div>
-                      </div>
-
-                      <Link
-                        to="/pricing"
-                        onClick={() => setIsOpen(false)}
-                        className={cn(
-                          'flex items-center gap-2 px-2.5 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer w-full border',
-                          isPro
-                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
-                            : 'bg-primary/15 text-foreground border-primary/30 hover:bg-primary/25',
-                        )}
-                      >
-                        <Sparkles className="size-3.5 shrink-0" />
-                        <span>
-                          {isPro ? 'Manage Pro Plan' : 'Upgrade to Pro'}
-                        </span>
-                      </Link>
-
-                      <div className="-mx-1.5 my-0.5 h-px bg-border/60" />
-
-                      <Link
-                        to="/account"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-md hover:bg-accent/60 transition-colors cursor-pointer w-full"
-                      >
-                        <BadgeCheck className="size-3.5 text-muted-foreground shrink-0" />
-                        <span>Account Profile</span>
-                      </Link>
-
-                      <Link
-                        to="/settings"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-md hover:bg-accent/60 transition-colors cursor-pointer w-full"
-                      >
-                        <Settings2 className="size-3.5 text-muted-foreground shrink-0" />
-                        <span>Settings</span>
-                      </Link>
-
-                      <div className="-mx-1.5 my-0.5 h-px bg-border/60" />
-
-                      <button
-                        onClick={() => {
-                          setIsOpen(false)
-                          setLogoutOpen(true)
-                        }}
-                        className="flex items-center gap-2 px-2.5 py-2 text-xs text-destructive font-semibold rounded-md hover:bg-destructive/10 transition-colors cursor-pointer w-full text-left"
-                      >
-                        <LogOut className="size-3.5 shrink-0" />
-                        <span>Sign out</span>
-                      </button>
-                    </motion.div>
-                  </div>
+              <Link
+                to="/pricing"
+                onClick={() => setIsOpen(false)}
+                className={cn(
+                  'flex items-center gap-2 px-2.5 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer w-full border',
+                  isPro
+                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
+                    : 'bg-primary/15 text-foreground border-primary/30 hover:bg-primary/25',
                 )}
-              </AnimatePresence>,
-              document.body,
-            )}
-        </SidebarMenuItem>
-      </SidebarMenu>
+              >
+                <Sparkles className="size-3.5 shrink-0" />
+                <span>{isPro ? 'Manage Pro Plan' : 'Upgrade to Pro'}</span>
+              </Link>
+
+              <div className="-mx-1.5 my-0.5 h-px bg-border/60" />
+
+              <Link
+                to="/account"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-md hover:bg-accent/60 transition-colors cursor-pointer w-full"
+              >
+                <BadgeCheck className="size-3.5 text-muted-foreground shrink-0" />
+                <span>Account Profile</span>
+              </Link>
+
+              <Link
+                to="/settings"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-md hover:bg-accent/60 transition-colors cursor-pointer w-full"
+              >
+                <Settings2 className="size-3.5 text-muted-foreground shrink-0" />
+                <span>Settings</span>
+              </Link>
+
+              <div className="-mx-1.5 my-0.5 h-px bg-border/60" />
+
+              <button
+                onClick={() => {
+                  setIsOpen(false)
+                  setLogoutOpen(true)
+                }}
+                className="flex items-center gap-2 px-2.5 py-2 text-xs text-destructive font-semibold rounded-md hover:bg-destructive/10 transition-colors cursor-pointer w-full text-left"
+              >
+                <LogOut className="size-3.5 shrink-0" />
+                <span>Sign out</span>
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>,
+      document.body,
+    )
+
+  return (
+    <>
+      {variant === 'topbar' ? (
+        topbarTrigger
+      ) : (
+        <SidebarMenu>
+          <SidebarMenuItem>{sidebarTrigger}</SidebarMenuItem>
+        </SidebarMenu>
+      )}
+
+      {dropdownMenu}
 
       <LogoutModal
         open={logoutOpen}

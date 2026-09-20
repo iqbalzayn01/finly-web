@@ -9,6 +9,9 @@ import { useSubscription } from '../../lib/subscription'
 import { SidebarTrigger } from '../ui/sidebar'
 import { Separator } from '../ui/separator'
 import notificationsData from '../../data/notifications.json'
+import teamsData from '../../data/teams.json'
+import { NavUser } from './nav-user'
+import type { UserProfile } from './nav-user'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -41,7 +44,11 @@ function getBreadcrumbInfo(pathname: string): {
   return { section: 'Finly OS', page: 'Overview' }
 }
 
-export function Topbar() {
+export function Topbar({
+  user = teamsData.currentUser,
+}: {
+  user?: UserProfile
+} = {}) {
   const location = useLocation()
   const { isPro } = useSubscription()
   const [notifOpen, setNotifOpen] = React.useState(false)
@@ -217,6 +224,8 @@ export function Topbar() {
             )}
           </AnimatePresence>
         </div>
+
+        <NavUser user={user} variant="topbar" />
       </div>
     </header>
   )
