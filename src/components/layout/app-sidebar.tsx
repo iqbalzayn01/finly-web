@@ -7,6 +7,7 @@ import {
   Package,
   Settings2,
 } from '../ui/icon'
+import { Logo } from './logo'
 import { NavMain } from './nav-main'
 import type { NavigationItem } from './nav-main'
 import { NavUser } from './nav-user'
@@ -59,9 +60,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <div className="bg-primary aspect-square flex items-center justify-center rounded-md h-9 sm:h-10 w-9 sm:w-10 shrink-0">
-          <span className="font-black">F</span>
-        </div>
+        <Logo />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={finlyNavigationItems} />

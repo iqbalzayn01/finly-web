@@ -383,7 +383,7 @@ export function SidebarSearch() {
           }}
           onKeyDown={handleKeyDown}
           placeholder="Search data..."
-          className="pl-8 pr-12 text-xs h-8 bg-background/60 dark:bg-background/40 border-sidebar-border focus-visible:ring-1 focus-visible:ring-primary/40 rounded-md"
+          className="pl-8 pr-12 text-xs h-9 bg-background/60 dark:bg-background/40 border-sidebar-border focus-visible:ring-1 focus-visible:ring-primary/40 rounded-md"
         />
         <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 select-none text-muted-foreground" />
         {searchQuery ? (

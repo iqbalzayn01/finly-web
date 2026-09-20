@@ -44,7 +44,7 @@ export function NavUser({
   user: UserProfile
   variant?: 'sidebar' | 'topbar'
 }) {
-  const { isMobile, state } = useSidebar()
+  const { isMobile, state, openMobile } = useSidebar()
   const { isPro } = useSubscription()
   const [isOpen, setIsOpen] = React.useState(false)
   const [logoutOpen, setLogoutOpen] = React.useState(false)
@@ -57,6 +57,7 @@ export function NavUser({
   })
 
   const isCollapsed = state === 'collapsed' && !isMobile
+  const isSidebarClosed = isMobile ? !openMobile : state === 'collapsed'
 
   const userInitials = user.name
     .split(' ')
@@ -229,7 +230,10 @@ export function NavUser({
       aria-expanded={isOpen}
       aria-label="User profile menu"
       className={cn(
-        'flex h-9 items-center gap-2 pl-1 pr-1.5 sm:pr-2.5 rounded-md border border-border bg-card text-foreground hover:bg-accent hover:border-primary/40 transition-all outline-none cursor-pointer shrink-0 shadow-none',
+        'flex h-9 items-center rounded-md border border-border bg-card text-foreground hover:bg-accent hover:border-primary/40 transition-all outline-none cursor-pointer shrink-0 shadow-none',
+        isSidebarClosed
+          ? 'size-9 justify-center p-0'
+          : 'gap-2 pl-1 pr-1.5 sm:pr-2.5',
         isOpen && 'border-primary ring-2 ring-primary/20 bg-accent',
       )}
     >
@@ -246,21 +250,24 @@ export function NavUser({
           {userInitials || 'US'}
         </AvatarFallback>
       </Avatar>
-      <span className="hidden sm:inline-block text-xs font-semibold text-foreground max-w-[90px] truncate">
-        {user.name}
-      </span>
-      <ChevronsUpDown className="size-3 text-muted-foreground shrink-0" />
+      {!isSidebarClosed && (
+        <>
+          <span className="hidden sm:inline-block text-xs font-semibold text-foreground max-w-[90px] truncate">
+            {user.name}
+          </span>
+          <ChevronsUpDown className="size-3 text-muted-foreground shrink-0" />
+        </>
+      )}
     </button>
   )
 
   const sidebarTrigger = (
     <SidebarMenuButton
       ref={triggerRef}
-      size="lg"
       onClick={() => setIsOpen((prev) => !prev)}
       aria-expanded={isOpen}
       className={cn(
-        'group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center cursor-pointer rounded-md h-12 transition-colors',
+        'w-full h-10 p-1 rounded-md transition-colors cursor-pointer select-none overflow-hidden group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:p-1 group-data-[collapsible=icon]:justify-center',
         isOpen
           ? 'bg-sidebar-accent text-sidebar-accent-foreground border border-primary/20'
           : 'hover:bg-accent/50',
@@ -268,7 +275,7 @@ export function NavUser({
     >
       <Avatar
         className={cn(
-          'size-8.5 rounded-md shrink-0 shadow-2xs transition-all',
+          'size-8 rounded-md shrink-0 shadow-2xs transition-all',
           isPro
             ? 'border-2 border-primary ring-2 ring-primary/20'
             : 'border border-border',
@@ -281,7 +288,7 @@ export function NavUser({
       </Avatar>
       {!isCollapsed && (
         <>
-          <div className="grid flex-1 text-left text-xs leading-tight min-w-0">
+          <div className="grid flex-1 text-left text-xs leading-tight min-w-0 overflow-hidden whitespace-nowrap group-data-[collapsible=icon]:hidden">
             <div className="flex items-center gap-1.5 truncate">
               <span className="truncate font-bold text-foreground tracking-tight">
                 {user.name}
@@ -296,7 +303,7 @@ export function NavUser({
               {user.email}
             </span>
           </div>
-          <ChevronsUpDown className="ml-auto size-3.5 text-muted-foreground shrink-0" />
+          <ChevronsUpDown className="ml-auto size-3.5 text-muted-foreground shrink-0 group-data-[collapsible=icon]:hidden" />
         </>
       )}
     </SidebarMenuButton>

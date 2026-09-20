@@ -717,7 +717,7 @@ function Dashboard() {
             <div>
               <div className="flex items-center justify-between mb-4 gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground border border-primary/20">
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                   <div className="truncate">
@@ -841,7 +841,7 @@ function Dashboard() {
           <Card className="flex flex-col border border-border bg-card shadow-none rounded-2xl p-0 h-full justify-between">
             <CardHeader className="items-center pb-0 pt-6 px-6 text-center">
               <div className="flex items-center gap-2 mb-1">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary border border-primary/20">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground border border-primary/20">
                   <Activity className="h-3.5 w-3.5" />
                 </div>
                 <CardTitle className="text-lg font-semibold text-foreground">

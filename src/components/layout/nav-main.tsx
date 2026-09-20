@@ -54,7 +54,7 @@ export function NavMain({ items }: { items: NavigationItem[] }) {
                   className={cn(
                     'w-full h-9 sm:h-10 px-3 text-xs sm:text-sm font-semibold rounded-md transition-colors cursor-pointer select-none group-data-[collapsible=icon]:px-0',
                     isActive
-                      ? 'bg-primary/50 text-primary-foreground font-bold hover:bg-primary hover:text-primary-foreground'
+                      ? 'bg-primary text-primary-foreground font-bold hover:bg-primary hover:text-primary-foreground'
                       : 'text-muted-foreground hover:bg-slate-500/10 dark:hover:bg-slate-500/20 hover:text-foreground',
                   )}
                 >
