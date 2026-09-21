@@ -225,7 +225,7 @@ function Settings() {
         <div className="space-y-6 sm:space-y-8">
           <div className="border border-border bg-card p-4 sm:p-6 md:p-8 rounded-2xl shadow-none space-y-5 sm:space-y-6">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
                 <Building2 className="h-5 w-5" />
               </div>
               <div>
@@ -338,7 +338,7 @@ function Settings() {
 
           <div className="border border-border bg-card p-8 rounded-2xl shadow-none space-y-6">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
                 <SlidersHorizontal className="h-5 w-5" />
               </div>
               <div>
@@ -430,7 +430,7 @@ function Settings() {
         <div className="border border-border bg-card p-8 rounded-2xl shadow-none space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
                 <Bot className="h-5 w-5" />
               </div>
               <div>

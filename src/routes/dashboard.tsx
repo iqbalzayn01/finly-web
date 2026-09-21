@@ -717,7 +717,7 @@ function Dashboard() {
             <div>
               <div className="flex items-center justify-between mb-4 gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground border border-primary/20">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
                     <ShieldCheck className="h-4 w-4" />
                   </div>
                   <div className="truncate">
@@ -949,7 +949,7 @@ function Dashboard() {
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary border border-primary/20 shrink-0">
+                <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground shrink-0">
                   <Receipt className="h-4 w-4" />
                 </div>
                 <div>
