@@ -15,7 +15,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '../components/ui/card'
@@ -674,35 +673,6 @@ function Dashboard() {
               </span>
             </div>
           </CardContent>
-
-          <CardFooter className="pt-2 pb-4">
-            <div className="flex flex-col sm:flex-row w-full sm:items-center justify-between gap-3 text-xs">
-              <div className="grid gap-1">
-                <div className="flex items-center gap-2 leading-none font-semibold text-foreground">
-                  <span>
-                    {periodSummary.netCashflow >= 0
-                      ? `Net operating surplus of ${formatAmount(periodSummary.netCashflow)} (${periodSummary.margin}% retention)`
-                      : `Net operating deficit of ${formatAmount(Math.abs(periodSummary.netCashflow))}`}
-                  </span>
-                  {periodSummary.netCashflow >= 0 ? (
-                    <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                  ) : (
-                    <TrendingDown className="h-4 w-4 text-rose-600 dark:text-rose-400" />
-                  )}
-                </div>
-                <div className="flex items-center gap-2 leading-none text-[11px] text-muted-foreground">
-                  Average period inflow: {formatAmount(periodSummary.avgIncome)}{' '}
-                  · Average period outflow:{' '}
-                  {formatAmount(periodSummary.avgExpense)}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground bg-muted/40 px-2.5 py-1 rounded-md border border-border/60 self-start sm:self-auto">
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
-                <span>Accounting-Grade Ledger Logic</span>
-              </div>
-            </div>
-          </CardFooter>
         </Card>
       </motion.div>
 
@@ -729,9 +699,6 @@ function Dashboard() {
                     </p>
                   </div>
                 </div>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
-                  Coverage: 8.1 Mo
-                </span>
               </div>
 
               <div className="my-4 sm:my-5">
@@ -839,7 +806,7 @@ function Dashboard() {
           className="flex flex-col"
         >
           <Card className="flex flex-col border border-border bg-card shadow-none rounded-2xl p-0 h-full justify-between">
-            <CardHeader className="items-center pb-0 pt-6 px-6 text-center">
+            <CardHeader className="items-center px-6 text-center">
               <div className="flex items-center gap-2 mb-1">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground border border-primary/20">
                   <Activity className="h-3.5 w-3.5" />
@@ -852,7 +819,7 @@ function Dashboard() {
                 Liquidity, operating margin, and payment collection rate
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex-1 pb-0 px-6 pt-2">
+            <CardContent className="px-6">
               <div className="relative mx-auto aspect-square max-h-62.5 w-full flex items-center justify-center">
                 <ChartContainer
                   config={healthChartConfig}
@@ -925,16 +892,6 @@ function Dashboard() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex items-center justify-between text-xs border-t border-border pt-4 px-6 pb-6 mt-2">
-              <div className="flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
-                <TrendingUp className="h-4 w-4" />
-                <span>Improved 4.1% this quarter</span>
-              </div>
-              <span className="flex items-center gap-1 text-muted-foreground text-[11px]">
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
-                Calculated from ledger
-              </span>
-            </CardFooter>
           </Card>
         </motion.div>
       </div>
