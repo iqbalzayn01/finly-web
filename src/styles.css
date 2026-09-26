@@ -373,6 +373,93 @@ body[data-scroll-locked] {
   }
 }
 
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+html.modal-open,
+html[data-base-ui-scroll-locked],
+body.modal-open,
+body[data-scroll-locked] {
+  scrollbar-color: transparent transparent !important;
+}
+
+html.modal-open::-webkit-scrollbar,
+html[data-base-ui-scroll-locked]::-webkit-scrollbar,
+body.modal-open::-webkit-scrollbar,
+body[data-scroll-locked]::-webkit-scrollbar {
+  background: transparent !important;
+}
+
+html.modal-open::-webkit-scrollbar-thumb,
+html[data-base-ui-scroll-locked]::-webkit-scrollbar-thumb,
+body.modal-open::-webkit-scrollbar-thumb,
+body[data-scroll-locked]::-webkit-scrollbar-thumb {
+  background: transparent !important;
+  visibility: hidden !important;
+  border: none !important;
+}
+
+html.modal-open::-webkit-scrollbar-track,
+html[data-base-ui-scroll-locked]::-webkit-scrollbar-track,
+body.modal-open::-webkit-scrollbar-track,
+body[data-scroll-locked]::-webkit-scrollbar-track {
+  background: transparent !important;
+  border: none !important;
+}
+
+html.modal-open::-webkit-scrollbar-button,
+html[data-base-ui-scroll-locked]::-webkit-scrollbar-button,
+body.modal-open::-webkit-scrollbar-button,
+body[data-scroll-locked]::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+html.modal-open::-webkit-scrollbar-corner,
+html[data-base-ui-scroll-locked]::-webkit-scrollbar-corner,
+body.modal-open::-webkit-scrollbar-corner,
+body[data-scroll-locked]::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
+html.modal-open *,
+body.modal-open *,
+html[data-base-ui-scroll-locked] *,
+body[data-scroll-locked] *,
+[data-slot='dialog-content'],
+[data-slot='dialog-content'] * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+html.modal-open *::-webkit-scrollbar,
+body.modal-open *::-webkit-scrollbar,
+html[data-base-ui-scroll-locked] *::-webkit-scrollbar,
+body[data-scroll-locked] *::-webkit-scrollbar,
+[data-slot='dialog-content']::-webkit-scrollbar,
+[data-slot='dialog-content'] *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,

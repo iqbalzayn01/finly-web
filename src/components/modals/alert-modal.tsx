@@ -1,7 +1,15 @@
 import * as React from 'react'
 import { AlertCircle, AlertTriangle, CheckCircle2, Info } from '../ui/icon'
 import { Button } from '../ui/button'
-import { Modal } from './modal'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog'
 
 export type AlertType = 'info' | 'success' | 'warning' | 'error'
 
@@ -83,14 +91,40 @@ export function AlertModal({
   }
 
   return (
-    <Modal
-      trigger={trigger}
-      open={isOpen}
-      onOpenChange={setIsOpen}
-      size="sm"
-      className="max-w-sm text-center"
-      footer={
-        <div className="flex w-full items-center justify-end gap-2.5 pt-2">
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      {trigger && (
+        <DialogTrigger
+          render={(props) => {
+            if (React.isValidElement(trigger)) {
+              return React.cloneElement(
+                trigger as React.ReactElement<any>,
+                props,
+              )
+            }
+            return <button {...props}>{trigger}</button>
+          }}
+        />
+      )}
+      <DialogContent className="max-w-sm text-center">
+        <DialogHeader className="items-center text-center">
+          <div
+            className={`flex h-12 w-12 items-center justify-center rounded-full mb-2 ${cfg.iconContainerClass}`}
+          >
+            {cfg.icon}
+          </div>
+          <DialogTitle className="text-center font-semibold text-lg text-foreground">
+            {title}
+          </DialogTitle>
+          {description && (
+            <DialogDescription className="text-center text-xs leading-relaxed text-muted-foreground">
+              {description}
+            </DialogDescription>
+          )}
+        </DialogHeader>
+
+        {children && <div className="mt-2 text-left">{children}</div>}
+
+        <DialogFooter className="flex w-full items-center justify-end gap-2.5 pt-2">
           {cancelText && (
             <Button variant="outline" size="sm" onClick={handleCancel}>
               {cancelText}
@@ -99,25 +133,8 @@ export function AlertModal({
           <Button variant={cfg.buttonVariant} size="sm" onClick={handleConfirm}>
             {confirmText}
           </Button>
-        </div>
-      }
-    >
-      <div className="flex flex-col items-center text-center gap-3 pt-1 pb-2">
-        <div
-          className={`flex h-12 w-12 items-center justify-center rounded-full ${cfg.iconContainerClass}`}
-        >
-          {cfg.icon}
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <h3 className="font-semibold text-lg text-foreground">{title}</h3>
-          {description && (
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              {description}
-            </p>
-          )}
-          {children && <div className="mt-2 text-left">{children}</div>}
-        </div>
-      </div>
-    </Modal>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

@@ -12,6 +12,14 @@ import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../components/ui/button'
 import { AlertModal } from '../components/ui/alert-modal'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../components/ui/dialog'
+import {
   Select,
   SelectTrigger,
   SelectValue,
@@ -324,133 +332,120 @@ function Items() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {showForm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/40 backdrop-blur-xs"
-              onClick={() => setShowForm(false)}
-            />
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-lg border border-border bg-card p-6 sm:p-8 rounded-2xl shadow-none max-h-[90vh] overflow-y-auto"
-            >
-              <h2 className="text-xl font-bold text-foreground mb-6">
-                New Item
-              </h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-xs font-semibold text-foreground">
-                    Item Name <span className="text-destructive">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={newItem.name}
-                    onChange={(e) => {
-                      setNewItem((prev) => ({ ...prev, name: e.target.value }))
-                      if (formErrors.name) {
-                        setFormErrors((prev) => {
-                          const updated = { ...prev }
-                          delete updated.name
-                          return updated
-                        })
-                      }
-                    }}
-                    placeholder="Enter item name"
-                    className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
-                      formErrors.name ? 'border-destructive' : 'border-border'
-                    }`}
-                  />
-                  {formErrors.name && (
-                    <p className="text-[11px] font-semibold text-destructive mt-1">
-                      {formErrors.name}
-                    </p>
-                  )}
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs font-semibold text-foreground">
-                      Price <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      value={newItem.price || ''}
-                      onChange={(e) => {
-                        setNewItem((prev) => ({
-                          ...prev,
-                          price: parseFloat(e.target.value) || 0,
-                        }))
-                        if (formErrors.price) {
-                          setFormErrors((prev) => {
-                            const updated = { ...prev }
-                            delete updated.price
-                            return updated
-                          })
-                        }
-                      }}
-                      placeholder="0.00"
-                      className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground font-mono ${
-                        formErrors.price
-                          ? 'border-destructive'
-                          : 'border-border'
-                      }`}
-                    />
-                    {formErrors.price && (
-                      <p className="text-[11px] font-semibold text-destructive mt-1">
-                        {formErrors.price}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold text-foreground">
-                      Unit <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={newItem.unit}
-                      onChange={(e) => {
-                        setNewItem((prev) => ({
-                          ...prev,
-                          unit: e.target.value,
-                        }))
-                        if (formErrors.unit) {
-                          setFormErrors((prev) => {
-                            const updated = { ...prev }
-                            delete updated.unit
-                            return updated
-                          })
-                        }
-                      }}
-                      placeholder="e.g. hour, project, month"
-                      className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
-                        formErrors.unit ? 'border-destructive' : 'border-border'
-                      }`}
-                    />
-                    {formErrors.unit && (
-                      <p className="text-[11px] font-semibold text-destructive mt-1">
-                        {formErrors.unit}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className="flex justify-end gap-3 mt-8">
-                  <Button variant="outline" onClick={() => setShowForm(false)}>
-                    Cancel
-                  </Button>
-                  <Button className="px-6" onClick={handleCreateItem}>
-                    Save Item
-                  </Button>
-                </div>
+      <Dialog open={showForm} onOpenChange={setShowForm}>
+        <DialogContent className="max-w-lg p-6 sm:p-8 max-h-[90vh] overflow-y-auto no-scrollbar">
+          <DialogHeader className="mb-2">
+            <DialogTitle className="text-xl font-bold text-foreground">
+              New Item
+            </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground">
+              Add a new service or product to your pricing catalog.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-xs font-semibold text-foreground">
+                Item Name <span className="text-destructive">*</span>
+              </label>
+              <input
+                type="text"
+                value={newItem.name}
+                onChange={(e) => {
+                  setNewItem((prev) => ({ ...prev, name: e.target.value }))
+                  if (formErrors.name) {
+                    setFormErrors((prev) => {
+                      const updated = { ...prev }
+                      delete updated.name
+                      return updated
+                    })
+                  }
+                }}
+                placeholder="Enter item name"
+                className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                  formErrors.name ? 'border-destructive' : 'border-border'
+                }`}
+              />
+              {formErrors.name && (
+                <p className="text-[11px] font-semibold text-destructive mt-1">
+                  {formErrors.name}
+                </p>
+              )}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-foreground">
+                  Price <span className="text-destructive">*</span>
+                </label>
+                <input
+                  type="number"
+                  value={newItem.price || ''}
+                  onChange={(e) => {
+                    setNewItem((prev) => ({
+                      ...prev,
+                      price: parseFloat(e.target.value) || 0,
+                    }))
+                    if (formErrors.price) {
+                      setFormErrors((prev) => {
+                        const updated = { ...prev }
+                        delete updated.price
+                        return updated
+                      })
+                    }
+                  }}
+                  placeholder="0.00"
+                  className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground font-mono ${
+                    formErrors.price ? 'border-destructive' : 'border-border'
+                  }`}
+                />
+                {formErrors.price && (
+                  <p className="text-[11px] font-semibold text-destructive mt-1">
+                    {formErrors.price}
+                  </p>
+                )}
               </div>
-            </motion.div>
+              <div>
+                <label className="text-xs font-semibold text-foreground">
+                  Unit <span className="text-destructive">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newItem.unit}
+                  onChange={(e) => {
+                    setNewItem((prev) => ({
+                      ...prev,
+                      unit: e.target.value,
+                    }))
+                    if (formErrors.unit) {
+                      setFormErrors((prev) => {
+                        const updated = { ...prev }
+                        delete updated.unit
+                        return updated
+                      })
+                    }
+                  }}
+                  placeholder="e.g. hour, project, month"
+                  className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                    formErrors.unit ? 'border-destructive' : 'border-border'
+                  }`}
+                />
+                {formErrors.unit && (
+                  <p className="text-[11px] font-semibold text-destructive mt-1">
+                    {formErrors.unit}
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
-        )}
-      </AnimatePresence>
+          <DialogFooter className="mt-8 flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setShowForm(false)}>
+              Cancel
+            </Button>
+            <Button className="px-6" onClick={handleCreateItem}>
+              Save Item
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <AlertModal
         open={itemModal.open}

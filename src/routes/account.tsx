@@ -5,7 +5,14 @@ import { motion } from 'motion/react'
 import { useState } from 'react'
 import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar'
 import { AlertModal } from '../components/ui/alert-modal'
-import { Modal } from '../components/ui/modal'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../components/ui/dialog'
 import { useSubscription } from '../lib/subscription'
 import { cn } from '../lib/utils'
 import {
@@ -294,14 +301,117 @@ function Account() {
         confirmText="Got it"
       />
 
-      <Modal
-        open={passwordModalOpen}
-        onOpenChange={setPasswordModalOpen}
-        title="Change Account Password"
-        description="Enter your current password followed by your new password."
-        size="md"
-        footer={
-          <div className="flex w-full items-center justify-end gap-2 pt-2">
+      <Dialog open={passwordModalOpen} onOpenChange={setPasswordModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader className="pr-8">
+            <DialogTitle>Change Account Password</DialogTitle>
+            <DialogDescription>
+              Enter your current password followed by your new password.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">
+                Current Password <span className="text-destructive">*</span>
+              </label>
+              <input
+                type="password"
+                value={passwordForm.currentPassword}
+                onChange={(e) => {
+                  setPasswordForm((prev) => ({
+                    ...prev,
+                    currentPassword: e.target.value,
+                  }))
+                  if (passwordErrors.currentPassword) {
+                    setPasswordErrors((prev) => {
+                      const updated = { ...prev }
+                      delete updated.currentPassword
+                      return updated
+                    })
+                  }
+                }}
+                placeholder="••••••••••••"
+                className={`h-10 w-full border bg-background rounded-md px-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground ${
+                  passwordErrors.currentPassword
+                    ? 'border-destructive'
+                    : 'border-border'
+                }`}
+              />
+              {passwordErrors.currentPassword && (
+                <p className="text-[11px] font-semibold text-destructive mt-1">
+                  {passwordErrors.currentPassword}
+                </p>
+              )}
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">
+                New Password <span className="text-destructive">*</span>
+              </label>
+              <input
+                type="password"
+                value={passwordForm.newPassword}
+                onChange={(e) => {
+                  setPasswordForm((prev) => ({
+                    ...prev,
+                    newPassword: e.target.value,
+                  }))
+                  if (passwordErrors.newPassword) {
+                    setPasswordErrors((prev) => {
+                      const updated = { ...prev }
+                      delete updated.newPassword
+                      return updated
+                    })
+                  }
+                }}
+                placeholder="Minimum 8 characters (mixed case + number)"
+                className={`h-10 w-full border bg-background rounded-md px-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground ${
+                  passwordErrors.newPassword
+                    ? 'border-destructive'
+                    : 'border-border'
+                }`}
+              />
+              {passwordErrors.newPassword && (
+                <p className="text-[11px] font-semibold text-destructive mt-1">
+                  {passwordErrors.newPassword}
+                </p>
+              )}
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground">
+                Confirm New Password <span className="text-destructive">*</span>
+              </label>
+              <input
+                type="password"
+                value={passwordForm.confirmPassword}
+                onChange={(e) => {
+                  setPasswordForm((prev) => ({
+                    ...prev,
+                    confirmPassword: e.target.value,
+                  }))
+                  if (passwordErrors.confirmPassword) {
+                    setPasswordErrors((prev) => {
+                      const updated = { ...prev }
+                      delete updated.confirmPassword
+                      return updated
+                    })
+                  }
+                }}
+                placeholder="Re-enter new password"
+                className={`h-10 w-full border bg-background rounded-md px-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground ${
+                  passwordErrors.confirmPassword
+                    ? 'border-destructive'
+                    : 'border-border'
+                }`}
+              />
+              {passwordErrors.confirmPassword && (
+                <p className="text-[11px] font-semibold text-destructive mt-1">
+                  {passwordErrors.confirmPassword}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <DialogFooter className="flex w-full items-center justify-end gap-2 pt-2 border-t border-border">
             <Button
               variant="outline"
               size="sm"
@@ -312,120 +422,36 @@ function Account() {
             <Button size="sm" onClick={handleUpdatePassword}>
               Update Password
             </Button>
-          </div>
-        }
-      >
-        <div className="space-y-4 py-2">
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-foreground">
-              Current Password <span className="text-destructive">*</span>
-            </label>
-            <input
-              type="password"
-              value={passwordForm.currentPassword}
-              onChange={(e) => {
-                setPasswordForm((prev) => ({
-                  ...prev,
-                  currentPassword: e.target.value,
-                }))
-                if (passwordErrors.currentPassword) {
-                  setPasswordErrors((prev) => {
-                    const updated = { ...prev }
-                    delete updated.currentPassword
-                    return updated
-                  })
-                }
-              }}
-              placeholder="••••••••••••"
-              className={`h-10 w-full border bg-background rounded-md px-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground ${
-                passwordErrors.currentPassword
-                  ? 'border-destructive'
-                  : 'border-border'
-              }`}
-            />
-            {passwordErrors.currentPassword && (
-              <p className="text-[11px] font-semibold text-destructive mt-1">
-                {passwordErrors.currentPassword}
-              </p>
-            )}
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-foreground">
-              New Password <span className="text-destructive">*</span>
-            </label>
-            <input
-              type="password"
-              value={passwordForm.newPassword}
-              onChange={(e) => {
-                setPasswordForm((prev) => ({
-                  ...prev,
-                  newPassword: e.target.value,
-                }))
-                if (passwordErrors.newPassword) {
-                  setPasswordErrors((prev) => {
-                    const updated = { ...prev }
-                    delete updated.newPassword
-                    return updated
-                  })
-                }
-              }}
-              placeholder="Minimum 8 characters (mixed case + number)"
-              className={`h-10 w-full border bg-background rounded-md px-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground ${
-                passwordErrors.newPassword
-                  ? 'border-destructive'
-                  : 'border-border'
-              }`}
-            />
-            {passwordErrors.newPassword && (
-              <p className="text-[11px] font-semibold text-destructive mt-1">
-                {passwordErrors.newPassword}
-              </p>
-            )}
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-foreground">
-              Confirm New Password <span className="text-destructive">*</span>
-            </label>
-            <input
-              type="password"
-              value={passwordForm.confirmPassword}
-              onChange={(e) => {
-                setPasswordForm((prev) => ({
-                  ...prev,
-                  confirmPassword: e.target.value,
-                }))
-                if (passwordErrors.confirmPassword) {
-                  setPasswordErrors((prev) => {
-                    const updated = { ...prev }
-                    delete updated.confirmPassword
-                    return updated
-                  })
-                }
-              }}
-              placeholder="Re-enter new password"
-              className={`h-10 w-full border bg-background rounded-md px-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground ${
-                passwordErrors.confirmPassword
-                  ? 'border-destructive'
-                  : 'border-border'
-              }`}
-            />
-            {passwordErrors.confirmPassword && (
-              <p className="text-[11px] font-semibold text-destructive mt-1">
-                {passwordErrors.confirmPassword}
-              </p>
-            )}
-          </div>
-        </div>
-      </Modal>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-      <Modal
-        open={twoFactorModalOpen}
-        onOpenChange={setTwoFactorModalOpen}
-        title="Two-Factor Authentication"
-        description="Require a TOTP verification code from your authenticator app on sign-in."
-        size="md"
-        footer={
-          <div className="flex w-full items-center justify-end gap-2 pt-2">
+      <Dialog open={twoFactorModalOpen} onOpenChange={setTwoFactorModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader className="pr-8">
+            <DialogTitle>Two-Factor Authentication</DialogTitle>
+            <DialogDescription>
+              Require a TOTP verification code from your authenticator app on
+              sign-in.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-2">
+            <div className="flex items-center gap-3 p-3.5 rounded-md bg-muted/40 border border-border">
+              <ShieldAlert className="h-6 w-6 text-primary shrink-0" />
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Scan this code with an authenticator app (such as Google
+                Authenticator or 1Password), then confirm.
+              </p>
+            </div>
+            <div className="flex justify-center p-4 bg-white dark:bg-card border border-border rounded-md">
+              <div className="h-28 w-28 bg-muted rounded-lg flex items-center justify-center font-mono text-xs text-muted-foreground border border-dashed border-border">
+                [ QR Code ]
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter className="flex w-full items-center justify-end gap-2 pt-2 border-t border-border">
             <Button
               variant="outline"
               size="sm"
@@ -442,24 +468,9 @@ function Account() {
             >
               {twoFactorEnabled ? 'Disable 2FA' : 'Verify & Enable'}
             </Button>
-          </div>
-        }
-      >
-        <div className="space-y-4 py-2">
-          <div className="flex items-center gap-3 p-3.5 rounded-md bg-muted/40 border border-border">
-            <ShieldAlert className="h-6 w-6 text-primary shrink-0" />
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Scan this code with an authenticator app (such as Google
-              Authenticator or 1Password), then confirm.
-            </p>
-          </div>
-          <div className="flex justify-center p-4 bg-white dark:bg-card border border-border rounded-md">
-            <div className="h-28 w-28 bg-muted rounded-lg flex items-center justify-center font-mono text-xs text-muted-foreground border border-dashed border-border">
-              [ QR Code ]
-            </div>
-          </div>
-        </div>
-      </Modal>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   )
 }

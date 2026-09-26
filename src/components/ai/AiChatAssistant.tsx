@@ -278,9 +278,6 @@ export function AiChatAssistant() {
                   <div>
                     <h3 className="font-bold text-xs sm:text-sm text-foreground flex items-center gap-1.5 sm:gap-2">
                       Finly Assistant
-                      <span className="text-[9px] sm:text-[10px] font-semibold px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                        Preview
-                      </span>
                     </h3>
                     <p className="text-[11px] sm:text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
                       <ShieldCheck className="h-3 w-3 text-emerald-500" />

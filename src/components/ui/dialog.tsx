@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Dialog as BaseDialog } from '@base-ui/react'
 import { X } from './icon'
-import { cn } from '#/lib/utils'
+import { cn } from '../../lib/utils'
 
 function Dialog({ ...props }: React.ComponentProps<typeof BaseDialog.Root>) {
   return <BaseDialog.Root data-slot="dialog" {...props} />
@@ -41,6 +41,25 @@ function DialogOverlay({
   )
 }
 
+let activeDialogCount = 0
+
+function DialogBodyLock() {
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return
+    activeDialogCount += 1
+    document.documentElement.classList.add('modal-open')
+    document.body.classList.add('modal-open')
+    return () => {
+      activeDialogCount = Math.max(0, activeDialogCount - 1)
+      if (activeDialogCount === 0) {
+        document.documentElement.classList.remove('modal-open')
+        document.body.classList.remove('modal-open')
+      }
+    }
+  }, [])
+  return null
+}
+
 interface DialogContentProps extends React.ComponentProps<
   typeof BaseDialog.Popup
 > {
@@ -55,11 +74,12 @@ function DialogContent({
 }: DialogContentProps) {
   return (
     <DialogPortal data-slot="dialog-portal">
+      <DialogBodyLock />
       <DialogOverlay />
       <BaseDialog.Popup
         data-slot="dialog-content"
         className={cn(
-          'fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-2xl border border-border bg-card p-6 text-foreground shadow-2xl duration-200 outline-none sm:max-w-lg',
+          'fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-2xl border border-border bg-card p-6 text-foreground shadow-2xl duration-200 outline-none max-w-lg no-scrollbar',
           'transition-all data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
           className,
         )}

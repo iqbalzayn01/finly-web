@@ -87,7 +87,7 @@ const cashflowChartConfig = {
   },
 } satisfies ChartConfig
 
-type CashflowTimeframe = '1d' | '7d' | '30d' | '1m' | '3m' | '6m' | '1y' | '5y'
+type CashflowTimeframe = '1d' | '7d' | '30d' | '1m' | '3m' | '1y' | '5y'
 
 const TIMEFRAME_OPTIONS: { label: string; value: CashflowTimeframe }[] = [
   { label: '1D', value: '1d' },
@@ -95,28 +95,8 @@ const TIMEFRAME_OPTIONS: { label: string; value: CashflowTimeframe }[] = [
   { label: '30D', value: '30d' },
   { label: '1M', value: '1m' },
   { label: '3M', value: '3m' },
-  { label: '6M', value: '6m' },
   { label: '1Y', value: '1y' },
   { label: '5Y', value: '5y' },
-]
-
-type CashflowViewMode = 'grouped' | 'split'
-
-const VIEW_MODE_OPTIONS: {
-  label: string
-  value: CashflowViewMode
-  description: string
-}[] = [
-  {
-    label: 'Grouped',
-    value: 'grouped',
-    description: 'Side-by-side inflow and outflow bars',
-  },
-  {
-    label: 'Split Axis',
-    value: 'split',
-    description: 'Bi-directional surplus & deficit split at $0',
-  },
 ]
 
 interface CashflowTooltipPayloadItem {
@@ -282,9 +262,7 @@ const {
 function Dashboard() {
   const { symbol, formatAmount } = useCurrency()
   const [cashflowTimeframe, setCashflowTimeframe] =
-    useState<CashflowTimeframe>('6m')
-  const [cashflowViewMode, setCashflowViewMode] =
-    useState<CashflowViewMode>('grouped')
+    useState<CashflowTimeframe>('1y')
   const [recentTxFilter, setRecentTxFilter] = useState<
     'all' | 'income' | 'expense'
   >('all')
@@ -402,7 +380,7 @@ function Dashboard() {
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <div className="space-y-1 min-w-0">
+                  <div className="space-y-2 min-w-0">
                     <span className="sm:text-xs md:text-base font-semibold truncate block">
                       {card.title}
                     </span>
@@ -425,16 +403,6 @@ function Dashboard() {
                 <div className="flex items-center justify-between text-xs gap-2">
                   <span className="opacity-75 font-medium truncate">
                     {card.subtext}
-                  </span>
-                  <span
-                    className={`inline-flex items-center gap-1 font-semibold px-2 py-0.5 shrink-0 ${card.trendClass}`}
-                  >
-                    {card.isUp ? (
-                      <ArrowUpRight className="h-3 w-3" />
-                    ) : (
-                      <ArrowDownRight className="h-3 w-3" />
-                    )}
-                    {card.trend}
                   </span>
                 </div>
               </div>
@@ -463,41 +431,21 @@ function Dashboard() {
               </CardDescription>
             </div>
 
-            <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
-              <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-md">
-                {VIEW_MODE_OPTIONS.map((mode) => (
-                  <button
-                    key={mode.value}
-                    type="button"
-                    onClick={() => setCashflowViewMode(mode.value)}
-                    title={mode.description}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-all cursor-pointer ${
-                      cashflowViewMode === mode.value
-                        ? 'bg-card text-foreground shadow-xs font-bold border border-border/80'
-                        : 'text-muted-foreground hover:text-foreground'
-                    }`}
-                  >
-                    {mode.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-md overflow-x-auto max-w-full">
-                {TIMEFRAME_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => setCashflowTimeframe(opt.value)}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-md uppercase transition-all cursor-pointer shrink-0 ${
-                      cashflowTimeframe === opt.value
-                        ? 'bg-primary text-primary-foreground shadow-xs font-bold'
-                        : 'text-muted-foreground hover:text-foreground'
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
+            <div className="flex items-center gap-1 p-1 bg-muted/60 rounded-md overflow-x-auto max-w-full">
+              {TIMEFRAME_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setCashflowTimeframe(opt.value)}
+                  className={`px-2.5 py-1 text-xs font-semibold rounded-md uppercase transition-all cursor-pointer shrink-0 ${
+                    cashflowTimeframe === opt.value
+                      ? 'bg-primary text-primary-foreground shadow-xs font-bold'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
             </div>
           </CardHeader>
 
@@ -580,7 +528,6 @@ function Dashboard() {
                   className="aspect-auto h-85 w-full"
                 >
                   <ComposedChart
-                    key={`cashflow-chart-${cashflowViewMode}`}
                     accessibilityLayer
                     data={computedCashflowData}
                     margin={{
@@ -609,11 +556,7 @@ function Dashboard() {
                       axisLine={false}
                       tickMargin={8}
                       tickCount={5}
-                      domain={
-                        cashflowViewMode === 'split'
-                          ? ['auto', 'auto']
-                          : [0, 'auto']
-                      }
+                      domain={['auto', 'auto']}
                       tickFormatter={(val: number) =>
                         `${val < 0 ? '-' : ''}${symbol}${Math.abs(val) >= 1000 ? `${(Math.abs(val) / 1000).toFixed(0)}k` : Math.abs(val)}`
                       }
@@ -637,12 +580,8 @@ function Dashboard() {
                       className="fill-primary"
                     />
                     <Bar
-                      key={`bar-expense-${cashflowViewMode}`}
-                      dataKey={
-                        cashflowViewMode === 'split'
-                          ? 'expenseNegative'
-                          : 'expense'
-                      }
+                      key="bar-expense"
+                      dataKey="expenseNegative"
                       name="Outflow"
                       radius={[6, 6, 0, 0]}
                       maxBarSize={80}

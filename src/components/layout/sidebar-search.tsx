@@ -440,7 +440,7 @@ export function SidebarSearch() {
                   )}
                 </div>
 
-                <div className="overflow-y-auto p-1.5 space-y-2 divide-y divide-border/40">
+                <div className="overflow-y-auto no-scrollbar p-1.5 space-y-2 divide-y divide-border/40">
                   {!trimmedQuery ? (
                     <div className="p-1 space-y-1">
                       <p className="px-2 py-1 text-[11px] font-medium text-muted-foreground">

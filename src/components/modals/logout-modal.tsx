@@ -1,7 +1,15 @@
 import * as React from 'react'
 import { LogOut } from '../ui/icon'
 import { Button } from '../ui/button'
-import { Modal } from './modal'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog'
 
 export interface LogoutModalProps {
   trigger?: React.ReactNode
@@ -29,37 +37,43 @@ export function LogoutModal({
   }
 
   return (
-    <Modal
-      trigger={trigger}
-      open={isOpen}
-      onOpenChange={setIsOpen}
-      size="sm"
-      className="max-w-sm text-center"
-      footer={
-        <div className="flex w-full items-center justify-end gap-2.5 pt-2">
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      {trigger && (
+        <DialogTrigger
+          render={(props) => {
+            if (React.isValidElement(trigger)) {
+              return React.cloneElement(
+                trigger as React.ReactElement<any>,
+                props,
+              )
+            }
+            return <button {...props}>{trigger}</button>
+          }}
+        />
+      )}
+      <DialogContent className="max-w-sm text-center">
+        <DialogHeader className="items-center text-center">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive mb-2">
+            <LogOut className="h-6 w-6" />
+          </div>
+          <DialogTitle className="text-center font-semibold text-lg text-foreground">
+            Sign out of Finly?
+          </DialogTitle>
+          <DialogDescription className="text-center text-xs leading-relaxed text-muted-foreground">
+            End your current active session? You will need to sign in again to
+            access your workspace.
+          </DialogDescription>
+        </DialogHeader>
+
+        <DialogFooter className="flex w-full items-center justify-end gap-2.5 pt-2">
           <Button variant="outline" size="sm" onClick={() => setIsOpen(false)}>
             Cancel
           </Button>
           <Button variant="destructive" size="sm" onClick={handleConfirm}>
             Sign Out
           </Button>
-        </div>
-      }
-    >
-      <div className="flex flex-col items-center text-center gap-3 pt-1 pb-2">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive">
-          <LogOut className="h-6 w-6" />
-        </div>
-        <div className="flex flex-col gap-1.5">
-          <h3 className="font-semibold text-lg text-foreground">
-            Sign out of Finly?
-          </h3>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            End your current active session? You will need to sign in again to
-            access your workspace.
-          </p>
-        </div>
-      </div>
-    </Modal>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

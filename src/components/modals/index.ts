@@ -1,4 +1,3 @@
-export * from './modal'
 export * from './alert-modal'
 export * from './api-key-modal'
 export * from './logout-modal'

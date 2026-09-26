@@ -14,6 +14,14 @@ import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../components/ui/button'
 import { AlertModal } from '../components/ui/alert-modal'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../components/ui/dialog'
+import {
   Select,
   SelectTrigger,
   SelectValue,
@@ -293,169 +301,156 @@ function Customers() {
         </div>
       )}
 
-      <AnimatePresence>
-        {showForm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/40 backdrop-blur-xs"
-              onClick={() => setShowForm(false)}
-            />
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-lg border border-border bg-card p-6 sm:p-8 rounded-2xl shadow-none max-h-[90vh] overflow-y-auto"
-            >
-              <h2 className="text-xl font-bold text-foreground mb-6">
-                New Customer
-              </h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-xs font-semibold text-foreground">
-                    Company Name <span className="text-destructive">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={newCustomer.name}
-                    onChange={(e) => {
-                      setNewCustomer((prev) => ({
-                        ...prev,
-                        name: e.target.value,
-                      }))
-                      if (formErrors.name) {
-                        setFormErrors((prev) => {
-                          const updated = { ...prev }
-                          delete updated.name
-                          return updated
-                        })
-                      }
-                    }}
-                    placeholder="Enter company name"
-                    className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
-                      formErrors.name ? 'border-destructive' : 'border-border'
-                    }`}
-                  />
-                  {formErrors.name && (
-                    <p className="text-[11px] font-semibold text-destructive mt-1">
-                      {formErrors.name}
-                    </p>
-                  )}
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs font-semibold text-foreground">
-                      Email <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      value={newCustomer.email}
-                      onChange={(e) => {
-                        setNewCustomer((prev) => ({
-                          ...prev,
-                          email: e.target.value,
-                        }))
-                        if (formErrors.email) {
-                          setFormErrors((prev) => {
-                            const updated = { ...prev }
-                            delete updated.email
-                            return updated
-                          })
-                        }
-                      }}
-                      placeholder="email@example.com"
-                      className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
-                        formErrors.email
-                          ? 'border-destructive'
-                          : 'border-border'
-                      }`}
-                    />
-                    {formErrors.email && (
-                      <p className="text-[11px] font-semibold text-destructive mt-1">
-                        {formErrors.email}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold text-foreground">
-                      Payment Terms
-                    </label>
-                    <div className="mt-1.5">
-                      <Select
-                        value={newCustomer.term}
-                        onValueChange={(val: 'net7' | 'net14' | 'net30') =>
-                          setNewCustomer((prev) => ({ ...prev, term: val }))
-                        }
-                      >
-                        <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-background text-foreground rounded-md">
-                          <SelectValue placeholder="Select terms" />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-md">
-                          <SelectItem value="net7">Net 7</SelectItem>
-                          <SelectItem value="net14">Net 14</SelectItem>
-                          <SelectItem value="net30">Net 30</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-foreground">
-                    Phone
-                  </label>
-                  <input
-                    type="text"
-                    value={newCustomer.phone}
-                    onChange={(e) =>
-                      setNewCustomer((prev) => ({
-                        ...prev,
-                        phone: e.target.value,
-                      }))
+      <Dialog open={showForm} onOpenChange={setShowForm}>
+        <DialogContent className="max-w-lg p-6 sm:p-8 max-h-[90vh] overflow-y-auto no-scrollbar">
+          <DialogHeader className="mb-2">
+            <DialogTitle className="text-xl font-bold text-foreground">
+              New Customer
+            </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground">
+              Add a new client or company to your customer directory.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-xs font-semibold text-foreground">
+                Company Name <span className="text-destructive">*</span>
+              </label>
+              <input
+                type="text"
+                value={newCustomer.name}
+                onChange={(e) => {
+                  setNewCustomer((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }))
+                  if (formErrors.name) {
+                    setFormErrors((prev) => {
+                      const updated = { ...prev }
+                      delete updated.name
+                      return updated
+                    })
+                  }
+                }}
+                placeholder="Enter company name"
+                className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                  formErrors.name ? 'border-destructive' : 'border-border'
+                }`}
+              />
+              {formErrors.name && (
+                <p className="text-[11px] font-semibold text-destructive mt-1">
+                  {formErrors.name}
+                </p>
+              )}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-foreground">
+                  Email <span className="text-destructive">*</span>
+                </label>
+                <input
+                  type="email"
+                  value={newCustomer.email}
+                  onChange={(e) => {
+                    setNewCustomer((prev) => ({
+                      ...prev,
+                      email: e.target.value,
+                    }))
+                    if (formErrors.email) {
+                      setFormErrors((prev) => {
+                        const updated = { ...prev }
+                        delete updated.email
+                        return updated
+                      })
                     }
-                    placeholder="+1 (555) 000-0000"
-                    className="mt-1.5 h-11 w-full border border-border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
-                  />
-                  {formErrors.phone && (
-                    <p className="text-[11px] font-semibold text-destructive mt-1">
-                      {formErrors.phone}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-foreground">
-                    Address
-                  </label>
-                  <textarea
-                    value={newCustomer.address}
-                    onChange={(e) =>
-                      setNewCustomer((prev) => ({
-                        ...prev,
-                        address: e.target.value,
-                      }))
+                  }}
+                  placeholder="email@example.com"
+                  className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
+                    formErrors.email ? 'border-destructive' : 'border-border'
+                  }`}
+                />
+                {formErrors.email && (
+                  <p className="text-[11px] font-semibold text-destructive mt-1">
+                    {formErrors.email}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-foreground">
+                  Payment Terms
+                </label>
+                <div className="mt-1.5">
+                  <Select
+                    value={newCustomer.term}
+                    onValueChange={(val: 'net7' | 'net14' | 'net30') =>
+                      setNewCustomer((prev) => ({ ...prev, term: val }))
                     }
-                    placeholder="Enter street address, city, country"
-                    rows={2}
-                    className="mt-1.5 w-full border border-border bg-background rounded-md p-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground resize-none"
-                  />
-                  {formErrors.address && (
-                    <p className="text-[11px] font-semibold text-destructive mt-1">
-                      {formErrors.address}
-                    </p>
-                  )}
+                  >
+                    <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-background text-foreground rounded-md">
+                      <SelectValue placeholder="Select terms" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-md">
+                      <SelectItem value="net7">Net 7</SelectItem>
+                      <SelectItem value="net14">Net 14</SelectItem>
+                      <SelectItem value="net30">Net 30</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-              <div className="mt-8 flex justify-end gap-3">
-                <Button variant="outline" onClick={() => setShowForm(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={handleCreateCustomer}>Create Customer</Button>
-              </div>
-            </motion.div>
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-foreground">
+                Phone
+              </label>
+              <input
+                type="text"
+                value={newCustomer.phone}
+                onChange={(e) =>
+                  setNewCustomer((prev) => ({
+                    ...prev,
+                    phone: e.target.value,
+                  }))
+                }
+                placeholder="+1 (555) 000-0000"
+                className="mt-1.5 h-11 w-full border border-border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
+              />
+              {formErrors.phone && (
+                <p className="text-[11px] font-semibold text-destructive mt-1">
+                  {formErrors.phone}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-foreground">
+                Address
+              </label>
+              <textarea
+                value={newCustomer.address}
+                onChange={(e) =>
+                  setNewCustomer((prev) => ({
+                    ...prev,
+                    address: e.target.value,
+                  }))
+                }
+                placeholder="Enter street address, city, country"
+                rows={2}
+                className="mt-1.5 w-full border border-border bg-background rounded-md p-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground resize-none"
+              />
+              {formErrors.address && (
+                <p className="text-[11px] font-semibold text-destructive mt-1">
+                  {formErrors.address}
+                </p>
+              )}
+            </div>
           </div>
-        )}
-      </AnimatePresence>
+          <DialogFooter className="mt-8 flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setShowForm(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleCreateCustomer}>Create Customer</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <AlertModal
         open={successModal.open}
