@@ -95,42 +95,6 @@ export function Topbar({
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
-        {isPro ? (
-          <>
-            <Link
-              to="/pricing"
-              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all cursor-pointer shadow-none"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-emerald-500" />
-              <span>Pro Plan Active</span>
-            </Link>
-            <Link
-              to="/pricing"
-              className="sm:hidden flex items-center justify-center h-9 w-9 rounded-md border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-              aria-label="Pro Plan Active"
-            >
-              <Sparkles className="h-4 w-4" />
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link
-              to="/pricing"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold bg-primary/15 text-foreground border border-primary/30 hover:bg-primary/25 transition-all cursor-pointer shadow-none"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-foreground" />
-              <span>Upgrade to Pro</span>
-            </Link>
-            <Link
-              to="/pricing"
-              className="sm:hidden flex items-center justify-center h-9 w-9 rounded-md border border-primary/20 bg-primary/10 text-primary"
-              aria-label="Upgrade to Pro"
-            >
-              <Sparkles className="h-4 w-4" />
-            </Link>
-          </>
-        )}
-
         <ThemeToggle />
 
         <div ref={notifRef} className="relative">

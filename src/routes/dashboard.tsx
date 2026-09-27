@@ -7,10 +7,8 @@ import {
   TrendingUp,
   TrendingDown,
   Receipt,
-  Activity,
-  ShieldCheck,
 } from '../components/ui/icon'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import {
   Card,
   CardContent,
@@ -18,11 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../components/ui/card'
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '../components/ui/chart'
+import { ChartContainer, ChartTooltip } from '../components/ui/chart'
 import type { ChartConfig } from '../components/ui/chart'
 import {
   XAxis,
@@ -30,11 +24,6 @@ import {
   CartesianGrid,
   Bar,
   ComposedChart,
-  Line,
-  LineChart,
-  PolarGrid,
-  RadialBar,
-  RadialBarChart,
   ReferenceLine,
 } from 'recharts'
 import { useCurrency } from '../lib/currency'
@@ -42,23 +31,6 @@ import { NumberTicker } from '../components/ui/number-ticker'
 import dashboardData from '../data/dashboard.json'
 
 export const Route = createFileRoute('/dashboard')({ component: Dashboard })
-
-const runwayChartConfig = {
-  runway: {
-    label: 'Runway (Months)',
-    color: 'var(--primary)',
-  },
-} satisfies ChartConfig
-
-const healthChartConfig = {
-  score: {
-    label: 'Health Score',
-  },
-  health: {
-    label: 'Cash Health',
-    color: 'var(--primary)',
-  },
-} satisfies ChartConfig
 
 const cashflowChartConfig = {
   income: {
@@ -252,12 +224,7 @@ const KPI_CARDS = [
   },
 ]
 
-const {
-  runwayChartData,
-  healthChartData,
-  cashflowDataMap,
-  recentTransactions,
-} = dashboardData
+const { cashflowDataMap, recentTransactions } = dashboardData
 
 function Dashboard() {
   const { symbol, formatAmount } = useCurrency()
@@ -266,23 +233,6 @@ function Dashboard() {
   const [recentTxFilter, setRecentTxFilter] = useState<
     'all' | 'income' | 'expense'
   >('all')
-  const [animatedHealthScore, setAnimatedHealthScore] = useState<number>(0)
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setAnimatedHealthScore(healthChartData[0].score)
-    }, 120)
-    return () => clearTimeout(timer)
-  }, [])
-
-  const currentHealthChartData = useMemo(() => {
-    return [
-      {
-        ...healthChartData[0],
-        score: animatedHealthScore,
-      },
-    ]
-  }, [animatedHealthScore])
 
   const filteredCashflowData = useMemo(() => {
     return cashflowDataMap[cashflowTimeframe]
@@ -350,7 +300,7 @@ function Dashboard() {
 
   return (
     <div className="space-y-6 pb-12">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -384,7 +334,7 @@ function Dashboard() {
                     <span className="sm:text-xs md:text-base font-semibold truncate block">
                       {card.title}
                     </span>
-                    <h3 className="font-mono text-3xl sm:text-3xl lg:text-4xl xl:text-5xl font-medium tracking-tight truncate">
+                    <h3 className="font-mono text-3xl sm:text-xl md:text-2xl 2xl:text-5xl font-semibold xl:font-medium tracking-tight truncate">
                       <NumberTicker
                         value={card.amount}
                         formatter={(v) => formatAmount(v)}
@@ -531,7 +481,7 @@ function Dashboard() {
                     accessibilityLayer
                     data={computedCashflowData}
                     margin={{
-                      left: 0,
+                      left: 12,
                       right: 12,
                       top: 12,
                       bottom: 0,
@@ -541,17 +491,18 @@ function Dashboard() {
                   >
                     <CartesianGrid
                       vertical={false}
-                      strokeDasharray="7 7"
+                      strokeDasharray="8 8"
                       className="stroke-border!"
                     />
                     <XAxis
                       dataKey="name"
-                      tickLine={false}
-                      axisLine={false}
-                      tickMargin={8}
+                      tickLine={true}
+                      axisLine={true}
+                      tickMargin={10}
                       className="text-[11px] font-medium fill-muted-foreground"
                     />
                     <YAxis
+                      hide
                       tickLine={false}
                       axisLine={false}
                       tickMargin={8}
@@ -614,226 +565,6 @@ function Dashboard() {
           </CardContent>
         </Card>
       </motion.div>
-
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 items-stretch">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...m3Transition, delay: 0.3 }}
-          className="flex flex-col"
-        >
-          <div className="bg-card text-foreground border border-border shadow-none rounded-2xl p-4 sm:p-6 flex-1 flex flex-col justify-between h-full">
-            <div>
-              <div className="flex items-center justify-between mb-4 gap-2">
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                    <ShieldCheck className="h-4 w-4" />
-                  </div>
-                  <div className="truncate">
-                    <h3 className="font-semibold text-sm text-foreground truncate">
-                      Cash Runway
-                    </h3>
-                    <p className="text-[11px] text-muted-foreground truncate">
-                      Runway at zero revenue
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="my-4 sm:my-5">
-                <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground">
-                    <NumberTicker value={8.1} decimalPlaces={1} />
-                  </span>
-                  <span className="text-sm sm:text-base font-semibold text-muted-foreground">
-                    Months
-                  </span>
-                </div>
-                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1 flex items-center gap-1">
-                  <TrendingUp className="h-3 w-3" /> +
-                  <NumberTicker value={0.4} decimalPlaces={1} /> mo vs previous
-                  month
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex justify-between text-xs font-semibold">
-                  <span className="text-muted-foreground">
-                    Historical Trend (6 Months)
-                  </span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                    8.1 months
-                  </span>
-                </div>
-                <ChartContainer
-                  config={runwayChartConfig}
-                  className="aspect-auto h-[120px] w-full"
-                >
-                  <LineChart
-                    accessibilityLayer
-                    data={runwayChartData}
-                    margin={{
-                      left: 12,
-                      right: 12,
-                      top: 8,
-                      bottom: 4,
-                    }}
-                  >
-                    <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                    <XAxis
-                      dataKey="month"
-                      tickLine={false}
-                      axisLine={false}
-                      tickMargin={6}
-                      tickFormatter={(value) => value.slice(0, 3)}
-                    />
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent hideLabel />}
-                    />
-                    <Line
-                      dataKey="runway"
-                      type="natural"
-                      stroke="var(--color-runway)"
-                      strokeWidth={2}
-                      dot={{
-                        fill: 'var(--color-runway)',
-                      }}
-                      activeDot={{
-                        r: 5,
-                      }}
-                    />
-                  </LineChart>
-                </ChartContainer>
-                <p className="text-[11px] text-muted-foreground leading-relaxed pt-1">
-                  8.1 months of operating expenses covered at current burn rate.
-                </p>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-border mt-5 grid grid-cols-2 gap-3 text-xs">
-              <div className="space-y-0.5">
-                <p className="text-[11px] font-medium opacity-75">
-                  Monthly Burn Rate
-                </p>
-                <p className="font-mono text-sm font-bold text-foreground">
-                  <NumberTicker
-                    value={20400}
-                    formatter={(v) => formatAmount(v)}
-                  />
-                </p>
-              </div>
-              <div className="space-y-0.5 text-right">
-                <p className="text-[11px] font-medium opacity-75">
-                  Liquid Cash
-                </p>
-                <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400">
-                  <NumberTicker
-                    value={164850}
-                    formatter={(v) => formatAmount(v)}
-                  />
-                </p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...m3Transition, delay: 0.35 }}
-          className="flex flex-col"
-        >
-          <Card className="flex flex-col border border-border bg-card shadow-none rounded-2xl p-0 h-full justify-between">
-            <CardHeader className="items-center px-6 text-center">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground border border-primary/20">
-                  <Activity className="h-3.5 w-3.5" />
-                </div>
-                <CardTitle className="text-lg font-semibold text-foreground">
-                  Cash Health
-                </CardTitle>
-              </div>
-              <CardDescription className="text-xs text-muted-foreground">
-                Liquidity, operating margin, and payment collection rate
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="px-6">
-              <div className="relative mx-auto aspect-square max-h-62.5 w-full flex items-center justify-center">
-                <ChartContainer
-                  config={healthChartConfig}
-                  className="mx-auto aspect-square max-h-62.5 w-full select-none outline-none"
-                >
-                  <RadialBarChart
-                    data={currentHealthChartData}
-                    startAngle={0}
-                    endAngle={250}
-                    outerRadius={90}
-                    innerRadius={68}
-                  >
-                    <PolarGrid
-                      gridType="circle"
-                      radialLines={false}
-                      stroke="none"
-                      className="first:fill-muted last:fill-background"
-                      polarRadius={[90, 68]}
-                    />
-                    <RadialBar
-                      dataKey="score"
-                      background
-                      cornerRadius={10}
-                      isAnimationActive={true}
-                      animationDuration={1500}
-                      animationEasing="ease-out"
-                      animationBegin={100}
-                    />
-                  </RadialBarChart>
-                </ChartContainer>
-
-                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none text-center">
-                  <span className="text-4xl font-bold tracking-tight font-mono text-foreground flex items-center justify-center">
-                    <NumberTicker
-                      value={healthChartData[0].score}
-                      suffix="%"
-                      delay={0.12}
-                    />
-                  </span>
-                  <span className="text-xs text-muted-foreground font-medium mt-1">
-                    Health Score
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 pt-1 pb-2">
-                <div className="p-2.5 bg-muted/40 rounded-md border border-border text-center">
-                  <p className="text-[11px] text-muted-foreground font-medium">
-                    Operating Margin
-                  </p>
-                  <p className="font-mono text-sm font-bold text-foreground mt-0.5">
-                    <NumberTicker value={41.4} decimalPlaces={1} suffix="%" />
-                  </p>
-                </div>
-                <div className="p-2.5 bg-muted/40 rounded-md border border-border text-center">
-                  <p className="text-[11px] text-muted-foreground font-medium">
-                    Collection Rate
-                  </p>
-                  <p className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
-                    <NumberTicker value={98.2} decimalPlaces={1} suffix="%" />
-                  </p>
-                </div>
-                <div className="p-2.5 bg-muted/40 rounded-md border border-border text-center">
-                  <p className="text-[11px] text-muted-foreground font-medium">
-                    DSO
-                  </p>
-                  <p className="font-mono text-sm font-bold text-foreground mt-0.5">
-                    <NumberTicker value={12} suffix=" Days" />
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

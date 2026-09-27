@@ -10,8 +10,6 @@ import {
 import { Logo } from './logo'
 import { NavMain } from './nav-main'
 import type { NavigationItem } from './nav-main'
-import { NavUser } from './nav-user'
-import type { UserProfile } from './nav-user'
 import {
   Sidebar,
   SidebarContent,
@@ -19,7 +17,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '../ui/sidebar'
-import teamsData from '../../data/teams.json'
 
 const finlyNavigationItems: NavigationItem[] = [
   {
@@ -54,8 +51,6 @@ const finlyNavigationItems: NavigationItem[] = [
   },
 ]
 
-const currentUserProfile: UserProfile = teamsData.currentUser
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -66,7 +61,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={finlyNavigationItems} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={currentUserProfile} />
+        {/* <NavUser user={currentUserProfile} /> */}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
