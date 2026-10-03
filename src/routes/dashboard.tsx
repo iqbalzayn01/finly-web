@@ -59,16 +59,14 @@ const cashflowChartConfig = {
   },
 } satisfies ChartConfig
 
-type CashflowTimeframe = '1d' | '7d' | '30d' | '1m' | '3m' | '1y' | '5y'
+type CashflowTimeframe = '7d' | '30d' | '3m' | '6m' | '1y'
 
 const TIMEFRAME_OPTIONS: { label: string; value: CashflowTimeframe }[] = [
-  { label: '1D', value: '1d' },
   { label: '7D', value: '7d' },
   { label: '30D', value: '30d' },
-  { label: '1M', value: '1m' },
   { label: '3M', value: '3m' },
+  { label: '6M', value: '6m' },
   { label: '1Y', value: '1y' },
-  { label: '5Y', value: '5y' },
 ]
 
 interface CashflowTooltipPayloadItem {
@@ -182,7 +180,7 @@ const KPI_CARDS = [
     icon: Wallet,
     containerClass:
       'bg-primary text-primary-foreground border border-primary/20 shadow-none rounded-2xl',
-    iconClass: 'bg-black/10 text-primary-foreground rounded-md',
+    iconClass: 'bg-white/90 text-primary-foreground rounded-md',
     trendClass: 'bg-black/10 text-primary-foreground rounded-md',
     progress: 85,
     progressBg: 'bg-black/10',
@@ -611,7 +609,7 @@ function Dashboard() {
                 </div>
 
                 <Link
-                  to="/cashbook"
+                  to="/records"
                   className="text-xs font-bold text-foreground hover:underline px-2.5 py-1 rounded-md hover:bg-muted transition-colors flex items-center gap-1 shrink-0"
                 >
                   <span>View All</span>
@@ -701,7 +699,7 @@ function Dashboard() {
               transactions
             </span>
             <Link
-              to="/cashbook"
+              to="/records"
               className="font-semibold text-foreground flex items-center gap-1 hover:underline"
             >
               Open Cashbook <ArrowUpRight className="h-3.5 w-3.5" />

@@ -1,60 +1,58 @@
 import * as React from 'react'
 import { cn } from '#/lib'
-import { Link, useLocation } from '@tanstack/react-router'
-import { Bell, Sparkles } from '../ui/icon'
+import {
+  Bell,
+  Records,
+  Sparkles,
+  LayoutDashboard,
+  Wallet,
+  ReceiptLong,
+  Users,
+} from '../ui/icon'
 import { motion, AnimatePresence } from 'motion/react'
 import { ThemeToggle } from '../ThemeToggle'
 import { TooltipSimple } from '../ui/tooltip'
 import { useSubscription } from '../../lib/subscription'
-import { SidebarTrigger } from '../ui/sidebar'
-import { Separator } from '../ui/separator'
+import { FinlyLogo } from './logo'
+import { SearchInput } from './search-input'
 import notificationsData from '../../data/notifications.json'
 import teamsData from '../../data/teams.json'
 import { NavUser } from './nav-user'
+import { NavMain } from './nav-main'
 import type { UserProfile } from './nav-user'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '../ui/breadcrumb'
+import type { NavigationItem } from './nav-main'
 
-function getBreadcrumbInfo(pathname: string): {
-  section: string
-  page: string
-} {
-  if (pathname === '/dashboard')
-    return { section: 'Finly OS', page: 'Dashboard' }
-  if (pathname === '/cashbook') return { section: 'Ledger', page: 'Cashbook' }
-  if (pathname === '/invoices/builder')
-    return { section: 'Invoicing', page: 'Create Invoice' }
-  if (pathname.startsWith('/invoices'))
-    return { section: 'Invoicing', page: 'Invoice Directory' }
-  if (pathname === '/customers') return { section: 'CRM', page: 'Customers' }
-  if (pathname === '/items')
-    return { section: 'Inventory', page: 'Catalog Items' }
-  if (pathname === '/settings')
-    return { section: 'Management', page: 'Settings' }
-  if (pathname === '/account')
-    return { section: 'User', page: 'Account Profile' }
-  if (pathname === '/pricing')
-    return { section: 'Finly', page: 'Plans & Pricing' }
-  return { section: 'Finly OS', page: 'Overview' }
-}
+const finlyNavigationItems: NavigationItem[] = [
+  {
+    title: 'Dashboard',
+    url: '/dashboard',
+    icon: LayoutDashboard,
+  },
+  {
+    title: 'Records',
+    url: '/records',
+    icon: Records,
+  },
+  {
+    title: 'Invoices',
+    url: '/invoices',
+    icon: ReceiptLong,
+  },
+  {
+    title: 'Customers',
+    url: '/customers',
+    icon: Users,
+  },
+]
 
 export function Topbar({
   user = teamsData.currentUser,
 }: {
   user?: UserProfile
 } = {}) {
-  const location = useLocation()
   const { isPro } = useSubscription()
   const [notifOpen, setNotifOpen] = React.useState(false)
   const notifRef = React.useRef<HTMLDivElement>(null)
-
-  const { section, page } = getBreadcrumbInfo(location.pathname)
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -70,29 +68,17 @@ export function Topbar({
   }, [])
 
   return (
-    <header className="flex h-14 sm:h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 border-b border-border bg-card/60 backdrop-blur-md px-3 sm:px-6 sticky top-0 z-20">
-      <div className="flex items-center gap-2 min-w-0">
-        <SidebarTrigger className="-ml-1 h-9 w-9" />
-        <Separator
-          orientation="vertical"
-          className="mr-1 sm:mr-2 data-[orientation=vertical]:h-4"
-        />
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem className="hidden sm:block">
-              <BreadcrumbLink href="/dashboard" className="text-xs font-medium">
-                {section}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden sm:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="text-xs font-bold truncate max-w-[130px] sm:max-w-none">
-                {page}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+    <header className="flex h-14 sm:h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 bg-card/60 backdrop-blur-md px-3 sm:px-6 sticky top-0 z-20">
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <FinlyLogo className="text-primary" />
+          <span className="truncate text-xl font-semibold">Finly</span>
+        </div>
+
+        <SearchInput />
       </div>
+
+      <NavMain items={finlyNavigationItems} />
 
       <div className="flex items-center gap-2 sm:gap-3">
         <ThemeToggle />
@@ -145,7 +131,7 @@ export function Topbar({
                       key={notif.id}
                       className={cn(
                         'p-3.5 hover:bg-accent/30 transition-colors cursor-pointer space-y-1',
-                        notif.unread && 'bg-primary/[0.03]',
+                        notif.unread && 'bg-primary/3',
                       )}
                     >
                       <div className="flex items-center justify-between">

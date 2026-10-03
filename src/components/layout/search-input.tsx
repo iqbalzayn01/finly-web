@@ -31,7 +31,7 @@ interface FlatResult {
   action: () => void
 }
 
-export function SidebarSearch() {
+export function SearchInput() {
   const navigate = useNavigate()
   const { state, isMobile, setOpen } = useSidebar()
   const [searchQuery, setSearchQuery] = React.useState('')
@@ -121,11 +121,11 @@ export function SidebarSearch() {
         },
         {
           category: 'quick',
-          id: 'quick-cashbook',
-          title: 'Cashbook Ledger',
+          id: 'quick-records',
+          title: 'Records Ledger',
           subtitle: `${transactionsData.length} total transactions`,
           action: () => {
-            navigate({ to: '/cashbook' })
+            navigate({ to: '/records' })
             setIsOpen(false)
             setSearchQuery('')
           },
@@ -199,7 +199,7 @@ export function SidebarSearch() {
             ? 'text-emerald-600 dark:text-emerald-400'
             : 'text-foreground',
         action: () => {
-          navigate({ to: '/cashbook' })
+          navigate({ to: '/records' })
           setIsOpen(false)
           setSearchQuery('')
         },
@@ -423,7 +423,7 @@ export function SidebarSearch() {
                   width: coords.width,
                   zIndex: 70,
                 }}
-                className="rounded-xl border border-border bg-card shadow-2xl overflow-hidden backdrop-blur-md flex flex-col max-h-[440px]"
+                className="rounded-xl border border-border bg-card shadow-2xl overflow-hidden backdrop-blur-md flex flex-col max-h-110"
               >
                 <div className="px-3.5 py-2.5 border-b border-border bg-muted/40 flex items-center justify-between">
                   <span className="font-semibold text-xs text-foreground">
@@ -498,7 +498,7 @@ export function SidebarSearch() {
                       <p className="text-xs font-bold text-foreground">
                         No matching data
                       </p>
-                      <p className="text-[11px] text-muted-foreground mt-1 max-w-[280px] mx-auto">
+                      <p className="text-[11px] text-muted-foreground mt-1 max-w-70 mx-auto">
                         No invoices, transactions, clients, or items match
                         &ldquo;
                         {searchQuery}&rdquo;.
@@ -597,7 +597,7 @@ export function SidebarSearch() {
                               <button
                                 type="button"
                                 onClick={() => {
-                                  navigate({ to: '/cashbook' })
+                                  navigate({ to: '/records' })
                                   setIsOpen(false)
                                   setSearchQuery('')
                                 }}
@@ -617,7 +617,7 @@ export function SidebarSearch() {
                                 key={tx.id}
                                 type="button"
                                 onClick={() => {
-                                  navigate({ to: '/cashbook' })
+                                  navigate({ to: '/records' })
                                   setIsOpen(false)
                                   setSearchQuery('')
                                 }}

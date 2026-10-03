@@ -28,7 +28,7 @@ import { NumberTicker } from '../components/ui/number-ticker'
 import CATEGORIES from '../data/categories.json'
 import initialTransactions from '../data/transactions.json'
 
-export const Route = createFileRoute('/cashbook')({
+export const Route = createFileRoute('/records')({
   component: Cashbook,
 })
 
