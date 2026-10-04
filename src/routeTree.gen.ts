@@ -11,15 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountRouteImport } from './routes/account'
-import { Route as CustomersRouteImport } from './routes/customers'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ItemsRouteImport } from './routes/items'
 import { Route as PricingRouteImport } from './routes/pricing'
-import { Route as RecordsRouteImport } from './routes/records'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as CustomersIndexRouteImport } from './routes/customers/index'
+import { Route as CustomersAddCustomerRouteImport } from './routes/customers/add-customer'
 import { Route as InvoicesIndexRouteImport } from './routes/invoices/index'
 import { Route as InvoicesIdRouteImport } from './routes/invoices/$id'
 import { Route as InvoicesBuilderRouteImport } from './routes/invoices/builder'
+import { Route as RecordsIndexRouteImport } from './routes/records/index'
+import { Route as RecordsCreateRecordRouteImport } from './routes/records/create-record'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,11 +31,6 @@ const IndexRoute = IndexRouteImport.update({
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CustomersRoute = CustomersRouteImport.update({
-  id: '/customers',
-  path: '/customers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -51,14 +48,19 @@ const PricingRoute = PricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RecordsRoute = RecordsRouteImport.update({
-  id: '/records',
-  path: '/records',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersIndexRoute = CustomersIndexRouteImport.update({
+  id: '/customers/',
+  path: '/customers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersAddCustomerRoute = CustomersAddCustomerRouteImport.update({
+  id: '/customers/add-customer',
+  path: '/customers/add-customer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvoicesIndexRoute = InvoicesIndexRouteImport.update({
@@ -76,101 +78,125 @@ const InvoicesBuilderRoute = InvoicesBuilderRouteImport.update({
   path: '/invoices/builder',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecordsIndexRoute = RecordsIndexRouteImport.update({
+  id: '/records/',
+  path: '/records/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecordsCreateRecordRoute = RecordsCreateRecordRouteImport.update({
+  id: '/records/create-record',
+  path: '/records/create-record',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
-  '/customers': typeof CustomersRoute
   '/dashboard': typeof DashboardRoute
   '/items': typeof ItemsRoute
   '/pricing': typeof PricingRoute
-  '/records': typeof RecordsRoute
   '/settings': typeof SettingsRoute
+  '/customers/add-customer': typeof CustomersAddCustomerRoute
   '/invoices/$id': typeof InvoicesIdRoute
   '/invoices/builder': typeof InvoicesBuilderRoute
+  '/records/create-record': typeof RecordsCreateRecordRoute
+  '/customers/': typeof CustomersIndexRoute
   '/invoices/': typeof InvoicesIndexRoute
+  '/records/': typeof RecordsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
-  '/customers': typeof CustomersRoute
   '/dashboard': typeof DashboardRoute
   '/items': typeof ItemsRoute
   '/pricing': typeof PricingRoute
-  '/records': typeof RecordsRoute
   '/settings': typeof SettingsRoute
+  '/customers/add-customer': typeof CustomersAddCustomerRoute
   '/invoices/$id': typeof InvoicesIdRoute
   '/invoices/builder': typeof InvoicesBuilderRoute
+  '/records/create-record': typeof RecordsCreateRecordRoute
+  '/customers': typeof CustomersIndexRoute
   '/invoices': typeof InvoicesIndexRoute
+  '/records': typeof RecordsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
-  '/customers': typeof CustomersRoute
   '/dashboard': typeof DashboardRoute
   '/items': typeof ItemsRoute
   '/pricing': typeof PricingRoute
-  '/records': typeof RecordsRoute
   '/settings': typeof SettingsRoute
+  '/customers/add-customer': typeof CustomersAddCustomerRoute
   '/invoices/$id': typeof InvoicesIdRoute
   '/invoices/builder': typeof InvoicesBuilderRoute
+  '/records/create-record': typeof RecordsCreateRecordRoute
+  '/customers/': typeof CustomersIndexRoute
   '/invoices/': typeof InvoicesIndexRoute
+  '/records/': typeof RecordsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/account'
-    | '/customers'
     | '/dashboard'
     | '/items'
     | '/pricing'
-    | '/records'
     | '/settings'
+    | '/customers/add-customer'
     | '/invoices/$id'
     | '/invoices/builder'
+    | '/records/create-record'
+    | '/customers/'
     | '/invoices/'
+    | '/records/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/account'
-    | '/customers'
     | '/dashboard'
     | '/items'
     | '/pricing'
-    | '/records'
     | '/settings'
+    | '/customers/add-customer'
     | '/invoices/$id'
     | '/invoices/builder'
+    | '/records/create-record'
+    | '/customers'
     | '/invoices'
+    | '/records'
   id:
     | '__root__'
     | '/'
     | '/account'
-    | '/customers'
     | '/dashboard'
     | '/items'
     | '/pricing'
-    | '/records'
     | '/settings'
+    | '/customers/add-customer'
     | '/invoices/$id'
     | '/invoices/builder'
+    | '/records/create-record'
+    | '/customers/'
     | '/invoices/'
+    | '/records/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
-  CustomersRoute: typeof CustomersRoute
   DashboardRoute: typeof DashboardRoute
   ItemsRoute: typeof ItemsRoute
   PricingRoute: typeof PricingRoute
-  RecordsRoute: typeof RecordsRoute
   SettingsRoute: typeof SettingsRoute
+  CustomersAddCustomerRoute: typeof CustomersAddCustomerRoute
   InvoicesIdRoute: typeof InvoicesIdRoute
   InvoicesBuilderRoute: typeof InvoicesBuilderRoute
+  RecordsCreateRecordRoute: typeof RecordsCreateRecordRoute
+  CustomersIndexRoute: typeof CustomersIndexRoute
   InvoicesIndexRoute: typeof InvoicesIndexRoute
+  RecordsIndexRoute: typeof RecordsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -187,13 +213,6 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AccountRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/customers': {
-      id: '/customers'
-      path: '/customers'
-      fullPath: '/customers'
-      preLoaderRoute: typeof CustomersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -217,18 +236,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/records': {
-      id: '/records'
-      path: '/records'
-      fullPath: '/records'
-      preLoaderRoute: typeof RecordsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/settings': {
       id: '/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers/': {
+      id: '/customers/'
+      path: '/customers'
+      fullPath: '/customers/'
+      preLoaderRoute: typeof CustomersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers/add-customer': {
+      id: '/customers/add-customer'
+      path: '/customers/add-customer'
+      fullPath: '/customers/add-customer'
+      preLoaderRoute: typeof CustomersAddCustomerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invoices/': {
@@ -252,21 +278,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvoicesBuilderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/records/': {
+      id: '/records/'
+      path: '/records'
+      fullPath: '/records/'
+      preLoaderRoute: typeof RecordsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/records/create-record': {
+      id: '/records/create-record'
+      path: '/records/create-record'
+      fullPath: '/records/create-record'
+      preLoaderRoute: typeof RecordsCreateRecordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
-  CustomersRoute: CustomersRoute,
   DashboardRoute: DashboardRoute,
   ItemsRoute: ItemsRoute,
   PricingRoute: PricingRoute,
-  RecordsRoute: RecordsRoute,
   SettingsRoute: SettingsRoute,
+  CustomersAddCustomerRoute: CustomersAddCustomerRoute,
   InvoicesIdRoute: InvoicesIdRoute,
   InvoicesBuilderRoute: InvoicesBuilderRoute,
+  RecordsCreateRecordRoute: RecordsCreateRecordRoute,
+  CustomersIndexRoute: CustomersIndexRoute,
   InvoicesIndexRoute: InvoicesIndexRoute,
+  RecordsIndexRoute: RecordsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

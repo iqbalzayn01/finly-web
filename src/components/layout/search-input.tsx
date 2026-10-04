@@ -2,7 +2,8 @@ import * as React from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from '@tanstack/react-router'
 import { motion, AnimatePresence } from 'motion/react'
-import { SidebarInput, useSidebar } from '../ui/sidebar'
+import { useSidebar } from '../ui/sidebar'
+import { Input } from '../ui'
 import {
   Search,
   X,
@@ -11,6 +12,8 @@ import {
   Users,
   Package,
   ArrowRight,
+  Receipt,
+  ReceiptLong,
 } from '../ui/icon'
 import { cn } from '../../lib/utils'
 import { formatAmount } from '../../lib/currency'
@@ -20,7 +23,7 @@ import customersData from '../../data/customers.json'
 import itemsData from '../../data/items.json'
 
 interface FlatResult {
-  category: 'invoice' | 'transaction' | 'customer' | 'item' | 'quick'
+  category: 'invoice' | 'records' | 'customer' | 'item' | 'quick'
   id: string
   title: string
   subtitle?: string
@@ -112,7 +115,7 @@ export function SearchInput() {
           category: 'quick',
           id: 'quick-invoices',
           title: 'Invoices',
-          subtitle: `${invoicesData.invoices.length} total records`,
+          subtitle: `${invoicesData.invoices.length} total invoices`,
           action: () => {
             navigate({ to: '/invoices' })
             setIsOpen(false)
@@ -122,7 +125,7 @@ export function SearchInput() {
         {
           category: 'quick',
           id: 'quick-records',
-          title: 'Records Ledger',
+          title: 'Records',
           subtitle: `${transactionsData.length} total transactions`,
           action: () => {
             navigate({ to: '/records' })
@@ -181,7 +184,7 @@ export function SearchInput() {
 
     matchedTransactions.slice(0, 3).forEach((tx) => {
       results.push({
-        category: 'transaction',
+        category: 'records',
         id: `tx-${tx.id}`,
         title: tx.desc,
         subtitle: `${tx.category} • ${tx.date}`,
@@ -366,12 +369,12 @@ export function SearchInput() {
         }}
         className="relative w-full"
       >
-        <label htmlFor="sidebar-data-search" className="sr-only">
+        <label htmlFor="data-search" className="sr-only">
           Search Data
         </label>
-        <SidebarInput
+        <Input
           ref={inputRef}
-          id="sidebar-data-search"
+          id="data-search"
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value)
@@ -383,9 +386,9 @@ export function SearchInput() {
           }}
           onKeyDown={handleKeyDown}
           placeholder="Search data..."
-          className="pl-8 pr-12 text-xs h-9 bg-background/60 dark:bg-background/40 border-sidebar-border focus-visible:ring-1 focus-visible:ring-primary/40 rounded-md"
+          className="pl-8 pr-12 text-xs h-9 bg-background/60 dark:bg-background/40 border-sidebar-border focus-visible:ring-1 focus-visible:ring-primary rounded-md"
         />
-        <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 select-none text-muted-foreground" />
+        <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 select-none text-muted-foreground" />
         {searchQuery ? (
           <button
             type="button"
@@ -434,9 +437,7 @@ export function SearchInput() {
                       {totalMatches} found
                     </span>
                   ) : (
-                    <span className="text-[10px] text-muted-foreground">
-                      Finly Records
-                    </span>
+                    ''
                   )}
                 </div>
 
@@ -466,8 +467,8 @@ export function SearchInput() {
                                 {item.id === 'quick-invoices' && (
                                   <FileText className="size-3.5" />
                                 )}
-                                {item.id === 'quick-cashbook' && (
-                                  <Wallet className="size-3.5" />
+                                {item.id === 'quick-records' && (
+                                  <ReceiptLong className="size-3.5" />
                                 )}
                                 {item.id === 'quick-customers' && (
                                   <Users className="size-3.5" />

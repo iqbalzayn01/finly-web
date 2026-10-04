@@ -52,31 +52,25 @@ export function ThemeToggle() {
     setIsOpen(false)
   }
 
-  const toggleButton = (
-    <button
-      onClick={() => setIsOpen(!isOpen)}
-      className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-foreground shadow-none hover:bg-accent transition-all outline-none cursor-pointer"
-      aria-label="Toggle Theme"
-    >
-      {mode === 'light' ? (
-        <Sun className="h-4 w-4" />
-      ) : mode === 'dark' ? (
-        <Moon className="h-4 w-4" />
-      ) : (
-        <Monitor className="h-4 w-4" />
-      )}
-    </button>
-  )
-
-  const tooltipLabel = `Theme: ${mode === 'light' ? 'Light' : mode === 'dark' ? 'Dark' : 'System'}`
-
   return (
     <div className="relative" ref={menuRef}>
-      {!isOpen ? (
-        <TooltipSimple content={tooltipLabel}>{toggleButton}</TooltipSimple>
-      ) : (
-        toggleButton
-      )}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          'flex h-9 w-9 items-center justify-center rounded-md bg-background border border-border text-foreground shadow-none transition-all outline-none cursor-pointer',
+          isOpen ? 'border border-primary bg-primary' : 'hover:bg-slate-500/10',
+        )}
+        aria-label="Toggle Theme"
+      >
+        {mode === 'light' ? (
+          <Sun className="h-4 w-4" />
+        ) : mode === 'dark' ? (
+          <Moon className="h-4 w-4" />
+        ) : (
+          <Monitor className="h-4 w-4" />
+        )}
+      </button>
+
       <AnimatePresence>
         {isOpen && (
           <motion.div

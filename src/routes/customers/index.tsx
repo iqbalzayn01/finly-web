@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import {
   Plus,
@@ -9,10 +9,10 @@ import {
   MoreVertical,
   Edit2,
   Trash2,
-} from '../components/ui/icon'
+} from '../../components/ui/icon'
 import { motion, AnimatePresence } from 'motion/react'
-import { Button } from '../components/ui/button'
-import { AlertModal } from '../components/ui/alert-modal'
+import { Button } from '../../components/ui/button'
+import { AlertModal } from '../../components/ui/alert-modal'
 import {
   Dialog,
   DialogContent,
@@ -20,20 +20,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../components/ui/dialog'
+} from '../../components/ui/dialog'
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from '../components/ui/select'
-import { useDebouncedSearch } from '../hooks/use-debounced-search'
-import { NumberTicker } from '../components/ui/number-ticker'
-import { runValidation, customerFormSchema } from '../lib/validation'
-import initialCustomers from '../data/customers.json'
+} from '../../components/ui/select'
+import { useDebouncedSearch } from '../../hooks/use-debounced-search'
+import { NumberTicker } from '../../components/ui/number-ticker'
+import { runValidation, customerFormSchema } from '../../lib/validation'
+import initialCustomers from '../../data/customers.json'
 
-export const Route = createFileRoute('/customers')({
+export const Route = createFileRoute('/customers/')({
   component: Customers,
 })
 
@@ -128,10 +128,12 @@ function Customers() {
           </p>
         </div>
         <Button
-          onClick={() => setShowForm(true)}
-          className="w-full sm:w-auto h-11 px-6 font-semibold shadow-none"
+          asChild
+          className="w-full sm:w-auto h-11 font-semibold shadow-none"
         >
-          <Plus className="h-5 w-5 mr-2" /> Add Customer
+          <Link to="/customers">
+            <Plus className="h-5 w-5" /> Add Customer
+          </Link>
         </Button>
       </div>
 

@@ -32,10 +32,10 @@ export function NavMain({ items }: { items: NavigationItem[] }) {
               <Button
                 asChild
                 className={cn(
-                  'w-full h-9 sm:h-10 px-3 text-xs sm:text-sm font-semibold rounded-md transition-colors cursor-pointer select-none bg-card hover:bg-accent border border-border',
+                  'w-full h-9 sm:h-10 px-3 text-xs sm:text-sm font-semibold rounded-md transition-colors cursor-pointer select-none bg-background border border-border',
                   isActive
                     ? 'bg-primary text-primary-foreground font-bold hover:bg-primary hover:text-primary-foreground border-primary'
-                    : 'text-muted-foreground hover:bg-slate-500/10 dark:hover:bg-slate-500/20 hover:text-foreground',
+                    : 'text-foreground hover:bg-slate-500/10',
                 )}
               >
                 <Link

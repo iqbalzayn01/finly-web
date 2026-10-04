@@ -5,18 +5,16 @@ import {
   Records,
   Sparkles,
   LayoutDashboard,
-  Wallet,
   ReceiptLong,
   Users,
 } from '../ui/icon'
 import { motion, AnimatePresence } from 'motion/react'
 import { ThemeToggle } from '../ThemeToggle'
-import { TooltipSimple } from '../ui/tooltip'
 import { useSubscription } from '../../lib/subscription'
 import { FinlyLogo } from './logo'
 import { SearchInput } from './search-input'
 import notificationsData from '../../data/notifications.json'
-import teamsData from '../../data/teams.json'
+import usersData from '../../data/users.json'
 import { NavUser } from './nav-user'
 import { NavMain } from './nav-main'
 import type { UserProfile } from './nav-user'
@@ -29,15 +27,16 @@ const finlyNavigationItems: NavigationItem[] = [
     icon: LayoutDashboard,
   },
   {
-    title: 'Records',
-    url: '/records',
-    icon: Records,
-  },
-  {
     title: 'Invoices',
     url: '/invoices',
     icon: ReceiptLong,
   },
+  {
+    title: 'Records',
+    url: '/records',
+    icon: Records,
+  },
+
   {
     title: 'Customers',
     url: '/customers',
@@ -46,7 +45,7 @@ const finlyNavigationItems: NavigationItem[] = [
 ]
 
 export function Topbar({
-  user = teamsData.currentUser,
+  user = usersData.currentUser,
 }: {
   user?: UserProfile
 } = {}) {
@@ -71,7 +70,7 @@ export function Topbar({
     <header className="flex h-14 sm:h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 bg-card/60 backdrop-blur-md px-3 sm:px-6 sticky top-0 z-20">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
-          <FinlyLogo className="text-primary" />
+          <FinlyLogo />
           <span className="truncate text-xl font-semibold">Finly</span>
         </div>
 
@@ -84,27 +83,19 @@ export function Topbar({
         <ThemeToggle />
 
         <div ref={notifRef} className="relative">
-          {notifOpen ? (
-            <button
-              onClick={() => setNotifOpen(false)}
-              className="relative flex h-9 w-9 items-center justify-center rounded-md border border-primary bg-primary/10 text-primary transition-colors outline-none cursor-pointer"
-              aria-label="Close Notifications"
-            >
-              <Bell className="h-4 w-4" />
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary ring-2 ring-card" />
-            </button>
-          ) : (
-            <TooltipSimple content="Notifications">
-              <button
-                onClick={() => setNotifOpen(true)}
-                className="relative flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-foreground hover:bg-accent hover:border-primary/40 transition-colors outline-none cursor-pointer"
-                aria-label="Open Notifications"
-              >
-                <Bell className="h-4 w-4" />
-                <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary ring-2 ring-card" />
-              </button>
-            </TooltipSimple>
-          )}
+          <button
+            onClick={() => setNotifOpen(!notifOpen)}
+            className={cn(
+              'relative flex h-9 w-9 items-center justify-center rounded-md bg-background border border-border text-foreground transition-colors outline-none cursor-pointer',
+              notifOpen
+                ? 'border border-primary bg-primary'
+                : 'hover:bg-slate-500/10',
+            )}
+            aria-label="Close Notifications"
+          >
+            <Bell className="h-4 w-4" />
+            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary ring-2 ring-card" />
+          </button>
 
           <AnimatePresence>
             {notifOpen && (
@@ -120,7 +111,7 @@ export function Topbar({
                   <h3 className="font-bold text-foreground text-xs">
                     Notifications
                   </h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/15 text-foreground border border-primary/30">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-500/5 text-foreground border border-border">
                     {notificationsData.filter((n) => n.unread).length} Unread
                   </span>
                 </div>

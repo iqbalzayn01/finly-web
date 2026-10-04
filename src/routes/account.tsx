@@ -34,8 +34,8 @@ function Account() {
   const [twoFactorModalOpen, setTwoFactorModalOpen] = useState(false)
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false)
 
-  const [fullName, setFullName] = useState('Alex Morgan')
-  const [email, setEmail] = useState('alex.morgan@finly.io')
+  const [fullName, setFullName] = useState('Grace Quinn')
+  const [email, setEmail] = useState('grace.quinn@finly.io')
   const [profileErrors, setProfileErrors] = useState<Record<string, string>>({})
 
   const [passwordForm, setPasswordForm] = useState({
@@ -119,7 +119,7 @@ function Account() {
             )}
           >
             <AvatarImage
-              src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+              src="https://doodleipsum.com/700x700/avatar?bg=ededed&i=bc3a7b2ecb91d1a6c511a620968c8a06"
               alt="Avatar"
             />
             <AvatarFallback>AM</AvatarFallback>

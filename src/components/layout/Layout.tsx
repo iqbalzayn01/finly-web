@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Topbar } from './Topbar'
+import { Topbar } from './topbar'
 
 const AiChatAssistant = React.lazy(() =>
   import('../AiChatAssistant').then((m) => ({ default: m.AiChatAssistant })),

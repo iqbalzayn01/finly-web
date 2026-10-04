@@ -230,29 +230,29 @@ export function NavUser({
       aria-expanded={isOpen}
       aria-label="User profile menu"
       className={cn(
-        'flex h-9 items-center rounded-md border border-border bg-card text-foreground hover:bg-accent hover:border-primary/40 transition-all outline-none cursor-pointer shrink-0 shadow-none',
+        'flex h-9 items-center rounded-md bg-background border border-border text-foreground transition-all outline-none cursor-pointer shrink-0 shadow-none',
         isSidebarClosed
-          ? 'size-9 justify-center p-0'
+          ? 'size-9 justify-center hover:bg-slate-500/10 p-0'
           : 'gap-2 pl-1 pr-1.5 sm:pr-2.5',
-        isOpen && 'border-primary ring-2 ring-primary/20 bg-accent',
+        isOpen && 'border border-primary bg-primary',
       )}
     >
       <Avatar
         className={cn(
           'size-7 rounded-md shrink-0 shadow-none transition-all',
           isPro
-            ? 'border-2 border-primary ring-1 ring-primary/20'
+            ? 'border border-primary ring-1 ring-primary/20'
             : 'border border-border',
         )}
       >
         <AvatarImage src={user.avatar} alt={user.name} />
         <AvatarFallback className="rounded-md bg-primary/10 text-foreground font-bold text-[10px]">
-          {userInitials || 'US'}
+          {userInitials || 'GQ'}
         </AvatarFallback>
       </Avatar>
       {!isSidebarClosed && (
         <>
-          <span className="hidden sm:inline-block text-xs font-semibold text-foreground max-w-[90px] truncate">
+          <span className="hidden sm:inline-block text-xs font-semibold text-foreground max-w-22.5 truncate">
             {user.name}
           </span>
           <ChevronsUpDown className="size-3 text-muted-foreground shrink-0" />
@@ -375,7 +375,7 @@ export function NavUser({
                   'flex items-center gap-2 px-2.5 py-2 text-xs font-semibold rounded-md transition-colors cursor-pointer w-full border',
                   isPro
                     ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
-                    : 'bg-primary/15 text-foreground border-primary/30 hover:bg-primary/25',
+                    : 'bg-primary text-black border-primary hover:bg-primary/90',
                 )}
               >
                 <Sparkles className="size-3.5 shrink-0" />
@@ -387,18 +387,18 @@ export function NavUser({
               <Link
                 to="/account"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-md hover:bg-accent/60 transition-colors cursor-pointer w-full"
+                className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-md hover:bg-slate-500/10 transition-colors cursor-pointer w-full"
               >
-                <BadgeCheck className="size-3.5 text-muted-foreground shrink-0" />
+                <BadgeCheck className="size-3.5 text-foreground shrink-0" />
                 <span>Account Profile</span>
               </Link>
 
               <Link
                 to="/settings"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-md hover:bg-accent/60 transition-colors cursor-pointer w-full"
+                className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-foreground rounded-md hover:bg-slate-500/10 transition-colors cursor-pointer w-full"
               >
-                <Settings2 className="size-3.5 text-muted-foreground shrink-0" />
+                <Settings2 className="size-3.5 text-foreground shrink-0" />
                 <span>Settings</span>
               </Link>
 

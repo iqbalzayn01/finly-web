@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import {
   Plus,
@@ -9,12 +9,11 @@ import {
   MoreVertical,
   Edit2,
   Trash2,
-} from '../components/ui/icon'
+} from '../../components/ui/icon'
 import { motion, AnimatePresence } from 'motion/react'
-import { Button } from '../components/ui/button'
-import { AlertModal } from '../components/ui/alert-modal'
-import { QuickEntryModal } from '../components/ui/quick-entry-modal'
-import { useCurrency } from '../lib/currency'
+import { Button } from '../../components/ui/button'
+import { AlertModal } from '../../components/ui/alert-modal'
+import { useCurrency } from '../../lib/currency'
 import {
   Select,
   SelectTrigger,
@@ -22,14 +21,14 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-} from '../components/ui/select'
-import { useDebouncedSearch } from '../hooks/use-debounced-search'
-import { NumberTicker } from '../components/ui/number-ticker'
-import CATEGORIES from '../data/categories.json'
-import initialTransactions from '../data/transactions.json'
+} from '../../components/ui/select'
+import { useDebouncedSearch } from '../../hooks/use-debounced-search'
+import { NumberTicker } from '../../components/ui/number-ticker'
+import CATEGORIES from '../../data/categories.json'
+import initialTransactions from '../../data/transactions.json'
 
-export const Route = createFileRoute('/records')({
-  component: Cashbook,
+export const Route = createFileRoute('/records/')({
+  component: Records,
 })
 
 const getCategoryBadge = (categoryName: string) => {
@@ -64,9 +63,8 @@ const SCOPE_OPTIONS = [
   { value: 'personal', label: 'Personal' },
 ]
 
-function Cashbook() {
-  const { currency, formatAmount } = useCurrency()
-  const [quickEntryOpen, setQuickEntryOpen] = useState(false)
+function Records() {
+  const { formatAmount } = useCurrency()
   const [openKebab, setOpenKebab] = useState<number | null>(null)
   const [typeFilter, setTypeFilter] = useState('all')
   const [scopeFilter, setScopeFilter] = useState('all')
@@ -104,7 +102,7 @@ function Cashbook() {
     isTooShort,
     results: filteredTransactions,
   } = useDebouncedSearch({
-    resourceKey: 'cashbook-transactions',
+    resourceKey: 'record-transactions',
     data: initialTransactions,
     extraFilters: { typeFilter, scopeFilter },
     filterFn: (items, query, filters) => {
@@ -132,17 +130,19 @@ function Cashbook() {
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
-            Cashbook
+            Records
           </h1>
           <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-muted-foreground">
             Track and filter business and personal cash inflows and outflows.
           </p>
         </div>
         <Button
-          onClick={() => setQuickEntryOpen(true)}
-          className="w-full sm:w-auto h-11 px-6 font-semibold shadow-none"
+          asChild
+          className="w-full sm:w-auto h-11 font-semibold shadow-none"
         >
-          <Plus className="h-5 w-5 mr-2" /> Quick Entry
+          <Link to="/records/create-record">
+            <Plus className="h-5 w-5" /> Create Record
+          </Link>
         </Button>
       </div>
 
@@ -212,7 +212,7 @@ function Cashbook() {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ ...m3Transition, delay: 0.2 }}
-        className="border border-border bg-card shadow-none rounded-2xl min-h-[500px] overflow-hidden"
+        className="border border-border bg-card shadow-none rounded-2xl min-h-125 overflow-hidden"
       >
         <div className="p-3.5 sm:p-4 border-b border-border flex flex-col sm:flex-row gap-3 sm:gap-4">
           <div className="relative flex-1">
@@ -276,7 +276,7 @@ function Cashbook() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm whitespace-nowrap min-w-[800px]">
+          <table className="w-full text-left text-sm whitespace-nowrap min-w-200">
             <thead className="bg-muted/40 text-muted-foreground border-border border-b">
               <tr>
                 <th className="px-6 py-4 font-semibold text-xs">
@@ -460,20 +460,6 @@ function Cashbook() {
         </div>
       </motion.div>
 
-      <QuickEntryModal
-        open={quickEntryOpen}
-        onOpenChange={setQuickEntryOpen}
-        currency={currency}
-        onSave={(data) => {
-          setFeedbackModal({
-            open: true,
-            type: 'success',
-            title: 'Transaction Saved',
-            desc: `Transaction of ${formatAmount(data.amount)} recorded to cashbook.`,
-          })
-        }}
-      />
-
       <AlertModal
         open={feedbackModal.open}
         onOpenChange={(open) => setFeedbackModal((prev) => ({ ...prev, open }))}
@@ -488,7 +474,7 @@ function Cashbook() {
         onOpenChange={(open) => setDeleteModal((prev) => ({ ...prev, open }))}
         type="error"
         title="Delete Transaction"
-        description={`Permanently remove ${deleteModal.txDesc || 'this entry'} from the cashbook? This will recalculate your ledger balances.`}
+        description={`Permanently remove ${deleteModal.txDesc || 'this entry'} from the record? This will recalculate your ledger balances.`}
         confirmText="Delete Entry"
         cancelText="Cancel"
         onConfirm={() => {

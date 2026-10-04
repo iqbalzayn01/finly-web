@@ -7,6 +7,7 @@ import {
   TrendingUp,
   TrendingDown,
   Receipt,
+  Plus,
 } from '../components/ui/icon'
 import { useState, useMemo } from 'react'
 import {
@@ -16,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../components/ui/card'
+import { Button } from '#/components/ui'
 import { ChartContainer, ChartTooltip } from '../components/ui/chart'
 import type { ChartConfig } from '../components/ui/chart'
 import {
@@ -313,6 +315,15 @@ function Dashboard() {
             Track cashflow, runway, and operating liquidity.
           </p>
         </motion.div>
+
+        <Button
+          asChild
+          className="w-full sm:w-auto h-11 font-semibold shadow-none"
+        >
+          <Link to="/records/create-record">
+            <Plus className="h-5 w-5" /> Create Record
+          </Link>
+        </Button>
       </div>
 
       <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3">

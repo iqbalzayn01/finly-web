@@ -124,11 +124,14 @@ function Invoices() {
             Create, track, and manage client invoices and receivables.
           </p>
         </div>
-        <Link to="/invoices/builder" className="w-full sm:w-auto">
-          <Button className="w-full sm:w-auto h-11 px-6 font-semibold shadow-none">
-            <Plus className="h-5 w-5 mr-2" /> New Invoice
-          </Button>
-        </Link>
+        <Button
+          asChild
+          className="w-full sm:w-auto h-11 font-semibold shadow-none"
+        >
+          <Link to="/invoices/builder">
+            <Plus className="h-5 w-5" /> New Invoice
+          </Link>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
@@ -167,7 +170,7 @@ function Invoices() {
         </div>
       </div>
 
-      <div className="border border-border bg-card shadow-none rounded-2xl min-h-[500px] overflow-hidden">
+      <div className="border border-border bg-card shadow-none rounded-2xl min-h-125 overflow-hidden">
         <div className="p-3.5 sm:p-4 border-b border-border flex flex-col sm:flex-row gap-3 sm:gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
@@ -205,7 +208,7 @@ function Invoices() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm whitespace-nowrap min-w-[800px]">
+          <table className="w-full text-left text-sm whitespace-nowrap min-w-200">
             <thead className="bg-muted/40 text-muted-foreground border-b border-border">
               <tr>
                 <th className="px-6 py-4 font-semibold text-xs">
