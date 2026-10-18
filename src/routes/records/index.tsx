@@ -15,13 +15,16 @@ import { Button } from '../../components/ui/button'
 import { AlertModal } from '../../components/ui/alert-modal'
 import { useCurrency } from '../../lib/currency'
 import {
+  Dialog,
+  DialogTrigger,
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectGroup,
   SelectItem,
-} from '../../components/ui/select'
+} from '#/components/ui'
+import { CreateRecordModal } from './create-record-modal'
 import { useDebouncedSearch } from '../../hooks/use-debounced-search'
 import { NumberTicker } from '../../components/ui/number-ticker'
 import CATEGORIES from '../../data/categories.json'
@@ -136,14 +139,16 @@ function Records() {
             Track and filter business and personal cash inflows and outflows.
           </p>
         </div>
-        <Button
-          asChild
-          className="w-full sm:w-auto h-11 font-semibold shadow-none"
-        >
-          <Link to="/records/create-record">
-            <Plus className="h-5 w-5" /> Create Record
-          </Link>
-        </Button>
+        <Dialog>
+          <DialogTrigger
+            render={
+              <Button className="w-full sm:w-auto h-11 font-semibold shadow-none">
+                <Plus className="h-5 w-5" /> Create Record
+              </Button>
+            }
+          />
+          <CreateRecordModal />
+        </Dialog>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">

@@ -32,6 +32,7 @@ export function ThemeToggle() {
   }, [])
 
   const applyThemeMode = (newMode: ThemeMode) => {
+    document.documentElement.style.removeProperty('color-scheme')
     if (newMode === 'dark') {
       document.documentElement.classList.add('dark')
     } else if (newMode === 'light') {

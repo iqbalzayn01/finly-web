@@ -21,7 +21,6 @@ import { Route as InvoicesIndexRouteImport } from './routes/invoices/index'
 import { Route as InvoicesIdRouteImport } from './routes/invoices/$id'
 import { Route as InvoicesBuilderRouteImport } from './routes/invoices/builder'
 import { Route as RecordsIndexRouteImport } from './routes/records/index'
-import { Route as RecordsCreateRecordRouteImport } from './routes/records/create-record'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -83,11 +82,6 @@ const RecordsIndexRoute = RecordsIndexRouteImport.update({
   path: '/records/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RecordsCreateRecordRoute = RecordsCreateRecordRouteImport.update({
-  id: '/records/create-record',
-  path: '/records/create-record',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -99,7 +93,6 @@ export interface FileRoutesByFullPath {
   '/customers/add-customer': typeof CustomersAddCustomerRoute
   '/invoices/$id': typeof InvoicesIdRoute
   '/invoices/builder': typeof InvoicesBuilderRoute
-  '/records/create-record': typeof RecordsCreateRecordRoute
   '/customers/': typeof CustomersIndexRoute
   '/invoices/': typeof InvoicesIndexRoute
   '/records/': typeof RecordsIndexRoute
@@ -114,7 +107,6 @@ export interface FileRoutesByTo {
   '/customers/add-customer': typeof CustomersAddCustomerRoute
   '/invoices/$id': typeof InvoicesIdRoute
   '/invoices/builder': typeof InvoicesBuilderRoute
-  '/records/create-record': typeof RecordsCreateRecordRoute
   '/customers': typeof CustomersIndexRoute
   '/invoices': typeof InvoicesIndexRoute
   '/records': typeof RecordsIndexRoute
@@ -130,7 +122,6 @@ export interface FileRoutesById {
   '/customers/add-customer': typeof CustomersAddCustomerRoute
   '/invoices/$id': typeof InvoicesIdRoute
   '/invoices/builder': typeof InvoicesBuilderRoute
-  '/records/create-record': typeof RecordsCreateRecordRoute
   '/customers/': typeof CustomersIndexRoute
   '/invoices/': typeof InvoicesIndexRoute
   '/records/': typeof RecordsIndexRoute
@@ -147,7 +138,6 @@ export interface FileRouteTypes {
     | '/customers/add-customer'
     | '/invoices/$id'
     | '/invoices/builder'
-    | '/records/create-record'
     | '/customers/'
     | '/invoices/'
     | '/records/'
@@ -162,7 +152,6 @@ export interface FileRouteTypes {
     | '/customers/add-customer'
     | '/invoices/$id'
     | '/invoices/builder'
-    | '/records/create-record'
     | '/customers'
     | '/invoices'
     | '/records'
@@ -177,7 +166,6 @@ export interface FileRouteTypes {
     | '/customers/add-customer'
     | '/invoices/$id'
     | '/invoices/builder'
-    | '/records/create-record'
     | '/customers/'
     | '/invoices/'
     | '/records/'
@@ -193,7 +181,6 @@ export interface RootRouteChildren {
   CustomersAddCustomerRoute: typeof CustomersAddCustomerRoute
   InvoicesIdRoute: typeof InvoicesIdRoute
   InvoicesBuilderRoute: typeof InvoicesBuilderRoute
-  RecordsCreateRecordRoute: typeof RecordsCreateRecordRoute
   CustomersIndexRoute: typeof CustomersIndexRoute
   InvoicesIndexRoute: typeof InvoicesIndexRoute
   RecordsIndexRoute: typeof RecordsIndexRoute
@@ -285,13 +272,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecordsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/records/create-record': {
-      id: '/records/create-record'
-      path: '/records/create-record'
-      fullPath: '/records/create-record'
-      preLoaderRoute: typeof RecordsCreateRecordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -305,7 +285,6 @@ const rootRouteChildren: RootRouteChildren = {
   CustomersAddCustomerRoute: CustomersAddCustomerRoute,
   InvoicesIdRoute: InvoicesIdRoute,
   InvoicesBuilderRoute: InvoicesBuilderRoute,
-  RecordsCreateRecordRoute: RecordsCreateRecordRoute,
   CustomersIndexRoute: CustomersIndexRoute,
   InvoicesIndexRoute: InvoicesIndexRoute,
   RecordsIndexRoute: RecordsIndexRoute,

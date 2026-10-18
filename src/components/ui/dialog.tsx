@@ -44,7 +44,7 @@ function DialogOverlay({
 let activeDialogCount = 0
 
 function DialogBodyLock() {
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (typeof document === 'undefined') return
     activeDialogCount += 1
     document.documentElement.classList.add('modal-open')
@@ -79,7 +79,7 @@ function DialogContent({
       <BaseDialog.Popup
         data-slot="dialog-content"
         className={cn(
-          'fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-2xl border border-border bg-card p-6 text-foreground shadow-2xl duration-200 outline-none max-w-lg no-scrollbar',
+          'fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-2xl border border-border bg-card p-6 text-foreground shadow-2xl duration-200 outline-none sm:max-w-lg no-scrollbar',
           'transition-all data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0',
           className,
         )}

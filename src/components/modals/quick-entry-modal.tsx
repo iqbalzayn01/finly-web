@@ -230,7 +230,7 @@ export function QuickEntryModal({
     onOpenChange,
   ])
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     submitTransaction()
   }

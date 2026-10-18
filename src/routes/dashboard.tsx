@@ -11,23 +11,20 @@ import {
 } from '../components/ui/icon'
 import { useState, useMemo } from 'react'
 import {
+  Button,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../components/ui/card'
-import { Button } from '#/components/ui'
-import { ChartContainer, ChartTooltip } from '../components/ui/chart'
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '#/components/ui'
 import type { ChartConfig } from '../components/ui/chart'
-import {
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Bar,
-  ComposedChart,
-  ReferenceLine,
-} from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import { useCurrency } from '../lib/currency'
 import { NumberTicker } from '../components/ui/number-ticker'
 import dashboardData from '../data/dashboard.json'
@@ -36,28 +33,12 @@ export const Route = createFileRoute('/dashboard')({ component: Dashboard })
 
 const cashflowChartConfig = {
   income: {
-    label: 'Inflow / Income',
+    label: 'Income',
     color: 'var(--primary)',
   },
   expense: {
-    label: 'Outflow / Expense',
-    color: 'rgba(100, 116, 139, 0.20)',
-    theme: {
-      light: 'rgba(100, 116, 139, 0.20)',
-      dark: 'rgba(148, 163, 184, 0.25)',
-    },
-  },
-  expenseNegative: {
-    label: 'Outflow / Expense',
-    color: 'rgba(100, 116, 139, 0.20)',
-    theme: {
-      light: 'rgba(100, 116, 139, 0.20)',
-      dark: 'rgba(148, 163, 184, 0.25)',
-    },
-  },
-  net: {
-    label: 'Net Cashflow',
-    color: '#6366F1',
+    label: 'Expense',
+    color: 'var(--destructive)',
   },
 } satisfies ChartConfig
 
@@ -71,158 +52,42 @@ const TIMEFRAME_OPTIONS: { label: string; value: CashflowTimeframe }[] = [
   { label: '1Y', value: '1y' },
 ]
 
-interface CashflowTooltipPayloadItem {
-  dataKey?: string | number
-  name?: string
-  value?: number
-  payload?: {
-    name?: string
-    income?: number
-    expense?: number
-    net?: number
-    expenseNegative?: number
-    [key: string]: unknown
-  }
-}
-
-interface CashflowTooltipProps {
-  active?: boolean
-  payload?: CashflowTooltipPayloadItem[]
-  label?: string
-}
-
-function CashflowTooltip({ active, payload, label }: CashflowTooltipProps) {
-  const { formatAmount } = useCurrency()
-
-  if (!active || !payload || !payload.length) {
-    return null
-  }
-
-  const raw = payload[0]?.payload
-  const income = typeof raw?.income === 'number' ? raw.income : 0
-  const expense = typeof raw?.expense === 'number' ? raw.expense : 0
-  const net = income - expense
-  const isSurplus = net >= 0
-  const marginPct = income > 0 ? ((net / income) * 100).toFixed(1) : '0.0'
-
-  return (
-    <div className="min-w-56 rounded-md border border-border/80 bg-card/95 p-3 text-xs shadow-xl text-foreground backdrop-blur-md">
-      <div className="flex items-center justify-between border-b border-border/60 pb-2 mb-2">
-        <span className="font-semibold text-foreground text-xs">{label}</span>
-        <span
-          className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${
-            isSurplus
-              ? 'bg-primary/20 text-lime-900 dark:text-lime-300 border border-primary/40'
-              : 'bg-slate-500/15 text-slate-700 dark:text-slate-300 border border-slate-500/30'
-          }`}
-        >
-          {isSurplus ? 'Net Surplus' : 'Net Deficit'}
-        </span>
-      </div>
-
-      <div className="space-y-1.5">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-xs bg-primary border border-black/10 shrink-0" />
-            <span className="text-muted-foreground font-medium">
-              Income (Inflow)
-            </span>
-          </div>
-          <span className="font-mono font-bold text-foreground">
-            {formatAmount(income)}
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-xs bg-slate-500/20 border border-slate-500/30 shrink-0" />
-            <span className="text-muted-foreground font-medium">
-              Expense (Outflow)
-            </span>
-          </div>
-          <span className="font-mono font-bold text-foreground">
-            {formatAmount(expense)}
-          </span>
-        </div>
-
-        <div className="border-t border-border/60 pt-2 mt-1 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-xs bg-[#6366F1] shrink-0" />
-            <span className="font-semibold text-foreground">Net Cashflow</span>
-          </div>
-          <div className="text-right">
-            <span
-              className={`font-mono font-bold ${
-                isSurplus
-                  ? 'text-lime-700 dark:text-lime-400'
-                  : 'text-slate-600 dark:text-slate-400'
-              }`}
-            >
-              {isSurplus
-                ? `+${formatAmount(net)}`
-                : `-${formatAmount(Math.abs(net))}`}
-            </span>
-            <span className="block text-[10px] text-muted-foreground">
-              {isSurplus ? '+' : ''}
-              {marginPct}% margin
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 const KPI_CARDS = [
   {
     title: 'My Balance',
     amount: 164850,
-    trend: '+14.2%',
-    isUp: true,
     icon: Wallet,
     containerClass:
       'bg-primary text-primary-foreground border border-primary/20 shadow-none rounded-2xl',
     iconClass: 'bg-white/90 text-primary-foreground rounded-md',
-    trendClass: 'bg-black/10 text-primary-foreground rounded-md',
-    progress: 85,
-    progressBg: 'bg-black/10',
-    progressFill: 'bg-primary-foreground',
     subtext: 'Liquid cash across bank accounts',
   },
   {
     title: 'My Income',
     amount: 34800,
-    trend: '+9.4% vs last month',
-    isUp: true,
     icon: ArrowUpRight,
     containerClass:
       'bg-card text-foreground border border-border shadow-none rounded-2xl',
     iconClass:
       'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-md',
-    trendClass:
-      'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-md',
-    progress: 72,
-    progressBg: 'bg-muted',
-    progressFill: 'bg-emerald-500',
     subtext: 'Collected revenue and receipts',
   },
   {
     title: 'Total Expenses',
     amount: 20400,
-    trend: '-3.1% vs last month',
-    isUp: false,
     icon: ArrowDownRight,
     containerClass:
       'bg-card text-foreground border border-border shadow-none rounded-2xl',
     iconClass:
       'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-md',
-    trendClass: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-md',
-    progress: 58,
-    progressBg: 'bg-muted',
-    progressFill: 'bg-rose-500',
     subtext: 'Operating expenses and payouts',
   },
 ]
+
+const m3Transition = {
+  duration: 0.35,
+  ease: [0.2, 0, 0, 1] as [number, number, number, number],
+}
 
 const { cashflowDataMap, recentTransactions } = dashboardData
 
@@ -238,14 +103,6 @@ function Dashboard() {
     return cashflowDataMap[cashflowTimeframe]
   }, [cashflowTimeframe])
 
-  const computedCashflowData = useMemo(() => {
-    return filteredCashflowData.map((d) => ({
-      ...d,
-      net: d.income - d.expense,
-      expenseNegative: -d.expense,
-    }))
-  }, [filteredCashflowData])
-
   const periodSummary = useMemo(() => {
     const totalIncome = filteredCashflowData.reduce(
       (acc, item) => acc + (item.income || 0),
@@ -256,29 +113,13 @@ function Dashboard() {
       0,
     )
     const netCashflow = totalIncome - totalExpense
-    const avgIncome = Math.round(
-      totalIncome / (filteredCashflowData.length || 1),
-    )
-    const avgExpense = Math.round(
-      totalExpense / (filteredCashflowData.length || 1),
-    )
-    const margin =
-      totalIncome > 0 ? Math.round((netCashflow / totalIncome) * 100) : 0
 
     return {
       totalIncome,
       totalExpense,
       netCashflow,
-      avgIncome,
-      avgExpense,
-      margin,
     }
   }, [filteredCashflowData])
-
-  const m3Transition = {
-    duration: 0.35,
-    ease: [0.2, 0, 0, 1] as [number, number, number, number],
-  }
 
   const allRecentTx = useMemo(() => {
     return recentTransactions.map((tx) => ({
@@ -315,15 +156,6 @@ function Dashboard() {
             Track cashflow, runway, and operating liquidity.
           </p>
         </motion.div>
-
-        <Button
-          asChild
-          className="w-full sm:w-auto h-11 font-semibold shadow-none"
-        >
-          <Link to="/records/create-record">
-            <Plus className="h-5 w-5" /> Create Record
-          </Link>
-        </Button>
       </div>
 
       <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3">
@@ -486,68 +318,123 @@ function Dashboard() {
                   config={cashflowChartConfig}
                   className="aspect-auto h-85 w-full"
                 >
-                  <ComposedChart
+                  <AreaChart
                     accessibilityLayer
-                    data={computedCashflowData}
+                    data={filteredCashflowData}
                     margin={{
-                      left: 12,
+                      left: 4,
                       right: 12,
                       top: 12,
                       bottom: 0,
                     }}
-                    barGap={4}
-                    barCategoryGap="3%"
                   >
-                    <CartesianGrid
-                      vertical={false}
-                      strokeDasharray="8 8"
-                      className="stroke-border!"
-                    />
+                    <defs>
+                      <linearGradient
+                        id="fillIncome"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="var(--color-income)"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="var(--color-income)"
+                          stopOpacity={0.1}
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="fillExpense"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="var(--color-expense)"
+                          stopOpacity={0.8}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="var(--color-expense)"
+                          stopOpacity={0.1}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid vertical={false} />
                     <XAxis
                       dataKey="name"
-                      tickLine={true}
-                      axisLine={true}
-                      tickMargin={10}
-                      className="text-[11px] font-medium fill-muted-foreground"
-                    />
-                    <YAxis
-                      hide
                       tickLine={false}
                       axisLine={false}
                       tickMargin={8}
-                      tickCount={5}
-                      domain={['auto', 'auto']}
-                      tickFormatter={(val: number) =>
-                        `${val < 0 ? '-' : ''}${symbol}${Math.abs(val) >= 1000 ? `${(Math.abs(val) / 1000).toFixed(0)}k` : Math.abs(val)}`
-                      }
-                      className="text-[11px] font-mono fill-muted-foreground/70"
+                      interval={cashflowTimeframe === '30d' ? 2 : 0}
+                      padding={{ left: 10, right: 10 }}
                     />
-                    <ReferenceLine
-                      y={0}
-                      stroke="var(--border)"
-                      strokeWidth={1.5}
+                    <YAxis
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                      width={48}
+                      tickFormatter={(val: number) =>
+                        `${symbol}${val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val}`
+                      }
+                      className="text-[11px] font-mono fill-muted-foreground"
                     />
                     <ChartTooltip
-                      content={<CashflowTooltip />}
-                      cursor={{ fill: 'var(--accent)', opacity: 0.12 }}
+                      cursor={{
+                        stroke: 'var(--foreground)',
+                        strokeWidth: 1,
+                        strokeDasharray: '4 4',
+                      }}
+                      content={<ChartTooltipContent indicator="dot" />}
                     />
-                    <Bar
-                      key="bar-income"
+                    <Area
                       dataKey="income"
-                      name="Inflow"
-                      radius={[6, 6, 0, 0]}
-                      maxBarSize={80}
-                      className="fill-primary"
+                      type="monotone"
+                      fill="url(#fillIncome)"
+                      stroke="var(--color-income)"
+                      strokeWidth={1.6}
+                      // dot={{
+                      //   r: 3,
+                      //   fill: 'var(--color-income)',
+                      //   stroke: 'var(--card)',
+                      //   strokeWidth: 1.5,
+                      //   fillOpacity: 1,
+                      // }}
+                      activeDot={{
+                        r: 5.5,
+                        fill: 'var(--color-income)',
+                        stroke: 'var(--color-income)',
+                        strokeWidth: 1.6,
+                      }}
                     />
-                    <Bar
-                      key="bar-expense"
-                      dataKey="expenseNegative"
-                      name="Outflow"
-                      radius={[6, 6, 0, 0]}
-                      maxBarSize={80}
-                      className="fill-slate-500/10 dark:fill-slate-500/50"
+                    <Area
+                      dataKey="expense"
+                      type="monotone"
+                      fill="url(#fillExpense)"
+                      stroke="var(--color-expense)"
+                      strokeWidth={1.6}
+                      // dot={{
+                      //   r: 3,
+                      //   fill: 'var(--color-expense)',
+                      //   stroke: 'var(--card)',
+                      //   strokeWidth: 1.5,
+                      //   fillOpacity: 1,
+                      // }}
+                      activeDot={{
+                        r: 5.5,
+                        fill: 'var(--color-expense)',
+                        stroke: 'var(--color-expense)',
+                        strokeWidth: 1.6,
+                      }}
                     />
-                  </ComposedChart>
+                    <ChartLegend content={<ChartLegendContent />} />
+                  </AreaChart>
                 </ChartContainer>
               </div>
             </div>
