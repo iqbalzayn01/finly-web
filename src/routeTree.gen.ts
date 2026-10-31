@@ -10,41 +10,30 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AccountRouteImport } from './routes/account'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as ItemsRouteImport } from './routes/items'
-import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as HistoryRouteImport } from './routes/history'
+import { Route as InvoicesRouteImport } from './routes/invoices'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as CustomersIndexRouteImport } from './routes/customers/index'
-import { Route as CustomersAddCustomerRouteImport } from './routes/customers/add-customer'
-import { Route as InvoicesIndexRouteImport } from './routes/invoices/index'
-import { Route as InvoicesIdRouteImport } from './routes/invoices/$id'
-import { Route as InvoicesBuilderRouteImport } from './routes/invoices/builder'
-import { Route as RecordsIndexRouteImport } from './routes/records/index'
+import { Route as SignupRouteImport } from './routes/signup'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AccountRoute = AccountRouteImport.update({
-  id: '/account',
-  path: '/account',
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const InvoicesRoute = InvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ItemsRoute = ItemsRouteImport.update({
-  id: '/items',
-  path: '/items',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -52,138 +41,59 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CustomersIndexRoute = CustomersIndexRouteImport.update({
-  id: '/customers/',
-  path: '/customers/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CustomersAddCustomerRoute = CustomersAddCustomerRouteImport.update({
-  id: '/customers/add-customer',
-  path: '/customers/add-customer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvoicesIndexRoute = InvoicesIndexRouteImport.update({
-  id: '/invoices/',
-  path: '/invoices/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvoicesIdRoute = InvoicesIdRouteImport.update({
-  id: '/invoices/$id',
-  path: '/invoices/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvoicesBuilderRoute = InvoicesBuilderRouteImport.update({
-  id: '/invoices/builder',
-  path: '/invoices/builder',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RecordsIndexRoute = RecordsIndexRouteImport.update({
-  id: '/records/',
-  path: '/records/',
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/account': typeof AccountRoute
-  '/dashboard': typeof DashboardRoute
-  '/items': typeof ItemsRoute
-  '/pricing': typeof PricingRoute
+  '/history': typeof HistoryRoute
+  '/invoices': typeof InvoicesRoute
+  '/login': typeof LoginRoute
   '/settings': typeof SettingsRoute
-  '/customers/add-customer': typeof CustomersAddCustomerRoute
-  '/invoices/$id': typeof InvoicesIdRoute
-  '/invoices/builder': typeof InvoicesBuilderRoute
-  '/customers/': typeof CustomersIndexRoute
-  '/invoices/': typeof InvoicesIndexRoute
-  '/records/': typeof RecordsIndexRoute
+  '/signup': typeof SignupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/account': typeof AccountRoute
-  '/dashboard': typeof DashboardRoute
-  '/items': typeof ItemsRoute
-  '/pricing': typeof PricingRoute
+  '/history': typeof HistoryRoute
+  '/invoices': typeof InvoicesRoute
+  '/login': typeof LoginRoute
   '/settings': typeof SettingsRoute
-  '/customers/add-customer': typeof CustomersAddCustomerRoute
-  '/invoices/$id': typeof InvoicesIdRoute
-  '/invoices/builder': typeof InvoicesBuilderRoute
-  '/customers': typeof CustomersIndexRoute
-  '/invoices': typeof InvoicesIndexRoute
-  '/records': typeof RecordsIndexRoute
+  '/signup': typeof SignupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/account': typeof AccountRoute
-  '/dashboard': typeof DashboardRoute
-  '/items': typeof ItemsRoute
-  '/pricing': typeof PricingRoute
+  '/history': typeof HistoryRoute
+  '/invoices': typeof InvoicesRoute
+  '/login': typeof LoginRoute
   '/settings': typeof SettingsRoute
-  '/customers/add-customer': typeof CustomersAddCustomerRoute
-  '/invoices/$id': typeof InvoicesIdRoute
-  '/invoices/builder': typeof InvoicesBuilderRoute
-  '/customers/': typeof CustomersIndexRoute
-  '/invoices/': typeof InvoicesIndexRoute
-  '/records/': typeof RecordsIndexRoute
+  '/signup': typeof SignupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/account'
-    | '/dashboard'
-    | '/items'
-    | '/pricing'
-    | '/settings'
-    | '/customers/add-customer'
-    | '/invoices/$id'
-    | '/invoices/builder'
-    | '/customers/'
-    | '/invoices/'
-    | '/records/'
+  fullPaths: '/' | '/history' | '/invoices' | '/login' | '/settings' | '/signup'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/account'
-    | '/dashboard'
-    | '/items'
-    | '/pricing'
-    | '/settings'
-    | '/customers/add-customer'
-    | '/invoices/$id'
-    | '/invoices/builder'
-    | '/customers'
-    | '/invoices'
-    | '/records'
+  to: '/' | '/history' | '/invoices' | '/login' | '/settings' | '/signup'
   id:
     | '__root__'
     | '/'
-    | '/account'
-    | '/dashboard'
-    | '/items'
-    | '/pricing'
+    | '/history'
+    | '/invoices'
+    | '/login'
     | '/settings'
-    | '/customers/add-customer'
-    | '/invoices/$id'
-    | '/invoices/builder'
-    | '/customers/'
-    | '/invoices/'
-    | '/records/'
+    | '/signup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AccountRoute: typeof AccountRoute
-  DashboardRoute: typeof DashboardRoute
-  ItemsRoute: typeof ItemsRoute
-  PricingRoute: typeof PricingRoute
+  HistoryRoute: typeof HistoryRoute
+  InvoicesRoute: typeof InvoicesRoute
+  LoginRoute: typeof LoginRoute
   SettingsRoute: typeof SettingsRoute
-  CustomersAddCustomerRoute: typeof CustomersAddCustomerRoute
-  InvoicesIdRoute: typeof InvoicesIdRoute
-  InvoicesBuilderRoute: typeof InvoicesBuilderRoute
-  CustomersIndexRoute: typeof CustomersIndexRoute
-  InvoicesIndexRoute: typeof InvoicesIndexRoute
-  RecordsIndexRoute: typeof RecordsIndexRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -195,32 +105,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountRouteImport
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+    '/invoices': {
+      id: '/invoices'
+      path: '/invoices'
+      fullPath: '/invoices'
+      preLoaderRoute: typeof InvoicesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/items': {
-      id: '/items'
-      path: '/items'
-      fullPath: '/items'
-      preLoaderRoute: typeof ItemsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -230,46 +133,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/customers/': {
-      id: '/customers/'
-      path: '/customers'
-      fullPath: '/customers/'
-      preLoaderRoute: typeof CustomersIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/customers/add-customer': {
-      id: '/customers/add-customer'
-      path: '/customers/add-customer'
-      fullPath: '/customers/add-customer'
-      preLoaderRoute: typeof CustomersAddCustomerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/invoices/': {
-      id: '/invoices/'
-      path: '/invoices'
-      fullPath: '/invoices/'
-      preLoaderRoute: typeof InvoicesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/invoices/$id': {
-      id: '/invoices/$id'
-      path: '/invoices/$id'
-      fullPath: '/invoices/$id'
-      preLoaderRoute: typeof InvoicesIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/invoices/builder': {
-      id: '/invoices/builder'
-      path: '/invoices/builder'
-      fullPath: '/invoices/builder'
-      preLoaderRoute: typeof InvoicesBuilderRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/records/': {
-      id: '/records/'
-      path: '/records'
-      fullPath: '/records/'
-      preLoaderRoute: typeof RecordsIndexRouteImport
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -277,17 +145,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AccountRoute: AccountRoute,
-  DashboardRoute: DashboardRoute,
-  ItemsRoute: ItemsRoute,
-  PricingRoute: PricingRoute,
+  HistoryRoute: HistoryRoute,
+  InvoicesRoute: InvoicesRoute,
+  LoginRoute: LoginRoute,
   SettingsRoute: SettingsRoute,
-  CustomersAddCustomerRoute: CustomersAddCustomerRoute,
-  InvoicesIdRoute: InvoicesIdRoute,
-  InvoicesBuilderRoute: InvoicesBuilderRoute,
-  CustomersIndexRoute: CustomersIndexRoute,
-  InvoicesIndexRoute: InvoicesIndexRoute,
-  RecordsIndexRoute: RecordsIndexRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

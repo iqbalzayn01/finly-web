@@ -1,17 +1,25 @@
 {
+  "bundler": "vite",
   "projectName": "finly-web",
   "mode": "file-router",
   "typescript": true,
   "packageManager": "npm",
-  "includeExamples": true,
+  "includeExamples": false,
   "tailwind": true,
   "projectPreset": "default",
+  "routerOnly": false,
   "addOnOptions": {},
-  "git": true,
+  "git": false,
   "install": true,
   "intent": true,
-  "routerOnly": false,
   "version": 1,
   "framework": "react",
-  "chosenAddOns": ["eslint", "shadcn", "tanstack-query", "table", "form"]
+  "chosenAddOns": [
+    "biome",
+    "vercel",
+    "form",
+    "shadcn",
+    "table",
+    "tanstack-query"
+  ]
 }
