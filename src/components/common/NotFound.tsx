@@ -30,11 +30,11 @@ export function NotFound() {
           Return to Dashboard
         </Link>
         <Link
-          to="/cashbook"
+          to="/records"
           className="px-5 py-2.5 border border-border bg-card hover:bg-accent text-foreground text-xs font-bold rounded-md transition-all shadow-none flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
-          View Cashbook
+          View Records
         </Link>
       </div>
     </div>

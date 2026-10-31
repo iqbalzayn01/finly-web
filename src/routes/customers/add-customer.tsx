@@ -1,9 +1,8 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/customers/add-customer')({
-  component: RouteComponent,
+  beforeLoad: () => {
+    throw redirect({ to: '/customers' })
+  },
+  component: () => null,
 })
-
-function RouteComponent() {
-  return <div>Hello "/customers/add-customer"!</div>
-}

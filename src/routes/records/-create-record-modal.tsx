@@ -8,25 +8,14 @@ import {
   ArrowDownRight,
   Building2,
   User,
-  Delete as BackspaceIcon,
   Keyboard,
   ArrowDown,
 } from '#/components/ui/icon'
 import {
   Button,
   Calendar,
-  Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  Field,
-  FieldDescription,
-  FieldLabel,
-  Input,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -138,7 +127,6 @@ export function CreateRecordModal({
   const [category, setCategory] = useState<string>('')
   const [scope, setScope] = useState<'business' | 'personal'>('business')
   const [description, setDescription] = useState<string>('')
-  const [activeKey, setActiveKey] = useState<string | null>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const descriptionInputRef = useRef<HTMLInputElement>(null)
@@ -147,11 +135,6 @@ export function CreateRecordModal({
 
   const handleNumpad = useCallback(
     (val: string) => {
-      setActiveKey(val)
-      setTimeout(() => {
-        setActiveKey((curr) => (curr === val ? null : curr))
-      }, 150)
-
       setErrors((prev) => {
         if (!prev.amount) return prev
         const updated = { ...prev }
@@ -526,17 +509,6 @@ export function CreateRecordModal({
               </PopoverContent>
             </Popover>
           </div>
-
-          {/* <div>
-              <label className="block text-[11px] font-semibold text-muted-foreground mb-1">
-                Invoice Attacment
-              </label>
-              <Field>
-                <FieldLabel htmlFor="picture">Picture</FieldLabel>
-                <Input id="picture" type="file" />
-                <FieldDescription>Select a picture to upload.</FieldDescription>
-              </Field>
-            </div> */}
         </div>
 
         <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-border mt-5">

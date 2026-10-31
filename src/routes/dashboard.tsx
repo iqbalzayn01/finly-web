@@ -7,11 +7,9 @@ import {
   TrendingUp,
   TrendingDown,
   Receipt,
-  Plus,
 } from '../components/ui/icon'
 import { useState, useMemo } from 'react'
 import {
-  Button,
   Card,
   CardContent,
   CardDescription,

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import {
   Plus,
@@ -24,7 +24,7 @@ import {
   SelectGroup,
   SelectItem,
 } from '#/components/ui'
-import { CreateRecordModal } from './create-record-modal'
+import { CreateRecordModal } from './-create-record-modal'
 import { useDebouncedSearch } from '../../hooks/use-debounced-search'
 import { NumberTicker } from '../../components/ui/number-ticker'
 import CATEGORIES from '../../data/categories.json'

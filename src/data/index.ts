@@ -5,8 +5,7 @@ import invoicesData from './invoices.json'
 import customersData from './customers.json'
 import itemsData from './items.json'
 import notificationsData from './notifications.json'
-import aiProvidersData from './ai-providers.json'
-import teamsData from './teams.json'
+import usersData from './users.json'
 
 export {
   dashboardData,
@@ -16,8 +15,7 @@ export {
   customersData,
   itemsData,
   notificationsData,
-  aiProvidersData,
-  teamsData,
+  usersData,
 }
 
 export const initialTransactions = transactionsData
@@ -26,7 +24,5 @@ export const initialItems = itemsData
 export const initialInvoices = invoicesData.invoices
 export const initialInvoiceDetails = invoicesData.invoiceDetails
 export const initialNotifications = notificationsData
-export const initialAiProviders = aiProvidersData
 export const initialCategories = categoriesData
-export const initialTeams = teamsData.teams
-export const initialCurrentUser = teamsData.currentUser
+export const initialCurrentUser = usersData.currentUser

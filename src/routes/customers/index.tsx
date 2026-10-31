@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import {
   Plus,
@@ -13,14 +13,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react'
 import { Button } from '../../components/ui/button'
 import { AlertModal } from '../../components/ui/alert-modal'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '../../components/ui/dialog'
+import { Dialog, DialogTrigger } from '../../components/ui/dialog'
 import {
   Select,
   SelectTrigger,
@@ -30,7 +23,9 @@ import {
 } from '../../components/ui/select'
 import { useDebouncedSearch } from '../../hooks/use-debounced-search'
 import { NumberTicker } from '../../components/ui/number-ticker'
-import { runValidation, customerFormSchema } from '../../lib/validation'
+import { useCurrency } from '../../lib/currency'
+import { CreateCustomerModal } from './-create-customer-modal'
+import type { CreatedCustomer, CreatedRecord } from './-create-customer-modal'
 import initialCustomers from '../../data/customers.json'
 
 export const Route = createFileRoute('/customers/')({
@@ -45,7 +40,9 @@ const TERM_OPTIONS = [
 ]
 
 function Customers() {
+  const { formatAmount } = useCurrency()
   const [showForm, setShowForm] = useState(false)
+  const [customersList, setCustomersList] = useState(initialCustomers)
   const [openKebab, setOpenKebab] = useState<number | null>(null)
   const [termFilter, setTermFilter] = useState('all')
   const [successModal, setSuccessModal] = useState<{
@@ -63,29 +60,28 @@ function Customers() {
   }>({
     open: false,
   })
-  const [newCustomer, setNewCustomer] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    term: 'net30' as 'net7' | 'net14' | 'net30',
-    address: '',
-    taxId: '',
-  })
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({})
 
-  const handleCreateCustomer = () => {
-    const res = runValidation(customerFormSchema, newCustomer)
-    if (!res.success) {
-      setFormErrors(res.errors)
-      return
+  const handleCustomerCreated = (
+    customer: CreatedCustomer,
+    record?: CreatedRecord | null,
+  ) => {
+    const newCustomer = {
+      id: customer.id,
+      name: customer.name,
+      email: customer.email,
+      phone: customer.phone,
+      address: customer.address,
+      term: customer.term,
+      spent: customer.spent ?? 0,
     }
-
-    setFormErrors({})
+    setCustomersList((prev) => [newCustomer, ...prev])
     setShowForm(false)
     setSuccessModal({
       open: true,
-      title: 'Customer Added',
-      desc: `Customer ${res.data.name} created and saved to directory.`,
+      title: record ? 'Customer & Record Created' : 'Customer Added',
+      desc: record
+        ? `Customer ${customer.name} created and initial ${record.type} record of ${formatAmount(record.amount, record.currency as any)} recorded.`
+        : `Customer ${customer.name} created and saved to directory.`,
     })
   }
 
@@ -96,7 +92,7 @@ function Customers() {
     results: filteredCustomers,
   } = useDebouncedSearch({
     resourceKey: 'customers-list',
-    data: initialCustomers,
+    data: customersList,
     extraFilters: { termFilter },
     filterFn: (items, query, filters) => {
       return items.filter((c) => {
@@ -127,14 +123,19 @@ function Customers() {
             Manage client profiles, contact information, and billing terms.
           </p>
         </div>
-        <Button
-          asChild
-          className="w-full sm:w-auto h-11 font-semibold shadow-none"
-        >
-          <Link to="/customers">
-            <Plus className="h-5 w-5" /> Add Customer
-          </Link>
-        </Button>
+        <Dialog open={showForm} onOpenChange={setShowForm}>
+          <DialogTrigger
+            render={
+              <Button className="w-full sm:w-auto h-11 font-semibold shadow-none">
+                <Plus className="h-5 w-5" /> Add Customer
+              </Button>
+            }
+          />
+          <CreateCustomerModal
+            onSuccess={handleCustomerCreated}
+            onCancel={() => setShowForm(false)}
+          />
+        </Dialog>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 max-w-2xl">
@@ -302,157 +303,6 @@ function Customers() {
           ))}
         </div>
       )}
-
-      <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="max-w-lg p-6 sm:p-8 max-h-[90vh] overflow-y-auto no-scrollbar">
-          <DialogHeader className="mb-2">
-            <DialogTitle className="text-xl font-bold text-foreground">
-              New Customer
-            </DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground">
-              Add a new client or company to your customer directory.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label className="text-xs font-semibold text-foreground">
-                Company Name <span className="text-destructive">*</span>
-              </label>
-              <input
-                type="text"
-                value={newCustomer.name}
-                onChange={(e) => {
-                  setNewCustomer((prev) => ({
-                    ...prev,
-                    name: e.target.value,
-                  }))
-                  if (formErrors.name) {
-                    setFormErrors((prev) => {
-                      const updated = { ...prev }
-                      delete updated.name
-                      return updated
-                    })
-                  }
-                }}
-                placeholder="Enter company name"
-                className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
-                  formErrors.name ? 'border-destructive' : 'border-border'
-                }`}
-              />
-              {formErrors.name && (
-                <p className="text-[11px] font-semibold text-destructive mt-1">
-                  {formErrors.name}
-                </p>
-              )}
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-semibold text-foreground">
-                  Email <span className="text-destructive">*</span>
-                </label>
-                <input
-                  type="email"
-                  value={newCustomer.email}
-                  onChange={(e) => {
-                    setNewCustomer((prev) => ({
-                      ...prev,
-                      email: e.target.value,
-                    }))
-                    if (formErrors.email) {
-                      setFormErrors((prev) => {
-                        const updated = { ...prev }
-                        delete updated.email
-                        return updated
-                      })
-                    }
-                  }}
-                  placeholder="email@example.com"
-                  className={`mt-1.5 h-11 w-full border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground ${
-                    formErrors.email ? 'border-destructive' : 'border-border'
-                  }`}
-                />
-                {formErrors.email && (
-                  <p className="text-[11px] font-semibold text-destructive mt-1">
-                    {formErrors.email}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-foreground">
-                  Payment Terms
-                </label>
-                <div className="mt-1.5">
-                  <Select
-                    value={newCustomer.term}
-                    onValueChange={(val: 'net7' | 'net14' | 'net30') =>
-                      setNewCustomer((prev) => ({ ...prev, term: val }))
-                    }
-                  >
-                    <SelectTrigger className="w-full h-11 border border-border shadow-none text-sm font-medium bg-background text-foreground rounded-md">
-                      <SelectValue placeholder="Select terms" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-md">
-                      <SelectItem value="net7">Net 7</SelectItem>
-                      <SelectItem value="net14">Net 14</SelectItem>
-                      <SelectItem value="net30">Net 30</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-foreground">
-                Phone
-              </label>
-              <input
-                type="text"
-                value={newCustomer.phone}
-                onChange={(e) =>
-                  setNewCustomer((prev) => ({
-                    ...prev,
-                    phone: e.target.value,
-                  }))
-                }
-                placeholder="+1 (555) 000-0000"
-                className="mt-1.5 h-11 w-full border border-border bg-background rounded-md px-4 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground"
-              />
-              {formErrors.phone && (
-                <p className="text-[11px] font-semibold text-destructive mt-1">
-                  {formErrors.phone}
-                </p>
-              )}
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-foreground">
-                Address
-              </label>
-              <textarea
-                value={newCustomer.address}
-                onChange={(e) =>
-                  setNewCustomer((prev) => ({
-                    ...prev,
-                    address: e.target.value,
-                  }))
-                }
-                placeholder="Enter street address, city, country"
-                rows={2}
-                className="mt-1.5 w-full border border-border bg-background rounded-md p-3 text-sm font-medium outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground resize-none"
-              />
-              {formErrors.address && (
-                <p className="text-[11px] font-semibold text-destructive mt-1">
-                  {formErrors.address}
-                </p>
-              )}
-            </div>
-          </div>
-          <DialogFooter className="mt-8 flex justify-end gap-3">
-            <Button variant="outline" onClick={() => setShowForm(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleCreateCustomer}>Create Customer</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       <AlertModal
         open={successModal.open}

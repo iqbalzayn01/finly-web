@@ -12,7 +12,6 @@ import {
   Users,
   Package,
   ArrowRight,
-  Receipt,
   ReceiptLong,
 } from '../ui/icon'
 import { cn } from '../../lib/utils'

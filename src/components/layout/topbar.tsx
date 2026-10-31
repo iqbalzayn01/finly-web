@@ -1,16 +1,8 @@
 import * as React from 'react'
 import { cn } from '#/lib'
-import {
-  Bell,
-  Records,
-  Sparkles,
-  LayoutDashboard,
-  ReceiptLong,
-  Users,
-} from '../ui/icon'
+import { Bell, Records, LayoutDashboard, ReceiptLong, Users } from '../ui/icon'
 import { motion, AnimatePresence } from 'motion/react'
 import { ThemeToggle } from '../ThemeToggle'
-import { useSubscription } from '../../lib/subscription'
 import { FinlyLogo } from './logo'
 import { SearchInput } from './search-input'
 import notificationsData from '../../data/notifications.json'
@@ -49,7 +41,6 @@ export function Topbar({
 }: {
   user?: UserProfile
 } = {}) {
-  const { isPro } = useSubscription()
   const [notifOpen, setNotifOpen] = React.useState(false)
   const notifRef = React.useRef<HTMLDivElement>(null)
 

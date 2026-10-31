@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { Sun, Moon, Monitor } from '../ui/icon'
 import { motion, AnimatePresence } from 'motion/react'
 import { cn } from '../../lib/utils'
-import { TooltipSimple } from '../ui/tooltip'
 
 export type ThemeMode = 'light' | 'dark' | 'auto'
 
