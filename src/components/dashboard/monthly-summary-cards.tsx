@@ -137,7 +137,7 @@ export function CashSummaryBentoTile() {
   const isSurplus = summary.netFlow >= 0;
 
   return (
-    <div className="bento-card col-span-12 flex flex-col justify-between border border-border bg-card p-6 md:col-span-4 dark:border-zinc-800">
+    <div className="bento-card col-span-12 flex flex-col justify-between border border-border p-6 md:col-span-4 dark:border-zinc-800">
       {/* Header Row */}
       <div className="flex items-center justify-between gap-2">
         <span className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">

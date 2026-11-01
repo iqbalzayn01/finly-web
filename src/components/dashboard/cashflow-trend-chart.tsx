@@ -51,7 +51,7 @@ export function CashflowTrendChart() {
   const isMasked = profile.privacyBlurEnabled;
 
   return (
-    <div className="bento-card bento-card-static col-span-12 flex flex-col justify-between border border-border bg-card p-5 sm:p-6 lg:col-span-8 dark:border-zinc-800">
+    <div className="bento-card bento-card-static col-span-12 flex flex-col justify-between border border-border p-5 sm:p-6 lg:col-span-8 dark:border-zinc-800">
       {/* Header & Interactive Time Range Pills */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-4">
         <div className="space-y-0.5">
@@ -65,7 +65,7 @@ export function CashflowTrendChart() {
 
         <fieldset
           aria-label="Select cashflow chart time range"
-          className="m-0 flex min-w-0 items-center gap-2 lg:gap-4 rounded-lg bg-white p-1 dark:border-zinc-800 dark:bg-background"
+          className="m-0 flex min-w-0 items-center gap-2 rounded-xl bg-background p-2 border border-border dark:border-zinc-800"
         >
           {TIME_RANGES.map((range) => {
             const active = timeRange === range;
@@ -76,7 +76,7 @@ export function CashflowTrendChart() {
                 aria-pressed={active}
                 onClick={() => setTimeRange(range)}
                 className={cn(
-                  'min-h-8 rounded-md p-2 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  'min-h-8 rounded-md p-2 font-mono text-xs font-semibold transition-colors cursor-pointer hover:bg-accent outline-none focus-visible:ring-2 focus-visible:ring-ring',
                   active
                     ? 'bg-primary font-bold text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground',
