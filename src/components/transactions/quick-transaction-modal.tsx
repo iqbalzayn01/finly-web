@@ -74,7 +74,6 @@ export function QuickTransactionModal() {
 		[txType],
 	);
 
-	// Initialize form state whenever modal opens
 	useEffect(() => {
 		if (!isQuickEntryOpen) return;
 
@@ -104,7 +103,6 @@ export function QuickTransactionModal() {
 		return () => window.clearTimeout(focusTimer);
 	}, [isQuickEntryOpen, quickEntryDefaultType, todayISO, wallets]);
 
-	// Persist unsaved draft while modal is open
 	useEffect(() => {
 		if (!isQuickEntryOpen) return;
 		if (!rawAmount.trim() && !note.trim()) return;
@@ -203,12 +201,12 @@ export function QuickTransactionModal() {
 				if (!open) closeQuickEntry();
 			}}
 		>
-			<DialogContent className="max-h-[92vh] overflow-y-auto rounded-2xl border-border bg-card p-6 shadow-2xl sm:max-w-lg">
+			<DialogContent className="max-h-[92vh] overflow-y-auto rounded-3xl border-border bg-popover p-6 shadow-2xl sm:max-w-lg">
 				<DialogHeader>
-					<DialogTitle className="text-lg font-bold tracking-tight">
+					<DialogTitle className="font-mono text-lg font-black uppercase tracking-tight">
 						Record Transaction
 					</DialogTitle>
-					<DialogDescription className="text-xs">
+					<DialogDescription className="font-mono text-xs">
 						Log money moving into or out of your cashflow.
 					</DialogDescription>
 				</DialogHeader>
@@ -216,20 +214,19 @@ export function QuickTransactionModal() {
 				<form onSubmit={handleSubmit} className="space-y-4">
 					{/* Draft Recovery Banner */}
 					{recoverableDraft && (
-						<div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-secondary/70 px-3.5 py-2.5 text-xs">
-							<div className="flex items-center gap-2 font-medium text-foreground">
-								<RotateCcw className="size-3.5 text-primary" />
+						<div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-info-border bg-info-bg px-3.5 py-2.5 font-mono text-xs">
+							<div className="flex items-center gap-2 font-semibold text-foreground">
+								<RotateCcw className="size-3.5 text-info" />
 								<span>
-									Restore unsaved entry ($
-									{recoverableDraft.rawAmount})?
+									Restore unsaved entry (${recoverableDraft.rawAmount})?
 								</span>
 							</div>
 							<div className="flex items-center gap-1.5">
 								<Button
 									type="button"
 									size="xs"
-									variant="default"
 									onClick={handleRestoreDraft}
+									className="rounded-lg bg-primary font-mono font-bold text-primary-foreground"
 								>
 									Restore
 								</Button>
@@ -238,6 +235,7 @@ export function QuickTransactionModal() {
 									size="xs"
 									variant="ghost"
 									onClick={handleDismissDraft}
+									className="font-mono"
 								>
 									Dismiss
 								</Button>
@@ -245,19 +243,19 @@ export function QuickTransactionModal() {
 						</div>
 					)}
 
-					{/* TRANSACTION TYPE (PRD §5.1) */}
+					{/* TRANSACTION TYPE (PRD v2.1.0 §5) */}
 					<div className="space-y-1.5">
-						<Label className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+						<Label className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
 							Transaction Type
 						</Label>
-						<div className="shadow-neu-inset grid grid-cols-2 gap-2 rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
+						<div className="grid grid-cols-2 gap-1.5 rounded-2xl border border-border bg-card p-1 dark:border-zinc-700 dark:bg-muted">
 							<button
 								type="button"
 								onClick={() => handleTypeSwitch("money_out")}
 								className={cn(
-									"flex min-h-10 items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-colors cursor-pointer",
+									"flex min-h-10 items-center justify-center gap-1.5 rounded-xl px-3 py-2 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring",
 									txType === "money_out"
-										? "shadow-neu-sm bg-zinc-900 font-bold text-white dark:bg-white dark:text-zinc-900"
+										? "bg-outflow font-extrabold text-primary-foreground shadow-xs"
 										: "text-muted-foreground hover:text-foreground",
 								)}
 							>
@@ -268,9 +266,9 @@ export function QuickTransactionModal() {
 								type="button"
 								onClick={() => handleTypeSwitch("money_in")}
 								className={cn(
-									"flex min-h-10 items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-colors cursor-pointer",
+									"flex min-h-10 items-center justify-center gap-1.5 rounded-xl px-3 py-2 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring",
 									txType === "money_in"
-										? "shadow-neu-sm bg-zinc-900 font-bold text-white dark:bg-white dark:text-zinc-900"
+										? "bg-inflow font-extrabold text-primary-foreground shadow-xs"
 										: "text-muted-foreground hover:text-foreground",
 								)}
 							>
@@ -280,16 +278,16 @@ export function QuickTransactionModal() {
 						</div>
 					</div>
 
-					{/* AMOUNT (USD) — Tap 1 */}
+					{/* AMOUNT (USD) */}
 					<div className="space-y-1.5">
 						<Label
 							htmlFor={`${baseId}-amount`}
-							className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+							className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
 						>
 							Amount (USD)
 						</Label>
-						<div className="flex items-center gap-2 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-2.5 transition-colors focus-within:border-zinc-900 focus-within:bg-white dark:border-zinc-800 dark:bg-zinc-900 dark:focus-within:border-white">
-							<span className="text-2xl font-bold select-none tabular-nums text-foreground">
+						<div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 py-2.5 transition-colors focus-within:border-primary dark:border-zinc-700 dark:bg-background dark:focus-within:border-primary">
+							<span className="font-mono text-2xl font-black text-muted-foreground select-none tabular-nums">
 								$
 							</span>
 							<input
@@ -304,16 +302,16 @@ export function QuickTransactionModal() {
 									setRawAmount(formatLiveNumericInput(e.target.value, "USD"));
 									setConfirmOverflow(false);
 								}}
-								className="h-10 w-full bg-transparent text-2xl font-bold tracking-tight text-foreground placeholder:text-muted-foreground/40 focus:outline-hidden tabular-nums font-mono"
+								className="h-10 w-full bg-transparent font-mono text-2xl font-black tracking-tight text-foreground placeholder:text-muted-foreground/40 focus:outline-hidden tabular-nums"
 							/>
 						</div>
 					</div>
 
 					{/* Overflow Safeguard */}
 					{isOverflow && (
-						<div className="space-y-2 rounded-xl border border-amber-300 bg-amber-50/90 p-3 text-xs dark:border-amber-800 dark:bg-amber-950/50">
-							<div className="flex items-start gap-2 text-amber-900 dark:text-amber-200">
-								<AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
+						<div className="space-y-2 rounded-2xl border border-warning-border bg-warning-bg p-3 font-mono text-xs">
+							<div className="flex items-start gap-2 text-amber-900 dark:text-warning">
+								<AlertTriangle className="mt-0.5 size-4 shrink-0" />
 								<p className="font-medium">
 									Large amount alert:{" "}
 									<strong className="tabular-nums">
@@ -332,7 +330,7 @@ export function QuickTransactionModal() {
 								/>
 								<Label
 									htmlFor={`${baseId}-overflow-confirm`}
-									className="cursor-pointer text-xs font-semibold text-amber-950 dark:text-amber-100"
+									className="cursor-pointer font-mono text-xs font-semibold text-foreground"
 								>
 									Confirm this USD amount contains correct zeros.
 								</Label>
@@ -340,9 +338,9 @@ export function QuickTransactionModal() {
 						</div>
 					)}
 
-					{/* CATEGORY — Tap 2 */}
+					{/* CATEGORY */}
 					<div className="space-y-2">
-						<Label className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+						<Label className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
 							Category
 						</Label>
 						<div className="flex flex-wrap gap-1.5">
@@ -357,10 +355,10 @@ export function QuickTransactionModal() {
 											setCategory(preset);
 										}}
 										className={cn(
-											"inline-flex min-h-9 items-center rounded-xl border px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer",
+											"inline-flex min-h-9 items-center rounded-xl border px-3 py-1.5 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring",
 											isSelected
-												? "border-zinc-900 bg-zinc-900 font-bold text-white shadow-neu-sm dark:border-white dark:bg-white dark:text-zinc-900"
-												: "border-zinc-200 bg-zinc-50 text-foreground hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-800/50 dark:hover:bg-zinc-800",
+												? "border-primary bg-primary font-bold text-primary-foreground"
+												: "border-border bg-card text-foreground hover:border-zinc-400 dark:border-zinc-700 dark:bg-muted dark:hover:border-zinc-600",
 										)}
 									>
 										{preset}
@@ -371,14 +369,14 @@ export function QuickTransactionModal() {
 								type="button"
 								onClick={() => setCustomCategoryMode(true)}
 								className={cn(
-									"inline-flex min-h-9 items-center gap-1 rounded-xl border border-dashed px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer",
+									"inline-flex min-h-9 items-center gap-1 rounded-xl border border-dashed px-3 py-1.5 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring",
 									customCategoryMode
-										? "border-zinc-900 bg-zinc-900 font-bold text-white dark:border-white dark:bg-white dark:text-zinc-900"
-										: "border-zinc-300 bg-transparent text-muted-foreground hover:text-foreground dark:border-zinc-700",
+										? "border-primary bg-primary font-bold text-primary-foreground"
+										: "border-border bg-transparent text-muted-foreground hover:text-foreground dark:border-zinc-700",
 								)}
 							>
 								<Plus className="size-3.5" />
-								<span>Add Custom Category</span>
+								<span>Custom</span>
 							</button>
 						</div>
 						{customCategoryMode && (
@@ -386,19 +384,19 @@ export function QuickTransactionModal() {
 								placeholder="Enter custom category name..."
 								value={customCategoryText}
 								onChange={(e) => setCustomCategoryText(e.target.value)}
-								className="mt-1.5 h-10 rounded-xl"
+								className="mt-1.5 h-10 rounded-xl bg-card font-mono text-xs dark:bg-background"
 							/>
 						)}
 					</div>
 
-					{/* WALLET ACCOUNT & DATE (PRD §5.1) */}
+					{/* WALLET ACCOUNT & DATE */}
 					<div className="grid gap-3 sm:grid-cols-2">
 						<div className="space-y-1.5">
-							<Label className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+							<Label className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
 								Wallet Account
 							</Label>
 							<Select value={walletId} onValueChange={setWalletId}>
-								<SelectTrigger className="h-10 w-full rounded-xl bg-background text-xs">
+								<SelectTrigger className="h-10 w-full rounded-xl border-border bg-card font-mono text-xs dark:border-zinc-700 dark:bg-background">
 									<SelectValue placeholder="Choose wallet" />
 								</SelectTrigger>
 								<SelectContent>
@@ -414,7 +412,7 @@ export function QuickTransactionModal() {
 						<div className="space-y-1.5">
 							<Label
 								htmlFor={`${baseId}-date`}
-								className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+								className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
 							>
 								Date
 							</Label>
@@ -423,30 +421,30 @@ export function QuickTransactionModal() {
 								type="date"
 								value={txDate}
 								onChange={(e) => setTxDate(e.target.value)}
-								className="h-10 rounded-xl bg-background text-xs tabular-nums"
+								className="h-10 rounded-xl border-border bg-card font-mono text-xs tabular-nums dark:border-zinc-700 dark:bg-background"
 							/>
 						</div>
 					</div>
 
-					{/* NOTE / DESCRIPTION (Optional) */}
+					{/* NOTE / DESCRIPTION */}
 					<div className="space-y-1.5">
 						<Label
 							htmlFor={`${baseId}-note`}
-							className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+							className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
 						>
 							Note / Description (Optional)
 						</Label>
 						<Input
 							id={`${baseId}-note`}
-							placeholder="e.g., Lunch meeting with client"
+							placeholder="e.g., Wholesale packaging restock"
 							value={note}
 							onChange={(e) => setNote(e.target.value)}
-							className="h-10 rounded-xl bg-background text-xs sm:text-sm"
+							className="h-10 rounded-xl border-border bg-card font-mono text-xs dark:border-zinc-700 dark:bg-background"
 						/>
 					</div>
 
-					{/* Business Transaction Checkbox (PRD §5.1) */}
-					<div className="flex items-center gap-2.5 rounded-xl border border-border bg-muted/30 px-3.5 py-2.5">
+					{/* Business Transaction Checkbox */}
+					<div className="flex items-center gap-2.5 rounded-2xl border border-border bg-card px-3.5 py-2.5 dark:border-zinc-700 dark:bg-muted">
 						<Checkbox
 							id={`${baseId}-biz`}
 							checked={isBusiness}
@@ -454,26 +452,26 @@ export function QuickTransactionModal() {
 						/>
 						<Label
 							htmlFor={`${baseId}-biz`}
-							className="cursor-pointer text-xs font-medium text-foreground"
+							className="cursor-pointer font-mono text-xs font-medium text-foreground"
 						>
 							Business transaction (Tag for tax &amp; business deductions)
 						</Label>
 					</div>
 
-					{/* DialogFooter — Tap 3 */}
+					{/* DialogFooter (PRD v2.1.0 §5 — Save Transaction in #C9F31D) */}
 					<DialogFooter className="gap-2 pt-2">
 						<Button
 							type="button"
 							variant="outline"
 							onClick={closeQuickEntry}
-							className="min-h-11 rounded-xl font-semibold"
+							className="min-h-11 rounded-xl font-mono text-xs font-bold"
 						>
 							Cancel
 						</Button>
 						<Button
 							type="submit"
 							disabled={!canSubmit}
-							className="min-h-11 rounded-xl px-6 font-bold"
+							className="min-h-11 rounded-xl bg-primary px-6 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground hover:bg-primary-hover cursor-pointer"
 						>
 							Save Transaction
 						</Button>

@@ -1,109 +1,89 @@
-import {
-	Eye,
-	EyeOff,
-	ShieldAlert,
-	ShieldCheck,
-	TriangleAlert,
-} from "lucide-react";
-import { MoneyValue } from "#/components/money-value";
-import { Badge } from "#/components/ui/badge";
-import { Button } from "#/components/ui/button";
-import { Card, CardContent } from "#/components/ui/card";
-import { useFinly } from "#/context/finly-context";
+import { MoneyValue } from '#/components/money-value';
+import { useFinly } from '#/context/finly-context';
 
+/**
+ * Tile 2: Daily Safe-to-Spend Hero Spotlight Tile (PRD v2.1.0 §3.1 & DESIGN.md §6.2)
+ * Rendered in high-contrast Electric Lime (#C9F31D) with Deep Black (#111111) text.
+ * Note: Hide balance button is intentionally absent per PRD v2.1.0 §3.1 & §6.
+ */
 export function SafeToSpendHero() {
-	const { profile, safeToSpend, togglePrivacyBlur } = useFinly();
+  const { profile, safeToSpend } = useFinly();
 
-	const statusConfig = {
-		healthy: {
-			label: "Healthy Buffer",
-			summaryText: "You are on track.",
-			icon: ShieldCheck,
-		},
-		caution: {
-			label: "Caution",
-			summaryText: "Pace discretionary spending to protect your buffer.",
-			icon: TriangleAlert,
-		},
-		deficit: {
-			label: "Deficit",
-			summaryText: "Scheduled obligations exceed your available buffer.",
-			icon: ShieldAlert,
-		},
-	}[safeToSpend.status];
+  const statusCopy = {
+    healthy: 'Paced to maintain positive month-end reserve',
+    caution: `Pace discretionary spend · ${safeToSpend.runwayMonths} mo runway`,
+    deficit: 'Scheduled obligations exceed available buffer',
+  }[safeToSpend.status];
 
-	const StatusIcon = statusConfig.icon;
+  const discretionaryPool = Math.max(
+    0,
+    safeToSpend.netAvailableCash - safeToSpend.committedFixedOutflows,
+  );
+  const headroomPercent =
+    safeToSpend.totalCashOnHand > 0
+      ? Math.min(
+          100,
+          Math.max(
+            6,
+            Math.round((discretionaryPool / safeToSpend.totalCashOnHand) * 100),
+          ),
+        )
+      : 0;
 
-	return (
-		<Card className="shadow-neu-raised rounded-2xl border border-zinc-100 bg-white py-0 dark:border-zinc-800 dark:bg-zinc-900">
-			<CardContent className="flex flex-col justify-between gap-4 p-6 sm:flex-row sm:items-center">
-				<div className="space-y-1.5">
-					<div className="flex flex-wrap items-center gap-2.5">
-						<span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-							SAFE-TO-SPEND TODAY:
-						</span>
-						<div className="flex items-baseline gap-1.5">
-							<MoneyValue
-								amount={safeToSpend.dailySafeToSpend}
-								className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl"
-							/>
-							<span className="text-sm font-semibold text-muted-foreground">
-								/ day
-							</span>
-						</div>
-						<Badge
-							variant="outline"
-							className="gap-1.5 rounded-full border-zinc-300 bg-zinc-100 px-2.5 py-0.5 text-xs font-semibold text-foreground dark:border-zinc-700 dark:bg-zinc-800"
-						>
-							<StatusIcon className="size-3.5" />
-							<span>{statusConfig.label}</span>
-						</Badge>
-					</div>
+  return (
+    <div className="bento-card col-span-12 flex flex-col justify-between bg-primary border border-primary p-6 text-primary-foreground md:col-span-4">
+      {/* Header Row */}
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-primary-foreground/75">
+          Daily Safe-to-Spend
+        </span>
+        <span className="rounded-full bg-primary-foreground px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-primary tabular-nums">
+          {safeToSpend.daysRemainingInCycle}D Left
+        </span>
+      </div>
 
-					<p className="text-xs text-muted-foreground sm:text-sm">
-						Based on{" "}
-						<MoneyValue
-							amount={safeToSpend.totalCashOnHand}
-							className="font-semibold text-foreground"
-						/>{" "}
-						cash on hand with{" "}
-						<strong className="font-semibold text-foreground tabular-nums">
-							{safeToSpend.daysRemainingInCycle} days
-						</strong>{" "}
-						remaining in this cycle.{" "}
-						<span className="font-medium text-foreground">
-							{statusConfig.summaryText}
-						</span>
-					</p>
-				</div>
+      {/* Oversized Daily Allowance Figure */}
+      <div className="my-5">
+        <div className="flex flex-wrap items-baseline gap-1.5">
+          <MoneyValue
+            amount={safeToSpend.dailySafeToSpend}
+            className="font-mono text-4xl font-black tracking-tighter text-primary-foreground tabular-nums sm:text-5xl"
+          />
+          <span className="font-mono text-sm font-bold text-primary-foreground/75">
+            / day
+          </span>
+        </div>
+        <p className="mt-2 font-mono text-xs font-medium text-primary-foreground/80">
+          {statusCopy}
+        </p>
+      </div>
 
-				<div className="flex shrink-0 items-center">
-					<Button
-						type="button"
-						variant="outline"
-						size="sm"
-						onClick={togglePrivacyBlur}
-						aria-label={
-							profile.privacyBlurEnabled
-								? "Show monetary balances"
-								: "Hide monetary balances"
-						}
-						className="min-h-10 gap-2 rounded-xl font-semibold"
-					>
-						{profile.privacyBlurEnabled ? (
-							<>
-								<Eye className="size-4 text-foreground" />
-								<span>Show Balance</span>
-							</>
-						) : (
-							<>
-								<EyeOff className="size-4 text-muted-foreground" />
-								<span>Hide Balance</span>
-							</>
-						)}
-					</Button>
-				</div>
-			</CardContent>
-		</Card>
-	);
+      {/* Solid Black Progress Bar (DESIGN.md §6.2) */}
+      <div className="space-y-2 pt-1">
+        <div className="flex items-center justify-between font-mono text-[11px] font-bold text-primary-foreground/80 tabular-nums">
+          <span>Spendable Pool ({headroomPercent}%)</span>
+          <span>
+            Buffer{' '}
+            <MoneyValue
+              amount={profile.emergencyBuffer}
+              className="font-extrabold text-primary-foreground"
+            />
+          </span>
+        </div>
+        <div
+          role="progressbar"
+          aria-valuenow={headroomPercent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Spendable cash pool percentage"
+          className="h-2 w-full overflow-hidden rounded-full bg-primary-foreground/20"
+        >
+          <div
+            className="h-full rounded-full bg-primary-foreground transition-[width] duration-300 ease-out"
+            style={{ width: `${headroomPercent}%` }}
+          />
+        </div>
+      </div>
+    </div>
+  );
 }

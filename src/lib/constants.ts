@@ -82,7 +82,7 @@ export function createSeedWorkspaceState(
 			privacyBlurEnabled: false,
 			emergencyBuffer: 1200,
 			baselineDailyTarget: 65,
-			themePreference: "system",
+			themePreference: "dark",
 			paymentDetails: {
 				bankName: "Chase Business Checking",
 				accountNumber: "****9812",

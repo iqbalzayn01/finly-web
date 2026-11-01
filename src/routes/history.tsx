@@ -14,13 +14,6 @@ import { MoneyValue } from "#/components/money-value";
 import { Badge } from "#/components/ui/badge";
 import { Button } from "#/components/ui/button";
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "#/components/ui/card";
-import {
 	Empty,
 	EmptyContent,
 	EmptyDescription,
@@ -213,14 +206,14 @@ function HistoryScreen() {
 	);
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-4">
 			{/* Page Header */}
-			<div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-				<div className="space-y-1">
-					<h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+			<div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+				<div className="space-y-0.5">
+					<h1 className="font-mono text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
 						Activity History
 					</h1>
-					<p className="text-xs text-muted-foreground sm:text-sm">
+					<p className="font-mono text-xs text-muted-foreground">
 						Search, filter, and export every USD{" "}
 						{terminology.inflow.toLowerCase()} &amp;{" "}
 						{terminology.outflow.toLowerCase()} entry.
@@ -233,7 +226,7 @@ function HistoryScreen() {
 						variant="outline"
 						onClick={exportCsv}
 						disabled={transactions.length === 0}
-						className="min-h-10 gap-1.5 rounded-xl font-semibold"
+						className="min-h-11 gap-1.5 rounded-2xl border-border bg-card font-mono text-xs font-bold"
 					>
 						<Download className="size-4" />
 						<span>Export CSV</span>
@@ -241,7 +234,7 @@ function HistoryScreen() {
 					<Button
 						type="button"
 						onClick={() => openQuickEntry("money_out")}
-						className="min-h-10 gap-1.5 rounded-xl px-4 font-bold"
+						className="min-h-11 gap-1.5 rounded-2xl bg-primary px-5 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground hover:bg-primary-hover cursor-pointer"
 					>
 						<Plus className="size-4 stroke-[2.5]" />
 						<span>Record Transaction</span>
@@ -249,71 +242,76 @@ function HistoryScreen() {
 				</div>
 			</div>
 
-			{/* Largest Spending Categories Breakdown */}
-			{monthlySummary.topOutflowCategories.length > 0 && (
-				<Card className="shadow-neu-raised rounded-2xl border border-zinc-100 bg-white py-4 dark:border-zinc-800 dark:bg-zinc-900">
-					<CardHeader className="pb-2">
-						<CardTitle className="text-sm font-bold">
-							Top {terminology.outflow} Categories (This Month)
-						</CardTitle>
-						<CardDescription className="text-xs">
-							Select a category pill to filter the ledger below
-						</CardDescription>
-					</CardHeader>
-					<CardContent className="flex flex-wrap gap-2 pt-1">
-						{monthlySummary.topOutflowCategories.slice(0, 6).map((cat) => {
-							const active = categoryFilter === cat.category;
-							return (
-								<button
-									key={cat.category}
-									type="button"
-									onClick={() => {
-										if (active) {
-											setCategoryFilter("all");
-										} else {
-											setCategoryFilter(cat.category);
-											setTypeFilter("money_out");
-										}
-										setPage(1);
-									}}
-									className={cn(
-										"flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs transition-colors cursor-pointer",
-										active
-											? "border-zinc-900 bg-zinc-900 font-bold text-white shadow-neu-sm dark:border-white dark:bg-white dark:text-zinc-900"
-											: "border-zinc-200 bg-zinc-50 text-foreground hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-800/50 dark:hover:bg-zinc-800",
-									)}
-								>
-									<span className="font-semibold">{cat.category}</span>
-									<MoneyValue
-										amount={cat.amount}
+			{/* 12-Column Bento Grid Matrix (gap-2 mobile / gap-4 desktop) */}
+			<div className="grid grid-cols-12 gap-2 sm:gap-4">
+				{/* Top Spending Categories Bento Tile */}
+				{monthlySummary.topOutflowCategories.length > 0 && (
+					<div className="bento-card bento-card-static col-span-12 border border-border bg-card p-5 sm:px-6 dark:border-zinc-800">
+						<div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+							<div>
+								<h2 className="font-mono text-xs font-bold uppercase tracking-widest text-foreground">
+									Top {terminology.outflow} Categories (30D)
+								</h2>
+								<p className="font-mono text-xs text-muted-foreground">
+									Click a category chip to isolate spending entries
+								</p>
+							</div>
+							<span className="rounded-full bg-accent px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase text-accent-foreground">
+								Breakdown
+							</span>
+						</div>
+
+						<div className="flex flex-wrap gap-2">
+							{monthlySummary.topOutflowCategories.slice(0, 6).map((cat) => {
+								const active = categoryFilter === cat.category;
+								return (
+									<button
+										key={cat.category}
+										type="button"
+										onClick={() => {
+											if (active) {
+												setCategoryFilter("all");
+											} else {
+												setCategoryFilter(cat.category);
+												setTypeFilter("money_out");
+											}
+											setPage(1);
+										}}
 										className={cn(
-											"font-bold tabular-nums",
+											"flex items-center gap-2 rounded-xl border px-3 py-1.5 font-mono text-xs transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring",
 											active
-												? "text-white dark:text-zinc-900"
-												: "text-foreground",
-										)}
-									/>
-									<span
-										className={cn(
-											"rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums",
-											active
-												? "bg-white/20 text-white dark:bg-black/20 dark:text-zinc-900"
-												: "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300",
+												? "border-primary bg-primary font-bold text-primary-foreground"
+												: "border-border bg-white text-foreground hover:border-zinc-400 dark:border-zinc-700 dark:bg-muted dark:hover:border-zinc-600",
 										)}
 									>
-										{cat.percentage}%
-									</span>
-								</button>
-							);
-						})}
-					</CardContent>
-				</Card>
-			)}
+										<span className="font-semibold">{cat.category}</span>
+										<MoneyValue
+											amount={cat.amount}
+											className={cn(
+												"font-extrabold tabular-nums",
+												active ? "text-primary-foreground" : "text-outflow",
+											)}
+										/>
+										<span
+											className={cn(
+												"rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums",
+												active
+													? "bg-primary-foreground/15 text-primary-foreground"
+													: "bg-muted text-muted-foreground",
+											)}
+										>
+											{cat.percentage}%
+										</span>
+									</button>
+								);
+							})}
+						</div>
+					</div>
+				)}
 
-			{/* Filter Controls */}
-			<Card className="shadow-neu-raised rounded-2xl border border-zinc-100 bg-white py-4 dark:border-zinc-800 dark:bg-zinc-900">
-				<CardContent className="space-y-3">
-					<div className="grid gap-3 md:grid-cols-12">
+				{/* Search & Filter Controls Bento Tile */}
+				<div className="bento-card bento-card-static col-span-12 space-y-3 border border-border bg-card p-5 sm:px-6 dark:border-zinc-800">
+					<div className="grid gap-2 sm:gap-3 md:grid-cols-12">
 						<div className="relative md:col-span-5">
 							<Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
 							<Input
@@ -323,7 +321,7 @@ function HistoryScreen() {
 									setQuery(e.target.value);
 									setPage(1);
 								}}
-								className="h-10 rounded-xl bg-background pl-9 text-xs sm:text-sm"
+								className="h-10 rounded-xl border-border bg-white pl-9 font-mono text-xs dark:border-zinc-800 dark:bg-background"
 							/>
 						</div>
 
@@ -337,7 +335,7 @@ function HistoryScreen() {
 							>
 								<SelectTrigger
 									aria-label="Filter by wallet"
-									className="h-10 w-full rounded-xl bg-background text-xs"
+									className="h-10 w-full rounded-xl border-border bg-white font-mono text-xs dark:border-zinc-800 dark:bg-background"
 								>
 									<SelectValue placeholder="All Wallets" />
 								</SelectTrigger>
@@ -362,7 +360,7 @@ function HistoryScreen() {
 							>
 								<SelectTrigger
 									aria-label="Filter by category"
-									className="h-10 w-full rounded-xl bg-background text-xs"
+									className="h-10 w-full rounded-xl border-border bg-white font-mono text-xs dark:border-zinc-800 dark:bg-background"
 								>
 									<SelectValue placeholder="All Categories" />
 								</SelectTrigger>
@@ -387,7 +385,7 @@ function HistoryScreen() {
 							>
 								<SelectTrigger
 									aria-label="Sort transactions"
-									className="h-10 w-full rounded-xl bg-background text-xs"
+									className="h-10 w-full rounded-xl border-border bg-white font-mono text-xs dark:border-zinc-800 dark:bg-background"
 								>
 									<SelectValue />
 								</SelectTrigger>
@@ -400,31 +398,68 @@ function HistoryScreen() {
 					</div>
 
 					<div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3">
-						<div className="shadow-neu-inset flex flex-wrap items-center gap-1 rounded-xl bg-zinc-100 p-1 dark:bg-zinc-800">
-							{(
-								[
-									{ id: "all", label: "All" },
-									{ id: "money_in", label: terminology.inflow },
-									{ id: "money_out", label: terminology.outflow },
-								] as const
-							).map((item) => (
-								<button
-									key={item.id}
-									type="button"
-									onClick={() => {
-										setTypeFilter(item.id);
-										setPage(1);
-									}}
+						<div className="flex flex-wrap items-center gap-1 rounded-xl border border-border bg-white p-1 dark:border-zinc-800 dark:bg-background">
+							<button
+								type="button"
+								onClick={() => {
+									setTypeFilter("all");
+									setPage(1);
+								}}
+								className={cn(
+									"min-h-8 rounded-lg px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring",
+									typeFilter === "all"
+										? "bg-primary font-bold text-primary-foreground"
+										: "text-muted-foreground hover:text-foreground",
+								)}
+							>
+								All
+							</button>
+							<button
+								type="button"
+								onClick={() => {
+									setTypeFilter("money_in");
+									setPage(1);
+								}}
+								className={cn(
+									"inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring",
+									typeFilter === "money_in"
+										? "bg-inflow font-bold text-primary-foreground"
+										: "text-muted-foreground hover:text-foreground",
+								)}
+							>
+								<span
 									className={cn(
-										"rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer",
-										typeFilter === item.id
-											? "shadow-neu-sm bg-zinc-900 font-bold text-white dark:bg-white dark:text-zinc-900"
-											: "text-muted-foreground hover:text-foreground",
+										"size-2 rounded-full",
+										typeFilter === "money_in"
+											? "bg-primary-foreground"
+											: "bg-inflow",
 									)}
-								>
-									{item.label}
-								</button>
-							))}
+								/>
+								<span>{terminology.inflow}</span>
+							</button>
+							<button
+								type="button"
+								onClick={() => {
+									setTypeFilter("money_out");
+									setPage(1);
+								}}
+								className={cn(
+									"inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring",
+									typeFilter === "money_out"
+										? "bg-outflow font-bold text-primary-foreground"
+										: "text-muted-foreground hover:text-foreground",
+								)}
+							>
+								<span
+									className={cn(
+										"size-2 rounded-full",
+										typeFilter === "money_out"
+											? "bg-primary-foreground"
+											: "bg-outflow",
+									)}
+								/>
+								<span>{terminology.outflow}</span>
+							</button>
 
 							{hasActiveFilters && (
 								<Button
@@ -432,7 +467,7 @@ function HistoryScreen() {
 									variant="ghost"
 									size="xs"
 									onClick={resetAllFilters}
-									className="gap-1 rounded-lg text-xs font-semibold text-muted-foreground hover:text-foreground cursor-pointer"
+									className="gap-1 rounded-lg font-mono text-xs font-semibold text-muted-foreground hover:text-foreground cursor-pointer"
 								>
 									<FilterX className="size-3.5" />
 									<span>Reset</span>
@@ -440,40 +475,45 @@ function HistoryScreen() {
 							)}
 						</div>
 
-						<div className="flex flex-wrap items-center gap-4 text-xs tabular-nums">
+						<div className="flex flex-wrap items-center gap-4 font-mono text-xs tabular-nums">
 							<span className="text-muted-foreground">
 								{terminology.inflow}:{" "}
-								<strong className="text-foreground">
-									<MoneyValue amount={filteredStats.totalIn} />
-								</strong>
+								<MoneyValue
+									amount={filteredStats.totalIn}
+									signedType="money_in"
+									className="font-extrabold text-inflow"
+								/>
 							</span>
 							<span className="text-muted-foreground">
 								{terminology.outflow}:{" "}
-								<strong className="text-foreground">
-									<MoneyValue amount={filteredStats.totalOut} />
-								</strong>
+								<MoneyValue
+									amount={filteredStats.totalOut}
+									signedType="money_out"
+									className="font-extrabold text-outflow"
+								/>
 							</span>
 						</div>
 					</div>
-				</CardContent>
-			</Card>
+				</div>
 
-			{/* Paginated Ledger Table */}
-			<Card className="shadow-neu-raised overflow-hidden rounded-2xl border border-zinc-100 bg-white py-0 dark:border-zinc-800 dark:bg-zinc-900">
-				<CardContent className="p-0">
+				{/* Paginated Ledger Bento Table (Span-12) */}
+				<div
+					id="history-table"
+					className="bento-card bento-card-static col-span-12 overflow-hidden border border-border bg-card dark:border-zinc-800"
+				>
 					{paginated.data.length === 0 ? (
 						<div className="p-6">
-							<Empty className="rounded-2xl border border-dashed border-border bg-muted/20 py-10">
+							<Empty className="rounded-2xl border border-dashed border-border bg-white/60 py-10 dark:bg-muted/60">
 								<EmptyHeader>
 									<EmptyMedia variant="icon">
-										<ReceiptText className="size-5 text-primary" />
+										<ReceiptText className="size-5 text-foreground" />
 									</EmptyMedia>
-									<EmptyTitle className="text-base font-bold">
+									<EmptyTitle className="font-mono text-base font-bold">
 										{transactions.length === 0
 											? "Your ledger is empty"
 											: "No matching transactions"}
 									</EmptyTitle>
-									<EmptyDescription className="text-xs">
+									<EmptyDescription className="font-mono text-xs">
 										{transactions.length === 0
 											? "Record your first income or expense in USD to populate your cashflow history."
 											: "Try broadening your search terms or clearing active filters."}
@@ -484,7 +524,7 @@ function HistoryScreen() {
 										<Button
 											type="button"
 											onClick={() => openQuickEntry("money_in")}
-											className="min-h-11 gap-2 rounded-xl px-5 font-bold"
+											className="min-h-11 gap-2 rounded-xl bg-primary px-5 font-mono text-xs font-extrabold uppercase text-primary-foreground"
 										>
 											<Plus className="size-4" />
 											<span>Record First Transaction</span>
@@ -494,7 +534,7 @@ function HistoryScreen() {
 											type="button"
 											variant="outline"
 											onClick={resetAllFilters}
-											className="min-h-10 rounded-xl font-semibold cursor-pointer"
+											className="min-h-10 rounded-xl font-mono font-semibold cursor-pointer"
 										>
 											Clear All Filters
 										</Button>
@@ -505,24 +545,24 @@ function HistoryScreen() {
 					) : (
 						<>
 							<Table>
-								<TableHeader className="bg-muted/40">
-									<TableRow>
-										<TableHead className="pl-5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+								<TableHeader className="bg-white/60 dark:bg-muted/70">
+									<TableRow className="border-border/70">
+										<TableHead className="pl-6 font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
 											Transaction / Note
 										</TableHead>
-										<TableHead className="hidden text-xs font-semibold uppercase tracking-wider text-muted-foreground sm:table-cell">
+										<TableHead className="hidden font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground sm:table-cell">
 											Category
 										</TableHead>
-										<TableHead className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+										<TableHead className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
 											Date
 										</TableHead>
-										<TableHead className="hidden text-xs font-semibold uppercase tracking-wider text-muted-foreground md:table-cell">
-											Wallet
+										<TableHead className="hidden font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground md:table-cell">
+											Wallet Account
 										</TableHead>
-										<TableHead className="text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+										<TableHead className="text-right font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
 											Amount (USD)
 										</TableHead>
-										<TableHead className="w-12 pr-4 text-right">
+										<TableHead className="w-12 pr-5 text-right">
 											<span className="sr-only">Actions</span>
 										</TableHead>
 									</TableRow>
@@ -531,10 +571,20 @@ function HistoryScreen() {
 									{paginated.data.map((tx) => {
 										const isInflow = tx.type === "money_in";
 										return (
-											<TableRow key={tx.id}>
-												<TableCell className="pl-5">
+											<TableRow
+												key={tx.id}
+												className="border-border/60 transition-colors hover:bg-white/80 dark:hover:bg-muted/60"
+											>
+												<TableCell className="pl-6">
 													<div className="flex items-center gap-2.5">
-														<span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-foreground dark:bg-zinc-800">
+														<span
+															className={cn(
+																"flex size-8 shrink-0 items-center justify-center rounded-xl",
+																isInflow
+																	? "bg-inflow-bg text-inflow"
+																	: "bg-outflow-bg text-outflow",
+															)}
+														>
 															{isInflow ? (
 																<ArrowUpRight className="size-4" />
 															) : (
@@ -542,10 +592,10 @@ function HistoryScreen() {
 															)}
 														</span>
 														<div className="min-w-0">
-															<p className="max-w-xs truncate text-sm font-medium text-foreground">
+															<p className="max-w-xs truncate font-mono text-xs font-semibold text-foreground sm:text-sm">
 																{tx.note || tx.category}
 															</p>
-															<p className="text-xs text-muted-foreground sm:hidden">
+															<p className="font-mono text-[11px] text-muted-foreground sm:hidden">
 																{tx.category}
 															</p>
 														</div>
@@ -553,36 +603,39 @@ function HistoryScreen() {
 												</TableCell>
 												<TableCell className="hidden sm:table-cell">
 													<Badge
-														variant="secondary"
-														className="rounded-md font-medium"
+														variant="outline"
+														className="rounded-lg border-border bg-white/80 font-mono text-[11px] font-medium text-foreground dark:border-zinc-700 dark:bg-muted"
 													>
 														{tx.category}
 													</Badge>
 												</TableCell>
-												<TableCell className="text-xs text-muted-foreground tabular-nums">
+												<TableCell className="font-mono text-xs text-muted-foreground tabular-nums">
 													<div>{formatFriendlyDate(tx.date, todayISO)}</div>
 													<div className="text-[11px] opacity-75">
 														{tx.date}
 													</div>
 												</TableCell>
-												<TableCell className="hidden text-xs text-muted-foreground md:table-cell">
+												<TableCell className="hidden font-mono text-xs text-muted-foreground md:table-cell">
 													{walletNameById.get(tx.walletId) ?? "Checking"}
 												</TableCell>
 												<TableCell className="text-right">
 													<MoneyValue
 														amount={tx.amount}
 														signedType={tx.type}
-														className="text-sm font-bold text-foreground tabular-nums font-mono"
+														className={cn(
+															"font-mono text-xs font-extrabold tabular-nums sm:text-sm",
+															isInflow ? "text-inflow" : "text-outflow",
+														)}
 													/>
 												</TableCell>
-												<TableCell className="pr-4 text-right">
+												<TableCell className="pr-5 text-right">
 													<Button
 														type="button"
 														variant="ghost"
 														size="icon-sm"
 														onClick={() => deleteTransaction(tx.id)}
 														aria-label={`Delete ${tx.note || tx.category}`}
-														className="text-muted-foreground hover:text-destructive cursor-pointer"
+														className="text-muted-foreground hover:text-outflow cursor-pointer dark:hover:text-outflow"
 													>
 														<Trash2 className="size-3.5" />
 													</Button>
@@ -593,18 +646,18 @@ function HistoryScreen() {
 								</TableBody>
 							</Table>
 
-							{/* 10-Row Pagination Footer */}
-							<div className="flex flex-col items-center justify-between gap-3 border-t border-border/60 bg-muted/20 px-5 py-3.5 sm:flex-row">
-								<p className="text-xs text-muted-foreground tabular-nums">
+							{/* Strict 10-Row Pagination Footer */}
+							<div className="flex flex-col items-center justify-between gap-3 border-t border-border/70 bg-white/50 px-6 py-3.5 sm:flex-row dark:bg-muted/60">
+								<p className="font-mono text-xs text-muted-foreground tabular-nums">
 									Showing{" "}
-									<strong className="font-semibold text-foreground">
+									<strong className="font-bold text-foreground">
 										{rangeStart} - {rangeEnd}
 									</strong>{" "}
 									of{" "}
-									<strong className="font-semibold text-foreground">
+									<strong className="font-bold text-foreground">
 										{paginated.totalItems}
 									</strong>{" "}
-									transactions
+									records
 								</p>
 
 								<Pagination className="mx-0 w-auto justify-end">
@@ -621,8 +674,8 @@ function HistoryScreen() {
 													}
 												}}
 												className={cn(
-													"h-8 rounded-lg text-xs cursor-pointer",
-													!canPrev && "pointer-events-none opacity-50",
+													"h-8 rounded-xl font-mono text-xs cursor-pointer",
+													!canPrev && "pointer-events-none opacity-45",
 												)}
 											/>
 										</PaginationItem>
@@ -633,7 +686,7 @@ function HistoryScreen() {
 												isActive
 												size="default"
 												onClick={(e) => e.preventDefault()}
-												className="shadow-neu-sm h-8 cursor-default rounded-lg bg-zinc-900 px-3 text-xs font-bold text-white tabular-nums dark:bg-white dark:text-zinc-900"
+												className="h-8 cursor-default rounded-xl border-none bg-primary px-3 font-mono text-xs font-bold text-primary-foreground tabular-nums hover:bg-primary hover:text-primary-foreground"
 											>
 												Page {paginated.currentPage} of {paginated.totalPages}
 											</PaginationLink>
@@ -653,8 +706,8 @@ function HistoryScreen() {
 													}
 												}}
 												className={cn(
-													"h-8 rounded-lg text-xs cursor-pointer",
-													!canNext && "pointer-events-none opacity-50",
+													"h-8 rounded-xl font-mono text-xs cursor-pointer",
+													!canNext && "pointer-events-none opacity-45",
 												)}
 											/>
 										</PaginationItem>
@@ -663,8 +716,8 @@ function HistoryScreen() {
 							</div>
 						</>
 					)}
-				</CardContent>
-			</Card>
+				</div>
+			</div>
 		</div>
 	);
 }

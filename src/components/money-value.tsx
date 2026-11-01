@@ -11,8 +11,8 @@ interface MoneyValueProps {
 }
 
 /**
- * Displays a monetary figure with `tabular-nums` alignment and respects
- * the global Privacy Blur Mode (DESIGN.md §3.1 & §5.3).
+ * Displays a monetary figure with Geist Mono `tabular-nums` alignment and
+ * respects the global Privacy Mask Mode (`$ ••••••` — PRD v2.1.0 §3.1 & DESIGN.md §6.1).
  */
 export function MoneyValue({
 	amount,
@@ -25,15 +25,24 @@ export function MoneyValue({
 		? formatSignedCurrency(amount, signedType, profile.currency)
 		: formatCurrency(amount, profile.currency, { compact });
 
-	const isBlurred = profile.privacyBlurEnabled;
+	const isMasked = profile.privacyBlurEnabled;
 	const symbol = CURRENCIES[profile.currency].symbol;
+	const signPrefix =
+		signedType === "money_in"
+			? "+"
+			: signedType === "money_out"
+				? "-"
+				: amount < 0
+					? "-"
+					: "";
 
 	return (
-		<span className={cn("tabular-nums inline-block", className)}>
-			{isBlurred ? (
+		<span className={cn("tabular-nums inline-block font-mono", className)}>
+			{isMasked ? (
 				<>
-					<span aria-hidden="true" className="privacy-masked">
-						{formatted}
+					<span aria-hidden="true">
+						{signPrefix}
+						{symbol} ••••••
 					</span>
 					<span className="sr-only">{symbol} hidden balance</span>
 				</>
