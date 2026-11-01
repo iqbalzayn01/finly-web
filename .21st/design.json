@@ -1,0 +1,182 @@
+{
+  "version": 1,
+  "project": {
+    "name": "finly-web",
+    "productType": "cashflow-management-dashboard",
+    "stack": [
+      "react",
+      "tanstack-start",
+      "shadcn",
+      "tailwind-v4",
+      "vite"
+    ]
+  },
+  "sources": {
+    "tokens": [
+      "src/styles.css"
+    ],
+    "components": [
+      "src/components/ui",
+      "src/components/dashboard",
+      "src/components/layout",
+      "src/components/transactions",
+      "src/components/invoices"
+    ],
+    "assets": [
+      "src/components/brand-logo.tsx"
+    ],
+    "instructions": [
+      ".21st/DESIGN.md",
+      "PRD.md"
+    ]
+  },
+  "design": {
+    "colorMode": "light-dark-system",
+    "colors": {
+      "primary": "oklch(74.6% 0.16 232.661)",
+      "inflow": "#10B981",
+      "outflow": "#F43F5E",
+      "warning": "#F59E0B"
+    },
+    "typography": {
+      "fontSans": "Plus Jakarta Sans",
+      "numericAlignment": "tabular-nums"
+    },
+    "spacing": {
+      "containerMaxWidth": "80rem",
+      "mobileBottomDockHeight": "64px"
+    },
+    "radius": {
+      "base": "0.875rem",
+      "cards": "1rem"
+    },
+    "shadows": {
+      "cards": "shadow-xs",
+      "modals": "shadow-2xl"
+    },
+    "motion": {
+      "privacyTransition": "filter 180ms ease-out"
+    },
+    "density": "calm-high-clarity"
+  },
+  "components": {
+    "installed": [
+      "accordion",
+      "alert",
+      "alert-dialog",
+      "aspect-ratio",
+      "attachment",
+      "avatar",
+      "badge",
+      "button",
+      "button-group",
+      "calendar",
+      "card",
+      "carousel",
+      "chart",
+      "checkbox",
+      "collapsible",
+      "combobox",
+      "context-menu",
+      "dialog",
+      "drawer",
+      "dropdown-menu",
+      "empty",
+      "field",
+      "hover-card",
+      "input",
+      "input-group",
+      "input-otp",
+      "item",
+      "kbd",
+      "label",
+      "marker",
+      "menubar",
+      "native-select",
+      "navigation-menu",
+      "pagination",
+      "popover",
+      "progress",
+      "radio-group",
+      "resizable",
+      "scroll-area",
+      "select",
+      "separator",
+      "sheet",
+      "skeleton",
+      "slider",
+      "sonner",
+      "spinner",
+      "switch",
+      "table",
+      "tabs",
+      "textarea",
+      "toggle",
+      "toggle-group",
+      "tooltip"
+    ],
+    "preferredPrimitives": [
+      "card",
+      "button",
+      "badge",
+      "dialog",
+      "drawer",
+      "alert-dialog",
+      "chart",
+      "table",
+      "tabs",
+      "empty"
+    ],
+    "patterns": [
+      "safe-to-spend-banner",
+      "interactive-area-chart-1w-1m-3m-6m-1y",
+      "clean-center-nav-with-profile-dropdown",
+      "native-shadcn-dialog-modals",
+      "10-row-paginated-ledger",
+      "invoice-cashflow-settlement-sync",
+      "privacy-blur-masking"
+    ]
+  },
+  "constraints": {
+    "must": [
+      "strict USD ($) formatting with tabular-nums on all monetary values",
+      "clean center top navigation containing only Dashboard, History, and Invoices (Settings inside Avatar Dropdown)",
+      "native shadcn/ui Dialog primitives for all modals",
+      "official shadcn/ui Area Chart - Interactive with 1W, 1M, 3M, 6M, 1Y filters and linear gradients",
+      "strict 10-row pagination on transaction tables"
+    ],
+    "avoid": [
+      "neon gradients or cluttered multi-axis charts",
+      "traditional accounting jargon by default (Debit / Credit / General Ledger)"
+    ]
+  },
+  "decisions": [
+    {
+      "date": "2026-10-31",
+      "summary": "Updated Finly Cashflow Workspace to PRD v1.6.0: Interactive Area Chart (1W/1M/3M/6M/1Y) with SVG linear gradients and net-difference tooltips, clean center top navigation with Settings relocated to User Profile dropdown + Notification popover, native shadcn/ui Dialog modals, enforced USD formatting, and 10-row paginated activity tables."
+    }
+  ],
+  "evidence": [
+    {
+      "fact": "components.installed",
+      "source": "src/components/ui"
+    },
+    {
+      "fact": "project.stack:react",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:shadcn",
+      "source": "components.json"
+    },
+    {
+      "fact": "project.stack:tailwind-v4",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:vite",
+      "source": "package.json"
+    }
+  ],
+  "generatedAt": "2026-10-31T19:51:30.000Z"
+}
