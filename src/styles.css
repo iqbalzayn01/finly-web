@@ -5,131 +5,153 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Base Neutral Canvas (#F8FAFC / #0F172A) */
-  --background: oklch(98.5% 0.005 240);
-  --foreground: oklch(14% 0.02 260);
+  /* Light Mode Counterpart — Editorial Crisp Bento (PRD v2.1.0 & DESIGN.md §2) */
+  --background: #ffffff;
+  --foreground: #111111;
 
-  /* Card & Surfaces */
-  --card: oklch(100% 0 0);
-  --card-foreground: oklch(14% 0.02 260);
-  --popover: oklch(100% 0 0);
-  --popover-foreground: oklch(14% 0.02 260);
+  /* Bento Card & Popover Surfaces (Zinc-100 Light Surface #F4F4F5) */
+  --card: #f4f4f5;
+  --card-foreground: #111111;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
 
-  /* PRIMARY: Monochromatic Neutral Scale (PRD v2.0.0 §10 & §40) */
-  --primary: oklch(14% 0.02 260);
-  --primary-foreground: oklch(99% 0 0);
+  /* Primary: Electric Lime (#C9F31D) with Deep Black (#111111) Text */
+  --primary: #c9f31d;
+  --primary-foreground: #111111;
 
-  /* Muted & Secondary Neutrals */
-  --secondary: oklch(96% 0.01 240);
-  --secondary-foreground: oklch(25% 0.02 260);
-  --muted: oklch(96% 0.01 240);
-  --muted-foreground: oklch(45% 0.02 260);
+  /* Secondary & Muted Neutrals */
+  --secondary: #e4e4e7;
+  --secondary-foreground: #111111;
+  --secondary-light: #f4f4f5;
+  --muted: #e4e4e7;
+  --muted-foreground: #52525b;
 
-  /* Accent (Neutral tint) */
-  --accent: oklch(94% 0.01 240);
-  --accent-foreground: oklch(14% 0.02 260);
+  /* Accent (Default Tailwind / Shadcn Zinc) */
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
 
-  /* Destructive & Money Out (Rose-500) */
-  --destructive: oklch(63% 0.24 18);
-  --destructive-foreground: oklch(98% 0 0);
+  /* Destructive & Outflow */
+  --destructive: #e11d48;
+  --destructive-foreground: #ffffff;
 
-  /* Cashflow Inflow (Emerald-500 strictly for Area Chart - PRD §3.3) */
-  --inflow: #10B981;
-  --inflow-bg: oklch(97% 0.03 155);
-  --inflow-border: oklch(88% 0.08 155);
+  /* Semantic Financial Indicators (DESIGN.md §2 & §5) */
+  --semantic-income: #34d399;
+  --semantic-expense: #fb7185;
+  --semantic-warning: #fbbf24;
+  --semantic-info: #38bdf8;
 
-  /* Cashflow Outflow (Rose-500 strictly for Area Chart - PRD §3.3) */
-  --outflow: #F43F5E;
-  --outflow-bg: oklch(97% 0.03 18);
-  --outflow-border: oklch(88% 0.08 18);
+  --inflow: #34d399;
+  --inflow-bg: rgba(52, 211, 153, 0.14);
+  --inflow-border: rgba(16, 185, 129, 0.35);
 
-  /* Attention & Due (Amber-500) */
-  --warning: oklch(75% 0.18 75);
-  --warning-bg: oklch(98% 0.03 75);
+  --outflow: #fb7185;
+  --outflow-bg: rgba(251, 113, 133, 0.14);
+  --outflow-border: rgba(244, 63, 94, 0.35);
+
+  --warning: #fbbf24;
+  --warning-bg: rgba(251, 191, 36, 0.16);
+  --warning-border: rgba(251, 191, 36, 0.35);
+  --info: #38bdf8;
+  --info-bg: rgba(56, 189, 248, 0.14);
+  --info-border: rgba(56, 189, 248, 0.35);
+  --primary-hover: #b8e016;
 
   /* Form & Boundary Controls */
-  --border: oklch(90% 0.01 240);
-  --input: oklch(85% 0.02 240);
-  --ring: oklch(40% 0.02 260);
+  --border: #e4e4e7;
+  --input: #d4d4d8;
+  --ring: #111111;
 
   /* Chart Semantics */
-  --chart-1: oklch(72% 0.17 155);
-  --chart-2: oklch(63% 0.24 18);
-  --chart-3: oklch(74.6% 0.16 232.661);
-  --chart-4: oklch(75% 0.18 75);
-  --chart-5: oklch(55% 0.03 260);
+  --chart-1: #34d399;
+  --chart-2: #fb7185;
+  --chart-3: #38bdf8;
+  --chart-4: #fbbf24;
+  --chart-5: #a78bfa;
 
-  /* Geometry (14px modern soft-rounded corners) */
-  --radius: 0.875rem;
+  /* Bento Geometry */
+  --radius: 1rem;
+  --radius-bento: 1.5rem;
 
   /* Sidebar Compatibility */
-  --sidebar: oklch(100% 0 0);
-  --sidebar-foreground: oklch(14% 0.02 260);
-  --sidebar-primary: oklch(74.6% 0.16 232.661);
-  --sidebar-primary-foreground: oklch(14% 0.04 240);
-  --sidebar-accent: oklch(94% 0.02 232);
-  --sidebar-accent-foreground: oklch(20% 0.04 240);
-  --sidebar-border: oklch(90% 0.01 240);
-  --sidebar-ring: oklch(74.6% 0.16 232.661);
+  --sidebar: #f4f4f5;
+  --sidebar-foreground: #111111;
+  --sidebar-primary: #c9f31d;
+  --sidebar-primary-foreground: #111111;
+  --sidebar-accent: #e4e4e7;
+  --sidebar-accent-foreground: #111111;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #111111;
 }
 
 .dark {
-  --background: oklch(12% 0.02 260);
-  --foreground: oklch(98% 0 0);
+  /* Flagship Dark Bento Palette (PRD v2.1.0 & DESIGN.md §2 & §5) */
+  --background: #111111;
+  --foreground: #ffffff;
 
-  --card: oklch(17% 0.02 260);
-  --card-foreground: oklch(98% 0 0);
-  --popover: oklch(17% 0.02 260);
-  --popover-foreground: oklch(98% 0 0);
+  --card: #27272a;
+  --card-foreground: #ffffff;
+  --popover: #27272a;
+  --popover-foreground: #ffffff;
 
-  --primary: oklch(99% 0 0);
-  --primary-foreground: oklch(14% 0.02 260);
+  --primary: #c9f31d;
+  --primary-foreground: #111111;
 
-  --secondary: oklch(24% 0.02 260);
-  --secondary-foreground: oklch(98% 0 0);
-  --muted: oklch(22% 0.02 260);
-  --muted-foreground: oklch(70% 0.02 260);
+  --secondary: #1e1e21;
+  --secondary-foreground: #ffffff;
+  --secondary-light: #f4f4f5;
+  --muted: #18181b;
+  --muted-foreground: #a1a1aa;
 
-  --accent: oklch(24% 0.01 240);
-  --accent-foreground: oklch(98% 0 0);
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
 
-  --destructive: oklch(63% 0.24 18);
-  --destructive-foreground: oklch(98% 0 0);
+  --destructive: #fb7185;
+  --destructive-foreground: #111111;
 
-  --inflow: #10B981;
-  --inflow-bg: oklch(22% 0.04 155);
-  --inflow-border: oklch(34% 0.08 155);
+  --semantic-income: #34d399;
+  --semantic-expense: #fb7185;
+  --semantic-warning: #fbbf24;
+  --semantic-info: #38bdf8;
 
-  --outflow: #F43F5E;
-  --outflow-bg: oklch(22% 0.05 18);
-  --outflow-border: oklch(34% 0.09 18);
+  --inflow: #34d399;
+  --inflow-bg: rgba(52, 211, 153, 0.14);
+  --inflow-border: rgba(52, 211, 153, 0.32);
 
-  --warning: oklch(78% 0.17 75);
-  --warning-bg: oklch(23% 0.05 75);
+  --outflow: #fb7185;
+  --outflow-bg: rgba(251, 113, 133, 0.14);
+  --outflow-border: rgba(251, 113, 133, 0.32);
 
-  --border: oklch(26% 0.02 260);
-  --input: oklch(28% 0.02 260);
-  --ring: oklch(70% 0.02 260);
+  --warning: #fbbf24;
+  --warning-bg: rgba(251, 191, 36, 0.16);
+  --warning-border: rgba(251, 191, 36, 0.32);
+  --info: #38bdf8;
+  --info-bg: rgba(56, 189, 248, 0.14);
+  --info-border: rgba(56, 189, 248, 0.32);
+  --primary-hover: #b8e016;
 
-  --chart-1: oklch(74% 0.17 155);
-  --chart-2: oklch(66% 0.22 18);
-  --chart-3: oklch(74.6% 0.16 232.661);
-  --chart-4: oklch(78% 0.17 75);
-  --chart-5: oklch(70% 0.02 260);
+  --border: #3f3f46;
+  --input: #3f3f46;
+  --ring: #c9f31d;
 
-  --sidebar: oklch(17% 0.02 260);
-  --sidebar-foreground: oklch(98% 0 0);
-  --sidebar-primary: oklch(74.6% 0.16 232.661);
-  --sidebar-primary-foreground: oklch(12% 0.04 240);
-  --sidebar-accent: oklch(24% 0.03 232);
-  --sidebar-accent-foreground: oklch(98% 0 0);
-  --sidebar-border: oklch(26% 0.02 260);
-  --sidebar-ring: oklch(74.6% 0.16 232.661);
+  --chart-1: #34d399;
+  --chart-2: #fb7185;
+  --chart-3: #38bdf8;
+  --chart-4: #fbbf24;
+  --chart-5: #a78bfa;
+
+  --sidebar: #27272a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #c9f31d;
+  --sidebar-primary-foreground: #111111;
+  --sidebar-accent: #18181b;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #3f3f46;
+  --sidebar-ring: #c9f31d;
 }
 
 @theme inline {
-  --font-sans: 'Geist Mono Variable', monospace;
-  --font-mono: 'Geist Mono Variable', monospace;
+  --font-sans: "Geist Mono Variable", "Geist Mono", monospace;
+  --font-mono: "Geist Mono Variable", "Geist Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -154,6 +176,11 @@
   --color-outflow-border: var(--outflow-border);
   --color-warning: var(--warning);
   --color-warning-bg: var(--warning-bg);
+  --color-warning-border: var(--warning-border);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-info-border: var(--info-border);
+  --color-primary-hover: var(--primary-hover);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -167,6 +194,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 2px);
   --radius-2xl: calc(var(--radius) + 6px);
+  --radius-3xl: var(--radius-bento);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -192,43 +220,43 @@
     margin: 0;
     background-color: var(--background);
     color: var(--foreground);
-    font-family: var(--font-sans);
+    font-family: var(--font-mono);
+    letter-spacing: -0.01em;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* Minimalist Neumorphic Shadows (PRD v2.0.0 §11, §2.1, §3.1, §3.3) */
-.shadow-neu-raised {
-  box-shadow: 4px 4px 16px oklch(0 0 0 / 0.05), -4px -4px 16px oklch(1 0 0 / 0.9);
-}
-.dark .shadow-neu-raised {
-  box-shadow: 4px 4px 20px oklch(0 0 0 / 0.4), -4px -4px 20px oklch(1 0 0 / 0.02);
-}
-
-.shadow-neu-inset {
-  box-shadow: inset 2px 2px 5px oklch(0 0 0 / 0.06), inset -2px -2px 5px oklch(1 0 0 / 0.85);
-}
-.dark .shadow-neu-inset {
-  box-shadow: inset 2px 2px 5px oklch(0 0 0 / 0.35), inset -2px -2px 5px oklch(1 0 0 / 0.02);
+/* Editorial Bento Tile Geometry & Motion (DESIGN.md §5) */
+.bento-card {
+  border-radius: var(--radius-bento);
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.shadow-neu-sm {
-  box-shadow: 2px 2px 6px oklch(0 0 0 / 0.07), -2px -2px 6px oklch(1 0 0 / 0.85);
-}
-.dark .shadow-neu-sm {
-  box-shadow: 2px 2px 6px oklch(0 0 0 / 0.35), -2px -2px 6px oklch(1 0 0 / 0.02);
+@media (prefers-reduced-motion: no-preference) {
+  .bento-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .bento-card-static:hover {
+    transform: none;
+  }
 }
 
-/* Required DESIGN.md §5.3 Privacy Masking Mode */
+/* Chart Privacy Masking Mode */
 .privacy-masked {
-  filter: blur(8px);
+  filter: blur(10px);
   user-select: none;
   transition: filter 0.2s ease-in-out;
 }
 
-/* Required DESIGN.md §3.1 Tabular Numerals for Financial Amounts */
+/* Tabular Numerals for Financial Amounts (DESIGN.md §4.1) */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }

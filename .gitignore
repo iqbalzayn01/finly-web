@@ -9,5 +9,6 @@ dist-ssr
 .wrangler
 .output
 .vinxi
+.21st
 __unconfig*
 todos.json

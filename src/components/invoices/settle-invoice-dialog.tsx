@@ -71,13 +71,13 @@ export function SettleInvoiceDialog({
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className="rounded-2xl border-border bg-card p-6 shadow-2xl sm:max-w-lg">
+			<DialogContent className="rounded-3xl border-border bg-popover p-6 shadow-2xl sm:max-w-lg">
 				<DialogHeader>
-					<DialogTitle className="flex items-center gap-2 text-lg font-bold tracking-tight">
-						<CheckCircle2 className="size-5 text-foreground" />
+					<DialogTitle className="flex items-center gap-2 font-mono text-lg font-black uppercase tracking-tight">
+						<CheckCircle2 className="size-5 text-inflow" />
 						<span>Confirm Payment Received</span>
 					</DialogTitle>
-					<DialogDescription className="text-xs">
+					<DialogDescription className="font-mono text-xs">
 						Record{" "}
 						<strong className="font-bold text-foreground tabular-nums">
 							{formatUSD(invoice.totalAmount)}
@@ -91,18 +91,18 @@ export function SettleInvoiceDialog({
 				</DialogHeader>
 
 				<div className="space-y-4 py-1 text-sm">
-					{/* DEPOSIT DESTINATION (PRD §5.3) */}
-					<div className="space-y-3 rounded-xl border border-border bg-muted/30 p-4">
-						<p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+					{/* Deposit Destination */}
+					<div className="space-y-3 rounded-2xl border border-border bg-card p-4 dark:border-zinc-700 dark:bg-muted">
+						<p className="font-mono text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
 							Deposit Destination
 						</p>
 
 						<div className="space-y-1.5">
-							<Label className="text-xs font-semibold text-foreground">
+							<Label className="font-mono text-xs font-semibold text-foreground">
 								Deposit Wallet
 							</Label>
 							<Select value={walletId} onValueChange={setWalletId}>
-								<SelectTrigger className="h-10 w-full rounded-xl bg-card text-xs">
+								<SelectTrigger className="h-10 w-full rounded-xl bg-card font-mono text-xs dark:bg-background">
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
@@ -117,11 +117,11 @@ export function SettleInvoiceDialog({
 
 						<div className="grid gap-3 sm:grid-cols-2">
 							<div className="space-y-1.5">
-								<Label className="text-xs font-semibold text-foreground">
+								<Label className="font-mono text-xs font-semibold text-foreground">
 									Income Category
 								</Label>
 								<Select value={category} onValueChange={setCategory}>
-									<SelectTrigger className="h-10 w-full rounded-xl bg-card text-xs">
+									<SelectTrigger className="h-10 w-full rounded-xl bg-card font-mono text-xs dark:bg-background">
 										<SelectValue />
 									</SelectTrigger>
 									<SelectContent>
@@ -137,7 +137,7 @@ export function SettleInvoiceDialog({
 							<div className="space-y-1.5">
 								<Label
 									htmlFor={`${baseId}-paid-date`}
-									className="text-xs font-semibold text-foreground"
+									className="font-mono text-xs font-semibold text-foreground"
 								>
 									Payment Date
 								</Label>
@@ -146,15 +146,15 @@ export function SettleInvoiceDialog({
 									type="date"
 									value={paidDate}
 									onChange={(e) => setPaidDate(e.target.value)}
-									className="h-10 rounded-xl bg-card text-xs tabular-nums"
+									className="h-10 rounded-xl bg-card font-mono text-xs tabular-nums dark:bg-background"
 								/>
 							</div>
 						</div>
 					</div>
 
-					{/* Immediate Impact Preview (PRD §5.3) */}
-					<div className="rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-3 text-xs dark:border-zinc-800 dark:bg-zinc-900/60">
-						<p className="font-semibold text-foreground">
+					{/* Immediate Impact Preview */}
+					<div className="rounded-2xl border border-inflow-border bg-inflow-bg px-4 py-3 font-mono text-xs">
+						<p className="font-bold text-foreground">
 							This action will immediately:
 						</p>
 						<ul className="mt-1.5 list-inside list-disc space-y-1 text-muted-foreground">
@@ -168,7 +168,7 @@ export function SettleInvoiceDialog({
 								<MoneyValue
 									amount={invoice.totalAmount}
 									signedType="money_in"
-									className="font-bold text-foreground"
+									className="font-extrabold text-inflow"
 								/>
 								)
 							</li>
@@ -185,14 +185,14 @@ export function SettleInvoiceDialog({
 						type="button"
 						variant="outline"
 						onClick={() => onOpenChange(false)}
-						className="min-h-11 rounded-xl font-semibold cursor-pointer"
+						className="min-h-11 rounded-xl font-mono text-xs font-bold cursor-pointer"
 					>
 						Cancel
 					</Button>
 					<Button
 						type="button"
 						onClick={handleConfirm}
-						className="shadow-neu-sm min-h-11 rounded-xl bg-zinc-900 px-5 font-bold text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 cursor-pointer"
+						className="min-h-11 rounded-xl bg-primary px-5 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground hover:bg-primary-hover cursor-pointer"
 					>
 						Confirm &amp; Deposit
 					</Button>

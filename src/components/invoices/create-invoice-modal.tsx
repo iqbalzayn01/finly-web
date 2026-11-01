@@ -204,24 +204,24 @@ export function CreateInvoiceModal({
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className="max-h-[92vh] overflow-y-auto rounded-2xl border-border bg-card p-5 shadow-2xl sm:max-w-2xl sm:p-6">
+			<DialogContent className="max-h-[92vh] overflow-y-auto rounded-3xl border-border bg-popover p-5 shadow-2xl sm:max-w-2xl sm:p-6">
 				<DialogHeader>
-					<DialogTitle className="text-lg font-bold tracking-tight">
+					<DialogTitle className="font-mono text-lg font-black uppercase tracking-tight">
 						Create New Invoice
 					</DialogTitle>
-					<DialogDescription className="text-xs">
-						Generate a clean payment request. Money will sync to cashflow when
-						paid.
+					<DialogDescription className="font-mono text-xs">
+						Generate a clean payment request. Money syncs directly to cashflow
+						when marked paid.
 					</DialogDescription>
 				</DialogHeader>
 
 				<form onSubmit={handleFormSubmit} className="space-y-5">
-					{/* CLIENT DETAILS (PRD §5.2) */}
+					{/* CLIENT DETAILS */}
 					<div className="grid gap-3 sm:grid-cols-2">
 						<div className="space-y-1.5">
 							<Label
 								htmlFor={`${baseId}-client`}
-								className="text-xs font-semibold"
+								className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
 							>
 								Client Name *
 							</Label>
@@ -231,28 +231,28 @@ export function CreateInvoiceModal({
 								placeholder="Acme Design Studio"
 								value={clientName}
 								onChange={(e) => setClientName(e.target.value)}
-								className="h-10 rounded-xl"
+								className="h-10 rounded-xl bg-card font-mono text-xs dark:bg-background"
 							/>
 						</div>
 						<div className="space-y-1.5">
 							<Label
 								htmlFor={`${baseId}-phone`}
-								className="text-xs font-semibold"
+								className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
 							>
-								Client Phone / WA (For 1-click share)
+								Client Phone / WA (1-click share)
 							</Label>
 							<Input
 								id={`${baseId}-phone`}
 								placeholder="+1 (555) 019-2834"
 								value={clientPhone}
 								onChange={(e) => setClientPhone(e.target.value)}
-								className="h-10 rounded-xl"
+								className="h-10 rounded-xl bg-card font-mono text-xs dark:bg-background"
 							/>
 						</div>
 						<div className="space-y-1.5">
 							<Label
 								htmlFor={`${baseId}-project`}
-								className="text-xs font-semibold"
+								className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
 							>
 								Project Summary (Optional)
 							</Label>
@@ -261,13 +261,13 @@ export function CreateInvoiceModal({
 								placeholder="Frontend Dashboard Setup"
 								value={projectTitle}
 								onChange={(e) => setProjectTitle(e.target.value)}
-								className="h-10 rounded-xl"
+								className="h-10 rounded-xl bg-card font-mono text-xs dark:bg-background"
 							/>
 						</div>
 						<div className="space-y-1.5">
 							<Label
 								htmlFor={`${baseId}-email`}
-								className="text-xs font-semibold"
+								className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
 							>
 								Client Email (Optional)
 							</Label>
@@ -277,18 +277,18 @@ export function CreateInvoiceModal({
 								placeholder="billing@acmedesign.co"
 								value={clientEmail}
 								onChange={(e) => setClientEmail(e.target.value)}
-								className="h-10 rounded-xl"
+								className="h-10 rounded-xl bg-card font-mono text-xs dark:bg-background"
 							/>
 						</div>
 					</div>
 
 					{/* TIMELINE & DUE DATE */}
-					<div className="space-y-3 rounded-xl border border-border bg-muted/30 p-3.5">
+					<div className="space-y-3 rounded-2xl border border-border bg-card p-4 dark:border-zinc-700 dark:bg-muted">
 						<div className="grid gap-3 sm:grid-cols-2">
 							<div className="space-y-1">
 								<Label
 									htmlFor={`${baseId}-issue`}
-									className="text-xs font-semibold text-muted-foreground"
+									className="font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
 								>
 									Issue Date
 								</Label>
@@ -302,13 +302,13 @@ export function CreateInvoiceModal({
 											setDueDate(addDaysISO(e.target.value, activePresetDays));
 										}
 									}}
-									className="h-10 rounded-lg bg-card tabular-nums"
+									className="h-10 rounded-xl bg-card font-mono text-xs tabular-nums dark:bg-background"
 								/>
 							</div>
 							<div className="space-y-1">
 								<Label
 									htmlFor={`${baseId}-due`}
-									className="text-xs font-semibold text-muted-foreground"
+									className="font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
 								>
 									Due Date
 								</Label>
@@ -320,12 +320,12 @@ export function CreateInvoiceModal({
 										setDueDate(e.target.value);
 										setActivePresetDays(null);
 									}}
-									className="h-10 rounded-lg bg-card tabular-nums"
+									className="h-10 rounded-xl bg-card font-mono text-xs tabular-nums dark:bg-background"
 								/>
 							</div>
 						</div>
 						<div className="flex flex-wrap items-center gap-2">
-							<span className="text-xs font-medium text-muted-foreground">
+							<span className="font-mono text-xs font-medium text-muted-foreground">
 								Quick Presets:
 							</span>
 							{[7, 14, 30].map((days) => (
@@ -334,10 +334,10 @@ export function CreateInvoiceModal({
 									type="button"
 									onClick={() => applyDuePreset(days)}
 									className={cn(
-										"rounded-lg border px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer",
+										"rounded-lg border px-2.5 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer",
 										activePresetDays === days
 											? "border-primary bg-primary font-bold text-primary-foreground"
-											: "border-border bg-card text-foreground hover:bg-secondary",
+											: "border-border bg-card text-foreground hover:bg-secondary dark:border-zinc-700 dark:bg-background",
 									)}
 								>
 									+{days} Days
@@ -349,7 +349,7 @@ export function CreateInvoiceModal({
 					{/* ITEMS & SERVICES (USD) */}
 					<div className="space-y-2.5">
 						<div className="flex items-center justify-between">
-							<Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+							<Label className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
 								Items &amp; Services
 							</Label>
 							<Button
@@ -357,14 +357,14 @@ export function CreateInvoiceModal({
 								size="xs"
 								variant="outline"
 								onClick={addLineItem}
-								className="gap-1 rounded-lg font-semibold"
+								className="gap-1 rounded-xl font-mono text-xs font-bold"
 							>
 								<Plus className="size-3.5" />
 								<span>Add Item Row</span>
 							</Button>
 						</div>
 
-						<div className="hidden grid-cols-[1fr_72px_132px_104px_36px] gap-2 px-2 text-[11px] font-semibold text-muted-foreground sm:grid">
+						<div className="hidden grid-cols-[1fr_72px_132px_104px_36px] gap-2 px-2 font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:grid">
 							<span>Description</span>
 							<span>Qty</span>
 							<span>Price (USD)</span>
@@ -381,7 +381,7 @@ export function CreateInvoiceModal({
 								return (
 									<div
 										key={item.key}
-										className="grid grid-cols-1 gap-2 rounded-xl border border-border bg-background/60 p-2.5 sm:grid-cols-[1fr_72px_132px_104px_36px] sm:items-center"
+										className="grid grid-cols-1 gap-2 rounded-2xl border border-border bg-card p-2.5 sm:grid-cols-[1fr_72px_132px_104px_36px] sm:items-center dark:border-zinc-700 dark:bg-muted"
 									>
 										<Input
 											placeholder={`Service item #${idx + 1}`}
@@ -389,7 +389,7 @@ export function CreateInvoiceModal({
 											onChange={(e) =>
 												updateLineItem(item.key, "description", e.target.value)
 											}
-											className="h-9 rounded-lg bg-card text-xs"
+											className="h-9 rounded-xl bg-card font-mono text-xs dark:bg-background"
 										/>
 										<Input
 											type="number"
@@ -400,10 +400,10 @@ export function CreateInvoiceModal({
 											onChange={(e) =>
 												updateLineItem(item.key, "quantity", e.target.value)
 											}
-											className="h-9 rounded-lg bg-card text-xs tabular-nums"
+											className="h-9 rounded-xl bg-card font-mono text-xs tabular-nums dark:bg-background"
 										/>
 										<div className="relative flex items-center">
-											<span className="pointer-events-none absolute left-2.5 text-xs text-muted-foreground">
+											<span className="pointer-events-none absolute left-2.5 font-mono text-xs text-muted-foreground">
 												$
 											</span>
 											<Input
@@ -418,10 +418,10 @@ export function CreateInvoiceModal({
 														formatLiveNumericInput(e.target.value, "USD"),
 													)
 												}
-												className="h-9 rounded-lg bg-card pl-6 text-xs tabular-nums"
+												className="h-9 rounded-xl bg-card pl-6 font-mono text-xs tabular-nums dark:bg-background"
 											/>
 										</div>
-										<div className="flex items-center justify-between px-1 text-right text-xs font-semibold text-foreground sm:justify-end tabular-nums">
+										<div className="flex items-center justify-between px-1 text-right font-mono text-xs font-bold text-foreground sm:justify-end tabular-nums">
 											<span className="text-muted-foreground sm:hidden">
 												Total:
 											</span>
@@ -434,7 +434,7 @@ export function CreateInvoiceModal({
 											disabled={lineItems.length <= 1}
 											onClick={() => removeLineItem(item.key)}
 											aria-label="Remove item row"
-											className="justify-self-end text-muted-foreground hover:text-destructive"
+											className="justify-self-end text-muted-foreground hover:text-outflow"
 										>
 											<Trash2 className="size-3.5" />
 										</Button>
@@ -449,7 +449,7 @@ export function CreateInvoiceModal({
 						<div className="space-y-1.5">
 							<Label
 								htmlFor={`${baseId}-instructions`}
-								className="text-xs font-semibold text-muted-foreground"
+								className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
 							>
 								Payment Instructions
 							</Label>
@@ -458,13 +458,13 @@ export function CreateInvoiceModal({
 								rows={2}
 								value={paymentInstructions}
 								onChange={(e) => setPaymentInstructions(e.target.value)}
-								className="rounded-xl text-xs"
+								className="rounded-xl bg-card font-mono text-xs dark:bg-background"
 							/>
 						</div>
 						<div className="space-y-1.5">
 							<Label
 								htmlFor={`${baseId}-tax`}
-								className="text-xs font-semibold text-muted-foreground"
+								className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground"
 							>
 								Tax (%)
 							</Label>
@@ -476,15 +476,15 @@ export function CreateInvoiceModal({
 								step="0.5"
 								value={taxRate}
 								onChange={(e) => setTaxRate(e.target.value)}
-								className="h-10 rounded-xl tabular-nums"
+								className="h-10 rounded-xl bg-card font-mono text-xs tabular-nums dark:bg-background"
 							/>
 						</div>
 					</div>
 
 					{/* TOTAL DUE (USD) */}
-					<div className="flex flex-col gap-1.5 rounded-xl border border-border bg-muted/40 px-4 py-3">
+					<div className="flex flex-col gap-1.5 rounded-2xl border border-border bg-muted px-4 py-3.5 text-foreground">
 						{computedTotals.taxPercent > 0 && (
-							<div className="flex items-center justify-between text-xs text-muted-foreground">
+							<div className="flex items-center justify-between font-mono text-xs text-muted-foreground">
 								<span>
 									Subtotal {formatUSD(computedTotals.subtotal)} + Tax (
 									{computedTotals.taxPercent}%)
@@ -494,22 +494,22 @@ export function CreateInvoiceModal({
 								</span>
 							</div>
 						)}
-						<div className="flex items-center justify-between text-sm font-extrabold text-foreground">
-							<span>TOTAL DUE (USD)</span>
-							<span className="text-xl tabular-nums">
+						<div className="flex items-center justify-between font-mono text-xs font-bold uppercase tracking-widest text-muted-foreground">
+							<span>Total Due (USD)</span>
+							<span className="text-xl font-black tracking-tight text-primary tabular-nums">
 								{formatUSD(computedTotals.totalDue)}
 							</span>
 						</div>
 					</div>
 
-					{/* DialogFooter (PRD §5.2) */}
+					{/* DialogFooter */}
 					<DialogFooter className="flex-wrap gap-2 pt-1 sm:justify-between">
 						<Button
 							type="button"
 							variant="outline"
 							disabled={!canSave}
 							onClick={() => submitWithAction("draft", "none")}
-							className="min-h-11 rounded-xl font-semibold"
+							className="min-h-11 rounded-xl font-mono text-xs font-bold"
 						>
 							Save Draft
 						</Button>
@@ -519,15 +519,15 @@ export function CreateInvoiceModal({
 								variant="outline"
 								disabled={!canSave}
 								onClick={() => submitWithAction("sent", "print")}
-								className="min-h-11 gap-1.5 rounded-xl font-semibold"
+								className="min-h-11 gap-1.5 rounded-xl font-mono text-xs font-bold"
 							>
 								<Printer className="size-3.5" />
-								<span>Print / Download PDF</span>
+								<span>Print / PDF</span>
 							</Button>
 							<Button
 								type="submit"
 								disabled={!canSave}
-								className="min-h-11 gap-1.5 rounded-xl px-5 font-bold"
+								className="min-h-11 gap-1.5 rounded-xl bg-primary px-5 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground hover:bg-primary-hover cursor-pointer"
 							>
 								<MessageCircle className="size-3.5" />
 								<span>Save &amp; Share (WA)</span>

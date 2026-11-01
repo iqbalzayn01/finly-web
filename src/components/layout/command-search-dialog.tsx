@@ -19,6 +19,7 @@ import {
 import { Input } from "#/components/ui/input";
 import { useFinly } from "#/context/finly-context";
 import { formatFriendlyDate } from "#/lib/format";
+import { cn } from "#/lib/utils";
 
 interface CommandSearchDialogProps {
 	open: boolean;
@@ -43,7 +44,6 @@ export function CommandSearchDialog({
 		if (!open) setQuery("");
 	}, [open]);
 
-	// Global keyboard shortcut: Cmd/Ctrl + K
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {
 			if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
@@ -84,7 +84,7 @@ export function CommandSearchDialog({
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className="rounded-2xl border-border bg-card p-0 shadow-2xl sm:max-w-lg overflow-hidden">
+			<DialogContent className="overflow-hidden rounded-3xl border-border bg-popover p-0 shadow-2xl sm:max-w-lg">
 				<DialogHeader className="sr-only">
 					<DialogTitle>Search Workspace</DialogTitle>
 					<DialogDescription>
@@ -98,14 +98,14 @@ export function CommandSearchDialog({
 						placeholder="Search transactions, clients, notes..."
 						value={query}
 						onChange={(e) => setQuery(e.target.value)}
-						className="h-8 border-0 bg-transparent px-0 text-sm shadow-none focus-visible:ring-0"
+						className="h-8 border-0 bg-transparent px-0 font-mono text-xs shadow-none focus-visible:ring-0 sm:text-sm"
 					/>
 				</div>
 
-				<div className="max-h-[65vh] overflow-y-auto p-3 space-y-4">
+				<div className="max-h-[65vh] space-y-4 overflow-y-auto p-3">
 					{/* Quick Action */}
 					<div>
-						<p className="px-2 pb-1.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+						<p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
 							Quick Actions
 						</p>
 						<button
@@ -114,64 +114,80 @@ export function CommandSearchDialog({
 								onOpenChange(false);
 								openQuickEntry("money_out");
 							}}
-							className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-left text-xs font-semibold text-foreground hover:bg-secondary cursor-pointer"
+							className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-left font-mono text-xs font-bold text-foreground transition-colors hover:bg-secondary cursor-pointer"
 						>
 							<span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-								<Plus className="size-4" />
+								<Plus className="size-4 stroke-[2.5]" />
 							</span>
-							<span>Record New Transaction (3-Tap Entry)</span>
+							<span>Record New Transaction</span>
 						</button>
 					</div>
 
 					{/* Transactions */}
 					<div>
-						<p className="px-2 pb-1.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+						<p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
 							Transactions ({matchingTransactions.length})
 						</p>
 						{matchingTransactions.length === 0 ? (
-							<p className="px-2 py-3 text-xs text-muted-foreground">
+							<p className="px-2 py-3 font-mono text-xs text-muted-foreground">
 								No matching transactions found.
 							</p>
 						) : (
 							<div className="space-y-1">
-								{matchingTransactions.map((tx) => (
-									<button
-										key={tx.id}
-										type="button"
-										onClick={() => {
-											onOpenChange(false);
-											void navigate({
-												to: "/history",
-												search: { q: query || undefined, category: undefined },
-											});
-										}}
-										className="flex w-full items-center justify-between gap-3 rounded-xl px-2.5 py-2 text-left hover:bg-secondary cursor-pointer"
-									>
-										<div className="flex min-w-0 items-center gap-2.5">
-											<span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-foreground dark:bg-zinc-800">
-												{tx.type === "money_in" ? (
-													<ArrowUpRight className="size-3.5" />
-												) : (
-													<ArrowDownRight className="size-3.5" />
-												)}
-											</span>
-											<div className="min-w-0">
-												<p className="truncate text-xs font-semibold text-foreground">
-													{tx.note || tx.category}
-												</p>
-												<p className="text-[11px] text-muted-foreground">
-													{tx.category} ·{" "}
-													{formatFriendlyDate(tx.date, todayISO)}
-												</p>
+								{matchingTransactions.map((tx) => {
+									const isInflow = tx.type === "money_in";
+									return (
+										<button
+											key={tx.id}
+											type="button"
+											onClick={() => {
+												onOpenChange(false);
+												void navigate({
+													to: "/history",
+													search: {
+														q: query || undefined,
+														category: undefined,
+													},
+												});
+											}}
+											className="flex w-full items-center justify-between gap-3 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-secondary cursor-pointer"
+										>
+											<div className="flex min-w-0 items-center gap-2.5">
+												<span
+													className={cn(
+														"flex size-7 shrink-0 items-center justify-center rounded-lg",
+														isInflow
+															? "bg-inflow-bg text-inflow"
+															: "bg-outflow-bg text-outflow",
+													)}
+												>
+													{isInflow ? (
+														<ArrowUpRight className="size-3.5" />
+													) : (
+														<ArrowDownRight className="size-3.5" />
+													)}
+												</span>
+												<div className="min-w-0">
+													<p className="truncate font-mono text-xs font-semibold text-foreground">
+														{tx.note || tx.category}
+													</p>
+													<p className="font-mono text-[11px] text-muted-foreground">
+														{tx.category} ·{" "}
+														{formatFriendlyDate(tx.date, todayISO)}
+													</p>
+												</div>
 											</div>
-										</div>
-										<MoneyValue
-											amount={tx.amount}
-											signedType={tx.type}
-											className="text-xs font-bold text-foreground shrink-0 tabular-nums font-mono"
-										/>
-									</button>
-								))}
+											<MoneyValue
+												amount={tx.amount}
+												signedType={tx.type}
+												className={cn(
+													"shrink-0 font-mono text-xs font-extrabold tabular-nums",
+													isInflow ? "text-inflow" : "text-outflow",
+												)}
+											/>
+										</button>
+									);
+								})}
 							</div>
 						)}
 					</div>
@@ -179,11 +195,11 @@ export function CommandSearchDialog({
 					{/* Invoices */}
 					{isInvoicingVisible && (
 						<div>
-							<p className="px-2 pb-1.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+							<p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
 								Invoices ({matchingInvoices.length})
 							</p>
 							{matchingInvoices.length === 0 ? (
-								<p className="px-2 py-2 text-xs text-muted-foreground">
+								<p className="px-2 py-2 font-mono text-xs text-muted-foreground">
 									No matching invoices.
 								</p>
 							) : (
@@ -196,34 +212,34 @@ export function CommandSearchDialog({
 												onOpenChange(false);
 												void navigate({ to: "/invoices" });
 											}}
-											className="flex w-full items-center justify-between gap-3 rounded-xl px-2.5 py-2 text-left hover:bg-secondary cursor-pointer"
+											className="flex w-full items-center justify-between gap-3 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-secondary cursor-pointer"
 										>
 											<div className="flex min-w-0 items-center gap-2.5">
-												<span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground">
+												<span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-info-bg text-info">
 													<FileText className="size-3.5" />
 												</span>
 												<div className="min-w-0">
-													<p className="truncate text-xs font-semibold text-foreground">
+													<p className="truncate font-mono text-xs font-semibold text-foreground">
 														{inv.clientName}{" "}
 														<span className="text-muted-foreground">
 															#{inv.invoiceNumber}
 														</span>
 													</p>
-													<p className="truncate text-[11px] text-muted-foreground">
+													<p className="truncate font-mono text-[11px] text-muted-foreground">
 														{inv.projectTitle || `Due ${inv.dueDate}`}
 													</p>
 												</div>
 											</div>
-											<div className="flex items-center gap-2 shrink-0">
+											<div className="flex shrink-0 items-center gap-2">
 												<Badge
 													variant="outline"
-													className="text-[10px] uppercase"
+													className="font-mono text-[10px] uppercase"
 												>
 													{inv.status}
 												</Badge>
 												<MoneyValue
 													amount={inv.totalAmount}
-													className="text-xs font-bold text-foreground"
+													className="font-mono text-xs font-bold text-foreground"
 												/>
 											</div>
 										</button>

@@ -70,21 +70,23 @@ export function InvoicePreviewDialog({
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className="max-h-[92vh] overflow-y-auto rounded-2xl border-border bg-card p-6 sm:max-w-xl">
+			<DialogContent className="max-h-[92vh] overflow-y-auto rounded-3xl border-border bg-popover p-6 sm:max-w-xl">
 				<DialogHeader className="no-print">
-					<DialogTitle className="text-base font-bold">
+					<DialogTitle className="font-mono text-base font-black uppercase tracking-tight">
 						Invoice #{invoice.invoiceNumber}
 					</DialogTitle>
-					<DialogDescription className="text-xs">
+					<DialogDescription className="font-mono text-xs">
 						Printable client invoice summary &amp; 1-click sharing
 					</DialogDescription>
 				</DialogHeader>
 
 				{/* Printable Sheet */}
-				<div className="space-y-6 rounded-2xl border border-border bg-background p-5 sm:p-6">
+				<div className="space-y-6 rounded-2xl border border-border bg-background p-5 font-mono sm:p-6">
 					<div className="flex items-start justify-between gap-4 border-b border-border pb-4">
 						<div className="flex items-center gap-2.5">
-							<BrandLogo size={28} variant="brand" />
+							<span className="flex size-8 items-center justify-center rounded-xl bg-primary-foreground">
+								<BrandLogo size={20} variant="brand" />
+							</span>
 							<div>
 								<p className="text-sm font-bold text-foreground">
 									{profile.businessName || profile.displayName}
@@ -93,10 +95,10 @@ export function InvoicePreviewDialog({
 							</div>
 						</div>
 						<div className="text-right">
-							<p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+							<p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
 								Invoice
 							</p>
-							<p className="text-base font-extrabold text-foreground tabular-nums">
+							<p className="text-base font-black text-foreground tabular-nums">
 								#{invoice.invoiceNumber}
 							</p>
 							<Badge variant="outline" className="mt-1 text-[10px] uppercase">
@@ -107,7 +109,7 @@ export function InvoicePreviewDialog({
 
 					<div className="grid grid-cols-2 gap-4 text-xs">
 						<div>
-							<p className="font-semibold uppercase tracking-wider text-muted-foreground">
+							<p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
 								Billed To
 							</p>
 							<p className="mt-1 text-sm font-bold text-foreground">
@@ -123,7 +125,7 @@ export function InvoicePreviewDialog({
 								<p className="text-muted-foreground">{invoice.clientPhone}</p>
 							)}
 						</div>
-						<div className="text-right space-y-1">
+						<div className="space-y-1 text-right">
 							<div>
 								<span className="text-muted-foreground">Issued: </span>
 								<span className="font-semibold text-foreground tabular-nums">
@@ -139,7 +141,7 @@ export function InvoicePreviewDialog({
 							{invoice.paidAtDate && (
 								<div>
 									<span className="text-muted-foreground">Paid: </span>
-									<span className="font-semibold text-foreground tabular-nums">
+									<span className="font-semibold text-inflow tabular-nums">
 										{invoice.paidAtDate}
 									</span>
 								</div>
@@ -171,7 +173,7 @@ export function InvoicePreviewDialog({
 										<td className="px-3 py-2.5 text-right text-muted-foreground tabular-nums">
 											{formatCurrency(item.unitPrice, profile.currency)}
 										</td>
-										<td className="px-3 py-2.5 text-right font-semibold text-foreground tabular-nums">
+										<td className="px-3 py-2.5 text-right font-bold text-foreground tabular-nums">
 											{formatCurrency(item.total, profile.currency)}
 										</td>
 									</tr>
@@ -198,7 +200,7 @@ export function InvoicePreviewDialog({
 								</span>
 							</div>
 						)}
-						<div className="flex justify-between pt-1 text-base font-extrabold text-foreground">
+						<div className="flex justify-between pt-1 text-base font-black text-foreground">
 							<span>Total Due</span>
 							<span className="tabular-nums">
 								{formatCurrency(invoice.totalAmount, profile.currency)}
@@ -207,8 +209,8 @@ export function InvoicePreviewDialog({
 					</div>
 
 					{invoice.paymentInstructions && (
-						<div className="rounded-xl bg-muted/50 p-3 text-xs text-muted-foreground whitespace-pre-line">
-							<p className="font-semibold text-foreground mb-0.5">
+						<div className="whitespace-pre-line rounded-xl bg-muted/50 p-3 text-xs text-muted-foreground">
+							<p className="mb-0.5 font-bold text-foreground">
 								Payment Instructions
 							</p>
 							{invoice.paymentInstructions}
@@ -222,7 +224,7 @@ export function InvoicePreviewDialog({
 						variant="outline"
 						size="sm"
 						onClick={handleCopySummary}
-						className="min-h-10 gap-1.5 rounded-xl"
+						className="min-h-10 gap-1.5 rounded-xl font-mono text-xs font-bold"
 					>
 						<Copy className="size-3.5" />
 						<span>Copy</span>
@@ -232,7 +234,7 @@ export function InvoicePreviewDialog({
 						variant="outline"
 						size="sm"
 						onClick={() => window.print()}
-						className="min-h-10 gap-1.5 rounded-xl"
+						className="min-h-10 gap-1.5 rounded-xl font-mono text-xs font-bold"
 					>
 						<Printer className="size-3.5" />
 						<span>Print / PDF</span>
@@ -241,12 +243,12 @@ export function InvoicePreviewDialog({
 						type="button"
 						size="sm"
 						onClick={handleWhatsAppShare}
-						className="min-h-10 gap-1.5 rounded-xl font-bold"
+						className="min-h-10 gap-1.5 rounded-xl bg-primary px-4 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground hover:bg-primary-hover"
 					>
 						<MessageCircle className="size-3.5" />
 						<span>
 							{invoice.status === "overdue"
-								? "Send WhatsApp Reminder"
+								? "Send WA Reminder"
 								: "Share via WhatsApp"}
 						</span>
 					</Button>

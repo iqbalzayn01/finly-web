@@ -31,33 +31,42 @@
     ]
   },
   "design": {
-    "colorMode": "light-dark-system",
+    "colorMode": "dark-default-with-light-toggle",
     "colors": {
-      "primary": "oklch(74.6% 0.16 232.661)",
-      "inflow": "#10B981",
-      "outflow": "#F43F5E",
-      "warning": "#F59E0B"
+      "primary": "#C9F31D",
+      "onPrimary": "#111111",
+      "backgroundDark": "#111111",
+      "surfaceDark": "#27272A",
+      "surfaceLight": "#F4F4F5",
+      "accent": "#A78BFA",
+      "inflow": "#34D399",
+      "outflow": "#FB7185",
+      "warning": "#FBBF24",
+      "info": "#38BDF8"
     },
     "typography": {
-      "fontSans": "Plus Jakarta Sans",
+      "fontSans": "Geist Mono Variable",
+      "fontMono": "Geist Mono Variable",
       "numericAlignment": "tabular-nums"
     },
     "spacing": {
       "containerMaxWidth": "80rem",
+      "bentoGutterMobile": "8px (gap-2)",
+      "bentoGutterDesktop": "16px (gap-4)",
       "mobileBottomDockHeight": "64px"
     },
     "radius": {
-      "base": "0.875rem",
-      "cards": "1rem"
+      "base": "1rem",
+      "bentoTile": "1.5rem"
     },
     "shadows": {
-      "cards": "shadow-xs",
+      "cards": "flat-bordered-bento",
       "modals": "shadow-2xl"
     },
     "motion": {
-      "privacyTransition": "filter 180ms ease-out"
+      "bentoHover": "translateY(-2px) 200ms cubic-bezier(0.16, 1, 0.3, 1)"
     },
-    "density": "calm-high-clarity"
+    "density": "editorial-bento-high-contrast"
   },
   "components": {
     "installed": [
@@ -128,32 +137,39 @@
       "empty"
     ],
     "patterns": [
-      "safe-to-spend-banner",
+      "12-col-bento-grid-matrix",
+      "inline-balance-eye-privacy-toggle",
+      "electric-lime-safe-to-spend-hero-tile",
       "interactive-area-chart-1w-1m-3m-6m-1y",
-      "clean-center-nav-with-profile-dropdown",
+      "borderless-top-bar-with-bento-nav-pills",
       "native-shadcn-dialog-modals",
       "10-row-paginated-ledger",
-      "invoice-cashflow-settlement-sync",
-      "privacy-blur-masking"
+      "invoice-cashflow-settlement-sync"
     ]
   },
   "constraints": {
     "must": [
-      "strict USD ($) formatting with tabular-nums on all monetary values",
-      "clean center top navigation containing only Dashboard, History, and Invoices (Settings inside Avatar Dropdown)",
-      "native shadcn/ui Dialog primitives for all modals",
-      "official shadcn/ui Area Chart - Interactive with 1W, 1M, 3M, 6M, 1Y filters and linear gradients",
+      "strict 8px (gap-2) mobile and 16px (gap-4) desktop Bento grid gutters",
+      "Geist Mono typography with tabular-nums on all financial values",
+      "inline Eye/EyeOff balance toggle strictly inside Total Balance Bento Card (removed from Safe-to-Spend)",
+      "Electric Lime (#C9F31D) primary surface/CTA always paired with #111111 text",
+      "Interactive Area Chart with #34D399 (Income) and #FB7185 (Expense) gradients and #38BDF8 tooltip header",
       "strict 10-row pagination on transaction tables"
     ],
     "avoid": [
-      "neon gradients or cluttered multi-axis charts",
-      "traditional accounting jargon by default (Debit / Credit / General Ledger)"
+      "hide-balance toggle on the Safe-to-Spend card",
+      "white text on Electric Lime (#C9F31D) surfaces",
+      "outdated neumorphic shadows on Bento cards"
     ]
   },
   "decisions": [
     {
       "date": "2026-10-31",
       "summary": "Updated Finly Cashflow Workspace to PRD v1.6.0: Interactive Area Chart (1W/1M/3M/6M/1Y) with SVG linear gradients and net-difference tooltips, clean center top navigation with Settings relocated to User Profile dropdown + Notification popover, native shadcn/ui Dialog modals, enforced USD formatting, and 10-row paginated activity tables."
+    },
+    {
+      "date": "2026-11-01",
+      "summary": "Upgraded entire Finly UI/UX to PRD v2.1.0 (Bento Grid Edition) and DESIGN.md: 12-column asymmetrical Bento Grid with gap-2/gap-4 gutters, Electric Lime (#C9F31D) + Deep Black (#111111) + Zinc (#27272A/#F4F4F5) + Violet (#A78BFA) palette, Geist Mono standard, inline Eye/EyeOff privacy mask ($ ••••••) relocated strictly to Total Balance card, clean Safe-to-Spend Lime hero tile, Unpaid Receivables quick-insight tile, semantic Emerald (#34D399) / Rose (#FB7185) / Sky (#38BDF8) accents, and high-contrast accessible light/dark modes."
     }
   ],
   "evidence": [
@@ -178,5 +194,5 @@
       "source": "package.json"
     }
   ],
-  "generatedAt": "2026-10-31T19:51:30.000Z"
+  "generatedAt": "2026-11-01T07:00:00.000Z"
 }

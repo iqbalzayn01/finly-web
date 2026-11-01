@@ -95,7 +95,7 @@ interface FinlyContextValue {
 	closeQuickEntry: () => void;
 
 	// Actions
-	togglePrivacyBlur: () => void;
+	togglePrivacyBlur: (forceState?: boolean) => void;
 	updateProfile: (patch: Partial<UserProfile>) => void;
 	completeOnboarding: (payload: OnboardingPayload) => void;
 	addTransaction: (input: AddTransactionInput) => Transaction;
@@ -199,23 +199,30 @@ export function FinlyProvider({ children }: { children: ReactNode }) {
 		setIsQuickEntryOpen(false);
 	}, []);
 
-	const togglePrivacyBlur = useCallback(() => {
-		commitWorkspace((prev) => {
-			const nextBlur = !prev.profile.privacyBlurEnabled;
-			toast.info(
-				nextBlur
-					? "Privacy mask enabled — balances hidden"
-					: "Privacy mask turned off",
-			);
-			return {
+	const togglePrivacyBlur = useCallback(
+		(forceState?: boolean) => {
+			const nextBlur =
+				typeof forceState === "boolean"
+					? forceState
+					: !workspace.profile.privacyBlurEnabled;
+
+			commitWorkspace((prev) => ({
 				...prev,
 				profile: {
 					...prev.profile,
 					privacyBlurEnabled: nextBlur,
 				},
-			};
-		});
-	}, [commitWorkspace]);
+			}));
+
+			toast.info(
+				nextBlur
+					? "Privacy mask enabled — balances hidden"
+					: "Privacy mask turned off",
+				{ id: "privacy-mask-toast" },
+			);
+		},
+		[commitWorkspace, workspace.profile.privacyBlurEnabled],
+	);
 
 	const updateProfile = useCallback(
 		(patch: Partial<UserProfile>) => {
