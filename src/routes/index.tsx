@@ -31,7 +31,7 @@ function DashboardScreen() {
           <h1 className="font-mono text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
             {formatMonthYear(todayISO)} Cashflow
           </h1>
-          <p className="font-mono text-xs text-muted-foreground">
+          <p className="font-mono text-base text-muted-foreground">
             Real-time cash position, daily spending headroom, and receivables
             matrix.
           </p>
@@ -39,11 +39,12 @@ function DashboardScreen() {
 
         <Button
           type="button"
+          size="lg"
           onClick={() => openQuickEntry('money_out')}
-          className="min-h-11 gap-2 rounded-2xl bg-primary px-5 font-mono text-xs font-extrabold tracking-wider text-primary-foreground shadow-xs hover:bg-primary-hover cursor-pointer"
+          className="hidden md:flex min-h-11 gap-2 rounded-2xl bg-primary px-5 font-mono text-xs font-extrabold tracking-wider text-primary-foreground shadow-xs hover:bg-primary-hover cursor-pointer"
         >
           <Plus className="size-4 stroke-[2.5]" />
-          <span>Record Transaction</span>
+          <span>Record</span>
         </Button>
       </div>
 

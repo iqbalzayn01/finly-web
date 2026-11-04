@@ -213,7 +213,7 @@ function HistoryScreen() {
           <h1 className="font-mono text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
             Activity History
           </h1>
-          <p className="font-mono text-xs text-muted-foreground">
+          <p className="font-mono text-base text-muted-foreground">
             Search, filter, and export every USD{' '}
             {terminology.inflow.toLowerCase()} &amp;{' '}
             {terminology.outflow.toLowerCase()} entry.
@@ -223,21 +223,23 @@ function HistoryScreen() {
         <div className="flex flex-wrap items-center gap-2">
           <Button
             type="button"
+            size="lg"
             variant="outline"
             onClick={exportCsv}
             disabled={transactions.length === 0}
-            className="min-h-11 gap-1.5 rounded-2xl border-border bg-card font-mono text-xs font-bold"
+            className="min-h-11 gap-1.5 rounded-2xl border-border bg-card font-mono text-xs font-bold cursor-pointer"
           >
             <Download className="size-4" />
             <span>Export CSV</span>
           </Button>
           <Button
             type="button"
+            size="lg"
             onClick={() => openQuickEntry('money_out')}
-            className="min-h-11 gap-1.5 rounded-2xl bg-primary px-5 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground hover:bg-primary-hover cursor-pointer"
+            className="hidden md:flex min-h-11 gap-1.5 rounded-2xl bg-primary font-mono text-xs font-extrabold tracking-wider text-primary-foreground hover:bg-primary-hover cursor-pointer"
           >
             <Plus className="size-4 stroke-[2.5]" />
-            <span>Record Transaction</span>
+            <span>Record</span>
           </Button>
         </div>
       </div>
@@ -398,7 +400,7 @@ function HistoryScreen() {
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3">
-            <div className="flex flex-wrap items-center gap-1 rounded-xl border border-border bg-white p-1 dark:border-zinc-800 dark:bg-background">
+            <div className="flex flex-wrap items-center gap-1 rounded-full border border-border bg-white p-1 dark:border-zinc-800 dark:bg-background">
               <button
                 type="button"
                 onClick={() => {
@@ -406,7 +408,7 @@ function HistoryScreen() {
                   setPage(1);
                 }}
                 className={cn(
-                  'min-h-8 rounded-lg px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  'min-h-8 rounded-full px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
                   typeFilter === 'all'
                     ? 'bg-primary font-bold text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground',
