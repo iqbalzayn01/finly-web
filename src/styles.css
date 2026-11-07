@@ -283,7 +283,6 @@ header.glass-header {
   border-style: solid;
   border-color: var(--border);
   box-shadow: 4px 4px 0px 0px var(--border);
-  background-color: var(--card);
   @apply backdrop-blur-xl;
 }
 
