@@ -107,7 +107,7 @@ function SignupOnboardingScreen() {
 					className="group inline-flex items-center gap-2.5 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
 				>
 					<span className="brutal-surface flex size-9 items-center justify-center rounded-xl bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
-						<BrandLogo size={20} variant="monochrome" />
+						<BrandLogo size={20} className="fill-black" />
 					</span>
 					<span className="font-mono text-lg font-black tracking-tight text-foreground">
 						Finly
@@ -285,7 +285,7 @@ function SignupOnboardingScreen() {
 								>
 									Current Balance (Optional)
 								</Label>
-								<div className="brutal-surface relative flex items-center rounded-2xl bg-background px-4 py-2.5 focus-within:border-primary">
+								<div className="brutal-surface relative flex items-center rounded-2xl bg-background px-4 py-2.5 focus-within:border-[#6366F1] focus-within:ring-2 focus-within:ring-[#6366F1]">
 									<span className="mr-2 font-mono text-xl font-bold text-muted-foreground select-none">
 										{currencyMeta.symbol}
 									</span>

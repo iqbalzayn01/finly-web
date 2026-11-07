@@ -1,6 +1,7 @@
 import {
   AlertTriangle,
   ArrowDownRight,
+  ArrowLeftRight,
   ArrowUpRight,
   Plus,
   RotateCcw,
@@ -29,7 +30,7 @@ import {
   SelectValue,
 } from '#/components/ui/select';
 import { useFinly } from '#/context/finly-context';
-import { getUniversalCategories } from '#/lib/constants';
+import { getUniversalCategories, isTransferCategory } from '#/lib/constants';
 import {
   CURRENCIES,
   formatLiveNumericInput,
@@ -301,7 +302,7 @@ export function QuickTransactionModal() {
             >
               Amount (USD)
             </Label>
-            <div className="brutal-surface flex items-center gap-2 rounded-2xl bg-background px-4 py-2.5 transition-colors focus-within:border-primary">
+            <div className="brutal-surface flex items-center gap-2 rounded-2xl bg-background px-4 py-2.5 transition-colors focus-within:border-[#6366F1] focus-within:ring-2 focus-within:ring-[#6366F1]">
               <span className="font-mono text-2xl font-black text-muted-foreground select-none tabular-nums">
                 $
               </span>
@@ -361,6 +362,7 @@ export function QuickTransactionModal() {
             <div className="flex flex-wrap gap-1.5">
               {presetCategories.map((preset) => {
                 const isSelected = !customCategoryMode && category === preset;
+                const isTransfer = isTransferCategory(preset);
                 return (
                   <button
                     key={preset}
@@ -370,13 +372,18 @@ export function QuickTransactionModal() {
                       setCategory(preset);
                     }}
                     className={cn(
-                      'inline-flex h-9 items-center rounded-xl border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                      isSelected
-                        ? 'border-border bg-primary font-extrabold text-primary-foreground'
-                        : 'border-border bg-background font-semibold text-foreground hover:bg-accent',
+                      'inline-flex h-9 items-center gap-1.5 rounded-xl border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1]',
+                      isTransfer
+                        ? isSelected
+                          ? 'border-[#6366F1] bg-[#6366F1]/20 font-extrabold text-[#6366F1]'
+                          : 'border-[#6366F1]/30 bg-[#6366F1]/10 font-semibold text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/15'
+                        : isSelected
+                          ? 'border-border bg-primary font-extrabold text-primary-foreground'
+                          : 'border-border bg-background font-semibold text-foreground hover:bg-accent',
                     )}
                   >
-                    {preset}
+                    {isTransfer && <ArrowLeftRight className="size-3.5" />}
+                    <span>{preset}</span>
                   </button>
                 );
               })}

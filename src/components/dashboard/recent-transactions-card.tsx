@@ -1,5 +1,6 @@
 import {
   ArrowDownRight,
+  ArrowLeftRight,
   ArrowUpRight,
   Plus,
   ReceiptText,
@@ -35,6 +36,7 @@ import {
 } from '#/components/ui/table';
 import { useFinly } from '#/context/finly-context';
 import { paginateItems } from '#/lib/cashflow';
+import { isTransferCategory } from '#/lib/constants';
 import { formatFriendlyDate } from '#/lib/format';
 import { cn } from '#/lib/utils';
 
@@ -297,6 +299,7 @@ export function RecentTransactionsCard() {
                   const walletName =
                     walletNameById.get(tx.walletId) ?? 'Checking';
                   const isInflow = tx.type === 'money_in';
+                  const isTransfer = isTransferCategory(tx.category);
 
                   return (
                     <TableRow
@@ -308,12 +311,16 @@ export function RecentTransactionsCard() {
                           <span
                             className={cn(
                               'flex size-8 shrink-0 items-center justify-center rounded-xl border-2 transition-transform duration-150 group-hover:scale-105',
-                              isInflow
-                                ? 'border-inflow-border bg-inflow-bg text-inflow'
-                                : 'border-outflow-border bg-outflow-bg text-outflow',
+                              isTransfer
+                                ? 'border-[#6366F1]/30 bg-[#6366F1]/15 text-[#6366F1]'
+                                : isInflow
+                                  ? 'border-inflow-border bg-inflow-bg text-inflow'
+                                  : 'border-outflow-border bg-outflow-bg text-outflow',
                             )}
                           >
-                            {isInflow ? (
+                            {isTransfer ? (
+                              <ArrowLeftRight className="size-4" />
+                            ) : isInflow ? (
                               <ArrowUpRight className="size-4" />
                             ) : (
                               <ArrowDownRight className="size-4" />
@@ -332,7 +339,12 @@ export function RecentTransactionsCard() {
                       <TableCell className="hidden sm:table-cell">
                         <Badge
                           variant="outline"
-                          className="rounded-lg border-border bg-card font-mono text-[11px] font-semibold text-foreground"
+                          className={cn(
+                            'rounded-lg font-mono text-[11px] font-semibold',
+                            isTransfer
+                              ? 'border-[#6366F1]/30 bg-[#6366F1]/15 text-[#6366F1]'
+                              : 'border-border bg-card text-foreground',
+                          )}
                         >
                           {tx.category}
                         </Badge>

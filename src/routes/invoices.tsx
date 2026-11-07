@@ -1,16 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router';
 import {
+  ArrowUpRight,
   CheckCircle2,
   Clock,
+  Copy,
   Eye,
   FileText,
-  MessageCircle,
   Plus,
   Search,
   Trash2,
   TriangleAlert,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import { CreateInvoiceModal } from '#/components/invoices/create-invoice-modal';
 import {
   buildWhatsAppInvoiceUrl,
@@ -55,7 +57,7 @@ function renderInvoiceStatusBadge(status: InvoiceStatus) {
       return (
         <Badge
           variant="outline"
-          className="rounded-lg border-border bg-muted px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-muted-foreground"
+          className="rounded-lg border-[#6366F1]/30 bg-[#6366F1]/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-[#6366F1]"
         >
           Draft
         </Badge>
@@ -64,7 +66,7 @@ function renderInvoiceStatusBadge(status: InvoiceStatus) {
       return (
         <Badge
           variant="outline"
-          className="rounded-lg border-info-border bg-info-bg px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-info"
+          className="rounded-lg border-[#6366F1]/30 bg-[#6366F1]/15 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-[#6366F1]"
         >
           Sent
         </Badge>
@@ -159,6 +161,20 @@ function InvoicesScreen() {
       profile.businessName || profile.displayName,
     );
     window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleCopyInvoiceLink = async (invoice: Invoice) => {
+    const url = buildWhatsAppInvoiceUrl(
+      invoice,
+      profile.currency,
+      profile.businessName || profile.displayName,
+    );
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(`Share link for #${invoice.invoiceNumber} copied`);
+    } catch {
+      toast.error('Unable to access clipboard');
+    }
   };
 
   const filterTabs: Array<{ id: FilterTab; label: string }> = [
@@ -404,8 +420,10 @@ function InvoicesScreen() {
                                 `${inv.items.length} item(s)`}
                             </p>
                           </TableCell>
-                          <TableCell className="font-mono text-xs font-bold text-foreground tabular-nums">
-                            #{inv.invoiceNumber}
+                          <TableCell>
+                            <span className="inline-flex items-center rounded-md border border-[#6366F1]/30 bg-[#6366F1]/15 px-2 py-0.5 font-mono text-xs font-bold text-[#6366F1] tabular-nums">
+                              #{inv.invoiceNumber}
+                            </span>
                           </TableCell>
                           <TableCell>
                             <p
@@ -457,16 +475,22 @@ function InvoicesScreen() {
                                   size="xs"
                                   variant="outline"
                                   onClick={() => handleWhatsAppShare(inv)}
-                                  className="gap-1 rounded-lg font-mono text-[11px] font-bold"
+                                  className="group gap-1 rounded-lg border-[#6366F1]/30 bg-[#6366F1]/10 font-mono text-[11px] font-bold text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/25 hover:text-[#818CF8]"
                                 >
-                                  <MessageCircle className="size-3.5" />
-                                  <span>
-                                    {inv.status === 'overdue'
-                                      ? 'Remind'
-                                      : 'Share'}
-                                  </span>
+                                  <span>Share Link</span>
+                                  <ArrowUpRight className="size-3.5 text-[#6366F1] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#818CF8]" />
                                 </Button>
                               )}
+                              <Button
+                                type="button"
+                                size="xs"
+                                variant="outline"
+                                onClick={() => handleCopyInvoiceLink(inv)}
+                                className="gap-1 rounded-lg border-[#6366F1]/30 bg-[#6366F1]/10 font-mono text-[11px] font-bold text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/25"
+                              >
+                                <Copy className="size-3.5" />
+                                <span className="hidden xl:inline">Copy Link</span>
+                              </Button>
                               <Button
                                 type="button"
                                 size="xs"
@@ -511,7 +535,7 @@ function InvoicesScreen() {
                             <p className="truncate font-mono text-sm font-bold text-foreground">
                               {inv.clientName}
                             </p>
-                            <span className="font-mono text-xs text-muted-foreground tabular-nums">
+                            <span className="inline-flex items-center rounded-md border border-[#6366F1]/30 bg-[#6366F1]/15 px-1.5 py-0.5 font-mono text-[11px] font-bold text-[#6366F1] tabular-nums">
                               #{inv.invoiceNumber}
                             </span>
                           </div>
@@ -546,18 +570,26 @@ function InvoicesScreen() {
                           <Eye className="size-3.5" />
                           <span>{isPaid ? 'Receipt' : 'View'}</span>
                         </Button>
+                        <Button
+                          type="button"
+                          size="xs"
+                          variant="outline"
+                          onClick={() => handleCopyInvoiceLink(inv)}
+                          className="h-8 gap-1 rounded-xl border-[#6366F1]/30 bg-[#6366F1]/10 font-mono font-bold text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/25"
+                        >
+                          <Copy className="size-3.5" />
+                          <span>Copy Link</span>
+                        </Button>
                         {!isPaid && (
                           <Button
                             type="button"
                             size="xs"
                             variant="outline"
                             onClick={() => handleWhatsAppShare(inv)}
-                            className="h-8 gap-1 rounded-xl font-mono font-bold"
+                            className="group h-8 gap-1 rounded-xl border-[#6366F1]/30 bg-[#6366F1]/10 font-mono font-bold text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/25 hover:text-[#818CF8]"
                           >
-                            <MessageCircle className="size-3.5" />
-                            <span>
-                              {inv.status === 'overdue' ? 'Remind' : 'Share'}
-                            </span>
+                            <span>Share Link</span>
+                            <ArrowUpRight className="size-3.5 text-[#6366F1] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#818CF8]" />
                           </Button>
                         )}
                         {!isPaid && (

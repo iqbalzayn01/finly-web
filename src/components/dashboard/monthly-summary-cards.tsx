@@ -80,10 +80,10 @@ export function TotalBalanceBentoTile() {
           type="button"
           onClick={() => setSelectedWalletId('all')}
           className={cn(
-            'inline-flex h-8 items-center rounded-xl border-2 px-3 font-mono text-[11px] transition-all duration-150 active:scale-95 cursor-pointer outline-none',
+            'inline-flex h-8 items-center rounded-xl border-2 px-3 font-mono text-[11px] transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]',
             selectedWalletId === 'all'
-              ? 'border-border bg-primary font-extrabold text-primary-foreground'
-              : 'border-border bg-muted/60 font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
+              ? 'border-[#6366F1] bg-[#6366F1]/15 font-extrabold text-[#6366F1]'
+              : 'border-border bg-muted/60 font-semibold text-muted-foreground hover:border-[#6366F1]/60 hover:bg-[#6366F1]/10 hover:text-[#6366F1]',
           )}
         >
           All ({wallets.length})
@@ -96,10 +96,10 @@ export function TotalBalanceBentoTile() {
               setSelectedWalletId(selectedWalletId === w.id ? 'all' : w.id)
             }
             className={cn(
-              'inline-flex h-8 items-center rounded-xl border-2 px-3 font-mono text-[11px] transition-all duration-150 active:scale-95 cursor-pointer outline-none',
+              'inline-flex h-8 items-center rounded-xl border-2 px-3 font-mono text-[11px] transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]',
               selectedWalletId === w.id
-                ? 'border-border bg-primary font-extrabold text-primary-foreground'
-                : 'border-border bg-muted/60 font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
+                ? 'border-[#6366F1] bg-[#6366F1]/15 font-extrabold text-[#6366F1]'
+                : 'border-border bg-muted/60 font-semibold text-muted-foreground hover:border-[#6366F1]/60 hover:bg-[#6366F1]/10 hover:text-[#6366F1]',
             )}
           >
             {w.name}

@@ -1,6 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import {
   ArrowDownRight,
+  ArrowLeftRight,
   ArrowUpRight,
   FileText,
   Plus,
@@ -21,6 +22,7 @@ import {
 } from '#/components/ui/dialog';
 import { Input } from '#/components/ui/input';
 import { useFinly } from '#/context/finly-context';
+import { isTransferCategory } from '#/lib/constants';
 import { formatFriendlyDate } from '#/lib/format';
 import { cn } from '#/lib/utils';
 
@@ -104,7 +106,7 @@ export function CommandSearchDialog({
             placeholder="Search transactions, clients, notes..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="h-8 border-0 bg-muted/50 px-4 font-mono text-xs shadow-none focus-visible:ring-0 sm:text-sm"
+            className="h-8 border-2 border-transparent bg-muted/50 px-4 font-mono text-xs shadow-none focus-visible:border-[#6366F1] focus-visible:ring-2 focus-visible:ring-[#6366F1] sm:text-sm"
           />
           <DialogClose asChild disabled={false}>
             <Button size="icon-xs" aria-label="Close search dialog">
@@ -147,6 +149,7 @@ export function CommandSearchDialog({
               <div className="space-y-1">
                 {matchingTransactions.map((tx) => {
                   const isInflow = tx.type === 'money_in';
+                  const isTransfer = isTransferCategory(tx.category);
                   return (
                     <button
                       key={tx.id}
@@ -167,12 +170,16 @@ export function CommandSearchDialog({
                         <span
                           className={cn(
                             'flex size-7 shrink-0 items-center justify-center rounded-lg border',
-                            isInflow
-                              ? 'border-inflow-border bg-inflow-bg text-inflow'
-                              : 'border-outflow-border bg-outflow-bg text-outflow',
+                            isTransfer
+                              ? 'border-[#6366F1]/30 bg-[#6366F1]/15 text-[#6366F1]'
+                              : isInflow
+                                ? 'border-inflow-border bg-inflow-bg text-inflow'
+                                : 'border-outflow-border bg-outflow-bg text-outflow',
                           )}
                         >
-                          {isInflow ? (
+                          {isTransfer ? (
+                            <ArrowLeftRight className="size-3.5" />
+                          ) : isInflow ? (
                             <ArrowUpRight className="size-3.5" />
                           ) : (
                             <ArrowDownRight className="size-3.5" />
@@ -230,9 +237,9 @@ export function CommandSearchDialog({
                           <FileText className="size-3.5" />
                         </span>
                         <div className="min-w-0">
-                          <p className="truncate font-mono text-xs font-bold text-foreground">
-                            {inv.clientName}{' '}
-                            <span className="text-muted-foreground">
+                          <p className="flex items-center gap-1.5 truncate font-mono text-xs font-bold text-foreground">
+                            <span className="truncate">{inv.clientName}</span>
+                            <span className="inline-flex shrink-0 items-center rounded border border-[#6366F1]/30 bg-[#6366F1]/15 px-1.5 py-0.5 text-[10px] font-bold text-[#6366F1]">
                               #{inv.invoiceNumber}
                             </span>
                           </p>
@@ -244,7 +251,11 @@ export function CommandSearchDialog({
                       <div className="flex shrink-0 items-center gap-2">
                         <Badge
                           variant="outline"
-                          className="font-mono text-[10px] uppercase"
+                          className={cn(
+                            'font-mono text-[10px] uppercase',
+                            (inv.status === 'sent' || inv.status === 'draft') &&
+                              'border-[#6366F1]/30 bg-[#6366F1]/15 text-[#6366F1]',
+                          )}
                         >
                           {inv.status}
                         </Badge>

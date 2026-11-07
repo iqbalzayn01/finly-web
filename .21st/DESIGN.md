@@ -5,7 +5,7 @@
 **Design Aesthetic:** Modern Editorial Bento Grid (High-Contrast, Asymmetric Tiles, Micro-Badges, Tactile Geometry)  
 **Primary Typography:** Geist Mono (`@fontsource-variable/geist-mono`) across all elements and tabular financial figures  
 **Grid Architecture:** CSS Grid Bento Matrix with strict **8px (`gap-2`)** or **16px (`gap-4`)** gutter rhythm  
-**Color Palette:** High-Contrast Neon-Minimalist (Primary Lime `#C9F31D`, Background `#111111`, Accent Violet `#A78BFA`, Secondary Zincs `#27272A`/`#F4F4F5`)  
+**Color Palette:** High-Contrast Neon-Minimalist (`Primary Color=#C9F31D`, `Tertiary Color=#6366F1` / Indigo 500, Background `#111111`, Secondary Zincs `#27272A`/`#F4F4F5`)  
 **Balance Privacy:** Inline eye toggle button (`Eye` / `EyeOff`) situated directly to the right of the Total Balance numeric string
 
 ---
@@ -41,6 +41,9 @@ Inspired by modern high-end editorial and financial bento layouts (as seen in co
 
 ## 2. Color System & Token Specification
 
+- **Primary Color=#C9F31D**
+- **Tertiary Color=#6366F1**
+
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        FINLY COLOR PALETTE                             │
@@ -49,11 +52,11 @@ Inspired by modern high-end editorial and financial bento layouts (as seen in co
 ├──────────────┼──────────────┼──────────────────────────────┼───────────┤
 │ Primary      │ #C9F31D      │ Brand Lime, Hero Bento Tiles │ #111111   │
 │ On-Primary   │ #111111      │ Text/Icons on Lime Surface   │ N/A       │
+│ Tertiary     │ #6366F1      │ Indigo 500 (Utility/Focus)   │ #6366F1   │
 │ Background   │ #111111      │ Canvas Root / App Background │ #FFFFFF   │
 │ Foreground   │ #FFFFFF      │ Primary White Text (Dark)    │ N/A       │
 │ Secondary Dk │ #27272A      │ Zinc-800 Card Tile / Chips   │ #FFFFFF   │
 │ Secondary Lt │ #F4F4F5      │ Zinc-100 Light Surface       │ #111111   │
-│ Accent       │ #A78BFA      │ Violet 400 (Contrast to Lime)│ #111111   │
 │ Muted Text   │ #A1A1AA      │ Zinc-400 Descriptions/Labels │ N/A       │
 ├──────────────┴──────────────┴──────────────────────────────┴───────────┤
 │ FUNCTIONAL / SEMANTIC ACCENTS                                          │
@@ -64,6 +67,30 @@ Inspired by modern high-end editorial and financial bento layouts (as seen in co
 │ Info         │ #38BDF8      │ Sky 400 (Tooltips & Notes)   │ #111111   │
 └──────────────┴──────────────┴──────────────────────────────┴───────────┘
 ```
+
+### 2.1 Tertiary Color (`#6366F1` / Indigo 500) Application Rules
+
+1. **Invoices & Receivables Module:**
+   - **Status badges (`"Sent"`, `"Draft"`) and ID tags (`"#INV-004"`):** `bg-[#6366F1]/15 text-[#6366F1] border-[#6366F1]/30`.
+   - **External link action (`↗`):** `text-[#6366F1]` with hover micro-interaction (`hover:text-[#818CF8]` and `group-hover:translate-x-0.5 group-hover:-translate-y-0.5` on the arrow).
+   - **Utility action buttons (`"Share Link"`, `"Copy Link"`):** `bg-[#6366F1]/10` with `hover:bg-[#6366F1]/25 hover:border-[#6366F1]`.
+2. **Account & Sub-Wallet Filter Chips:**
+   - **Inactive chip hover state:** `hover:border-[#6366F1]/60 hover:text-[#6366F1] hover:bg-[#6366F1]/10 transition-all duration-150`.
+   - **Active selected chip:** solid `border-[#6366F1] text-[#6366F1] bg-[#6366F1]/15`.
+3. **Inter-Account Transfers & Neutral Movements:**
+   - Use `#6366F1` for badge tags and transfer icons to distinguish non-income / non-expense funds movement between internal wallets.
+4. **Form Controls & Focus States:**
+   - Use `#6366F1` as the focus ring across all text inputs, selects, dialog inputs, and search dialogs (`focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]`).
+5. **Strict Negative Constraints:**
+   - **NEVER** add tertiary hover, borders, or shadow interactions to Bento Card containers (cards must remain macro, static, and grounded).
+   - **NEVER** change the hover color of Primary Lime (`#C9F31D`) CTA buttons into Indigo.
+   - **NEVER** use Tertiary Indigo for primary balance figures or operational cashflow (Emerald `#34D399`, Rose `#FB7185`).
+6. **Full-Canvas Ambient Glass Gradient:**
+   - Dual ambient gradient combining Primary Lime (`#C9F31D`) and Tertiary Indigo (`#6366F1`) with smooth optical frosted glass diffusion (`backdrop-blur-[70px]`).
+   - Positioned directly behind the full canvas background, starting from behind the header/top bar (`top-0`) and extending downward toward the center (`~600px`), fading softly into the background (`to-background`).
+7. **Glassmorphism UI (Header/Topbar & All Cards):**
+   - **Header / Topbar:** Translucent frosted glass background (`bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60`) with `border-b-2 border-border/80`. Action controls and navigation pills also utilize translucent frosted glass surfaces (`bg-card/70` / `bg-background/60 backdrop-blur-md`).
+   - **All Cards (`.bento-card` & `Card`):** All cards implement glassmorphism with translucent surfaces (`--card: rgba(39, 39, 42, 0.70)` in dark mode, `rgba(255, 255, 255, 0.75)` in light mode) paired with `backdrop-filter: blur(20px)` and `-webkit-backdrop-filter: blur(20px)`, preserving tactile 2px brutalist borders and 4px static drop shadows while allowing the ambient primary/tertiary gradient to diffuse through.
 
 ---
 
@@ -122,13 +149,11 @@ All typographic elements, numbers, micro-badges, and labels utilize **Geist Mono
     /* Bento Base Colors */
     --primary: #c9f31d;
     --primary-foreground: #111111;
+    --tertiary: #6366f1;
 
     --secondary: #27272a;
     --secondary-foreground: #ffffff;
     --secondary-light: #f4f4f5;
-
-    --accent: #a78bfa;
-    --accent-foreground: #111111;
 
     --muted: #27272a;
     --muted-foreground: #a1a1aa;
@@ -140,6 +165,7 @@ All typographic elements, numbers, micro-badges, and labels utilize **Geist Mono
     --semantic-info: #38bdf8;
 
     --border: #27272a;
+    --ring: #6366f1;
     --radius-bento: 1.5rem; /* 24px */
   }
 
@@ -151,18 +177,11 @@ All typographic elements, numbers, micro-badges, and labels utilize **Geist Mono
   }
 }
 
-/* Custom Bento Utility Helpers */
+/* Custom Bento Utility Helpers (Macro, Static, and Grounded) */
 @utility bento-card {
   border-radius: var(--radius-bento);
   position: relative;
   overflow: hidden;
-  transition:
-    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.2s ease;
-}
-
-@utility bento-card:hover {
-  transform: translateY(-2px);
 }
 ```
 

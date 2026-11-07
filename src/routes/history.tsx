@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import {
   ArrowDownRight,
+  ArrowLeftRight,
   ArrowUpRight,
   Download,
   FilterX,
@@ -8,6 +9,7 @@ import {
   ReceiptText,
   Search,
   Trash2,
+  Wallet,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { MoneyValue } from '#/components/money-value';
@@ -47,6 +49,7 @@ import {
 } from '#/components/ui/table';
 import { useFinly } from '#/context/finly-context';
 import { calculateMonthlySummary, paginateItems } from '#/lib/cashflow';
+import { isTransferCategory } from '#/lib/constants';
 import { formatFriendlyDate } from '#/lib/format';
 import { cn } from '#/lib/utils';
 import type { TransactionType } from '#/types/finly';
@@ -399,6 +402,57 @@ function HistoryScreen() {
             </div>
           </div>
 
+          {/* Account & Sub-Wallet Filter Chips */}
+          <div
+            role="group"
+            aria-label="Filter by account or sub-wallet"
+            className="flex flex-wrap items-center gap-2 border-t-2 border-border pt-4"
+          >
+            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+              Accounts:
+            </span>
+            <button
+              type="button"
+              aria-pressed={walletFilter === 'all'}
+              onClick={() => {
+                setWalletFilter('all');
+                setPage(1);
+              }}
+              className={cn(
+                'inline-flex h-8 items-center gap-1.5 rounded-xl border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]',
+                walletFilter === 'all'
+                  ? 'border-[#6366F1] bg-[#6366F1]/15 font-extrabold text-[#6366F1]'
+                  : 'border-border bg-background font-semibold text-muted-foreground hover:border-[#6366F1]/60 hover:bg-[#6366F1]/10 hover:text-[#6366F1]',
+              )}
+            >
+              <Wallet className="size-3.5" />
+              <span>All Accounts</span>
+            </button>
+
+            {wallets.map((w) => {
+              const active = walletFilter === w.id;
+              return (
+                <button
+                  key={w.id}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => {
+                    setWalletFilter(w.id);
+                    setPage(1);
+                  }}
+                  className={cn(
+                    'inline-flex h-8 items-center gap-1.5 rounded-xl border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]',
+                    active
+                      ? 'border-[#6366F1] bg-[#6366F1]/15 font-extrabold text-[#6366F1]'
+                      : 'border-border bg-background font-semibold text-muted-foreground hover:border-[#6366F1]/60 hover:bg-[#6366F1]/10 hover:text-[#6366F1]',
+                  )}
+                >
+                  <span>{w.name}</span>
+                </button>
+              );
+            })}
+          </div>
+
           <div className="flex flex-wrap items-center justify-between gap-3 border-t-2 border-border pt-4">
             <div className="flex flex-wrap items-center gap-2">
               <div className="brutal-surface flex flex-wrap items-center gap-1 rounded-xl bg-muted/50 p-1">
@@ -574,6 +628,7 @@ function HistoryScreen() {
                 <TableBody>
                   {paginated.data.map((tx) => {
                     const isInflow = tx.type === 'money_in';
+                    const isTransfer = isTransferCategory(tx.category);
                     return (
                       <TableRow
                         key={tx.id}
@@ -584,12 +639,16 @@ function HistoryScreen() {
                             <span
                               className={cn(
                                 'flex size-8 shrink-0 items-center justify-center rounded-xl border-2 transition-transform duration-150 group-hover:scale-105',
-                                isInflow
-                                  ? 'border-inflow-border bg-inflow-bg text-inflow'
-                                  : 'border-outflow-border bg-outflow-bg text-outflow',
+                                isTransfer
+                                  ? 'border-[#6366F1]/30 bg-[#6366F1]/15 text-[#6366F1]'
+                                  : isInflow
+                                    ? 'border-inflow-border bg-inflow-bg text-inflow'
+                                    : 'border-outflow-border bg-outflow-bg text-outflow',
                               )}
                             >
-                              {isInflow ? (
+                              {isTransfer ? (
+                                <ArrowLeftRight className="size-4" />
+                              ) : isInflow ? (
                                 <ArrowUpRight className="size-4" />
                               ) : (
                                 <ArrowDownRight className="size-4" />
@@ -608,7 +667,12 @@ function HistoryScreen() {
                         <TableCell className="hidden sm:table-cell">
                           <Badge
                             variant="outline"
-                            className="rounded-lg border-border bg-card font-mono text-[11px] font-semibold text-foreground"
+                            className={cn(
+                              'rounded-lg font-mono text-[11px] font-semibold',
+                              isTransfer
+                                ? 'border-[#6366F1]/30 bg-[#6366F1]/15 text-[#6366F1]'
+                                : 'border-border bg-card text-foreground',
+                            )}
                           >
                             {tx.category}
                           </Badge>

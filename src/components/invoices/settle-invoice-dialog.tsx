@@ -86,7 +86,10 @@ export function SettleInvoiceDialog({
 						<strong className="font-bold text-foreground">
 							{invoice.clientName}
 						</strong>{" "}
-						(#{invoice.invoiceNumber}) to your balance?
+						<span className="inline-flex items-center rounded-md border border-[#6366F1]/30 bg-[#6366F1]/15 px-1.5 py-0.5 font-mono text-[11px] font-bold text-[#6366F1] tabular-nums">
+							#{invoice.invoiceNumber}
+						</span>{" "}
+						to your balance?
 					</DialogDescription>
 				</DialogHeader>
 

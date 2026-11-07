@@ -36,9 +36,9 @@ export function ReceivablesBentoTile() {
         <Link
           to="/invoices"
           aria-label="Open Invoices"
-          className="brutal-btn group inline-flex size-9 shrink-0 items-center justify-center rounded-xl border-border bg-muted text-foreground hover:bg-primary hover:text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="brutal-btn group inline-flex size-9 shrink-0 items-center justify-center rounded-xl border-[#6366F1]/30 bg-[#6366F1]/10 text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/25 hover:text-[#818CF8] outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]"
         >
-          <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <ArrowUpRight className="size-4 text-[#6366F1] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#818CF8]" />
         </Link>
       </div>
 
@@ -108,11 +108,11 @@ export function ReceivablesBentoTile() {
       <Button
         asChild
         variant="outline"
-        className="h-10 w-full justify-between rounded-xl font-mono text-xs font-extrabold uppercase tracking-wider hover:bg-primary hover:text-primary-foreground"
+        className="group h-10 w-full justify-between rounded-xl border-[#6366F1]/30 bg-[#6366F1]/10 font-mono text-xs font-extrabold uppercase tracking-wider text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/25 hover:text-[#818CF8]"
       >
         <Link to="/invoices">
           <span>Manage Invoices</span>
-          <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <ArrowUpRight className="size-4 text-[#6366F1] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#818CF8]" />
         </Link>
       </Button>
     </div>

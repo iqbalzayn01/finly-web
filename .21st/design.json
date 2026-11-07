@@ -35,10 +35,10 @@
     "colors": {
       "primary": "#C9F31D",
       "onPrimary": "#111111",
+      "tertiary": "#6366F1",
       "backgroundDark": "#111111",
       "surfaceDark": "#27272A",
       "surfaceLight": "#F4F4F5",
-      "accent": "#A78BFA",
       "inflow": "#34D399",
       "outflow": "#FB7185",
       "warning": "#FBBF24",
