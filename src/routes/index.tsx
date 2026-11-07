@@ -24,48 +24,48 @@ function DashboardScreen() {
     safeToSpend.totalCashOnHand < 0 || safeToSpend.status === 'deficit';
 
   return (
-    <div className="space-y-4">
-      {/* Top Workspace Header Row (PRD v2.1.0 §3) */}
-      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-        <div className="space-y-0.5">
+    <div className="space-y-6">
+      {/* Top Workspace Header Row */}
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div className="space-y-1">
           <h1 className="font-mono text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
-            {formatMonthYear(todayISO)} Cashflow
+            {formatMonthYear(todayISO)} Overview
           </h1>
-          <p className="font-mono text-base text-muted-foreground">
-            Real-time cash position, daily spending headroom, and receivables
-            matrix.
+          <p className="font-mono text-xs text-muted-foreground sm:text-sm">
+            See your balance, daily spending limit, and unpaid invoices in one
+            place.
           </p>
         </div>
 
         <Button
           type="button"
-          size="lg"
+          size="default"
           onClick={() => openQuickEntry('money_out')}
-          className="hidden md:flex min-h-11 gap-2 rounded-2xl bg-primary px-5 font-mono text-xs font-extrabold tracking-wider text-primary-foreground shadow-xs hover:bg-primary-hover cursor-pointer"
+          className="h-10 gap-2 rounded-xl bg-primary px-4 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground"
         >
-          <Plus className="size-4 stroke-[2.5]" />
-          <span>Record</span>
+          <Plus className="size-4 stroke-[2.5] transition-transform duration-200 group-hover:rotate-90" />
+          <span>Add Transaction</span>
         </Button>
       </div>
 
-      {/* 12-Column Asymmetrical Bento Grid Matrix (Strict gap-2 mobile / gap-4 desktop — PRD v2.1.0 §3) */}
-      <div className="grid grid-cols-12 gap-2 sm:gap-4">
-        {/* Optional Deficit Warning Tile */}
+      {/* 12-Column Rounded Brutalism Bento Grid */}
+      <div className="grid grid-cols-12 items-stretch gap-4">
+        {/* Optional Low Balance Warning Tile */}
         {showDeficitAlert && (
           <div
             role="alert"
-            className="bento-card bento-card-static col-span-12 flex flex-col justify-between gap-3 border border-outflow-border bg-outflow-bg p-4 text-foreground sm:flex-row sm:items-center"
+            className="bento-card bento-card-static col-span-12 flex flex-col justify-between gap-4 border-outflow-border bg-outflow-bg p-5 text-foreground sm:flex-row sm:items-center"
           >
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl bg-outflow-bg text-outflow">
-                <ShieldAlert className="size-4" />
+            <div className="flex items-start gap-3.5">
+              <span className="brutal-surface flex size-10 shrink-0 items-center justify-center rounded-xl border-outflow-border bg-card text-outflow">
+                <ShieldAlert className="size-5" />
               </span>
-              <div className="space-y-0.5 font-mono text-xs">
-                <p className="font-bold uppercase tracking-wider text-outflow">
-                  Cashflow Deficit Alert
+              <div className="space-y-1 font-mono text-xs">
+                <p className="font-extrabold uppercase tracking-wider text-outflow">
+                  Low Balance Warning
                 </p>
                 <p className="text-muted-foreground">
-                  Available balance is{' '}
+                  Your balance is{' '}
                   <MoneyValue
                     amount={safeToSpend.totalCashOnHand}
                     className="font-bold text-foreground"
@@ -75,7 +75,7 @@ function DashboardScreen() {
                     amount={safeToSpend.committedFixedOutflows}
                     className="font-bold text-foreground"
                   />{' '}
-                  in scheduled obligations.
+                  in upcoming bills.
                 </p>
               </div>
             </div>
@@ -84,29 +84,29 @@ function DashboardScreen() {
               asChild
               size="sm"
               variant="outline"
-              className="shrink-0 gap-1.5 rounded-xl border-outflow-border bg-background font-mono text-xs font-bold hover:bg-outflow hover:text-primary-foreground"
+              className="shrink-0 gap-1.5 rounded-xl border-outflow-border bg-card font-mono text-xs font-bold hover:bg-outflow hover:text-primary-foreground"
             >
               <Link
                 to="/history"
                 search={{ sort: 'largest', q: undefined, category: undefined }}
               >
-                <span>Review Largest Expenses</span>
-                <ArrowRight className="size-3.5" />
+                <span>View Largest Expenses</span>
+                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </Button>
           </div>
         )}
 
-        {/* Row 1: Tile 1 (Balance + Inline Eye) | Tile 2 (Safe-to-Spend Lime) | Tile 3 (Cash Summary Violet) */}
+        {/* Row 1: 3 Equal 4-Column Bento Tiles */}
         <TotalBalanceBentoTile />
         <SafeToSpendHero />
         <CashSummaryBentoTile />
 
-        {/* Row 2: Tile 4 (Span-8 Interactive Area Chart) | Tile 5 (Span-4 Unpaid Receivables) */}
+        {/* Row 2: 8-Col Trend Chart + 4-Col Unpaid Invoices */}
         <CashflowTrendChart />
         <ReceivablesBentoTile />
 
-        {/* Row 3: Tile 6 (Span-12 10-Row Paginated Recent Transactions Ledger) */}
+        {/* Row 3: 12-Col Recent Activity Table */}
         <section id="recent-transactions" className="col-span-12">
           <RecentTransactionsCard />
         </section>

@@ -58,68 +58,69 @@ function LoginScreen() {
 	return (
 		<div className="grid min-h-screen bg-background lg:grid-cols-2">
 			{/* Left Brand & Editorial Bento Column */}
-			<div className="hidden flex-col justify-between border-r border-zinc-800 bg-zinc-950 p-10 text-white xl:p-14 lg:flex dark:bg-background">
+			<div className="hidden flex-col justify-between border-r-2 border-border bg-card p-10 text-foreground xl:p-14 lg:flex">
 				<div className="space-y-10">
 					<Link
 						to="/"
-						className="inline-flex items-center gap-3 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-primary"
+						className="group inline-flex items-center gap-3 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
 					>
-						<span className="flex size-9 items-center justify-center rounded-xl bg-card ring-1 ring-zinc-700">
-							<BrandLogo size={22} variant="brand" />
+						<span className="brutal-surface flex size-10 items-center justify-center rounded-xl bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
+							<BrandLogo size={22} variant="monochrome" />
 						</span>
-						<span className="font-mono text-xl font-black tracking-tight text-white">
+						<span className="font-mono text-xl font-black tracking-tight text-foreground">
 							Finly
 						</span>
 					</Link>
 
 					<div className="max-w-md space-y-5">
-						<span className="inline-block rounded-full bg-primary px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground">
-							Bento Cashflow OS
+						<span className="inline-block rounded-lg border-2 border-border bg-primary px-3 py-1 font-mono text-[10px] font-extrabold uppercase tracking-wider text-primary-foreground">
+							Simple Money Tracker
 						</span>
-						<h1 className="font-mono text-4xl font-black leading-tight tracking-tight text-white">
+						<h1 className="font-mono text-4xl font-black leading-tight tracking-tight text-foreground">
 							Know what is safe to spend today.
 						</h1>
 						<p className="font-mono text-xs leading-relaxed text-muted-foreground sm:text-sm">
-							High-clarity, plain-language cashflow tracking designed for
-							independent creators, salaried professionals, and
-							micro-businesses.
+							Simple, everyday money tracking built for freelancers, creators,
+							and small businesses.
 						</p>
 
-						<ul className="space-y-3 pt-2 font-mono text-xs font-medium text-white">
+						<ul className="space-y-3 pt-2 font-mono text-xs font-semibold text-foreground">
 							<li className="flex items-center gap-3">
-								<CheckCircle2 className="size-4 shrink-0 text-primary" />
-								<span>
-									3-second transaction logging with zero accounting jargon
+								<span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-inflow-border bg-inflow-bg text-inflow">
+									<CheckCircle2 className="size-3.5" />
 								</span>
+								<span>Add income and expenses in seconds</span>
 							</li>
 							<li className="flex items-center gap-3">
-								<CheckCircle2 className="size-4 shrink-0 text-inflow" />
-								<span>
-									Real-time daily Safe-to-Spend &amp; runway calculation
+								<span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-inflow-border bg-inflow-bg text-inflow">
+									<CheckCircle2 className="size-3.5" />
 								</span>
+								<span>Automatic daily spending limit</span>
 							</li>
 							<li className="flex items-center gap-3">
-								<CheckCircle2 className="size-4 shrink-0 text-info" />
-								<span>Instant client invoice tracking &amp; cashflow sync</span>
+								<span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-info-border bg-info-bg text-info">
+									<CheckCircle2 className="size-3.5" />
+								</span>
+								<span>Easy client invoices and payment tracking</span>
 							</li>
 						</ul>
 					</div>
 				</div>
 
 				{/* Social Proof Bento Tile */}
-				<div className="bento-card max-w-md space-y-3 border border-zinc-800 bg-card p-6">
-					<p className="font-mono text-xs leading-relaxed text-white sm:text-sm">
-						&ldquo;Finally, a finance tracker that speaks human language instead
-						of accounting textbooks.&rdquo;
+				<div className="bento-card bento-card-static max-w-md space-y-3 bg-background p-6">
+					<p className="font-mono text-xs leading-relaxed text-foreground sm:text-sm">
+						&ldquo;Finally, a money app that uses plain language instead of
+						confusing accounting terms.&rdquo;
 					</p>
 					<div className="flex items-center gap-2.5 font-mono text-xs">
-						<span className="flex size-8 items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground">
+						<span className="brutal-surface flex size-8 items-center justify-center rounded-xl bg-primary font-extrabold text-primary-foreground">
 							SM
 						</span>
 						<div>
-							<p className="font-bold text-white">Studio Monolith</p>
+							<p className="font-bold text-foreground">Studio Monolith</p>
 							<p className="text-[11px] text-muted-foreground">
-								Independent Design Lab
+								Design Studio
 							</p>
 						</div>
 					</div>
@@ -131,15 +132,15 @@ function LoginScreen() {
 				<div className="flex items-center justify-between">
 					<Link
 						to="/"
-						className="inline-flex items-center gap-2 font-mono text-xs font-semibold text-muted-foreground hover:text-foreground"
+						className="group inline-flex items-center gap-2 font-mono text-xs font-bold text-muted-foreground hover:text-foreground"
 					>
-						<ArrowLeft className="size-3.5" />
-						<span>Back to Workspace</span>
+						<ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
+						<span>Back to Dashboard</span>
 					</Link>
 
 					<div className="flex items-center gap-2 lg:hidden">
-						<span className="flex size-7 items-center justify-center rounded-lg bg-zinc-950 dark:bg-background">
-							<BrandLogo size={18} variant="brand" />
+						<span className="brutal-surface flex size-8 items-center justify-center rounded-xl bg-primary">
+							<BrandLogo size={18} variant="monochrome" />
 						</span>
 						<span className="font-mono text-sm font-black text-foreground">
 							Finly
@@ -153,16 +154,16 @@ function LoginScreen() {
 							Welcome back
 						</h2>
 						<p className="font-mono text-xs text-muted-foreground">
-							Sign in to review your daily Safe-to-Spend allowance and ledger.
+							Sign in to view your balance, daily limit, and invoices.
 						</p>
 					</div>
 
-					<div className="bento-card bento-card-static mt-6 space-y-5 border border-border bg-card p-6 dark:border-zinc-800">
+					<div className="bento-card bento-card-static mt-6 space-y-5 bg-card p-6">
 						<form onSubmit={handleSubmit} className="space-y-4">
 							<div className="space-y-1.5">
 								<Label
 									htmlFor={`${baseId}-identifier`}
-									className="font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+									className="font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
 								>
 									Email or Phone Number
 								</Label>
@@ -176,7 +177,7 @@ function LoginScreen() {
 									onBlur={() => setIdentifierTouched(true)}
 									aria-invalid={identifierInvalid}
 									className={cn(
-										"h-11 rounded-xl bg-card font-mono text-xs dark:bg-background",
+										"h-11 rounded-xl bg-background font-mono text-xs",
 										identifierInvalid && "border-destructive",
 									)}
 								/>
@@ -191,7 +192,7 @@ function LoginScreen() {
 								<div className="flex items-center justify-between">
 									<Label
 										htmlFor={`${baseId}-password`}
-										className="font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+										className="font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
 									>
 										Password
 									</Label>
@@ -199,10 +200,10 @@ function LoginScreen() {
 										type="button"
 										onClick={() =>
 											toast.info(
-												"Local-first workspace: no server password reset needed.",
+												"Your data is stored on this device — no server password reset needed.",
 											)
 										}
-										className="font-mono text-xs font-bold text-foreground underline decoration-primary decoration-2 underline-offset-4 cursor-pointer dark:text-primary"
+										className="font-mono text-xs font-bold text-foreground underline decoration-primary decoration-2 underline-offset-4 cursor-pointer"
 									>
 										Forgot password?
 									</button>
@@ -214,7 +215,7 @@ function LoginScreen() {
 										required
 										value={password}
 										onChange={(e) => setPassword(e.target.value)}
-										className="h-11 rounded-xl bg-card pr-11 font-mono text-xs dark:bg-background"
+										className="h-11 rounded-xl bg-background pr-11 font-mono text-xs"
 									/>
 									<button
 										type="button"
@@ -222,7 +223,7 @@ function LoginScreen() {
 										aria-label={
 											showPassword ? "Hide password" : "Show password"
 										}
-										className="absolute top-1/2 right-2.5 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground cursor-pointer"
+										className="absolute top-1/2 right-2.5 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer"
 									>
 										{showPassword ? (
 											<EyeOff className="size-4" />
@@ -245,32 +246,32 @@ function LoginScreen() {
 									htmlFor={`${baseId}-remember`}
 									className="font-mono text-xs text-muted-foreground cursor-pointer"
 								>
-									Remember this device for 30 days
+									Keep me signed in on this device
 								</Label>
 							</div>
 
 							<Button
 								type="submit"
-								className="min-h-11 w-full gap-2 rounded-xl bg-primary font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground hover:bg-primary-hover cursor-pointer"
+								className="h-11 w-full gap-2 rounded-xl bg-primary font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground cursor-pointer"
 							>
 								<Lock className="size-4" />
-								<span>Sign In to Dashboard</span>
+								<span>Sign In</span>
 							</Button>
 						</form>
 
 						<div className="relative flex items-center justify-center">
-							<div className="w-full border-t border-border" />
-							<span className="bg-card px-3 font-mono text-[11px] font-medium uppercase text-muted-foreground">
+							<div className="w-full border-t-2 border-border" />
+							<span className="bg-card px-3 font-mono text-[11px] font-bold uppercase text-muted-foreground">
 								or
 							</span>
-							<div className="w-full border-t border-border" />
+							<div className="w-full border-t-2 border-border" />
 						</div>
 
 						<Button
 							type="button"
 							variant="outline"
 							onClick={handleGoogleContinue}
-							className="min-h-11 w-full gap-2.5 rounded-xl border-border bg-card font-mono text-xs font-bold dark:border-zinc-700 dark:bg-background"
+							className="h-11 w-full gap-2.5 rounded-xl bg-background font-mono text-xs font-bold"
 						>
 							<svg
 								aria-hidden="true"
@@ -299,18 +300,18 @@ function LoginScreen() {
 					</div>
 
 					<p className="mt-6 text-center font-mono text-xs text-muted-foreground">
-						Don&apos;t have an account?{" "}
+						New here?{" "}
 						<Link
 							to="/signup"
-							className="font-bold text-foreground underline decoration-primary decoration-2 underline-offset-4 dark:text-primary"
+							className="font-bold text-foreground underline decoration-primary decoration-2 underline-offset-4"
 						>
-							Create free workspace
+							Create free account
 						</Link>
 					</p>
 				</div>
 
 				<p className="text-center font-mono text-[11px] text-muted-foreground">
-					100% client-side privacy · Stored locally in IndexedDB
+					100% private · Saved locally on your device
 				</p>
 			</div>
 		</div>

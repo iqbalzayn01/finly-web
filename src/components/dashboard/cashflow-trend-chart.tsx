@@ -51,21 +51,21 @@ export function CashflowTrendChart() {
   const isMasked = profile.privacyBlurEnabled;
 
   return (
-    <div className="bento-card bento-card-static col-span-12 flex flex-col justify-between border border-border p-5 sm:p-6 lg:col-span-8 dark:border-zinc-800">
+    <div className="bento-card bento-card-static col-span-12 flex h-full flex-col justify-between bg-card p-6 lg:col-span-8">
       {/* Header & Interactive Time Range Pills */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b-2 border-border pb-4">
         <div className="space-y-0.5">
-          <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-foreground">
-            Cashflow Dynamics
+          <h2 className="font-mono text-xs font-extrabold uppercase tracking-wider text-foreground sm:text-sm">
+            {terminology.inflow} vs. {terminology.outflow}
           </h2>
           <p className="font-mono text-xs text-muted-foreground">
-            {terminology.inflow} vs {terminology.outflow} Area Comparison (USD)
+            Compare what came in and what went out over time
           </p>
         </div>
 
         <fieldset
-          aria-label="Select cashflow chart time range"
-          className="m-0 flex min-w-0 items-center gap-2 rounded-xl bg-background p-2 border border-border dark:border-zinc-800"
+          aria-label="Select chart time range"
+          className="brutal-surface m-0 flex min-w-0 items-center gap-1 rounded-xl bg-muted/50 p-1"
         >
           {TIME_RANGES.map((range) => {
             const active = timeRange === range;
@@ -76,10 +76,10 @@ export function CashflowTrendChart() {
                 aria-pressed={active}
                 onClick={() => setTimeRange(range)}
                 className={cn(
-                  'min-h-8 rounded-md p-2 font-mono text-xs font-semibold transition-colors cursor-pointer hover:bg-accent outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  'h-7 rounded-lg border-2 px-2.5 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
                   active
-                    ? 'bg-primary font-bold text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground',
+                    ? 'border-border bg-primary font-extrabold text-primary-foreground'
+                    : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
                 )}
               >
                 {range}
@@ -138,7 +138,7 @@ export function CashflowTrendChart() {
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
-              className="stroke-border/70"
+              className="stroke-border"
             />
             <XAxis
               dataKey="label"
@@ -158,20 +158,20 @@ export function CashflowTrendChart() {
               className="font-mono text-[11px] tabular-nums"
             />
 
-            {/* Elevated Sky Accented Popover Tooltip (PRD v2.1.0 §3.1) */}
             <ChartTooltip
-              cursor={{ stroke: 'var(--info)', strokeWidth: 1.25 }}
+              cursor={{ stroke: 'var(--info)', strokeWidth: 1.5 }}
               content={({ active, payload }) => {
                 if (!active || !payload?.length) return null;
                 const point = payload[0]?.payload as
-                  AreaChartDataPoint | undefined;
+                  | AreaChartDataPoint
+                  | undefined;
                 if (!point) return null;
 
                 const isPositiveNet = point.net >= 0;
 
                 return (
-                  <div className="min-w-52 rounded-2xl border border-info-border bg-popover p-3 font-mono text-xs text-foreground shadow-2xl">
-                    <div className="mb-2 flex items-center gap-2 border-b border-border pb-1.5">
+                  <div className="brutal-surface min-w-52 rounded-2xl border-2 border-border bg-popover p-3.5 font-mono text-xs text-foreground">
+                    <div className="mb-2 flex items-center gap-2 border-b-2 border-border pb-1.5">
                       <span className="size-2 rounded-full bg-info" />
                       <span className="text-[11px] font-bold text-info">
                         {point.tooltipDate}
@@ -203,9 +203,9 @@ export function CashflowTrendChart() {
                         </span>
                       </div>
 
-                      <div className="flex items-center justify-between gap-4 border-t border-border pt-1.5">
+                      <div className="flex items-center justify-between gap-4 border-t-2 border-border pt-1.5">
                         <span className="font-semibold text-muted-foreground">
-                          Net Diff
+                          Net
                         </span>
                         <span
                           className={cn(
@@ -228,15 +228,15 @@ export function CashflowTrendChart() {
               dataKey="income"
               type="monotone"
               fill={`url(#${incomeGradientId})`}
-              stroke="#34D399"
-              strokeWidth={2.25}
+              stroke="var(--inflow)"
+              strokeWidth={2.5}
             />
             <Area
               dataKey="expenses"
               type="monotone"
               fill={`url(#${expensesGradientId})`}
-              stroke="#FB7185"
-              strokeWidth={2.25}
+              stroke="var(--outflow)"
+              strokeWidth={2.5}
             />
             <ChartLegend content={<ChartLegendContent />} />
           </AreaChart>

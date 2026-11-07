@@ -84,15 +84,15 @@ export function CommandSearchDialog({
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className="overflow-hidden rounded-3xl border-border bg-popover p-0 shadow-2xl sm:max-w-lg">
+			<DialogContent className="brutal-surface overflow-hidden rounded-3xl border-2 border-border bg-popover p-0 sm:max-w-lg">
 				<DialogHeader className="sr-only">
-					<DialogTitle>Search Workspace</DialogTitle>
+					<DialogTitle>Search</DialogTitle>
 					<DialogDescription>
 						Search transactions, categories, clients, and invoices
 					</DialogDescription>
 				</DialogHeader>
 
-				<div className="flex items-center gap-2.5 border-b border-border px-4 py-3">
+				<div className="flex items-center gap-2.5 border-b-2 border-border px-4 py-3">
 					<Search className="size-4 shrink-0 text-muted-foreground" />
 					<Input
 						placeholder="Search transactions, clients, notes..."
@@ -102,10 +102,10 @@ export function CommandSearchDialog({
 					/>
 				</div>
 
-				<div className="max-h-[65vh] space-y-4 overflow-y-auto p-3">
+				<div className="max-h-[65vh] space-y-4 overflow-y-auto p-3.5">
 					{/* Quick Action */}
 					<div>
-						<p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+						<p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
 							Quick Actions
 						</p>
 						<button
@@ -114,18 +114,18 @@ export function CommandSearchDialog({
 								onOpenChange(false);
 								openQuickEntry("money_out");
 							}}
-							className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-left font-mono text-xs font-bold text-foreground transition-colors hover:bg-secondary cursor-pointer"
+							className="group flex w-full items-center gap-2.5 rounded-xl border-2 border-transparent px-2.5 py-2 text-left font-mono text-xs font-bold text-foreground transition-all hover:border-border hover:bg-accent cursor-pointer"
 						>
-							<span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+							<span className="flex size-7 items-center justify-center rounded-lg border-2 border-border bg-primary text-primary-foreground transition-transform group-hover:rotate-90">
 								<Plus className="size-4 stroke-[2.5]" />
 							</span>
-							<span>Record New Transaction</span>
+							<span>Add New Transaction</span>
 						</button>
 					</div>
 
 					{/* Transactions */}
 					<div>
-						<p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+						<p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
 							Transactions ({matchingTransactions.length})
 						</p>
 						{matchingTransactions.length === 0 ? (
@@ -150,15 +150,15 @@ export function CommandSearchDialog({
 													},
 												});
 											}}
-											className="flex w-full items-center justify-between gap-3 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-secondary cursor-pointer"
+											className="flex w-full items-center justify-between gap-3 rounded-xl border-2 border-transparent px-2.5 py-2 text-left transition-all hover:border-border hover:bg-accent cursor-pointer"
 										>
 											<div className="flex min-w-0 items-center gap-2.5">
 												<span
 													className={cn(
-														"flex size-7 shrink-0 items-center justify-center rounded-lg",
+														"flex size-7 shrink-0 items-center justify-center rounded-lg border",
 														isInflow
-															? "bg-inflow-bg text-inflow"
-															: "bg-outflow-bg text-outflow",
+															? "border-inflow-border bg-inflow-bg text-inflow"
+															: "border-outflow-border bg-outflow-bg text-outflow",
 													)}
 												>
 													{isInflow ? (
@@ -168,7 +168,7 @@ export function CommandSearchDialog({
 													)}
 												</span>
 												<div className="min-w-0">
-													<p className="truncate font-mono text-xs font-semibold text-foreground">
+													<p className="truncate font-mono text-xs font-bold text-foreground">
 														{tx.note || tx.category}
 													</p>
 													<p className="font-mono text-[11px] text-muted-foreground">
@@ -195,7 +195,7 @@ export function CommandSearchDialog({
 					{/* Invoices */}
 					{isInvoicingVisible && (
 						<div>
-							<p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+							<p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
 								Invoices ({matchingInvoices.length})
 							</p>
 							{matchingInvoices.length === 0 ? (
@@ -212,14 +212,14 @@ export function CommandSearchDialog({
 												onOpenChange(false);
 												void navigate({ to: "/invoices" });
 											}}
-											className="flex w-full items-center justify-between gap-3 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-secondary cursor-pointer"
+											className="flex w-full items-center justify-between gap-3 rounded-xl border-2 border-transparent px-2.5 py-2 text-left transition-all hover:border-border hover:bg-accent cursor-pointer"
 										>
 											<div className="flex min-w-0 items-center gap-2.5">
-												<span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-info-bg text-info">
+												<span className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-info-border bg-info-bg text-info">
 													<FileText className="size-3.5" />
 												</span>
 												<div className="min-w-0">
-													<p className="truncate font-mono text-xs font-semibold text-foreground">
+													<p className="truncate font-mono text-xs font-bold text-foreground">
 														{inv.clientName}{" "}
 														<span className="text-muted-foreground">
 															#{inv.invoiceNumber}

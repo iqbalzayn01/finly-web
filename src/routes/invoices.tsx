@@ -170,103 +170,122 @@ function InvoicesScreen() {
   ];
 
   return (
-    <div className="space-y-4">
-      {/* Page Header (PRD v2.1.0 §4) */}
-      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-        <div className="space-y-0.5">
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div className="space-y-1">
           <h1 className="font-mono text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
-            Invoices &amp; Receivables
+            Client Invoices
           </h1>
-          <p className="font-mono text-base text-muted-foreground">
-            Issue client bills, track payment statuses, and settle funds
-            directly into cashflow.
+          <p className="font-mono text-xs text-muted-foreground sm:text-sm">
+            Create invoices, track overdue payments, and mark bills as paid.
           </p>
         </div>
 
         <Button
           type="button"
-          size="lg"
+          size="default"
           onClick={() => setCreateModalOpen(true)}
-          className="min-h-11 gap-2 rounded-2xl bg-primary font-mono text-xs font-extrabold tracking-wider text-primary-foreground shadow-xs hover:bg-primary-hover cursor-pointer"
+          className="h-10 gap-2 rounded-xl bg-primary px-4 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground"
         >
-          <Plus className="size-4 stroke-[2.5]" />
+          <Plus className="size-4 stroke-[2.5] transition-transform duration-200 group-hover:rotate-90" />
           <span>New Invoice</span>
         </Button>
       </div>
 
-      {/* 12-Column Bento Matrix (gap-2 mobile / gap-4 desktop — PRD v2.1.0 §4) */}
-      <div className="grid grid-cols-12 gap-2 sm:gap-4">
-        {/* Bento Stat 1: Unpaid */}
-        <div className="bento-card col-span-12 flex items-start justify-between gap-3 border border-border bg-zinc-900 p-6 text-white sm:col-span-4 dark:bg-card">
-          <div className="space-y-1.5">
-            <p className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-              Waiting To Be Paid
+      {/* 12-Column Bento Grid */}
+      <div className="grid grid-cols-12 items-stretch gap-4">
+        {/* Bento Stat 1: Waiting to Be Paid */}
+        <div className="bento-card col-span-12 flex h-full flex-col justify-between gap-4 bg-card p-6 sm:col-span-4">
+          <div className="flex items-center justify-between gap-2">
+            <p className="font-mono text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
+              Waiting to Be Paid
             </p>
-            <MoneyValue
-              amount={summary.waitingAmount}
-              className="font-mono text-2xl font-black tracking-tighter text-white tabular-nums sm:text-3xl"
-            />
-            <p className="font-mono text-xs text-muted-foreground">
-              {summary.waitingCount}{' '}
-              {summary.waitingCount === 1
-                ? 'Invoice Pending'
-                : 'Invoices Pending'}
-            </p>
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border-2 border-info-border bg-info-bg text-info">
+              <Clock className="size-5" />
+            </span>
           </div>
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-info-bg text-info">
-            <Clock className="size-5" />
-          </span>
+
+          <MoneyValue
+            amount={summary.waitingAmount}
+            className="font-mono text-2xl font-black tracking-tight text-foreground tabular-nums sm:text-3xl"
+          />
+
+          <div className="flex items-center justify-between border-t-2 border-border pt-3 font-mono text-xs">
+            <span className="text-muted-foreground">Pending</span>
+            <span className="font-bold text-foreground tabular-nums">
+              {summary.waitingCount}{' '}
+              {summary.waitingCount === 1 ? 'invoice' : 'invoices'}
+            </span>
+          </div>
         </div>
 
         {/* Bento Stat 2: Overdue */}
-        <div className="bento-card col-span-12 flex items-start justify-between gap-3 border border-border p-6 sm:col-span-4  dark:border-zinc-800">
-          <div className="space-y-1.5">
-            <p className="font-mono text-[11px] font-semibold uppercase tracking-widest text-outflow">
-              Overdue (Needs Action)
+        <div className="bento-card col-span-12 flex h-full flex-col justify-between gap-4 bg-card p-6 sm:col-span-4">
+          <div className="flex items-center justify-between gap-2">
+            <p className="font-mono text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
+              Overdue
             </p>
-            <MoneyValue
-              amount={summary.overdueAmount}
-              className="font-mono text-2xl font-black tracking-tighter text-outflow tabular-nums sm:text-3xl"
-            />
-            <p className="font-mono text-xs text-muted-foreground">
-              {summary.overdueCount}{' '}
-              {summary.overdueCount === 1 ? 'Client Late' : 'Clients Late'}
-            </p>
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border-2 border-outflow-border bg-outflow-bg text-outflow">
+              <TriangleAlert className="size-5" />
+            </span>
           </div>
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-outflow-bg text-outflow">
-            <TriangleAlert className="size-5" />
-          </span>
+
+          <MoneyValue
+            amount={summary.overdueAmount}
+            className={cn(
+              'font-mono text-2xl font-black tracking-tight tabular-nums sm:text-3xl',
+              summary.overdueCount > 0 ? 'text-outflow' : 'text-foreground',
+            )}
+          />
+
+          <div className="flex items-center justify-between border-t-2 border-border pt-3 font-mono text-xs">
+            <span className="text-muted-foreground">Needs follow-up</span>
+            <span
+              className={cn(
+                'font-bold tabular-nums',
+                summary.overdueCount > 0 ? 'text-outflow' : 'text-foreground',
+              )}
+            >
+              {summary.overdueCount}{' '}
+              {summary.overdueCount === 1 ? 'client' : 'clients'}
+            </span>
+          </div>
         </div>
 
-        {/* Bento Stat 3: Collected */}
-        <div className="bento-card col-span-12 flex items-start justify-between gap-3 border border-border p-6 sm:col-span-4 dark:border-zinc-800">
-          <div className="space-y-1.5">
-            <p className="font-mono text-[11px] font-semibold uppercase tracking-widest text-inflow">
+        {/* Bento Stat 3: Paid This Month */}
+        <div className="bento-card col-span-12 flex h-full flex-col justify-between gap-4 bg-card p-6 sm:col-span-4">
+          <div className="flex items-center justify-between gap-2">
+            <p className="font-mono text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
               Paid This Month
             </p>
-            <MoneyValue
-              amount={summary.collectedThisMonthAmount}
-              className="font-mono text-2xl font-black tracking-tighter text-inflow tabular-nums sm:text-3xl"
-            />
-            <p className="font-mono text-xs text-muted-foreground">
-              {summary.collectedThisMonthCount}{' '}
-              {summary.collectedThisMonthCount === 1 ? 'Invoice' : 'Invoices'}{' '}
-              Collected
-            </p>
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border-2 border-inflow-border bg-inflow-bg text-inflow">
+              <CheckCircle2 className="size-5" />
+            </span>
           </div>
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-inflow-bg text-inflow">
-            <CheckCircle2 className="size-5" />
-          </span>
+
+          <MoneyValue
+            amount={summary.collectedThisMonthAmount}
+            className="font-mono text-2xl font-black tracking-tight text-inflow tabular-nums sm:text-3xl"
+          />
+
+          <div className="flex items-center justify-between border-t-2 border-border pt-3 font-mono text-xs">
+            <span className="text-muted-foreground">Collected</span>
+            <span className="font-bold text-foreground tabular-nums">
+              {summary.collectedThisMonthCount}{' '}
+              {summary.collectedThisMonthCount === 1 ? 'invoice' : 'invoices'}
+            </span>
+          </div>
         </div>
 
         {/* Bento Table: Invoices List (Span-12) */}
-        <div className="bento-card bento-card-static col-span-12 overflow-hidden border border-border bg-card dark:border-zinc-800">
+        <div className="bento-card bento-card-static col-span-12 overflow-hidden bg-card">
           {/* Filter Pills + Search Header */}
-          <div className="flex flex-col justify-between gap-3 border-b border-border/70 p-4 sm:flex-row sm:items-center sm:px-6">
+          <div className="flex flex-col justify-between gap-4 border-b-2 border-border p-6 sm:flex-row sm:items-center">
             <div
               role="tablist"
               aria-label="Filter invoices by status"
-              className="flex flex-wrap items-center gap-1 rounded-xl border border-border bg-white p-1 dark:border-zinc-800 dark:bg-background"
+              className="brutal-surface flex flex-wrap items-center gap-1 rounded-xl bg-muted/50 p-1"
             >
               {filterTabs.map((tab) => {
                 const active = statusTab === tab.id;
@@ -278,19 +297,19 @@ function InvoicesScreen() {
                     aria-selected={active}
                     onClick={() => setStatusTab(tab.id)}
                     className={cn(
-                      'inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                      'inline-flex h-8 items-center gap-1.5 rounded-lg border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
                       active
-                        ? 'bg-primary font-bold text-primary-foreground shadow-xs'
-                        : 'text-muted-foreground hover:text-foreground',
+                        ? 'border-border bg-primary font-extrabold text-primary-foreground'
+                        : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
                     )}
                   >
                     <span>{tab.label}</span>
                     <span
                       className={cn(
-                        'rounded-md px-1.5 py-0.5 text-[10px] tabular-nums',
+                        'rounded-md border px-1.5 py-0.5 text-[10px] tabular-nums',
                         active
-                          ? 'bg-primary-foreground/15 font-bold text-primary-foreground'
-                          : 'bg-muted text-muted-foreground',
+                          ? 'border-primary-foreground/30 bg-primary-foreground/15 font-bold text-primary-foreground'
+                          : 'border-border bg-muted text-muted-foreground',
                       )}
                     >
                       {countsByTab[tab.id]}
@@ -300,13 +319,13 @@ function InvoicesScreen() {
               })}
             </div>
 
-            <div className="relative w-full sm:w-64">
-              <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+            <div className="relative w-full sm:w-72">
+              <Search className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Search client or #INV..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="h-10 rounded-xl border-border bg-white pl-9 font-mono text-xs dark:border-zinc-800 dark:bg-background"
+                className="h-10 rounded-xl border-2 border-border bg-background pl-10 font-mono text-xs"
               />
             </div>
           </div>
@@ -314,26 +333,26 @@ function InvoicesScreen() {
           {/* Table or Empty State */}
           {filteredInvoices.length === 0 ? (
             <div className="p-6">
-              <Empty className="rounded-2xl border border-dashed border-border bg-white/60 py-10 dark:bg-muted/60">
+              <Empty className="rounded-2xl border-2 border-dashed border-border bg-muted/30 py-10">
                 <EmptyHeader>
                   <EmptyMedia variant="icon">
                     <FileText className="size-5 text-foreground" />
                   </EmptyMedia>
                   <EmptyTitle className="font-mono text-base font-bold">
                     {invoices.length === 0
-                      ? 'No invoices created yet'
-                      : 'No invoices match this filter'}
+                      ? 'No invoices yet'
+                      : 'No matching invoices'}
                   </EmptyTitle>
                   <EmptyDescription className="font-mono text-xs">
-                    Create a clean, printable client invoice in seconds and sync
-                    its payment straight into your cashflow balance.
+                    Create a client invoice in seconds and add the payment to
+                    your balance when it is paid.
                   </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
                   <Button
                     type="button"
                     onClick={() => setCreateModalOpen(true)}
-                    className="min-h-11 gap-2 rounded-xl bg-primary px-5 font-mono text-xs font-extrabold uppercase text-primary-foreground hover:bg-primary-hover"
+                    className="h-10 gap-2 rounded-xl bg-primary px-5 font-mono text-xs font-extrabold uppercase text-primary-foreground"
                   >
                     <Plus className="size-4" />
                     <span>Create First Invoice</span>
@@ -346,24 +365,24 @@ function InvoicesScreen() {
               {/* Desktop Table */}
               <div className="hidden md:block">
                 <Table>
-                  <TableHeader className="bg-white/60 dark:bg-muted/70">
-                    <TableRow className="border-border/70">
-                      <TableHead className="pl-6 font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                  <TableHeader className="bg-muted/60">
+                    <TableRow className="border-b-2 border-border">
+                      <TableHead className="pl-6 font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
                         Client / Project
                       </TableHead>
-                      <TableHead className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                      <TableHead className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
                         Invoice #
                       </TableHead>
-                      <TableHead className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                      <TableHead className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
                         Due Date
                       </TableHead>
-                      <TableHead className="text-right font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                      <TableHead className="text-right font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
                         Amount
                       </TableHead>
-                      <TableHead className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                      <TableHead className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
                         Status
                       </TableHead>
-                      <TableHead className="pr-6 text-right font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                      <TableHead className="pr-6 text-right font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
                         Actions
                       </TableHead>
                     </TableRow>
@@ -374,7 +393,7 @@ function InvoicesScreen() {
                       return (
                         <TableRow
                           key={inv.id}
-                          className="border-border/60 transition-colors hover:bg-white/80 dark:hover:bg-muted/60"
+                          className="border-border transition-colors hover:bg-accent/70"
                         >
                           <TableCell className="pl-6">
                             <p className="font-mono text-sm font-bold text-foreground">
@@ -420,13 +439,13 @@ function InvoicesScreen() {
                             {renderInvoiceStatusBadge(inv.status)}
                           </TableCell>
                           <TableCell className="pr-6">
-                            <div className="flex items-center justify-end gap-1.5">
+                            <div className="flex items-center justify-end gap-2">
                               {!isPaid && (
                                 <Button
                                   type="button"
                                   size="xs"
                                   onClick={() => setInvoiceToSettle(inv)}
-                                  className="gap-1 rounded-lg bg-primary font-mono text-[11px] font-extrabold text-primary-foreground hover:bg-primary-hover cursor-pointer"
+                                  className="gap-1 rounded-lg bg-primary font-mono text-[11px] font-extrabold text-primary-foreground cursor-pointer"
                                 >
                                   <CheckCircle2 className="size-3.5" />
                                   <span>Mark Paid</span>
@@ -438,12 +457,12 @@ function InvoicesScreen() {
                                   size="xs"
                                   variant="outline"
                                   onClick={() => handleWhatsAppShare(inv)}
-                                  className="gap-1 rounded-lg border-border bg-white font-mono text-[11px] font-semibold dark:border-zinc-700 dark:bg-muted"
+                                  className="gap-1 rounded-lg font-mono text-[11px] font-bold"
                                 >
                                   <MessageCircle className="size-3.5" />
                                   <span>
                                     {inv.status === 'overdue'
-                                      ? 'WhatsApp'
+                                      ? 'Remind'
                                       : 'Share'}
                                   </span>
                                 </Button>
@@ -454,11 +473,11 @@ function InvoicesScreen() {
                                 variant="ghost"
                                 onClick={() => setInvoiceToPreview(inv)}
                                 aria-label={`Preview invoice ${inv.invoiceNumber}`}
-                                className="gap-1 rounded-lg font-mono text-[11px] text-muted-foreground hover:text-foreground"
+                                className="gap-1 rounded-lg font-mono text-[11px] font-semibold text-muted-foreground hover:text-foreground"
                               >
                                 <Eye className="size-3.5" />
                                 <span className="hidden lg:inline">
-                                  {isPaid ? 'Receipt' : 'Preview'}
+                                  {isPaid ? 'Receipt' : 'View'}
                                 </span>
                               </Button>
                               <Button
@@ -481,7 +500,7 @@ function InvoicesScreen() {
               </div>
 
               {/* Mobile Cards */}
-              <div className="divide-y divide-border/70 md:hidden">
+              <div className="divide-y-2 divide-border md:hidden">
                 {filteredInvoices.map((inv) => {
                   const isPaid = inv.status === 'paid';
                   return (
@@ -510,7 +529,7 @@ function InvoicesScreen() {
                             amount={inv.totalAmount}
                             className="font-mono text-base font-extrabold text-foreground"
                           />
-                          <div className="mt-0.5">
+                          <div className="mt-1">
                             {renderInvoiceStatusBadge(inv.status)}
                           </div>
                         </div>
@@ -522,10 +541,10 @@ function InvoicesScreen() {
                           size="xs"
                           variant="outline"
                           onClick={() => setInvoiceToPreview(inv)}
-                          className="min-h-9 gap-1 rounded-xl font-mono font-semibold"
+                          className="h-8 gap-1 rounded-xl font-mono font-bold"
                         >
                           <Eye className="size-3.5" />
-                          <span>{isPaid ? 'Receipt' : 'Preview'}</span>
+                          <span>{isPaid ? 'Receipt' : 'View'}</span>
                         </Button>
                         {!isPaid && (
                           <Button
@@ -533,11 +552,11 @@ function InvoicesScreen() {
                             size="xs"
                             variant="outline"
                             onClick={() => handleWhatsAppShare(inv)}
-                            className="min-h-9 gap-1 rounded-xl font-mono font-semibold"
+                            className="h-8 gap-1 rounded-xl font-mono font-bold"
                           >
                             <MessageCircle className="size-3.5" />
                             <span>
-                              {inv.status === 'overdue' ? 'Ping' : 'WhatsApp'}
+                              {inv.status === 'overdue' ? 'Remind' : 'Share'}
                             </span>
                           </Button>
                         )}
@@ -546,7 +565,7 @@ function InvoicesScreen() {
                             type="button"
                             size="xs"
                             onClick={() => setInvoiceToSettle(inv)}
-                            className="min-h-9 gap-1 rounded-xl bg-primary font-mono font-extrabold text-primary-foreground hover:bg-primary-hover cursor-pointer"
+                            className="h-8 gap-1 rounded-xl bg-primary font-mono font-extrabold text-primary-foreground cursor-pointer"
                           >
                             <CheckCircle2 className="size-3.5" />
                             <span>Mark Paid</span>

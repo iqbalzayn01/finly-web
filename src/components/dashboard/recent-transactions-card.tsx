@@ -1,4 +1,10 @@
-import { Plus, ReceiptText, Trash2 } from 'lucide-react';
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  Plus,
+  ReceiptText,
+  Trash2,
+} from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { MoneyValue } from '#/components/money-value';
 import { Badge } from '#/components/ui/badge';
@@ -36,11 +42,6 @@ type LedgerFilterTab = 'all' | 'income' | 'expenses';
 
 const PAGE_SIZE = 10;
 
-/**
- * Tile 6: Recent Transactions Bento Ledger (PRD v2.1.0 §3.1)
- * Span-12 full-width Bento container with strict 10-row pagination and
- * semantic Inflow (#34D399) / Outflow (#FB7185) filter pills and amounts.
- */
 export function RecentTransactionsCard() {
   const {
     transactions,
@@ -116,23 +117,23 @@ export function RecentTransactionsCard() {
   );
 
   return (
-    <div className="bento-card bento-card-static col-span-12 overflow-hidden border border-border dark:border-zinc-800">
-      {/* Bento Ledger Header */}
-      <div className="flex flex-col justify-between gap-4 border-b border-border/70 p-5 sm:flex-row sm:items-center sm:px-6">
+    <div className="bento-card bento-card-static col-span-12 overflow-hidden bg-card">
+      {/* Header */}
+      <div className="flex flex-col justify-between gap-4 border-b-2 border-border p-6 sm:flex-row sm:items-center">
         <div className="space-y-0.5">
-          <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-foreground">
+          <h2 className="font-mono text-xs font-extrabold uppercase tracking-wider text-foreground sm:text-sm">
             Recent Activity
           </h2>
           <p className="font-mono text-xs text-muted-foreground">
-            Chronological cashflow ledger · 10 records per page
+            Your latest income and expenses
           </p>
         </div>
 
-        {/* Filter Pills: All, Inflow, Outflow */}
+        {/* Filter Pills: All, Income, Expenses */}
         <div
           role="tablist"
           aria-label="Filter recent transactions"
-          className="flex flex-wrap items-center gap-1 rounded-full border border-border bg-white p-1 dark:border-zinc-800 dark:bg-background"
+          className="brutal-surface flex flex-wrap items-center gap-1 rounded-xl bg-muted/50 p-1"
         >
           <button
             type="button"
@@ -143,10 +144,10 @@ export function RecentTransactionsCard() {
               setPage(1);
             }}
             className={cn(
-              'inline-flex min-h-8 items-center gap-1.5 rounded-full px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'inline-flex h-8 items-center gap-1.5 rounded-lg border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
               filterTab === 'all'
-                ? 'bg-primary font-bold text-primary-foreground shadow-xs'
-                : 'text-muted-foreground hover:text-foreground',
+                ? 'border-border bg-primary font-extrabold text-primary-foreground'
+                : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
             )}
           >
             <span>All ({tabCounts.all})</span>
@@ -161,10 +162,10 @@ export function RecentTransactionsCard() {
               setPage(1);
             }}
             className={cn(
-              'inline-flex min-h-8 items-center gap-1.5 rounded-full px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'inline-flex h-8 items-center gap-1.5 rounded-lg border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
               filterTab === 'income'
-                ? 'bg-inflow font-bold text-primary-foreground shadow-xs'
-                : 'text-muted-foreground hover:text-foreground',
+                ? 'border-border bg-inflow font-extrabold text-primary-foreground'
+                : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
             )}
           >
             <span
@@ -187,10 +188,10 @@ export function RecentTransactionsCard() {
               setPage(1);
             }}
             className={cn(
-              'inline-flex min-h-8 items-center gap-1.5 rounded-full px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'inline-flex h-8 items-center gap-1.5 rounded-lg border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
               filterTab === 'expenses'
-                ? 'bg-outflow font-bold text-primary-foreground shadow-xs'
-                : 'text-muted-foreground hover:text-foreground',
+                ? 'border-border bg-outflow font-extrabold text-primary-foreground'
+                : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
             )}
           >
             <span
@@ -212,41 +213,40 @@ export function RecentTransactionsCard() {
       <div>
         {transactions.length === 0 ? (
           <div className="p-6">
-            <Empty className="rounded-2xl border border-dashed border-border bg-white/60 py-10 dark:bg-muted/60">
+            <Empty className="rounded-2xl border-2 border-dashed border-border bg-muted/30 py-10">
               <EmptyHeader>
                 <EmptyMedia variant="icon">
                   <ReceiptText className="size-5 text-foreground" />
                 </EmptyMedia>
                 <EmptyTitle className="font-mono text-base font-bold">
-                  No transactions recorded yet
+                  No transactions yet
                 </EmptyTitle>
                 <EmptyDescription className="font-mono text-xs">
-                  Record your first income or expense in USD to see your
-                  Safe-to-Spend allowance and cashflow trend.
+                  Add your first income or expense to start tracking your daily
+                  spending limit.
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent>
                 <Button
                   type="button"
                   onClick={() => openQuickEntry('money_in')}
-                  className="min-h-11 gap-2 rounded-xl px-5 font-mono font-bold"
+                  className="h-10 gap-2 rounded-xl px-5 font-mono text-xs font-extrabold uppercase tracking-wider"
                 >
                   <Plus className="size-4" />
-                  <span>Record Transaction</span>
+                  <span>Add Transaction</span>
                 </Button>
               </EmptyContent>
             </Empty>
           </div>
         ) : paginated.data.length === 0 ? (
           <div className="p-6">
-            <Empty className="rounded-2xl border border-dashed border-border bg-white/60 py-8 dark:bg-muted/60">
+            <Empty className="rounded-2xl border-2 border-dashed border-border bg-muted/30 py-8">
               <EmptyHeader>
                 <EmptyTitle className="font-mono text-sm font-bold">
                   No matching transactions
                 </EmptyTitle>
                 <EmptyDescription className="font-mono text-xs">
-                  Switch filter pills or clear the active wallet filter to view
-                  more records.
+                  Switch filters or clear the wallet filter to see more items.
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent>
@@ -259,9 +259,9 @@ export function RecentTransactionsCard() {
                     setSelectedWalletId('all');
                     setPage(1);
                   }}
-                  className="rounded-xl font-mono font-semibold"
+                  className="rounded-xl font-mono text-xs font-bold"
                 >
-                  Show All Transactions
+                  Show All
                 </Button>
               </EmptyContent>
             </Empty>
@@ -269,24 +269,24 @@ export function RecentTransactionsCard() {
         ) : (
           <>
             <Table>
-              <TableHeader className="bg-accent dark:bg-muted/70">
-                <TableRow className="border-border/70">
-                  <TableHead className="pl-5 font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground sm:pl-6">
-                    Transaction / Note
+              <TableHeader className="bg-muted/60">
+                <TableRow className="border-b-2 border-border">
+                  <TableHead className="pl-6 font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
+                    Description
                   </TableHead>
-                  <TableHead className="hidden font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground sm:table-cell">
+                  <TableHead className="hidden font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground sm:table-cell">
                     Category
                   </TableHead>
-                  <TableHead className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                  <TableHead className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
                     Date
                   </TableHead>
-                  <TableHead className="hidden font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground md:table-cell">
-                    Wallet Account
+                  <TableHead className="hidden font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground md:table-cell">
+                    Wallet
                   </TableHead>
-                  <TableHead className="text-right font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                  <TableHead className="text-right font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
                     Amount
                   </TableHead>
-                  <TableHead className="w-10 pr-4 text-right sm:pr-5">
+                  <TableHead className="w-12 pr-6 text-right">
                     <span className="sr-only">Actions</span>
                   </TableHead>
                 </TableRow>
@@ -301,18 +301,26 @@ export function RecentTransactionsCard() {
                   return (
                     <TableRow
                       key={tx.id}
-                      className="group border-border/60 transition-colors hover:bg-accent dark:hover:bg-muted/60"
+                      className="group border-border transition-colors hover:bg-accent/70"
                     >
-                      <TableCell className="pl-5 sm:pl-6">
-                        <div className="flex items-center gap-2.5">
+                      <TableCell className="pl-6">
+                        <div className="flex items-center gap-3">
                           <span
                             className={cn(
-                              'size-2 shrink-0 rounded-full',
-                              isInflow ? 'bg-inflow' : 'bg-outflow',
+                              'flex size-8 shrink-0 items-center justify-center rounded-xl border-2 transition-transform duration-150 group-hover:scale-105',
+                              isInflow
+                                ? 'border-inflow-border bg-inflow-bg text-inflow'
+                                : 'border-outflow-border bg-outflow-bg text-outflow',
                             )}
-                          />
+                          >
+                            {isInflow ? (
+                              <ArrowUpRight className="size-4" />
+                            ) : (
+                              <ArrowDownRight className="size-4" />
+                            )}
+                          </span>
                           <div className="min-w-0">
-                            <p className="max-w-44 truncate font-mono text-xs font-semibold text-foreground sm:max-w-xs sm:text-sm">
+                            <p className="max-w-44 truncate font-mono text-xs font-bold text-foreground sm:max-w-xs sm:text-sm">
                               {tx.note || tx.category}
                             </p>
                             <p className="font-mono text-[11px] text-muted-foreground sm:hidden">
@@ -324,7 +332,7 @@ export function RecentTransactionsCard() {
                       <TableCell className="hidden sm:table-cell">
                         <Badge
                           variant="outline"
-                          className="rounded-lg border-border bg-white/80 font-mono text-[11px] font-medium text-foreground dark:border-zinc-700 dark:bg-muted"
+                          className="rounded-lg border-border bg-card font-mono text-[11px] font-semibold text-foreground"
                         >
                           {tx.category}
                         </Badge>
@@ -345,14 +353,14 @@ export function RecentTransactionsCard() {
                           )}
                         />
                       </TableCell>
-                      <TableCell className="pr-4 text-right sm:pr-5">
+                      <TableCell className="pr-6 text-right">
                         <Button
                           type="button"
                           variant="ghost"
-                          size="icon-xs"
+                          size="icon-sm"
                           onClick={() => deleteTransaction(tx.id)}
                           aria-label={`Delete ${tx.note || tx.category}`}
-                          className="text-muted-foreground opacity-75 hover:text-outflow sm:opacity-0 sm:group-hover:opacity-100 focus-visible:opacity-100 dark:hover:text-outflow"
+                          className="text-muted-foreground hover:text-outflow"
                         >
                           <Trash2 className="size-3.5" />
                         </Button>
@@ -363,18 +371,18 @@ export function RecentTransactionsCard() {
               </TableBody>
             </Table>
 
-            {/* Strict 10-Row Pagination Footer (PRD v2.1.0 §3 & §6) */}
-            <div className="flex flex-col items-center justify-between gap-3 border-t border-border/70 bg-accent px-5 py-3.5 sm:flex-row sm:px-6 dark:bg-muted/60">
+            {/* Pagination Footer */}
+            <div className="flex flex-col items-center justify-between gap-3 border-t-2 border-border bg-muted/40 px-6 py-3.5 sm:flex-row">
               <p className="font-mono text-xs text-muted-foreground tabular-nums">
                 Showing{' '}
                 <strong className="font-bold text-foreground">
-                  {rangeStart} - {rangeEnd}
+                  {rangeStart}–{rangeEnd}
                 </strong>{' '}
                 of{' '}
                 <strong className="font-bold text-foreground">
                   {paginated.totalItems}
                 </strong>{' '}
-                records
+                items
               </p>
 
               <Pagination className="mx-0 w-auto justify-end">
@@ -391,7 +399,7 @@ export function RecentTransactionsCard() {
                         }
                       }}
                       className={cn(
-                        'h-8 rounded-xl font-mono text-xs cursor-pointer',
+                        'h-8 rounded-xl border-2 border-border bg-card font-mono text-xs font-bold cursor-pointer',
                         !canPrev && 'pointer-events-none opacity-45',
                       )}
                     />
@@ -403,7 +411,7 @@ export function RecentTransactionsCard() {
                       isActive
                       size="default"
                       onClick={(e) => e.preventDefault()}
-                      className="h-8 cursor-default rounded-full border border-border dark:bg-primary px-3 font-mono text-xs font-bold text-primary-foreground tabular-nums hover:text-primary-foreground shadow-none"
+                      className="h-8 cursor-default rounded-xl border-2 border-border bg-primary px-3 font-mono text-xs font-extrabold text-primary-foreground tabular-nums hover:bg-primary hover:text-primary-foreground shadow-none"
                     >
                       Page {paginated.currentPage} of {paginated.totalPages}
                     </PaginationLink>
@@ -423,7 +431,7 @@ export function RecentTransactionsCard() {
                         }
                       }}
                       className={cn(
-                        'h-8 rounded-xl font-mono text-xs cursor-pointer',
+                        'h-8 rounded-xl border-2 border-border bg-card font-mono text-xs font-bold cursor-pointer',
                         !canNext && 'pointer-events-none opacity-45',
                       )}
                     />

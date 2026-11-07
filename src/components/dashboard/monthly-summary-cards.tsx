@@ -33,31 +33,31 @@ export function TotalBalanceBentoTile() {
   const isMasked = profile.privacyBlurEnabled;
 
   return (
-    <div className="bento-card col-span-12 flex flex-col justify-between bg-zinc-900 p-6 border border-zinc-900 text-white md:col-span-4 dark:bg-card dark:border-zinc-800">
-      {/* Header Row */}
+    <div className="bento-card col-span-12 flex h-full flex-col justify-between gap-5 bg-card p-6 text-foreground md:col-span-4">
+      {/* 1. Header Row */}
       <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-[11px] font-semibold uppercase tracking-widest text-white dark:text-muted-foreground">
+        <span className="font-mono text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
           {terminology.netBalance}
         </span>
-        <span className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-primary">
-          <span className="size-2.5 rounded-full bg-primary" />
+        <span className="inline-flex h-6 items-center gap-1.5 rounded-lg border-2 border-border bg-muted px-2.5 font-mono text-[10px] font-bold uppercase tracking-wider text-foreground">
+          <span className="size-2 rounded-full bg-inflow" />
           <span>Live</span>
         </span>
       </div>
 
-      {/* Balance + Inline Privacy Eye Button */}
-      <div className="my-5 space-y-2.5">
-        <div className="flex items-center gap-3">
+      {/* 2. Main Balance + Privacy Eye Button */}
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between gap-3">
           <MoneyValue
             amount={displayedBalance}
-            className="font-mono text-3xl font-black tracking-tighter text-white tabular-nums sm:text-4xl"
+            className="font-mono text-3xl font-black tracking-tight text-foreground tabular-nums sm:text-4xl"
           />
           <button
             type="button"
             onClick={() => togglePrivacyBlur()}
             aria-label={isMasked ? 'Show balance' : 'Hide balance'}
             title={isMasked ? 'Show balance' : 'Hide balance'}
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-zinc-700/80 bg-zinc-800/90 text-muted-foreground transition-colors hover:bg-zinc-700 hover:text-white cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="brutal-btn inline-flex size-9 shrink-0 items-center justify-center rounded-xl border-border bg-muted text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer outline-none"
           >
             {isMasked ? (
               <EyeOff className="size-4" />
@@ -67,64 +67,60 @@ export function TotalBalanceBentoTile() {
           </button>
         </div>
 
-        <p className="font-mono text-xs text-white dark:text-muted-foreground">
+        <p className="font-mono text-xs text-muted-foreground">
           {activeWallet
-            ? `Filtered to ${activeWallet.name}`
-            : `Available across ${wallets.length} active ${wallets.length === 1 ? 'account' : 'accounts'}`}
+            ? `Showing ${activeWallet.name}`
+            : `Cash across all ${wallets.length} wallets`}
         </p>
-
-        {/* Wallet Filter Micro-Chips */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-1">
-          <button
-            type="button"
-            onClick={() => setSelectedWalletId('all')}
-            className={cn(
-              'rounded-xl px-2.5 py-1 font-mono text-[11px] transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary border border-muted-foreground dark:border-border/80',
-              selectedWalletId === 'all'
-                ? 'bg-primary font-bold text-primary-foreground'
-                : 'bg-zinc-800/90 font-medium text-muted-foreground hover:bg-zinc-700 hover:text-white',
-            )}
-          >
-            All ({wallets.length})
-          </button>
-          {wallets.map((w) => (
-            <button
-              key={w.id}
-              type="button"
-              onClick={() =>
-                setSelectedWalletId(selectedWalletId === w.id ? 'all' : w.id)
-              }
-              className={cn(
-                'rounded-xl px-2.5 py-1 font-mono text-[11px] transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary border border-muted-foreground dark:border-border/80',
-                selectedWalletId === w.id
-                  ? 'bg-primary font-bold text-primary-foreground'
-                  : 'bg-zinc-800/90 font-medium text-muted-foreground hover:bg-zinc-700 hover:text-white',
-              )}
-            >
-              {w.name}
-            </button>
-          ))}
-        </div>
       </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between border-t border-border/80 pt-3">
-        <span className="font-mono text-[11px] text-white dark:text-muted-foreground">
-          {wallets.length} {wallets.length === 1 ? 'Account' : 'Accounts'}{' '}
-          Active
-        </span>
-        <span className="font-mono text-[11px] font-semibold text-white dark:text-muted-foreground">
-          Auto-updated
-        </span>
+      {/* 3. Wallet Filter Chips */}
+      <div className="flex flex-wrap items-center gap-1.5">
+        <button
+          type="button"
+          onClick={() => setSelectedWalletId('all')}
+          className={cn(
+            'inline-flex h-8 items-center rounded-xl border-2 px-3 font-mono text-[11px] transition-all duration-150 active:scale-95 cursor-pointer outline-none',
+            selectedWalletId === 'all'
+              ? 'border-border bg-primary font-extrabold text-primary-foreground'
+              : 'border-border bg-muted/60 font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
+          )}
+        >
+          All ({wallets.length})
+        </button>
+        {wallets.map((w) => (
+          <button
+            key={w.id}
+            type="button"
+            onClick={() =>
+              setSelectedWalletId(selectedWalletId === w.id ? 'all' : w.id)
+            }
+            className={cn(
+              'inline-flex h-8 items-center rounded-xl border-2 px-3 font-mono text-[11px] transition-all duration-150 active:scale-95 cursor-pointer outline-none',
+              selectedWalletId === w.id
+                ? 'border-border bg-primary font-extrabold text-primary-foreground'
+                : 'border-border bg-muted/60 font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
+            )}
+          >
+            {w.name}
+          </button>
+        ))}
+      </div>
+
+      {/* 4. Aligned Footer */}
+      <div className="flex items-center justify-between border-t-2 border-border pt-3 font-mono text-xs">
+        <span className="text-muted-foreground">Safety buffer</span>
+        <MoneyValue
+          amount={profile.emergencyBuffer}
+          className="font-bold text-foreground tabular-nums"
+        />
       </div>
     </div>
   );
 }
 
 /**
- * Tile 3: Total Inflow & Outflow Summary Tile (PRD v2.1.0 §3.1)
- * Styled with neutral micro-badge,
- * Emerald (#34D399) Inflow, Rose (#FB7185) Outflow, and Net Cash Position.
+ * Tile 3: This Month's Summary Tile
  */
 export function CashSummaryBentoTile() {
   const { transactions, todayISO, terminology, selectedWalletId } = useFinly();
@@ -137,89 +133,82 @@ export function CashSummaryBentoTile() {
   const isSurplus = summary.netFlow >= 0;
 
   return (
-    <div className="bento-card col-span-12 flex flex-col justify-between border border-border p-6 md:col-span-4 dark:border-zinc-800">
-      {/* Header Row */}
+    <div className="bento-card col-span-12 flex h-full flex-col justify-between gap-5 bg-card p-6 text-foreground md:col-span-4">
+      {/* 1. Header Row */}
       <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-          Total Cash Summary
+        <span className="font-mono text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
+          This Month
         </span>
-        <span className="rounded-full bg-accent px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
-          30D Flow
+        <span
+          className={cn(
+            'inline-flex h-6 items-center rounded-lg border-2 px-2.5 font-mono text-[10px] font-bold uppercase tracking-wider',
+            isSurplus
+              ? 'border-inflow-border bg-inflow-bg text-inflow'
+              : 'border-outflow-border bg-outflow-bg text-outflow',
+          )}
+        >
+          {isSurplus ? 'Positive' : 'Over Spent'}
         </span>
       </div>
 
-      {/* Inflow & Outflow Rows */}
-      <div className="my-4 space-y-2.5">
-        <div className="flex items-center justify-between gap-2 rounded-2xl border border-border/70 bg-white/85 px-3.5 py-2.5 dark:border-zinc-700/60 dark:bg-muted/85">
-          <div className="flex items-center gap-2.5">
-            <span className="flex size-7 shrink-0 items-center justify-center rounded-xl bg-inflow-bg text-inflow">
-              <ArrowUpRight className="size-4" />
-            </span>
-            <div>
-              <p className="font-mono text-xs font-bold text-foreground">
-                {terminology.inflow}
-              </p>
-              <p className="font-mono text-[10px] text-muted-foreground">
-                {summary.inflowCount}{' '}
-                {summary.inflowCount === 1 ? 'deposit' : 'deposits'}
-              </p>
-            </div>
-          </div>
-          <MoneyValue
-            amount={summary.moneyIn}
-            signedType="money_in"
-            className="font-mono text-base font-extrabold text-inflow tabular-nums sm:text-lg"
-          />
-        </div>
-
-        <div className="flex items-center justify-between gap-2 rounded-2xl border border-border/70 bg-white/85 px-3.5 py-2.5 dark:border-zinc-700/60 dark:bg-muted/85">
-          <div className="flex items-center gap-2.5">
-            <span className="flex size-7 shrink-0 items-center justify-center rounded-xl bg-outflow-bg text-outflow">
-              <ArrowDownRight className="size-4" />
-            </span>
-            <div>
-              <p className="font-mono text-xs font-bold text-foreground">
-                {terminology.outflow}
-              </p>
-              <p className="font-mono text-[10px] text-muted-foreground">
-                {summary.outflowCount}{' '}
-                {summary.outflowCount === 1 ? 'entry' : 'entries'}
-              </p>
-            </div>
-          </div>
-          <MoneyValue
-            amount={summary.moneyOut}
-            signedType="money_out"
-            className="font-mono text-base font-extrabold text-outflow tabular-nums sm:text-lg"
-          />
-        </div>
-      </div>
-
-      {/* Net Cash Position Footer */}
-      <div className="flex items-center justify-between gap-2 border-t border-border/80 pt-3">
-        <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-          Net Cash
-        </span>
-        <div className="flex items-center gap-2">
+      {/* 2. Main Net Cashflow Figure */}
+      <div className="space-y-1.5">
+        <div className="flex items-baseline gap-2">
           <MoneyValue
             amount={Math.abs(summary.netFlow)}
             signedType={isSurplus ? 'money_in' : 'money_out'}
             className={cn(
-              'font-mono text-xs font-extrabold tabular-nums sm:text-sm',
+              'font-mono text-3xl font-black tracking-tight tabular-nums sm:text-4xl',
               isSurplus ? 'text-inflow' : 'text-outflow',
             )}
           />
-          <span
-            className={cn(
-              'rounded-full px-2 py-0.5 font-mono text-[10px] font-bold uppercase',
-              isSurplus
-                ? 'bg-inflow-bg text-inflow'
-                : 'bg-outflow-bg text-outflow',
-            )}
-          >
-            {isSurplus ? 'Surplus' : 'Deficit'}
-          </span>
         </div>
+        <p className="font-mono text-xs text-muted-foreground">
+          {isSurplus
+            ? 'Saved so far this month'
+            : 'Spent more than earned this month'}
+        </p>
+      </div>
+
+      {/* 3. Side-by-Side Income & Expenses Boxes */}
+      <div className="grid grid-cols-2 gap-2.5">
+        <div className="flex items-center gap-2.5 rounded-xl border-2 border-border bg-muted/40 p-2.5">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-inflow-border bg-inflow-bg text-inflow">
+            <ArrowUpRight className="size-4" />
+          </span>
+          <div className="min-w-0">
+            <p className="truncate font-mono text-[10px] font-bold uppercase text-muted-foreground">
+              {terminology.inflow}
+            </p>
+            <MoneyValue
+              amount={summary.moneyIn}
+              className="block truncate font-mono text-xs font-extrabold text-inflow tabular-nums sm:text-sm"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2.5 rounded-xl border-2 border-border bg-muted/40 p-2.5">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-outflow-border bg-outflow-bg text-outflow">
+            <ArrowDownRight className="size-4" />
+          </span>
+          <div className="min-w-0">
+            <p className="truncate font-mono text-[10px] font-bold uppercase text-muted-foreground">
+              {terminology.outflow}
+            </p>
+            <MoneyValue
+              amount={summary.moneyOut}
+              className="block truncate font-mono text-xs font-extrabold text-outflow tabular-nums sm:text-sm"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Aligned Footer */}
+      <div className="flex items-center justify-between border-t-2 border-border pt-3 font-mono text-xs">
+        <span className="text-muted-foreground">Recorded this month</span>
+        <span className="font-bold text-foreground tabular-nums">
+          {summary.inflowCount + summary.outflowCount} entries
+        </span>
       </div>
     </div>
   );
