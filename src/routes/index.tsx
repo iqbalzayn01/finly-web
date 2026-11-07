@@ -41,7 +41,7 @@ function DashboardScreen() {
           type="button"
           size="default"
           onClick={() => openQuickEntry('money_out')}
-          className="h-10 gap-2 rounded-xl bg-primary px-4 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground"
+          className="hidden md:flex h-10 gap-2 rounded-xl bg-primary px-4 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground"
         >
           <Plus className="size-4 stroke-[2.5] transition-transform duration-200 group-hover:rotate-90" />
           <span>Add Transaction</span>
