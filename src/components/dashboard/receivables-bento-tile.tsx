@@ -22,59 +22,64 @@ export function ReceivablesBentoTile() {
   const hasOverdue = summary.overdueCount > 0;
 
   return (
-    <div className="bento-card col-span-12 flex flex-col justify-between border border-border p-6 lg:col-span-4 dark:border-zinc-800">
-      {/* Header Row */}
-      <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-          {terminology.unpaidBills}
-        </span>
+    <div className="bento-card col-span-12 flex h-full flex-col justify-between gap-5 bg-card p-6 lg:col-span-4">
+      {/* Header Row aligned with Chart Header */}
+      <div className="flex items-center justify-between gap-2 border-b-2 border-border pb-4">
+        <div className="space-y-0.5">
+          <h2 className="font-mono text-xs font-extrabold uppercase tracking-wider text-foreground sm:text-sm">
+            {terminology.unpaidBills}
+          </h2>
+          <p className="font-mono text-xs text-muted-foreground">
+            Money clients owe you
+          </p>
+        </div>
         <Link
           to="/invoices"
-          aria-label="Open Invoices workspace"
-          className="inline-flex size-8 items-center justify-center rounded-xl border border-border bg-white text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring dark:border-zinc-700 dark:bg-muted"
+          aria-label="Open Invoices"
+          className="brutal-btn group inline-flex size-9 shrink-0 items-center justify-center rounded-xl border-border bg-muted text-foreground hover:bg-primary hover:text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <ArrowUpRight className="size-4" />
+          <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>
       </div>
 
       {/* Primary Pending Figure */}
-      <div className="my-5 space-y-4">
-        <div>
+      <div className="space-y-4">
+        <div className="space-y-1">
           <div className="flex items-center gap-1.5 font-mono text-xs font-semibold text-muted-foreground">
             <Clock className="size-3.5 text-info" />
             <span>
               {summary.waitingCount}{' '}
               {summary.waitingCount === 1
-                ? 'Invoice Pending'
-                : 'Invoices Pending'}
+                ? 'unpaid invoice'
+                : 'unpaid invoices'}
             </span>
           </div>
           <MoneyValue
             amount={summary.waitingAmount}
-            className="mt-1.5 font-mono text-3xl font-black tracking-tighter text-foreground tabular-nums sm:text-4xl"
+            className="block font-mono text-3xl font-black tracking-tight text-foreground tabular-nums sm:text-4xl"
           />
         </div>
 
-        {/* Overdue & Collected Breakdown Pills */}
-        <div className="space-y-2">
+        {/* Overdue & Collected Breakdown Boxes */}
+        <div className="space-y-2.5">
           <div
             className={cn(
-              'flex items-center justify-between gap-2 rounded-2xl border px-3.5 py-2.5 text-xs',
+              'flex items-center justify-between gap-2 rounded-xl border-2 px-3.5 py-3 text-xs',
               hasOverdue
                 ? 'border-outflow-border bg-outflow-bg'
-                : 'border-border/80 bg-white/80 dark:border-zinc-700/60 dark:bg-muted/80',
+                : 'border-border bg-muted/40',
             )}
           >
-            <span className="inline-flex items-center gap-2 font-mono font-semibold text-foreground">
+            <span className="inline-flex items-center gap-2 font-mono font-bold text-foreground">
               <TriangleAlert
                 className={cn(
-                  'size-3.5 shrink-0',
+                  'size-4 shrink-0',
                   hasOverdue ? 'text-outflow' : 'text-muted-foreground',
                 )}
               />
               <span>
                 Overdue{' '}
-                {hasOverdue ? `(${summary.overdueCount})` : '(All clear)'}
+                {hasOverdue ? `(${summary.overdueCount})` : '(None)'}
               </span>
             </span>
             <MoneyValue
@@ -86,9 +91,9 @@ export function ReceivablesBentoTile() {
             />
           </div>
 
-          <div className="flex items-center justify-between gap-2 rounded-2xl border border-inflow-border bg-inflow-bg px-3.5 py-2.5 text-xs">
-            <span className="inline-flex items-center gap-2 font-mono font-semibold text-foreground">
-              <CheckCircle2 className="size-3.5 shrink-0 text-inflow" />
+          <div className="flex items-center justify-between gap-2 rounded-xl border-2 border-inflow-border bg-inflow-bg px-3.5 py-3 text-xs">
+            <span className="inline-flex items-center gap-2 font-mono font-bold text-foreground">
+              <CheckCircle2 className="size-4 shrink-0 text-inflow" />
               <span>Paid This Month</span>
             </span>
             <MoneyValue
@@ -103,11 +108,11 @@ export function ReceivablesBentoTile() {
       <Button
         asChild
         variant="outline"
-        className="min-h-10 w-full justify-between rounded-xl border-border bg-white font-mono text-xs font-bold text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground dark:border-zinc-700 dark:bg-muted dark:hover:border-primary dark:hover:bg-primary dark:hover:text-primary-foreground"
+        className="h-10 w-full justify-between rounded-xl font-mono text-xs font-extrabold uppercase tracking-wider hover:bg-primary hover:text-primary-foreground"
       >
         <Link to="/invoices">
-          <span>View Invoices</span>
-          <ArrowUpRight className="size-4" />
+          <span>Manage Invoices</span>
+          <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>
       </Button>
     </div>

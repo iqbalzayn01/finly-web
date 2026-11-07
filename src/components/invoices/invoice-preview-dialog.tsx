@@ -70,22 +70,22 @@ export function InvoicePreviewDialog({
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className="max-h-[92vh] overflow-y-auto rounded-3xl border-border bg-popover p-6 sm:max-w-xl">
+			<DialogContent className="brutal-surface max-h-[92vh] overflow-y-auto rounded-3xl border-2 border-border bg-popover p-6 sm:max-w-xl">
 				<DialogHeader className="no-print">
 					<DialogTitle className="font-mono text-base font-black uppercase tracking-tight">
 						Invoice #{invoice.invoiceNumber}
 					</DialogTitle>
 					<DialogDescription className="font-mono text-xs">
-						Printable client invoice summary &amp; 1-click sharing
+						Preview, print, or share this invoice with your client.
 					</DialogDescription>
 				</DialogHeader>
 
 				{/* Printable Sheet */}
-				<div className="space-y-6 rounded-2xl border border-border bg-background p-5 font-mono sm:p-6">
-					<div className="flex items-start justify-between gap-4 border-b border-border pb-4">
+				<div className="space-y-6 rounded-2xl border-2 border-border bg-background p-5 font-mono sm:p-6">
+					<div className="flex items-start justify-between gap-4 border-b-2 border-border pb-4">
 						<div className="flex items-center gap-2.5">
-							<span className="flex size-8 items-center justify-center rounded-xl bg-primary-foreground">
-								<BrandLogo size={20} variant="brand" />
+							<span className="brutal-surface flex size-9 items-center justify-center rounded-xl bg-primary">
+								<BrandLogo size={20} variant="monochrome" />
 							</span>
 							<div>
 								<p className="text-sm font-bold text-foreground">
@@ -95,7 +95,7 @@ export function InvoicePreviewDialog({
 							</div>
 						</div>
 						<div className="text-right">
-							<p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+							<p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
 								Invoice
 							</p>
 							<p className="text-base font-black text-foreground tabular-nums">
@@ -109,7 +109,7 @@ export function InvoicePreviewDialog({
 
 					<div className="grid grid-cols-2 gap-4 text-xs">
 						<div>
-							<p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+							<p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
 								Billed To
 							</p>
 							<p className="mt-1 text-sm font-bold text-foreground">
@@ -149,16 +149,14 @@ export function InvoicePreviewDialog({
 						</div>
 					</div>
 
-					<div className="overflow-hidden rounded-xl border border-border">
+					<div className="overflow-hidden rounded-xl border-2 border-border">
 						<table className="w-full text-xs">
-							<thead className="bg-muted/60 text-muted-foreground">
+							<thead className="border-b-2 border-border bg-muted/60 text-muted-foreground">
 								<tr>
-									<th className="px-3 py-2 text-left font-semibold">
-										Description
-									</th>
-									<th className="px-3 py-2 text-right font-semibold">Qty</th>
-									<th className="px-3 py-2 text-right font-semibold">Rate</th>
-									<th className="px-3 py-2 text-right font-semibold">Total</th>
+									<th className="px-3 py-2 text-left font-bold">Description</th>
+									<th className="px-3 py-2 text-right font-bold">Qty</th>
+									<th className="px-3 py-2 text-right font-bold">Price</th>
+									<th className="px-3 py-2 text-right font-bold">Total</th>
 								</tr>
 							</thead>
 							<tbody className="divide-y divide-border">
@@ -182,7 +180,7 @@ export function InvoicePreviewDialog({
 						</table>
 					</div>
 
-					<div className="space-y-1.5 border-t border-border pt-3 text-xs">
+					<div className="space-y-1.5 border-t-2 border-border pt-3 text-xs">
 						<div className="flex justify-between text-muted-foreground">
 							<span>Subtotal</span>
 							<span className="tabular-nums">
@@ -209,7 +207,7 @@ export function InvoicePreviewDialog({
 					</div>
 
 					{invoice.paymentInstructions && (
-						<div className="whitespace-pre-line rounded-xl bg-muted/50 p-3 text-xs text-muted-foreground">
+						<div className="whitespace-pre-line rounded-xl border-2 border-border bg-muted/40 p-3 text-xs text-muted-foreground">
 							<p className="mb-0.5 font-bold text-foreground">
 								Payment Instructions
 							</p>
@@ -224,7 +222,7 @@ export function InvoicePreviewDialog({
 						variant="outline"
 						size="sm"
 						onClick={handleCopySummary}
-						className="min-h-10 gap-1.5 rounded-xl font-mono text-xs font-bold"
+						className="h-10 gap-1.5 rounded-xl font-mono text-xs font-bold"
 					>
 						<Copy className="size-3.5" />
 						<span>Copy</span>
@@ -234,7 +232,7 @@ export function InvoicePreviewDialog({
 						variant="outline"
 						size="sm"
 						onClick={() => window.print()}
-						className="min-h-10 gap-1.5 rounded-xl font-mono text-xs font-bold"
+						className="h-10 gap-1.5 rounded-xl font-mono text-xs font-bold"
 					>
 						<Printer className="size-3.5" />
 						<span>Print / PDF</span>
@@ -243,13 +241,13 @@ export function InvoicePreviewDialog({
 						type="button"
 						size="sm"
 						onClick={handleWhatsAppShare}
-						className="min-h-10 gap-1.5 rounded-xl bg-primary px-4 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground hover:bg-primary-hover"
+						className="h-10 gap-1.5 rounded-xl bg-primary px-4 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground"
 					>
 						<MessageCircle className="size-3.5" />
 						<span>
 							{invoice.status === "overdue"
-								? "Send WA Reminder"
-								: "Share via WhatsApp"}
+								? "Send Reminder"
+								: "Share on WhatsApp"}
 						</span>
 					</Button>
 				</div>

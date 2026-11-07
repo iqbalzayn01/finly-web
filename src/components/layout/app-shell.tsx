@@ -136,28 +136,26 @@ export function AppShell({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-foreground dark:bg-zinc-950">
-      {/* Offline Resilience Sticky Banner */}
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      {/* Offline Banner */}
       {isOffline && (
-        <div className="no-print sticky top-0 z-50 flex items-center justify-center gap-2 border-b border-warning-border bg-warning-bg px-4 py-1.5 font-mono text-xs font-semibold text-amber-900 dark:text-warning">
+        <div className="no-print sticky top-0 z-50 flex items-center justify-center gap-2 border-b-2 border-warning-border bg-warning-bg px-4 py-2 font-mono text-xs font-bold text-amber-900 dark:text-warning">
           <WifiOff className="size-3.5 shrink-0" />
-          <span>
-            Working Offline · Transactions saved locally on this device
-          </span>
+          <span>Offline mode — changes are saved on your device</span>
         </div>
       )}
 
-      {/* Borderless Top Bar (PRD v2.1.0 §2.1 — bg-white dark:bg-zinc-950 border-none) */}
-      <header className="no-print sticky top-0 z-40 border-none bg-white shadow-none dark:bg-zinc-950">
+      {/* Top Navigation Bar */}
+      <header className="no-print sticky top-0 z-40 border-b-2 border-border bg-background/95 backdrop-blur-md">
         <div className="mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto] items-center gap-4 px-4 sm:px-6 md:grid-cols-[1fr_auto_1fr] lg:px-8">
-          {/* 1. Left Zone: Brand Spark (#C9F31D) + Finly Wordmark */}
+          {/* 1. Left Zone: Brand Logo */}
           <div className="flex items-center">
             <Link
               to="/"
               className="group inline-flex items-center gap-2.5 rounded-xl py-1 pr-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <span className="flex size-8 items-center justify-center rounded-xl bg-primary">
-                <BrandLogo size={24} variant="monochrome" />
+              <span className="brutal-surface flex size-10 items-center justify-center rounded-xl bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
+                <BrandLogo size={22} variant="monochrome" />
               </span>
               <span className="font-mono text-lg font-black tracking-tight text-foreground">
                 Finly
@@ -165,20 +163,20 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Link>
           </div>
 
-          {/* 2. Center Zone: Minimalist Bento Pill Container (Desktop >= 768px — PRD §2.1) */}
+          {/* 2. Center Zone: Navigation Bar */}
           <nav
-            aria-label="Core workspace navigation"
-            className="hidden items-center justify-center gap-1 rounded-2xl border border-border p-1.5 md:flex"
+            aria-label="Main navigation"
+            className="brutal-surface hidden items-center justify-center gap-1 rounded-2xl bg-card p-1 md:flex"
           >
             {centerNavItems.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  'rounded-xl px-4 py-1.5 font-mono text-xs tracking-wider transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  'inline-flex h-8 items-center justify-center rounded-xl border-2 px-4 font-mono text-xs tracking-wide transition-all duration-150 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-ring',
                   item.active
-                    ? 'bg-primary font-bold text-primary-foreground shadow-xs'
-                    : 'font-semibold text-muted-foreground hover:text-foreground',
+                    ? 'border-border bg-primary font-extrabold text-primary-foreground'
+                    : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
                 )}
               >
                 {item.label}
@@ -186,41 +184,38 @@ export function AppShell({ children }: { children: ReactNode }) {
             ))}
           </nav>
 
-          {/* 3. Right Zone: Quick Search, Theme Switcher, Notifications, Profile Dropdown */}
-          <div className="flex items-center justify-end gap-1.5 sm:gap-2">
-            {/* Quick Search (⌘K) */}
+          {/* 3. Right Zone: Action Controls */}
+          <div className="flex items-center justify-end gap-2">
+            {/* Search (⌘K) */}
             <Button
               type="button"
-              variant="ghost"
-              size="lg"
+              variant="outline"
+              size="default"
               onClick={() => setSearchOpen(true)}
               aria-label="Search transactions and invoices (Cmd+K)"
-              //   className="min-h-10 min-w-10 gap-2 rounded-xl text-muted-foreground border border-border hover:bg-card hover:text-foreground sm:min-h-9 lg:bg-card"
-              className="gap-2 rounded-full text-muted-foreground border border-border hover:text-foreground cursor-pointer"
+              className="h-10 gap-2 rounded-xl px-3 font-mono text-xs font-bold text-foreground"
             >
-              <Search className="size-4 shrink-0" />
-              <span className="hidden font-mono text-[11px] font-semibold lg:inline">
-                Search
-              </span>
-              <kbd className="hidden rounded-md bg-white px-1.5 py-0.5 font-mono text-[10px] font-bold text-muted-foreground xl:inline-block dark:bg-background">
+              <Search className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:scale-110 group-hover:text-foreground" />
+              <span className="hidden lg:inline">Search</span>
+              <kbd className="hidden rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] font-bold text-muted-foreground xl:inline-block">
                 ⌘K
               </kbd>
             </Button>
 
-            {/* Single-Click Theme Switcher */}
+            {/* Theme Switcher */}
             <Button
               type="button"
-              variant="ghost"
-              size="icon-lg"
+              variant="outline"
+              size="icon"
               onClick={handleToggleTheme}
               aria-label="Switch between light and dark mode"
-              className="rounded-full text-muted-foreground border border-border hover:text-foreground cursor-pointer"
+              className="relative size-10 rounded-xl"
             >
-              <Sun className="size-4 scale-100 rotate-0 transition-transform dark:scale-0 dark:-rotate-90" />
-              <Moon className="absolute size-4 scale-0 rotate-90 transition-transform dark:scale-100 dark:rotate-0" />
+              <Sun className="size-4 scale-100 rotate-0 transition-transform duration-200 group-hover:rotate-45 dark:scale-0 dark:-rotate-90" />
+              <Moon className="absolute size-4 scale-0 rotate-90 transition-transform duration-200 dark:scale-100 dark:rotate-0 dark:group-hover:-rotate-12" />
             </Button>
 
-            {/* Notification Popover */}
+            {/* Notifications Popover */}
             <Popover
               open={notificationsOpen}
               onOpenChange={setNotificationsOpen}
@@ -228,16 +223,16 @@ export function AppShell({ children }: { children: ReactNode }) {
               <PopoverTrigger asChild>
                 <Button
                   type="button"
-                  variant="ghost"
-                  size="icon-lg"
-                  aria-label="View cashflow and invoice notifications"
-                  className="rounded-full text-muted-foreground border border-border hover:text-foreground cursor-pointer"
+                  variant="outline"
+                  size="icon"
+                  aria-label="View alerts"
+                  className="relative size-10 rounded-xl"
                 >
-                  <Bell className="size-4" />
+                  <Bell className="size-4 transition-transform duration-200 group-hover:rotate-12" />
                   {alertCount > 0 && (
                     <span
                       className={cn(
-                        'absolute top-2 right-2 size-2 rounded-full ring-2 ring-white dark:ring-zinc-950',
+                        'absolute top-1.5 right-1.5 size-2.5 rounded-full border-2 border-card',
                         hasUrgentAlert ? 'bg-outflow' : 'bg-primary',
                       )}
                     />
@@ -246,23 +241,23 @@ export function AppShell({ children }: { children: ReactNode }) {
               </PopoverTrigger>
               <PopoverContent
                 align="end"
-                className="w-80 rounded-2xl border-border bg-popover p-4 shadow-2xl"
+                className="brutal-surface w-80 rounded-2xl border-2 border-border bg-popover p-4"
               >
-                <div className="flex items-center justify-between border-b border-border pb-2.5">
-                  <p className="font-mono text-[11px] font-bold tracking-wider text-foreground">
-                    Cashflow Alerts
+                <div className="flex items-center justify-between border-b-2 border-border pb-2.5">
+                  <p className="font-mono text-xs font-extrabold uppercase tracking-wider text-foreground">
+                    Alerts
                   </p>
-                  <span className="font-mono text-[11px] text-muted-foreground">
+                  <span className="font-mono text-[11px] font-semibold text-muted-foreground">
                     {formatMonthYear(todayISO)}
                   </span>
                 </div>
 
-                <div className="mt-3 space-y-2 text-xs">
+                <div className="mt-3 space-y-2.5 text-xs">
                   {invoiceSummary.overdueCount > 0 && (
                     <Link
                       to="/invoices"
                       onClick={() => setNotificationsOpen(false)}
-                      className="flex items-start gap-2.5 rounded-xl border border-outflow-border bg-outflow-bg p-2.5 transition-colors hover:bg-outflow-bg/80"
+                      className="flex items-start gap-2.5 rounded-xl border-2 border-outflow-border bg-outflow-bg p-3 transition-transform hover:-translate-y-0.5"
                     >
                       <TriangleAlert className="mt-0.5 size-4 shrink-0 text-outflow" />
                       <div>
@@ -275,7 +270,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                             amount={invoiceSummary.overdueAmount}
                             className="font-bold text-outflow"
                           />{' '}
-                          past due — review &amp; ping
+                          past due — click to view
                         </p>
                       </div>
                     </Link>
@@ -285,12 +280,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                     <Link
                       to="/invoices"
                       onClick={() => setNotificationsOpen(false)}
-                      className="flex items-start gap-2.5 rounded-xl border border-border bg-muted/40 p-2.5 transition-colors hover:bg-secondary"
+                      className="flex items-start gap-2.5 rounded-xl border-2 border-border bg-muted/50 p-3 transition-transform hover:-translate-y-0.5 hover:bg-accent"
                     >
                       <FileText className="mt-0.5 size-4 shrink-0 text-info" />
                       <div>
                         <p className="font-bold text-foreground">
-                          {invoiceSummary.waitingCount} Pending Client{' '}
+                          {invoiceSummary.waitingCount} Unpaid{' '}
                           {invoiceSummary.waitingCount === 1
                             ? 'Invoice'
                             : 'Invoices'}
@@ -300,7 +295,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                             amount={invoiceSummary.waitingAmount}
                             className="font-bold text-foreground"
                           />{' '}
-                          waiting to settle
+                          waiting for payment
                         </p>
                       </div>
                     </Link>
@@ -308,10 +303,10 @@ export function AppShell({ children }: { children: ReactNode }) {
 
                   <div
                     className={cn(
-                      'flex items-start gap-2.5 rounded-xl border p-2.5',
+                      'flex items-start gap-2.5 rounded-xl border-2 p-3',
                       safeToSpend.status === 'deficit'
                         ? 'border-outflow-border bg-outflow-bg'
-                        : 'border-border bg-muted/30',
+                        : 'border-border bg-muted/40',
                     )}
                   >
                     <ShieldAlert
@@ -324,7 +319,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                     />
                     <div>
                       <p className="font-bold text-foreground">
-                        Safe-to-Spend:{' '}
+                        Safe to spend:{' '}
                         <MoneyValue
                           amount={safeToSpend.dailySafeToSpend}
                           className="font-extrabold"
@@ -332,8 +327,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                         / day
                       </p>
                       <p className="text-muted-foreground">
-                        {safeToSpend.daysRemainingInCycle}D left in cycle ·{' '}
-                        {safeToSpend.runwayMonths} mo runway
+                        {safeToSpend.daysRemainingInCycle} days left this month
                       </p>
                     </div>
                   </div>
@@ -341,30 +335,29 @@ export function AppShell({ children }: { children: ReactNode }) {
               </PopoverContent>
             </Popover>
 
-            {/* User Profile Dropdown ([AZ v] — PRD §2.1) */}
+            {/* User Profile Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   type="button"
-                  variant="ghost"
-                  size="icon-lg"
-                  aria-label="Open user profile and workspace menu"
-                  className="rounded-full text-muted-foreground border border-border hover:text-foreground cursor-pointer"
+                  variant="outline"
+                  size="icon"
+                  aria-label="Open account menu"
+                  className="size-10 rounded-xl p-0"
                 >
-                  <Avatar className="size-8">
-                    <AvatarFallback className="bg-primary-foreground font-mono text-[11px] font-bold text-primary">
+                  <Avatar className="size-7 rounded-lg">
+                    <AvatarFallback className="rounded-lg bg-primary font-mono text-[11px] font-extrabold text-primary-foreground">
                       {initials || 'AZ'}
                     </AvatarFallback>
                   </Avatar>
-                  {/* <ChevronDown className="size-3.5 text-muted-foreground" /> */}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="w-64 rounded-2xl border-border bg-popover p-1.5 shadow-2xl"
+                className="brutal-surface w-64 rounded-2xl border-2 border-border bg-popover p-2"
               >
                 <DropdownMenuLabel className="flex flex-col gap-0.5 px-2.5 py-2">
-                  <p className="truncate font-mono text-xs font-bold text-foreground">
+                  <p className="truncate font-mono text-xs font-extrabold text-foreground">
                     {profile.displayName}
                   </p>
                   <p className="truncate font-mono text-[11px] font-normal text-muted-foreground">
@@ -372,14 +365,14 @@ export function AppShell({ children }: { children: ReactNode }) {
                   </p>
                 </DropdownMenuLabel>
 
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="bg-border" />
 
-                {/* Privacy Masking Toggle ($ ••••••) */}
+                {/* Hide Balances Toggle */}
                 <div className="flex items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-xs">
                   <div className="flex items-center gap-2">
                     <EyeOff className="size-3.5 text-muted-foreground" />
-                    <span className="font-medium text-foreground">
-                      Privacy Mask ($ ••••••)
+                    <span className="font-semibold text-foreground">
+                      Hide Balances
                     </span>
                   </div>
                   <Switch
@@ -390,34 +383,31 @@ export function AppShell({ children }: { children: ReactNode }) {
                   />
                 </div>
 
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="bg-border" />
 
-                {/* Settings & Preferences (/settings) */}
                 <DropdownMenuItem
                   asChild
-                  className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer"
+                  className="rounded-xl px-2.5 py-2 text-xs font-semibold cursor-pointer"
                 >
                   <Link to="/settings">
                     <Settings className="size-3.5" />
-                    <span>Settings &amp; Preferences</span>
+                    <span>Settings</span>
                   </Link>
                 </DropdownMenuItem>
 
-                {/* Export Data (CSV) */}
                 <DropdownMenuItem
                   onClick={exportCsv}
-                  className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer"
+                  className="rounded-xl px-2.5 py-2 text-xs font-semibold cursor-pointer"
                 >
                   <Download className="size-3.5" />
-                  <span>Export Data (CSV)</span>
+                  <span>Export CSV</span>
                 </DropdownMenuItem>
 
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="bg-border" />
 
-                {/* Sign Out */}
                 <DropdownMenuItem
                   asChild
-                  className="rounded-xl px-2.5 py-2 text-xs font-medium text-outflow focus:text-outflow cursor-pointer"
+                  className="rounded-xl px-2.5 py-2 text-xs font-semibold text-outflow focus:text-outflow cursor-pointer"
                 >
                   <Link to="/login">
                     <LogOut className="size-3.5" />
@@ -430,94 +420,74 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      {/* Main Content Canvas with Rounded Top Corners (PRD v2.1.0 §2 & DESIGN.md §1.1) */}
-      <main className="mx-auto mb-16 w-full max-w-7xl flex-1 p-4 sm:mb-0 sm:p-6 lg:p-8">
+      {/* Main Content Container */}
+      <main className="mx-auto mb-20 w-full max-w-7xl flex-1 p-4 sm:mb-0 sm:p-6 lg:p-8">
         {children}
       </main>
 
       {/* Mobile Bottom Navigation (< 768px) */}
       <nav
         aria-label="Mobile bottom navigation"
-        className="no-print fixed inset-x-0 bottom-0 z-40 flex h-16 items-center justify-around border-t border-border bg-white/95 px-2 backdrop-blur-md md:hidden dark:bg-muted/95"
+        className="no-print fixed inset-x-0 bottom-0 z-40 flex h-16 items-center justify-around border-t-2 border-border bg-background/95 px-2 backdrop-blur-md md:hidden"
       >
         <Link
           to="/"
           className={cn(
-            'flex min-h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-colors',
+            'flex min-h-11 min-w-14 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-all active:scale-95',
             location.pathname === '/'
-              ? 'font-bold text-foreground'
+              ? 'bg-accent font-extrabold text-foreground'
               : 'text-muted-foreground hover:text-foreground',
           )}
         >
-          <LayoutDashboard
-            className={cn(
-              'size-4',
-              location.pathname === '/' && 'text-primary',
-            )}
-          />
-          <span>Dashboard</span>
+          <LayoutDashboard className="size-4" />
+          <span>Home</span>
         </Link>
 
         <Link
           to="/history"
           className={cn(
-            'flex min-h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-colors',
+            'flex min-h-11 min-w-14 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-all active:scale-95',
             location.pathname.startsWith('/history')
-              ? 'font-bold text-foreground'
+              ? 'bg-accent font-extrabold text-foreground'
               : 'text-muted-foreground hover:text-foreground',
           )}
         >
-          <History
-            className={cn(
-              'size-4',
-              location.pathname.startsWith('/history') && 'text-primary',
-            )}
-          />
+          <History className="size-4" />
           <span>History</span>
         </Link>
 
         <button
           type="button"
           onClick={() => openQuickEntry('money_out')}
-          aria-label="Record new transaction"
-          className="flex size-12 -translate-y-2 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg transition-transform active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          aria-label="Add transaction"
+          className="brutal-btn flex size-12 -translate-y-2 items-center justify-center rounded-2xl border-border bg-primary text-primary-foreground cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <Plus className="size-6 stroke-[2.5]" />
+          <Plus className="size-6 stroke-[2.5] transition-transform duration-200 hover:rotate-90" />
         </button>
 
         <Link
           to="/invoices"
           className={cn(
-            'flex min-h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-colors',
+            'flex min-h-11 min-w-14 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-all active:scale-95',
             location.pathname.startsWith('/invoices')
-              ? 'font-bold text-foreground'
+              ? 'bg-accent font-extrabold text-foreground'
               : 'text-muted-foreground hover:text-foreground',
           )}
         >
-          <FileText
-            className={cn(
-              'size-4',
-              location.pathname.startsWith('/invoices') && 'text-primary',
-            )}
-          />
+          <FileText className="size-4" />
           <span>Invoices</span>
         </Link>
 
         <Link
           to="/settings"
           className={cn(
-            'flex min-h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-colors',
+            'flex min-h-11 min-w-14 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-all active:scale-95',
             location.pathname.startsWith('/settings')
-              ? 'font-bold text-foreground'
+              ? 'bg-accent font-extrabold text-foreground'
               : 'text-muted-foreground hover:text-foreground',
           )}
         >
-          <Settings
-            className={cn(
-              'size-4',
-              location.pathname.startsWith('/settings') && 'text-primary',
-            )}
-          />
+          <Settings className="size-4" />
           <span>Settings</span>
         </Link>
       </nav>

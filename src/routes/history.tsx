@@ -206,60 +206,60 @@ function HistoryScreen() {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-        <div className="space-y-0.5">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div className="space-y-1">
           <h1 className="font-mono text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
             Activity History
           </h1>
-          <p className="font-mono text-base text-muted-foreground">
-            Search, filter, and export every USD{' '}
-            {terminology.inflow.toLowerCase()} &amp;{' '}
-            {terminology.outflow.toLowerCase()} entry.
+          <p className="font-mono text-xs text-muted-foreground sm:text-sm">
+            Search, filter, and download all your{' '}
+            {terminology.inflow.toLowerCase()} and{' '}
+            {terminology.outflow.toLowerCase()}.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
           <Button
             type="button"
-            size="lg"
+            size="default"
             variant="outline"
             onClick={exportCsv}
             disabled={transactions.length === 0}
-            className="min-h-11 gap-1.5 rounded-2xl border-border bg-card font-mono text-xs font-bold cursor-pointer"
+            className="h-10 gap-2 rounded-xl px-4 font-mono text-xs font-extrabold uppercase tracking-wider"
           >
-            <Download className="size-4" />
+            <Download className="size-4 transition-transform group-hover:-translate-y-0.5" />
             <span>Export CSV</span>
           </Button>
           <Button
             type="button"
-            size="lg"
+            size="default"
             onClick={() => openQuickEntry('money_out')}
-            className="hidden md:flex min-h-11 gap-1.5 rounded-2xl bg-primary font-mono text-xs font-extrabold tracking-wider text-primary-foreground hover:bg-primary-hover cursor-pointer"
+            className="hidden md:flex h-10 gap-2 rounded-xl bg-primary px-4 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground"
           >
-            <Plus className="size-4 stroke-[2.5]" />
-            <span>Record</span>
+            <Plus className="size-4 stroke-[2.5] transition-transform duration-200 group-hover:rotate-90" />
+            <span>Add Transaction</span>
           </Button>
         </div>
       </div>
 
-      {/* 12-Column Bento Grid Matrix (gap-2 mobile / gap-4 desktop) */}
-      <div className="grid grid-cols-12 gap-2 sm:gap-4">
+      {/* 12-Column Bento Grid */}
+      <div className="grid grid-cols-12 gap-4">
         {/* Top Spending Categories Bento Tile */}
         {monthlySummary.topOutflowCategories.length > 0 && (
-          <div className="bento-card bento-card-static col-span-12 border border-borders p-5 sm:px-6 dark:border-zinc-800">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h2 className="font-mono text-xs font-bold uppercase tracking-widest text-foreground">
-                  Top {terminology.outflow} Categories (30D)
+          <div className="bento-card bento-card-static col-span-12 bg-card p-6">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b-2 border-border pb-3.5">
+              <div className="space-y-0.5">
+                <h2 className="font-mono text-xs font-extrabold uppercase tracking-wider text-foreground sm:text-sm">
+                  Top {terminology.outflow} Categories (This Month)
                 </h2>
                 <p className="font-mono text-xs text-muted-foreground">
-                  Click a category chip to isolate spending entries
+                  Click any category below to filter your list
                 </p>
               </div>
-              <span className="rounded-full bg-accent px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase text-accent-foreground">
-                Breakdown
+              <span className="inline-flex h-6 items-center rounded-lg border-2 border-border bg-muted px-2.5 font-mono text-[10px] font-bold uppercase tracking-wider text-foreground">
+                Top Categories
               </span>
             </div>
 
@@ -280,13 +280,13 @@ function HistoryScreen() {
                       setPage(1);
                     }}
                     className={cn(
-                      'flex items-center gap-2 rounded-xl border px-3 py-1.5 font-mono text-xs transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                      'brutal-btn flex h-9 items-center gap-2 rounded-xl px-3 font-mono text-xs cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
                       active
-                        ? 'border-primary bg-primary font-bold text-primary-foreground'
-                        : 'border-border bg-white text-foreground hover:border-zinc-400 dark:border-zinc-700 dark:bg-muted dark:hover:border-zinc-600',
+                        ? 'border-border bg-primary font-extrabold text-primary-foreground'
+                        : 'border-border bg-card text-foreground hover:bg-accent',
                     )}
                   >
-                    <span className="font-semibold">{cat.category}</span>
+                    <span className="font-bold">{cat.category}</span>
                     <MoneyValue
                       amount={cat.amount}
                       className={cn(
@@ -296,10 +296,10 @@ function HistoryScreen() {
                     />
                     <span
                       className={cn(
-                        'rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums',
+                        'rounded-md border px-1.5 py-0.5 text-[10px] font-bold tabular-nums',
                         active
-                          ? 'bg-primary-foreground/15 text-primary-foreground'
-                          : 'bg-muted text-muted-foreground',
+                          ? 'border-primary-foreground/30 bg-primary-foreground/15 text-primary-foreground'
+                          : 'border-border bg-muted text-muted-foreground',
                       )}
                     >
                       {cat.percentage}%
@@ -312,18 +312,18 @@ function HistoryScreen() {
         )}
 
         {/* Search & Filter Controls Bento Tile */}
-        <div className="bento-card bento-card-static col-span-12 space-y-3 border border-border p-5 sm:px-6 dark:border-zinc-800">
-          <div className="grid gap-2 sm:gap-3 md:grid-cols-12">
+        <div className="bento-card bento-card-static col-span-12 space-y-4 bg-card p-6">
+          <div className="grid gap-3 md:grid-cols-12">
             <div className="relative md:col-span-5">
-              <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Search className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search notes, categories, or USD amounts..."
+                placeholder="Search notes, categories, or amounts..."
                 value={query}
                 onChange={(e) => {
                   setQuery(e.target.value);
                   setPage(1);
                 }}
-                className="h-10 rounded-xl border-border bg-white pl-9 font-mono text-xs dark:border-zinc-800 dark:bg-background"
+                className="h-10 rounded-xl border-2 border-border bg-background pl-10 font-mono text-xs"
               />
             </div>
 
@@ -337,7 +337,7 @@ function HistoryScreen() {
               >
                 <SelectTrigger
                   aria-label="Filter by wallet"
-                  className="h-10 w-full rounded-xl border-border bg-white font-mono text-xs dark:border-zinc-800 dark:bg-background"
+                  className="h-10 w-full rounded-xl border-2 border-border bg-background font-mono text-xs font-semibold"
                 >
                   <SelectValue placeholder="All Wallets" />
                 </SelectTrigger>
@@ -362,7 +362,7 @@ function HistoryScreen() {
               >
                 <SelectTrigger
                   aria-label="Filter by category"
-                  className="h-10 w-full rounded-xl border-border bg-white font-mono text-xs dark:border-zinc-800 dark:bg-background"
+                  className="h-10 w-full rounded-xl border-2 border-border bg-background font-mono text-xs font-semibold"
                 >
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
@@ -387,98 +387,100 @@ function HistoryScreen() {
               >
                 <SelectTrigger
                   aria-label="Sort transactions"
-                  className="h-10 w-full rounded-xl border-border bg-white font-mono text-xs dark:border-zinc-800 dark:bg-background"
+                  className="h-10 w-full rounded-xl border-2 border-border bg-background font-mono text-xs font-semibold"
                 >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="recent">Most Recent</SelectItem>
-                  <SelectItem value="largest">Largest Amount</SelectItem>
+                  <SelectItem value="recent">Newest First</SelectItem>
+                  <SelectItem value="largest">Highest Amount</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3">
-            <div className="flex flex-wrap items-center gap-1 rounded-full border border-border bg-white p-1 dark:border-zinc-800 dark:bg-background">
-              <button
-                type="button"
-                onClick={() => {
-                  setTypeFilter('all');
-                  setPage(1);
-                }}
-                className={cn(
-                  'min-h-8 rounded-full px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                  typeFilter === 'all'
-                    ? 'bg-primary font-bold text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground',
-                )}
-              >
-                All
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setTypeFilter('money_in');
-                  setPage(1);
-                }}
-                className={cn(
-                  'inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                  typeFilter === 'money_in'
-                    ? 'bg-inflow font-bold text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground',
-                )}
-              >
-                <span
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t-2 border-border pt-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="brutal-surface flex flex-wrap items-center gap-1 rounded-xl bg-muted/50 p-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTypeFilter('all');
+                    setPage(1);
+                  }}
                   className={cn(
-                    'size-2 rounded-full',
+                    'inline-flex h-8 items-center rounded-lg border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                    typeFilter === 'all'
+                      ? 'border-border bg-primary font-extrabold text-primary-foreground'
+                      : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
+                  )}
+                >
+                  All
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTypeFilter('money_in');
+                    setPage(1);
+                  }}
+                  className={cn(
+                    'inline-flex h-8 items-center gap-1.5 rounded-lg border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
                     typeFilter === 'money_in'
-                      ? 'bg-primary-foreground'
-                      : 'bg-inflow',
+                      ? 'border-border bg-inflow font-extrabold text-primary-foreground'
+                      : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
                   )}
-                />
-                <span>{terminology.inflow}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setTypeFilter('money_out');
-                  setPage(1);
-                }}
-                className={cn(
-                  'inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 py-1 font-mono text-xs font-semibold transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                  typeFilter === 'money_out'
-                    ? 'bg-outflow font-bold text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground',
-                )}
-              >
-                <span
+                >
+                  <span
+                    className={cn(
+                      'size-2 rounded-full',
+                      typeFilter === 'money_in'
+                        ? 'bg-primary-foreground'
+                        : 'bg-inflow',
+                    )}
+                  />
+                  <span>{terminology.inflow}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTypeFilter('money_out');
+                    setPage(1);
+                  }}
                   className={cn(
-                    'size-2 rounded-full',
+                    'inline-flex h-8 items-center gap-1.5 rounded-lg border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
                     typeFilter === 'money_out'
-                      ? 'bg-primary-foreground'
-                      : 'bg-outflow',
+                      ? 'border-border bg-outflow font-extrabold text-primary-foreground'
+                      : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
                   )}
-                />
-                <span>{terminology.outflow}</span>
-              </button>
+                >
+                  <span
+                    className={cn(
+                      'size-2 rounded-full',
+                      typeFilter === 'money_out'
+                        ? 'bg-primary-foreground'
+                        : 'bg-outflow',
+                    )}
+                  />
+                  <span>{terminology.outflow}</span>
+                </button>
+              </div>
 
               {hasActiveFilters && (
                 <Button
                   type="button"
-                  variant="ghost"
-                  size="xs"
+                  variant="outline"
+                  size="sm"
                   onClick={resetAllFilters}
-                  className="gap-1 rounded-lg font-mono text-xs font-semibold text-muted-foreground hover:text-foreground cursor-pointer"
+                  className="h-9 gap-1.5 rounded-xl font-mono text-xs font-bold"
                 >
                   <FilterX className="size-3.5" />
-                  <span>Reset</span>
+                  <span>Reset Filters</span>
                 </Button>
               )}
             </div>
 
             <div className="flex flex-wrap items-center gap-4 font-mono text-xs tabular-nums">
-              <span className="text-muted-foreground">
+              <span className="rounded-lg border-2 border-border bg-muted/40 px-2.5 py-1 text-muted-foreground">
                 {terminology.inflow}:{' '}
                 <MoneyValue
                   amount={filteredStats.totalIn}
@@ -486,7 +488,7 @@ function HistoryScreen() {
                   className="font-extrabold text-inflow"
                 />
               </span>
-              <span className="text-muted-foreground">
+              <span className="rounded-lg border-2 border-border bg-muted/40 px-2.5 py-1 text-muted-foreground">
                 {terminology.outflow}:{' '}
                 <MoneyValue
                   amount={filteredStats.totalOut}
@@ -501,24 +503,24 @@ function HistoryScreen() {
         {/* Paginated Ledger Bento Table (Span-12) */}
         <div
           id="history-table"
-          className="bento-card bento-card-static col-span-12 overflow-hidden border border-border dark:border-zinc-800"
+          className="bento-card bento-card-static col-span-12 overflow-hidden bg-card"
         >
           {paginated.data.length === 0 ? (
             <div className="p-6">
-              <Empty className="rounded-2xl border border-dashed border-border bg-white/60 py-10 dark:bg-muted/60">
+              <Empty className="rounded-2xl border-2 border-dashed border-border bg-muted/30 py-10">
                 <EmptyHeader>
                   <EmptyMedia variant="icon">
                     <ReceiptText className="size-5 text-foreground" />
                   </EmptyMedia>
                   <EmptyTitle className="font-mono text-base font-bold">
                     {transactions.length === 0
-                      ? 'Your ledger is empty'
+                      ? 'No transactions yet'
                       : 'No matching transactions'}
                   </EmptyTitle>
                   <EmptyDescription className="font-mono text-xs">
                     {transactions.length === 0
-                      ? 'Record your first income or expense in USD to populate your cashflow history.'
-                      : 'Try broadening your search terms or clearing active filters.'}
+                      ? 'Add your first income or expense to start building your history.'
+                      : 'Try changing your search words or clearing active filters.'}
                   </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>
@@ -526,17 +528,17 @@ function HistoryScreen() {
                     <Button
                       type="button"
                       onClick={() => openQuickEntry('money_in')}
-                      className="min-h-11 gap-2 rounded-xl bg-primary px-5 font-mono text-xs font-extrabold uppercase text-primary-foreground"
+                      className="h-10 gap-2 rounded-xl bg-primary px-5 font-mono text-xs font-extrabold uppercase text-primary-foreground"
                     >
                       <Plus className="size-4" />
-                      <span>Record First Transaction</span>
+                      <span>Add First Transaction</span>
                     </Button>
                   ) : (
                     <Button
                       type="button"
                       variant="outline"
                       onClick={resetAllFilters}
-                      className="min-h-10 rounded-xl font-mono font-semibold cursor-pointer"
+                      className="h-10 rounded-xl font-mono text-xs font-bold cursor-pointer"
                     >
                       Clear All Filters
                     </Button>
@@ -547,24 +549,24 @@ function HistoryScreen() {
           ) : (
             <>
               <Table>
-                <TableHeader className="bg-accent dark:bg-muted/70">
-                  <TableRow className="border-border/70">
-                    <TableHead className="pl-6 font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                      Transaction / Note
+                <TableHeader className="bg-muted/60">
+                  <TableRow className="border-b-2 border-border">
+                    <TableHead className="pl-6 font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
+                      Description
                     </TableHead>
-                    <TableHead className="hidden font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground sm:table-cell">
+                    <TableHead className="hidden font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground sm:table-cell">
                       Category
                     </TableHead>
-                    <TableHead className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                    <TableHead className="font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
                       Date
                     </TableHead>
-                    <TableHead className="hidden font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground md:table-cell">
-                      Wallet Account
+                    <TableHead className="hidden font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground md:table-cell">
+                      Wallet
                     </TableHead>
-                    <TableHead className="text-right font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                      Amount (USD)
+                    <TableHead className="text-right font-mono text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">
+                      Amount
                     </TableHead>
-                    <TableHead className="w-12 pr-5 text-right">
+                    <TableHead className="w-12 pr-6 text-right">
                       <span className="sr-only">Actions</span>
                     </TableHead>
                   </TableRow>
@@ -575,16 +577,16 @@ function HistoryScreen() {
                     return (
                       <TableRow
                         key={tx.id}
-                        className="border-border/60 transition-colors hover:bg-accent dark:hover:bg-muted/60"
+                        className="group border-border transition-colors hover:bg-accent/70"
                       >
                         <TableCell className="pl-6">
-                          <div className="flex items-center gap-2.5">
+                          <div className="flex items-center gap-3">
                             <span
                               className={cn(
-                                'flex size-8 shrink-0 items-center justify-center rounded-xl',
+                                'flex size-8 shrink-0 items-center justify-center rounded-xl border-2 transition-transform duration-150 group-hover:scale-105',
                                 isInflow
-                                  ? 'bg-inflow-bg text-inflow'
-                                  : 'bg-outflow-bg text-outflow',
+                                  ? 'border-inflow-border bg-inflow-bg text-inflow'
+                                  : 'border-outflow-border bg-outflow-bg text-outflow',
                               )}
                             >
                               {isInflow ? (
@@ -594,7 +596,7 @@ function HistoryScreen() {
                               )}
                             </span>
                             <div className="min-w-0">
-                              <p className="max-w-xs truncate font-mono text-xs font-semibold text-foreground sm:text-sm">
+                              <p className="max-w-xs truncate font-mono text-xs font-bold text-foreground sm:text-sm">
                                 {tx.note || tx.category}
                               </p>
                               <p className="font-mono text-[11px] text-muted-foreground sm:hidden">
@@ -606,7 +608,7 @@ function HistoryScreen() {
                         <TableCell className="hidden sm:table-cell">
                           <Badge
                             variant="outline"
-                            className="rounded-lg border-border bg-white/80 font-mono text-[11px] font-medium text-foreground dark:border-zinc-700 dark:bg-muted"
+                            className="rounded-lg border-border bg-card font-mono text-[11px] font-semibold text-foreground"
                           >
                             {tx.category}
                           </Badge>
@@ -630,14 +632,14 @@ function HistoryScreen() {
                             )}
                           />
                         </TableCell>
-                        <TableCell className="pr-5 text-right">
+                        <TableCell className="pr-6 text-right">
                           <Button
                             type="button"
                             variant="ghost"
                             size="icon-sm"
                             onClick={() => deleteTransaction(tx.id)}
                             aria-label={`Delete ${tx.note || tx.category}`}
-                            className="text-muted-foreground hover:text-outflow cursor-pointer dark:hover:text-outflow"
+                            className="text-muted-foreground hover:text-outflow cursor-pointer"
                           >
                             <Trash2 className="size-3.5" />
                           </Button>
@@ -648,18 +650,18 @@ function HistoryScreen() {
                 </TableBody>
               </Table>
 
-              {/* Strict 10-Row Pagination Footer */}
-              <div className="flex flex-col items-center justify-between gap-3 border-t border-border/70 bg-accent px-6 py-3.5 sm:flex-row dark:bg-muted/60">
+              {/* Pagination Footer */}
+              <div className="flex flex-col items-center justify-between gap-3 border-t-2 border-border bg-muted/40 px-6 py-3.5 sm:flex-row">
                 <p className="font-mono text-xs text-muted-foreground tabular-nums">
                   Showing{' '}
                   <strong className="font-bold text-foreground">
-                    {rangeStart} - {rangeEnd}
+                    {rangeStart}–{rangeEnd}
                   </strong>{' '}
                   of{' '}
                   <strong className="font-bold text-foreground">
                     {paginated.totalItems}
                   </strong>{' '}
-                  records
+                  items
                 </p>
 
                 <Pagination className="mx-0 w-auto justify-end">
@@ -676,7 +678,7 @@ function HistoryScreen() {
                           }
                         }}
                         className={cn(
-                          'h-8 rounded-xl font-mono text-xs cursor-pointer',
+                          'h-8 rounded-xl border-2 border-border bg-card font-mono text-xs font-bold cursor-pointer',
                           !canPrev && 'pointer-events-none opacity-45',
                         )}
                       />
@@ -688,7 +690,7 @@ function HistoryScreen() {
                         isActive
                         size="default"
                         onClick={(e) => e.preventDefault()}
-                        className="h-8 cursor-default rounded-full border border-border px-3 font-mono text-xs font-bold text-primary-foreground tabular-nums dark:bg-primary hover:text-primary-foreground"
+                        className="h-8 cursor-default rounded-xl border-2 border-border bg-primary px-3 font-mono text-xs font-extrabold text-primary-foreground tabular-nums hover:bg-primary hover:text-primary-foreground shadow-none"
                       >
                         Page {paginated.currentPage} of {paginated.totalPages}
                       </PaginationLink>
@@ -708,7 +710,7 @@ function HistoryScreen() {
                           }
                         }}
                         className={cn(
-                          'h-8 rounded-xl font-mono text-xs cursor-pointer',
+                          'h-8 rounded-xl border-2 border-border bg-card font-mono text-xs font-bold cursor-pointer',
                           !canNext && 'pointer-events-none opacity-45',
                         )}
                       />

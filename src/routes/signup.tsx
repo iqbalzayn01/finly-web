@@ -104,10 +104,10 @@ function SignupOnboardingScreen() {
 			<div className="mx-auto flex w-full max-w-2xl items-center justify-between">
 				<Link
 					to="/"
-					className="inline-flex items-center gap-2.5 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
+					className="group inline-flex items-center gap-2.5 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
 				>
-					<span className="flex size-8 items-center justify-center rounded-xl bg-zinc-950 ring-1 ring-zinc-800 dark:bg-background">
-						<BrandLogo size={20} variant="brand" />
+					<span className="brutal-surface flex size-9 items-center justify-center rounded-xl bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
+						<BrandLogo size={20} variant="monochrome" />
 					</span>
 					<span className="font-mono text-lg font-black tracking-tight text-foreground">
 						Finly
@@ -118,8 +118,8 @@ function SignupOnboardingScreen() {
 					to="/login"
 					className="font-mono text-xs font-semibold text-muted-foreground hover:text-foreground"
 				>
-					Already have a workspace?{" "}
-					<span className="font-bold text-foreground underline decoration-primary decoration-2 underline-offset-4 dark:text-primary">
+					Already have an account?{" "}
+					<span className="font-bold text-foreground underline decoration-primary decoration-2 underline-offset-4">
 						Sign in
 					</span>
 				</Link>
@@ -129,27 +129,26 @@ function SignupOnboardingScreen() {
 			<div className="mx-auto my-8 w-full max-w-xl space-y-5">
 				<div className="space-y-2">
 					<div className="flex items-center justify-between font-mono text-xs font-semibold">
-						<span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-0.5 text-[11px] font-bold uppercase text-primary-foreground">
+						<span className="inline-flex items-center gap-1.5 rounded-lg border-2 border-border bg-primary px-2.5 py-0.5 text-[11px] font-extrabold uppercase text-primary-foreground">
 							<Sparkles className="size-3" />
 							<span>Step {step} of 2</span>
 						</span>
 						<span className="text-muted-foreground">
-							{step === 1 ? "Account Credentials" : "Starting Cash on Hand"}
+							{step === 1 ? "Your Details" : "Starting Balance"}
 						</span>
 					</div>
-					<Progress value={step === 1 ? 50 : 100} className="h-2" />
+					<Progress value={step === 1 ? 50 : 100} className="h-2.5 border border-border" />
 				</div>
 
-				<div className="bento-card bento-card-static border border-border bg-card p-6 sm:p-8 dark:border-zinc-800">
+				<div className="bento-card bento-card-static bg-card p-6 sm:p-8">
 					{step === 1 ? (
 						<form onSubmit={handleStep1Submit} className="space-y-5">
-							<div className="space-y-1">
+							<div className="space-y-1 border-b-2 border-border pb-4">
 								<h1 className="font-mono text-2xl font-black tracking-tight text-foreground">
-									Create your cashflow workspace
+									Create your account
 								</h1>
 								<p className="font-mono text-xs text-muted-foreground">
-									Get set up in under 60 seconds — zero bank credentials
-									required.
+									Get started in under a minute — no bank connection needed.
 								</p>
 							</div>
 
@@ -157,9 +156,9 @@ function SignupOnboardingScreen() {
 								<div className="space-y-1.5">
 									<Label
 										htmlFor={`${baseId}-fullname`}
-										className="font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+										className="font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
 									>
-										Full Name or Studio Name
+										Your Name or Studio Name
 									</Label>
 									<Input
 										id={`${baseId}-fullname`}
@@ -167,14 +166,14 @@ function SignupOnboardingScreen() {
 										placeholder="Alex Zayyan"
 										value={fullName}
 										onChange={(e) => setFullName(e.target.value)}
-										className="h-11 rounded-xl bg-card font-mono text-xs dark:bg-background"
+										className="h-11 rounded-xl bg-background font-mono text-xs"
 									/>
 								</div>
 
 								<div className="space-y-1.5">
 									<Label
 										htmlFor={`${baseId}-email`}
-										className="font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+										className="font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
 									>
 										Email Address
 									</Label>
@@ -185,16 +184,16 @@ function SignupOnboardingScreen() {
 										placeholder="alex@designstudio.dev"
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
-										className="h-11 rounded-xl bg-card font-mono text-xs dark:bg-background"
+										className="h-11 rounded-xl bg-background font-mono text-xs"
 									/>
 								</div>
 
 								<div className="space-y-2">
 									<Label
 										htmlFor={`${baseId}-pwd`}
-										className="font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+										className="font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
 									>
-										Create Password (8+ characters)
+										Password (8+ characters)
 									</Label>
 									<div className="relative">
 										<Input
@@ -205,7 +204,7 @@ function SignupOnboardingScreen() {
 											placeholder="At least 8 characters"
 											value={password}
 											onChange={(e) => setPassword(e.target.value)}
-											className="h-11 rounded-xl bg-card pr-11 font-mono text-xs dark:bg-background"
+											className="h-11 rounded-xl bg-background pr-11 font-mono text-xs"
 										/>
 										<button
 											type="button"
@@ -213,7 +212,7 @@ function SignupOnboardingScreen() {
 											aria-label={
 												showPassword ? "Hide password" : "Show password"
 											}
-											className="absolute top-1/2 right-2.5 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground cursor-pointer"
+											className="absolute top-1/2 right-2.5 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer"
 										>
 											{showPassword ? (
 												<EyeOff className="size-4" />
@@ -253,8 +252,7 @@ function SignupOnboardingScreen() {
 										htmlFor={`${baseId}-terms`}
 										className="font-mono text-xs leading-relaxed text-muted-foreground cursor-pointer"
 									>
-										I agree to Finly&apos;s Terms of Service &amp; Local-First
-										Privacy Policy.
+										I agree to the Terms of Service and Privacy Policy.
 									</Label>
 								</div>
 							</div>
@@ -262,32 +260,32 @@ function SignupOnboardingScreen() {
 							<Button
 								type="submit"
 								disabled={!canContinueStep1}
-								className="min-h-11 w-full gap-2 rounded-xl bg-primary font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground hover:bg-primary-hover"
+								className="h-11 w-full gap-2 rounded-xl bg-primary font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground"
 							>
-								<span>Continue to Workspace Setup</span>
-								<ArrowRight className="size-4" />
+								<span>Continue</span>
+								<ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
 							</Button>
 						</form>
 					) : (
 						<form onSubmit={handleLaunchDashboard} className="space-y-6">
-							<div className="space-y-1">
+							<div className="space-y-1 border-b-2 border-border pb-4">
 								<h1 className="font-mono text-2xl font-black tracking-tight text-foreground">
-									Set starting cash on hand
+									Enter your starting balance
 								</h1>
 								<p className="font-mono text-xs text-muted-foreground">
-									Finly calculates your daily Safe-to-Spend limit automatically.
-									You can adjust this anytime in Settings.
+									We use this to calculate your daily Safe-to-Spend limit. You
+									can change it anytime in Settings.
 								</p>
 							</div>
 
 							<div className="space-y-1.5">
 								<Label
 									htmlFor={`${baseId}-starting-cash`}
-									className="font-mono text-[11px] font-semibold uppercase tracking-wider text-muted-foreground"
+									className="font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
 								>
-									Current Cash on Hand (Optional)
+									Current Balance (Optional)
 								</Label>
-								<div className="relative flex items-center rounded-2xl border border-border bg-card px-4 py-2.5 focus-within:ring-2 focus-within:ring-ring dark:border-zinc-700 dark:bg-background">
+								<div className="brutal-surface relative flex items-center rounded-2xl bg-background px-4 py-2.5 focus-within:border-primary">
 									<span className="mr-2 font-mono text-xl font-bold text-muted-foreground select-none">
 										{currencyMeta.symbol}
 									</span>
@@ -309,8 +307,7 @@ function SignupOnboardingScreen() {
 									/>
 								</div>
 								<p className="font-mono text-[11px] text-muted-foreground">
-									Leave blank to start at {currencyMeta.symbol}0.00 and log
-									entries as you go.
+									Leave blank to start at {currencyMeta.symbol}0.00.
 								</p>
 							</div>
 
@@ -319,17 +316,17 @@ function SignupOnboardingScreen() {
 									type="button"
 									variant="outline"
 									onClick={() => setStep(1)}
-									className="min-h-11 gap-1.5 rounded-xl px-4 font-mono text-xs font-bold"
+									className="h-11 gap-1.5 rounded-xl px-4 font-mono text-xs font-bold"
 								>
-									<ArrowLeft className="size-4" />
+									<ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
 									<span>Back</span>
 								</Button>
 								<Button
 									type="submit"
-									className="min-h-11 flex-1 gap-2 rounded-xl bg-primary font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground hover:bg-primary-hover"
+									className="h-11 flex-1 gap-2 rounded-xl bg-primary font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground"
 								>
 									<Rocket className="size-4" />
-									<span>Launch My Cashflow Dashboard</span>
+									<span>Open Dashboard</span>
 								</Button>
 							</div>
 						</form>
@@ -338,7 +335,7 @@ function SignupOnboardingScreen() {
 			</div>
 
 			<p className="text-center font-mono text-[11px] text-muted-foreground">
-				Finly · Built for instant daily cashflow clarity
+				Finly · Simple daily money tracking
 			</p>
 		</div>
 	);

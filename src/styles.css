@@ -228,24 +228,82 @@
   }
 }
 
-/* Editorial Bento Tile Geometry & Motion (DESIGN.md §5) */
+/* Rounded Brutalism Bento Tile Geometry & Motion */
 .bento-card {
   border-radius: var(--radius-bento);
   position: relative;
   overflow: hidden;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
   transition:
-    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.18s ease,
+    box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.18s ease;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .bento-card:hover {
-    transform: translateY(-2px);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px var(--border);
   }
 
   .bento-card-static:hover {
     transform: none;
+    box-shadow: 4px 4px 0px 0px var(--border);
+  }
+}
+
+/* Tactile Rounded Brutalist Surface & Interactive Helpers */
+.brutal-surface {
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--border);
+  box-shadow: 2px 2px 0px 0px var(--border);
+}
+
+.brutal-btn {
+  border-width: 2px;
+  border-style: solid;
+  box-shadow: 2px 2px 0px 0px var(--border);
+  transition:
+    transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .brutal-btn:hover:not(:disabled) {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px 0px var(--border);
+  }
+
+  .brutal-btn:active:not(:disabled) {
+    transform: translate(1px, 1px);
+    box-shadow: 0px 0px 0px 0px var(--border);
+  }
+
+  /* Universal Icon & Button Micro-Interactions */
+  button svg,
+  a svg,
+  [role="button"] svg {
+    transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  button:hover:not(:disabled) svg,
+  a:hover svg,
+  [role="button"]:hover svg {
+    transform: scale(1.12);
+  }
+
+  button:active:not(:disabled) svg,
+  a:active svg,
+  [role="button"]:active svg {
+    transform: scale(0.92);
   }
 }
 

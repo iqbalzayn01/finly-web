@@ -41,20 +41,20 @@ export function getTerminology(plainTermsEnabled: boolean): TerminologyLabels {
 		return {
 			inflow: "Income",
 			outflow: "Expenses",
-			inflowAction: "Money In (Income)",
-			outflowAction: "Money Out (Expense)",
+			inflowAction: "Money In (+)",
+			outflowAction: "Money Out (-)",
 			netBalance: "Total Balance",
 			unpaidBills: "Unpaid Invoices",
 		};
 	}
 
 	return {
-		inflow: "Cash Inflow",
-		outflow: "Cash Outflow",
-		inflowAction: "Credit / Inflow",
-		outflowAction: "Debit / Outflow",
-		netBalance: "Available Liquidity",
-		unpaidBills: "Accounts Receivable",
+		inflow: "Cash In",
+		outflow: "Cash Out",
+		inflowAction: "Cash In (+)",
+		outflowAction: "Cash Out (-)",
+		netBalance: "Total Balance",
+		unpaidBills: "Receivables",
 	};
 }
 
