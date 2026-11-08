@@ -65,7 +65,7 @@ function LoginScreen() {
 						className="group inline-flex items-center gap-3 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
 					>
 						<span className="brutal-surface flex size-10 items-center justify-center rounded-xl bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
-							<BrandLogo size={22} variant="monochrome" />
+							<BrandLogo size={22} className="fill-black" />
 						</span>
 						<span className="font-mono text-xl font-black tracking-tight text-foreground">
 							Finly
@@ -108,7 +108,7 @@ function LoginScreen() {
 				</div>
 
 				{/* Social Proof Bento Tile */}
-				<div className="bento-card bento-card-static max-w-md space-y-3 bg-background p-6">
+				<div className="bento-card bento-card-static max-w-md space-y-3 bg-card p-6">
 					<p className="font-mono text-xs leading-relaxed text-foreground sm:text-sm">
 						&ldquo;Finally, a money app that uses plain language instead of
 						confusing accounting terms.&rdquo;
@@ -140,7 +140,7 @@ function LoginScreen() {
 
 					<div className="flex items-center gap-2 lg:hidden">
 						<span className="brutal-surface flex size-8 items-center justify-center rounded-xl bg-primary">
-							<BrandLogo size={18} variant="monochrome" />
+							<BrandLogo size={18} className="fill-black" />
 						</span>
 						<span className="font-mono text-sm font-black text-foreground">
 							Finly

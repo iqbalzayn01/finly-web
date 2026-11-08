@@ -6,6 +6,7 @@ export const UNIVERSAL_INFLOW_CATEGORIES = [
 	"Salary & Retainers",
 	"Sales & Income",
 	"Consulting",
+	"Internal Transfer",
 	"Investment & Other",
 ];
 
@@ -18,8 +19,13 @@ export const UNIVERSAL_OUTFLOW_CATEGORIES = [
 	"Utilities",
 	"Dining & Personal",
 	"Equipment",
+	"Internal Transfer",
 	"Taxes",
 ];
+
+export function isTransferCategory(category: string): boolean {
+	return category.toLowerCase().includes("transfer");
+}
 
 export function getUniversalCategories(type: TransactionType): string[] {
 	return type === "money_in"

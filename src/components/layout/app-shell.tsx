@@ -98,7 +98,18 @@ export function AppShell({ children }: { children: ReactNode }) {
     location.pathname === '/login' || location.pathname === '/signup';
 
   if (isAuthRoute) {
-    return <div className="min-h-screen bg-background">{children}</div>;
+    return (
+      <div className="relative min-h-screen bg-background">
+        {/* Background Gradient Blur (Primary #C9F31D + Tertiary #6366F1) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-x-0 top-0 z-0 h-screen overflow-hidden select-none"
+        >
+          <div className="ambient-gradient-blur absolute -top-10 left-1/2 h-[75vh] w-[140%] -translate-x-1/2" />
+        </div>
+        <div className="relative z-10">{children}</div>
+      </div>
+    );
   }
 
   const centerNavItems = [
@@ -136,7 +147,15 @@ export function AppShell({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
+    <div className="relative flex min-h-screen flex-col bg-background text-foreground">
+      {/* Background Gradient Blur (Primary #C9F31D + Tertiary #6366F1) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-x-0 top-0 z-0 h-screen overflow-hidden select-none"
+      >
+        <div className="ambient-gradient-blur absolute -top-10 left-1/2 h-[75vh] w-[140%] -translate-x-1/2" />
+      </div>
+
       {/* Offline Banner */}
       {isOffline && (
         <div className="no-print sticky top-0 z-50 flex items-center justify-center gap-2 border-b-2 border-warning-border bg-warning-bg px-4 py-2 font-mono text-xs font-bold text-amber-900 dark:text-warning">
@@ -146,7 +165,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
 
       {/* Top Navigation Bar */}
-      <header className="no-print sticky top-0 z-40 border-b-2 border-border bg-background/95 backdrop-blur-md">
+      <header className="glass-header no-print sticky top-0 z-40 w-full">
         <div className="mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto] items-center gap-4 px-4 sm:px-6 md:grid-cols-[1fr_auto_1fr] lg:px-8">
           {/* 1. Left Zone: Brand Logo */}
           <div className="flex items-center">
@@ -155,7 +174,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               className="group inline-flex items-center gap-2.5 rounded-xl py-1 pr-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span className="brutal-surface flex size-10 items-center justify-center rounded-xl bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
-                <BrandLogo size={22} variant="monochrome" />
+                <BrandLogo size={22} className="fill-black" />
               </span>
               <span className="font-mono text-lg font-black tracking-tight text-foreground">
                 Finly
@@ -176,7 +195,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   'inline-flex h-8 items-center justify-center rounded-xl border-2 px-4 font-mono text-xs tracking-wide transition-all duration-150 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-ring',
                   item.active
                     ? 'border-border bg-primary font-extrabold text-primary-foreground'
-                    : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
+                    : 'border-transparent font-semibold text-muted-foreground hover:bg-accent/80 hover:text-foreground',
                 )}
               >
                 {item.label}
@@ -193,11 +212,11 @@ export function AppShell({ children }: { children: ReactNode }) {
               size="default"
               onClick={() => setSearchOpen(true)}
               aria-label="Search transactions and invoices (Cmd+K)"
-              className="h-10 gap-2 rounded-xl px-3 font-mono text-xs font-bold text-foreground"
+              className="h-10 gap-2 rounded-xl border-2 border-border bg-card px-3 font-mono text-xs font-bold text-foreground backdrop-blur-md hover:bg-accent/80"
             >
               <Search className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:scale-110 group-hover:text-foreground" />
               <span className="hidden lg:inline">Search</span>
-              <kbd className="hidden rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] font-bold text-muted-foreground xl:inline-block">
+              <kbd className="hidden rounded-md border border-border bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] font-bold text-muted-foreground xl:inline-block">
                 ⌘K
               </kbd>
             </Button>
@@ -209,7 +228,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               size="icon"
               onClick={handleToggleTheme}
               aria-label="Switch between light and dark mode"
-              className="relative size-10 rounded-xl"
+              className="relative size-10 rounded-xl border-2 border-border bg-card backdrop-blur-md hover:bg-accent/80"
             >
               <Sun className="size-4 scale-100 rotate-0 transition-transform duration-200 group-hover:rotate-45 dark:scale-0 dark:-rotate-90" />
               <Moon className="absolute size-4 scale-0 rotate-90 transition-transform duration-200 dark:scale-100 dark:rotate-0 dark:group-hover:-rotate-12" />
@@ -226,7 +245,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   variant="outline"
                   size="icon"
                   aria-label="View alerts"
-                  className="relative size-10 rounded-xl"
+                  className="relative size-10 rounded-xl border-2 border-border bg-card backdrop-blur-md hover:bg-accent/80"
                 >
                   <Bell className="size-4 transition-transform duration-200 group-hover:rotate-12" />
                   {alertCount > 0 && (
@@ -343,7 +362,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   variant="outline"
                   size="icon"
                   aria-label="Open account menu"
-                  className="size-10 rounded-xl p-0"
+                  className="size-10 rounded-xl border-2 border-border bg-card p-0 backdrop-blur-md hover:bg-accent/80"
                 >
                   <Avatar className="size-7 rounded-lg">
                     <AvatarFallback className="rounded-lg bg-primary font-mono text-[11px] font-extrabold text-primary-foreground">
@@ -421,14 +440,14 @@ export function AppShell({ children }: { children: ReactNode }) {
       </header>
 
       {/* Main Content Container */}
-      <main className="mx-auto mb-20 w-full max-w-7xl flex-1 p-4 sm:mb-0 sm:p-6 lg:p-8">
+      <main className="relative z-10 mx-auto mb-20 w-full max-w-7xl flex-1 p-4 sm:mb-0 sm:p-6 lg:p-8">
         {children}
       </main>
 
       {/* Mobile Bottom Navigation (< 768px) */}
       <nav
         aria-label="Mobile bottom navigation"
-        className="no-print fixed inset-x-0 bottom-0 z-40 flex h-16 items-center justify-around border-t-2 border-border bg-background/95 px-2 backdrop-blur-md md:hidden"
+        className="glass-header no-print fixed inset-x-0 bottom-0 z-40 flex h-16 items-center justify-around border-t-2 border-border px-2 md:hidden"
       >
         <Link
           to="/"

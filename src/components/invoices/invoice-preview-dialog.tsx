@@ -1,4 +1,4 @@
-import { Copy, MessageCircle, Printer } from "lucide-react";
+import { ArrowUpRight, Copy, Printer } from "lucide-react";
 import { toast } from "sonner";
 import { BrandLogo } from "#/components/brand-logo";
 import { Badge } from "#/components/ui/badge";
@@ -12,6 +12,7 @@ import {
 } from "#/components/ui/dialog";
 import { useFinly } from "#/context/finly-context";
 import { formatCurrency } from "#/lib/format";
+import { cn } from "#/lib/utils";
 import type { Invoice, SupportedCurrency } from "#/types/finly";
 
 export function buildWhatsAppInvoiceUrl(
@@ -85,7 +86,7 @@ export function InvoicePreviewDialog({
 					<div className="flex items-start justify-between gap-4 border-b-2 border-border pb-4">
 						<div className="flex items-center gap-2.5">
 							<span className="brutal-surface flex size-9 items-center justify-center rounded-xl bg-primary">
-								<BrandLogo size={20} variant="monochrome" />
+								<BrandLogo size={20} className="fill-black" />
 							</span>
 							<div>
 								<p className="text-sm font-bold text-foreground">
@@ -98,12 +99,25 @@ export function InvoicePreviewDialog({
 							<p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
 								Invoice
 							</p>
-							<p className="text-base font-black text-foreground tabular-nums">
+							<span className="mt-0.5 inline-flex items-center rounded-md border border-[#6366F1]/30 bg-[#6366F1]/15 px-2 py-0.5 font-mono text-sm font-black text-[#6366F1] tabular-nums">
 								#{invoice.invoiceNumber}
-							</p>
-							<Badge variant="outline" className="mt-1 text-[10px] uppercase">
-								{invoice.status}
-							</Badge>
+							</span>
+							<div className="mt-1">
+								<Badge
+									variant="outline"
+									className={cn(
+										"text-[10px] font-bold uppercase",
+										(invoice.status === "sent" || invoice.status === "draft") &&
+											"border-[#6366F1]/30 bg-[#6366F1]/15 text-[#6366F1]",
+										invoice.status === "overdue" &&
+											"border-outflow-border bg-outflow-bg text-outflow",
+										invoice.status === "paid" &&
+											"border-inflow-border bg-inflow-bg text-inflow",
+									)}
+								>
+									{invoice.status}
+								</Badge>
+							</div>
 						</div>
 					</div>
 
@@ -222,33 +236,29 @@ export function InvoicePreviewDialog({
 						variant="outline"
 						size="sm"
 						onClick={handleCopySummary}
-						className="h-10 gap-1.5 rounded-xl font-mono text-xs font-bold"
+						className="h-10 gap-1.5 rounded-xl border-[#6366F1]/30 bg-[#6366F1]/10 font-mono text-xs font-bold text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/25"
 					>
 						<Copy className="size-3.5" />
-						<span>Copy</span>
+						<span>Copy Link</span>
 					</Button>
 					<Button
 						type="button"
 						variant="outline"
 						size="sm"
-						onClick={() => window.print()}
-						className="h-10 gap-1.5 rounded-xl font-mono text-xs font-bold"
+						onClick={handleWhatsAppShare}
+						className="group h-10 gap-1.5 rounded-xl border-[#6366F1]/30 bg-[#6366F1]/10 font-mono text-xs font-bold text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/25 hover:text-[#818CF8]"
 					>
-						<Printer className="size-3.5" />
-						<span>Print / PDF</span>
+						<span>Share Link</span>
+						<ArrowUpRight className="size-3.5 text-[#6366F1] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#818CF8]" />
 					</Button>
 					<Button
 						type="button"
 						size="sm"
-						onClick={handleWhatsAppShare}
+						onClick={() => window.print()}
 						className="h-10 gap-1.5 rounded-xl bg-primary px-4 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground"
 					>
-						<MessageCircle className="size-3.5" />
-						<span>
-							{invoice.status === "overdue"
-								? "Send Reminder"
-								: "Share on WhatsApp"}
-						</span>
+						<Printer className="size-3.5" />
+						<span>Print / PDF</span>
 					</Button>
 				</div>
 			</DialogContent>
