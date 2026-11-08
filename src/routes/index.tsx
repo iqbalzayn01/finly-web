@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ArrowRight, Plus, ShieldAlert } from 'lucide-react';
+import { CashSummaryBentoTile } from '#/components/dashboard/cash-summary-bento-tile';
 import { CashflowTrendChart } from '#/components/dashboard/cashflow-trend-chart';
-import {
-  CashSummaryBentoTile,
-  TotalBalanceBentoTile,
-} from '#/components/dashboard/monthly-summary-cards';
 import { ReceivablesBentoTile } from '#/components/dashboard/receivables-bento-tile';
 import { RecentTransactionsCard } from '#/components/dashboard/recent-transactions-card';
 import { SafeToSpendHero } from '#/components/dashboard/safe-to-spend-hero';
+import { TotalBalanceBentoTile } from '#/components/dashboard/total-balance-bento-tile';
 import { MoneyValue } from '#/components/money-value';
 import { Button } from '#/components/ui/button';
 import { useFinly } from '#/context/finly-context';

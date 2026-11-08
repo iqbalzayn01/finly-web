@@ -423,7 +423,7 @@ export function RecentTransactionsCard() {
                       isActive
                       size="default"
                       onClick={(e) => e.preventDefault()}
-                      className="h-8 cursor-default rounded-xl border-2 border-border bg-primary px-3 font-mono text-xs font-extrabold text-primary-foreground tabular-nums hover:bg-primary hover:text-primary-foreground shadow-none"
+                      className="h-8 cursor-default rounded-xl border-2 border-border bg-primary dark:bg-primary px-3 font-mono text-xs font-extrabold text-primary-foreground tabular-nums hover:bg-primary hover:text-primary-foreground shadow-none"
                     >
                       Page {paginated.currentPage} of {paginated.totalPages}
                     </PaginationLink>

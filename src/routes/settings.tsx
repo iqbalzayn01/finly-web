@@ -12,6 +12,7 @@ import {
   SlidersHorizontal,
   Trash2,
   UserCog,
+  X,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import type { FormEvent } from 'react';
@@ -26,6 +27,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogClose,
 } from '#/components/ui/dialog';
 import { Input } from '#/components/ui/input';
 import { Label } from '#/components/ui/label';
@@ -944,17 +946,27 @@ function SettingsScreen() {
 
       {/* 2-Step Destructive Reset Dialog */}
       <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
-        <DialogContent className="brutal-surface rounded-3xl border-2 border-border bg-popover p-6 sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-mono text-lg font-bold text-outflow">
-              Clear All Data?
-            </DialogTitle>
-            <DialogDescription className="font-mono text-xs">
-              This permanently removes your transactions, invoices, and wallet
-              balances from this browser. Download a backup first if you want to
-              keep a copy.
-            </DialogDescription>
-          </DialogHeader>
+        <DialogContent
+          showCloseButton={false}
+          className="brutal-surface rounded-3xl border-2 border-border bg-popover/80 p-6 sm:max-w-md"
+        >
+          <div className="flex justify-between">
+            <DialogHeader>
+              <DialogTitle className="font-mono text-lg font-bold text-outflow">
+                Clear All Data?
+              </DialogTitle>
+              <DialogDescription className="font-mono text-xs">
+                This permanently removes your transactions, invoices, and wallet
+                balances from this browser. Download a backup first if you want
+                to keep a copy.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogClose asChild disabled={false}>
+              <Button size="icon-xs" aria-label="Close dialog">
+                <X className="size-4" />
+              </Button>
+            </DialogClose>
+          </div>
 
           <div className="space-y-2 py-2">
             <Label

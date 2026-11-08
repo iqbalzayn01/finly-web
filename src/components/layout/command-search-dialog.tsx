@@ -91,7 +91,7 @@ export function CommandSearchDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="brutal-surface overflow-hidden rounded-3xl border-2 border-border bg-popover p-0 sm:max-w-lg"
+        className="brutal-surface overflow-hidden rounded-3xl border-2 border-border bg-popover/80 p-6 sm:max-w-lg"
       >
         <DialogHeader className="sr-only">
           <DialogTitle>Search</DialogTitle>
@@ -100,13 +100,13 @@ export function CommandSearchDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex items-center gap-2.5 border-b-2 border-border px-4 py-3">
+        <div className="flex items-center gap-2.5 pb-2">
           <Search className="size-4 shrink-0 text-muted-foreground" />
           <Input
             placeholder="Search transactions, clients, notes..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="h-8 border-2 border-transparent bg-muted/50 px-4 font-mono text-xs shadow-none focus-visible:border-[#6366F1] focus-visible:ring-2 focus-visible:ring-[#6366F1] sm:text-sm"
+            className="h-8 border-2 border-transparent bg-muted/80 px-4 font-mono text-xs shadow-none focus-visible:border-[#6366F1] focus-visible:ring-2 focus-visible:ring-[#6366F1] sm:text-sm"
           />
           <DialogClose asChild disabled={false}>
             <Button size="icon-xs" aria-label="Close search dialog">
@@ -115,10 +115,10 @@ export function CommandSearchDialog({
           </DialogClose>
         </div>
 
-        <div className="max-h-[65vh] space-y-4 overflow-y-auto p-3.5">
+        <div className="max-h-[65vh] space-y-4 overflow-y-auto">
           {/* Quick Action */}
           <div>
-            <p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+            <p className="pb-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
               Quick Actions
             </p>
             <button
@@ -127,7 +127,7 @@ export function CommandSearchDialog({
                 onOpenChange(false);
                 openQuickEntry('money_out');
               }}
-              className="group flex w-full items-center gap-2.5 rounded-xl border-2 border-transparent px-2.5 py-2 text-left font-mono text-xs font-bold text-foreground transition-all hover:border-border hover:bg-accent cursor-pointer"
+              className="group flex w-full items-center gap-2.5 rounded-xl border-2 border-transparent px-2 py-2 text-left font-mono text-xs font-bold text-foreground transition-all hover:border-border hover:bg-accent cursor-pointer"
             >
               <span className="flex size-7 items-center justify-center rounded-lg border-2 border-border bg-primary text-primary-foreground transition-transform group-hover:rotate-90">
                 <Plus className="size-4 stroke-[2.5]" />
@@ -138,7 +138,7 @@ export function CommandSearchDialog({
 
           {/* Transactions */}
           <div>
-            <p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+            <p className="pb-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
               Transactions ({matchingTransactions.length})
             </p>
             {matchingTransactions.length === 0 ? (
@@ -213,7 +213,7 @@ export function CommandSearchDialog({
           {/* Invoices */}
           {isInvoicingVisible && (
             <div>
-              <p className="px-2 pb-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+              <p className="pb-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
                 Invoices ({matchingInvoices.length})
               </p>
               {matchingInvoices.length === 0 ? (

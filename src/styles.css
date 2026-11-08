@@ -10,7 +10,7 @@
   --foreground: #111111;
 
   /* Bento Card & Popover Surfaces with Glassmorphism */
-  --glass-header: rgba(255, 255, 255, 0.70);
+  --glass-header: rgba(255, 255, 255, 0.25);
   --card: rgba(255, 255, 255, 0.65);
   --card-foreground: #111111;
   --popover: rgba(255, 255, 255, 0.85);
@@ -246,24 +246,24 @@
 /* Ambient Background Gradient Blur (Primary #C9F31D + Tertiary #6366F1) */
 .ambient-gradient-blur {
   background:
-    radial-gradient(110% 70% at 20% 0%, rgba(201, 243, 29, 0.16), transparent 70%),
-    radial-gradient(110% 70% at 80% 0%, rgba(99, 102, 241, 0.20), transparent 70%),
-    linear-gradient(180deg, rgba(201, 243, 29, 0.10) 0%, rgba(99, 102, 241, 0.12) 30%, transparent 80%);
+    radial-gradient(circle 650px at 20% 0%, rgba(201, 243, 29, 0.36), transparent 70%),
+    radial-gradient(circle 650px at 80% 0%, rgba(99, 102, 241, 0.40), transparent 70%),
+    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(201, 243, 29, 0.18) 0%, rgba(99, 102, 241, 0.20) 45%, transparent 75%);
   filter: blur(60px);
 }
 
 .dark .ambient-gradient-blur {
   background:
-    radial-gradient(110% 70% at 20% 0%, rgba(201, 243, 29, 0.18), transparent 70%),
-    radial-gradient(110% 70% at 80% 0%, rgba(99, 102, 241, 0.24), transparent 70%),
-    linear-gradient(180deg, rgba(201, 243, 29, 0.12) 0%, rgba(99, 102, 241, 0.15) 30%, transparent 80%);
+    radial-gradient(circle 650px at 20% 0%, rgba(201, 243, 29, 0.20), transparent 70%),
+    radial-gradient(circle 650px at 80% 0%, rgba(99, 102, 241, 0.26), transparent 70%),
+    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(201, 243, 29, 0.12) 0%, rgba(99, 102, 241, 0.16) 45%, transparent 75%);
   filter: blur(65px);
 }
 
 /* Glassmorphism Header & Navigation */
 .glass-header {
   background-color: var(--glass-header);
-  @apply backdrop-blur-xl;
+  @apply backdrop-blur-md;
 }
 
 header.glass-header {
@@ -271,7 +271,7 @@ header.glass-header {
   top: 0;
   z-index: 40;
   width: 100%;
-  border-bottom: 2px solid var(--border);
+  /* border-bottom: 2px solid var(--border); */
 }
 
 /* Rounded Brutalism Bento Tile Geometry (Macro, Static, and Grounded with Glassmorphism) */
@@ -283,7 +283,7 @@ header.glass-header {
   border-style: solid;
   border-color: var(--border);
   box-shadow: 4px 4px 0px 0px var(--border);
-  @apply backdrop-blur-xl;
+  @apply backdrop-blur-xs;
 }
 
 /* Tactile Rounded Brutalist Surface & Interactive Helpers */

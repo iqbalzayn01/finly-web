@@ -206,7 +206,7 @@ export function QuickTransactionModal() {
     >
       <DialogContent
         showCloseButton={false}
-        className="brutal-surface rounded-3xl border-2 border-border bg-popover p-6 sm:max-w-lg"
+        className="brutal-surface rounded-3xl border-2 border-border bg-popover/80 p-6 sm:max-w-lg"
       >
         <div className="flex justify-between">
           <DialogHeader>
