@@ -65,7 +65,7 @@ export function CashflowTrendChart() {
 
         <fieldset
           aria-label="Select chart time range"
-          className="brutal-surface m-0 flex min-w-0 items-center gap-1 rounded-xl bg-muted/50 p-1"
+          className="brutal-surface m-0 flex min-w-0 items-center gap-1 rounded-xl bg-background p-1"
         >
           {TIME_RANGES.map((range) => {
             const active = timeRange === range;
@@ -163,8 +163,7 @@ export function CashflowTrendChart() {
               content={({ active, payload }) => {
                 if (!active || !payload?.length) return null;
                 const point = payload[0]?.payload as
-                  | AreaChartDataPoint
-                  | undefined;
+                  AreaChartDataPoint | undefined;
                 if (!point) return null;
 
                 const isPositiveNet = point.net >= 0;

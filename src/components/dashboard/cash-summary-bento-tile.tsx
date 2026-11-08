@@ -44,10 +44,10 @@ export function CashSummaryBentoTile() {
         <div className="flex items-baseline gap-2">
           <MoneyValue
             amount={Math.abs(summary.netFlow)}
-            signedType={isSurplus ? 'money_in' : 'money_out'}
+            // signedType={isSurplus ? 'money_in' : 'money_out'}
             className={cn(
-              'font-mono text-3xl font-black tracking-tight tabular-nums sm:text-4xl',
-              isSurplus ? 'text-inflow' : 'text-outflow',
+              'font-mono text-3xl text-foreground font-black tracking-tight tabular-nums sm:text-4xl',
+              // isSurplus ? 'text-inflow' : 'text-outflow',
             )}
           />
         </div>
@@ -60,12 +60,12 @@ export function CashSummaryBentoTile() {
 
       {/* 3. Side-by-Side Income & Expenses Boxes */}
       <div className="grid grid-cols-2 gap-2.5">
-        <div className="flex items-center gap-2.5 rounded-xl border-2 border-border bg-muted/40 p-2.5">
+        <div className="flex items-center gap-2.5 rounded-xl border-2 border-border bg-background p-2.5">
           <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-inflow-border bg-inflow-bg text-inflow">
             <ArrowUpRight className="size-4" />
           </span>
           <div className="min-w-0">
-            <p className="truncate font-mono text-[10px] font-bold uppercase text-muted-foreground">
+            <p className="truncate font-mono text-[11px] font-bold text-foreground">
               {terminology.inflow}
             </p>
             <MoneyValue
@@ -75,12 +75,12 @@ export function CashSummaryBentoTile() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 rounded-xl border-2 border-border bg-muted/40 p-2.5">
+        <div className="flex items-center gap-2.5 rounded-xl border-2 border-border bg-background p-2.5">
           <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-outflow-border bg-outflow-bg text-outflow">
             <ArrowDownRight className="size-4" />
           </span>
           <div className="min-w-0">
-            <p className="truncate font-mono text-[10px] font-bold uppercase text-muted-foreground">
+            <p className="truncate font-mono text-[11px] font-bold text-foreground">
               {terminology.outflow}
             </p>
             <MoneyValue
