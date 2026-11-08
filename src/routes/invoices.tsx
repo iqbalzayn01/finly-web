@@ -217,7 +217,7 @@ function InvoicesScreen() {
             <p className="font-mono text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
               Waiting to Be Paid
             </p>
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border-2 border-info-border bg-info-bg text-info">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border-2 border-muted-foreground text-muted-foreground">
               <Clock className="size-5" />
             </span>
           </div>
@@ -242,7 +242,7 @@ function InvoicesScreen() {
             <p className="font-mono text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
               Overdue
             </p>
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border-2 border-outflow-border bg-outflow-bg text-outflow">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border-2 border-muted-foreground text-muted-foreground">
               <TriangleAlert className="size-5" />
             </span>
           </div>
@@ -275,7 +275,7 @@ function InvoicesScreen() {
             <p className="font-mono text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
               Paid This Month
             </p>
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border-2 border-inflow-border bg-inflow-bg text-inflow">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border-2 border-muted-foreground text-muted-foreground">
               <CheckCircle2 className="size-5" />
             </span>
           </div>
@@ -301,7 +301,7 @@ function InvoicesScreen() {
             <div
               role="tablist"
               aria-label="Filter invoices by status"
-              className="brutal-surface flex flex-wrap items-center gap-1 rounded-xl bg-muted/50 p-1"
+              className="brutal-surface flex flex-wrap items-center gap-1 rounded-xl bg-background p-1"
             >
               {filterTabs.map((tab) => {
                 const active = statusTab === tab.id;
@@ -489,7 +489,9 @@ function InvoicesScreen() {
                                 className="gap-1 rounded-lg border-[#6366F1]/30 bg-[#6366F1]/10 font-mono text-[11px] font-bold text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/25"
                               >
                                 <Copy className="size-3.5" />
-                                <span className="hidden xl:inline">Copy Link</span>
+                                <span className="hidden xl:inline">
+                                  Copy Link
+                                </span>
                               </Button>
                               <Button
                                 type="button"

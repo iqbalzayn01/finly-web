@@ -33,13 +33,6 @@ export function ReceivablesBentoTile() {
             Money clients owe you
           </p>
         </div>
-        <Link
-          to="/invoices"
-          aria-label="Open Invoices"
-          className="brutal-btn group inline-flex size-9 shrink-0 items-center justify-center rounded-xl border-[#6366F1]/30 bg-[#6366F1]/10 text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/25 hover:text-[#818CF8] outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]"
-        >
-          <ArrowUpRight className="size-4 text-[#6366F1] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#818CF8]" />
-        </Link>
       </div>
 
       {/* Primary Pending Figure */}
@@ -78,8 +71,7 @@ export function ReceivablesBentoTile() {
                 )}
               />
               <span>
-                Overdue{' '}
-                {hasOverdue ? `(${summary.overdueCount})` : '(None)'}
+                Overdue {hasOverdue ? `(${summary.overdueCount})` : '(None)'}
               </span>
             </span>
             <MoneyValue

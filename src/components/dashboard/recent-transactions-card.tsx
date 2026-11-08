@@ -2,9 +2,21 @@ import {
   ArrowDownRight,
   ArrowLeftRight,
   ArrowUpRight,
+  Briefcase,
+  Building2,
+  Car,
+  Coins,
+  FileText,
+  Laptop,
   Plus,
   ReceiptText,
+  ShoppingCart,
   Trash2,
+  TrendingUp,
+  Utensils,
+  Wrench,
+  Zap,
+  type LucideIcon,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { MoneyValue } from '#/components/money-value';
@@ -43,6 +55,110 @@ import { cn } from '#/lib/utils';
 type LedgerFilterTab = 'all' | 'income' | 'expenses';
 
 const PAGE_SIZE = 10;
+
+function getCategoryIcon(
+  category: string,
+  type: 'money_in' | 'money_out',
+): LucideIcon {
+  const normalized = category.toLowerCase().trim();
+
+  if (normalized.includes('transfer')) return ArrowLeftRight;
+  if (
+    normalized.includes('food') ||
+    normalized.includes('dining') ||
+    normalized.includes('restaurant') ||
+    normalized.includes('coffee')
+  ) {
+    return Utensils;
+  }
+  if (
+    normalized.includes('grocer') ||
+    normalized.includes('supermarket') ||
+    normalized.includes('market') ||
+    normalized.includes('shopping')
+  ) {
+    return ShoppingCart;
+  }
+  if (
+    normalized.includes('software') ||
+    normalized.includes('tool') ||
+    normalized.includes('hosting') ||
+    normalized.includes('saas') ||
+    normalized.includes('app')
+  ) {
+    return Laptop;
+  }
+  if (
+    normalized.includes('workspace') ||
+    normalized.includes('rent') ||
+    normalized.includes('office') ||
+    normalized.includes('desk')
+  ) {
+    return Building2;
+  }
+  if (
+    normalized.includes('commute') ||
+    normalized.includes('fuel') ||
+    normalized.includes('gas') ||
+    normalized.includes('transport') ||
+    normalized.includes('travel') ||
+    normalized.includes('car')
+  ) {
+    return Car;
+  }
+  if (
+    normalized.includes('utilit') ||
+    normalized.includes('electric') ||
+    normalized.includes('power') ||
+    normalized.includes('water') ||
+    normalized.includes('internet')
+  ) {
+    return Zap;
+  }
+  if (
+    normalized.includes('equip') ||
+    normalized.includes('hardware') ||
+    normalized.includes('gear') ||
+    normalized.includes('device')
+  ) {
+    return Wrench;
+  }
+  if (normalized.includes('tax')) {
+    return ReceiptText;
+  }
+  if (
+    normalized.includes('invoice') ||
+    normalized.includes('bill') ||
+    normalized.includes('statement')
+  ) {
+    return FileText;
+  }
+  if (
+    normalized.includes('salary') ||
+    normalized.includes('retainer') ||
+    normalized.includes('consult') ||
+    normalized.includes('payroll')
+  ) {
+    return Briefcase;
+  }
+  if (
+    normalized.includes('sale') ||
+    normalized.includes('income') ||
+    normalized.includes('revenue')
+  ) {
+    return TrendingUp;
+  }
+  if (
+    normalized.includes('invest') ||
+    normalized.includes('dividend') ||
+    normalized.includes('crypto') ||
+    normalized.includes('capital')
+  ) {
+    return Coins;
+  }
+
+  return type === 'money_in' ? ArrowUpRight : ArrowDownRight;
+}
 
 export function RecentTransactionsCard() {
   const {
@@ -120,7 +236,6 @@ export function RecentTransactionsCard() {
 
   return (
     <div className="bento-card bento-card-static col-span-12 overflow-hidden bg-card">
-      {/* Header */}
       <div className="flex flex-col justify-between gap-4 border-b-2 border-border p-6 sm:flex-row sm:items-center">
         <div className="space-y-0.5">
           <h2 className="font-mono text-xs font-extrabold uppercase tracking-wider text-foreground sm:text-sm">
@@ -131,7 +246,6 @@ export function RecentTransactionsCard() {
           </p>
         </div>
 
-        {/* Filter Pills: All, Income, Expenses */}
         <div
           role="tablist"
           aria-label="Filter recent transactions"
@@ -211,7 +325,6 @@ export function RecentTransactionsCard() {
         </div>
       </div>
 
-      {/* Table Content */}
       <div>
         {transactions.length === 0 ? (
           <div className="p-6">
@@ -300,6 +413,7 @@ export function RecentTransactionsCard() {
                     walletNameById.get(tx.walletId) ?? 'Checking';
                   const isInflow = tx.type === 'money_in';
                   const isTransfer = isTransferCategory(tx.category);
+                  const CategoryIcon = getCategoryIcon(tx.category, tx.type);
 
                   return (
                     <TableRow
@@ -311,20 +425,9 @@ export function RecentTransactionsCard() {
                           <span
                             className={cn(
                               'flex size-8 shrink-0 items-center justify-center rounded-xl border-2 transition-transform duration-150 group-hover:scale-105',
-                              isTransfer
-                                ? 'border-[#6366F1]/30 bg-[#6366F1]/15 text-[#6366F1]'
-                                : isInflow
-                                  ? 'border-inflow-border bg-inflow-bg text-inflow'
-                                  : 'border-outflow-border bg-outflow-bg text-outflow',
                             )}
                           >
-                            {isTransfer ? (
-                              <ArrowLeftRight className="size-4" />
-                            ) : isInflow ? (
-                              <ArrowUpRight className="size-4" />
-                            ) : (
-                              <ArrowDownRight className="size-4" />
-                            )}
+                            <CategoryIcon className="size-4" />
                           </span>
                           <div className="min-w-0">
                             <p className="max-w-44 truncate font-mono text-xs font-bold text-foreground sm:max-w-xs sm:text-sm">
@@ -383,7 +486,6 @@ export function RecentTransactionsCard() {
               </TableBody>
             </Table>
 
-            {/* Pagination Footer */}
             <div className="flex flex-col items-center justify-between gap-3 border-t-2 border-border bg-muted/40 px-6 py-3.5 sm:flex-row">
               <p className="font-mono text-xs text-muted-foreground tabular-nums">
                 Showing{' '}

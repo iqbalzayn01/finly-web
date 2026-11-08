@@ -228,10 +228,10 @@ export function AppShell({ children }: { children: ReactNode }) {
               size="icon"
               onClick={handleToggleTheme}
               aria-label="Switch between light and dark mode"
-              className="relative size-10 rounded-xl border-2 border-border bg-card backdrop-blur-md hover:bg-accent/80"
+              className="size-10 rounded-xl border-2 border-border bg-card backdrop-blur-md hover:bg-accent/80"
             >
-              <Sun className="size-4 scale-100 rotate-0 transition-transform duration-200 group-hover:rotate-45 dark:scale-0 dark:-rotate-90" />
-              <Moon className="absolute size-4 scale-0 rotate-90 transition-transform duration-200 dark:scale-100 dark:rotate-0 dark:group-hover:-rotate-12" />
+              <Sun className="size-4 transition-transform duration-200 group-hover:rotate-45 dark:hidden" />
+              <Moon className="hidden size-4 transition-transform duration-200 dark:block dark:group-hover:-rotate-12" />
             </Button>
 
             {/* Notifications Popover */}
@@ -355,7 +355,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Popover>
 
             {/* User Profile Menu */}
-            <DropdownMenu>
+            <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button
                   type="button"
@@ -447,32 +447,32 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Mobile Bottom Navigation (< 768px) */}
       <nav
         aria-label="Mobile bottom navigation"
-        className="glass-header no-print fixed inset-x-0 bottom-0 z-40 flex h-16 items-center justify-around border-t-2 border-border px-2 md:hidden"
+        className="glass-header no-print fixed inset-x-0 bottom-0 z-40 flex h-18 items-center justify-around border-t-2 border-border px-2 md:hidden"
       >
         <Link
           to="/"
+          aria-label="Home"
           className={cn(
-            'flex min-h-11 min-w-14 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-all active:scale-95',
+            'flex flex-col items-center justify-center gap-0.5 rounded-xl p-3 font-mono text-[10px] font-semibold transition-all active:scale-95',
             location.pathname === '/'
               ? 'bg-accent font-extrabold text-foreground'
               : 'text-muted-foreground hover:text-foreground',
           )}
         >
           <LayoutDashboard className="size-4" />
-          <span>Home</span>
         </Link>
 
         <Link
           to="/history"
+          aria-label="History"
           className={cn(
-            'flex min-h-11 min-w-14 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-all active:scale-95',
+            'flex flex-col items-center justify-center gap-0.5 rounded-xl p-3 font-mono text-[10px] font-semibold transition-all active:scale-95',
             location.pathname.startsWith('/history')
               ? 'bg-accent font-extrabold text-foreground'
               : 'text-muted-foreground hover:text-foreground',
           )}
         >
           <History className="size-4" />
-          <span>History</span>
         </Link>
 
         <button
@@ -486,28 +486,28 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         <Link
           to="/invoices"
+          aria-label="Invoices"
           className={cn(
-            'flex min-h-11 min-w-14 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-all active:scale-95',
+            'flex flex-col items-center justify-center gap-0.5 rounded-xl p-3 font-mono text-[10px] font-semibold transition-all active:scale-95',
             location.pathname.startsWith('/invoices')
               ? 'bg-accent font-extrabold text-foreground'
               : 'text-muted-foreground hover:text-foreground',
           )}
         >
           <FileText className="size-4" />
-          <span>Invoices</span>
         </Link>
 
         <Link
           to="/settings"
+          aria-label="Settings"
           className={cn(
-            'flex min-h-11 min-w-14 flex-col items-center justify-center gap-0.5 rounded-xl px-2 font-mono text-[10px] font-semibold transition-all active:scale-95',
+            'flex flex-col items-center justify-center gap-0.5 rounded-xl p-3 font-mono text-[10px] font-semibold transition-all active:scale-95',
             location.pathname.startsWith('/settings')
               ? 'bg-accent font-extrabold text-foreground'
               : 'text-muted-foreground hover:text-foreground',
           )}
         >
           <Settings className="size-4" />
-          <span>Settings</span>
         </Link>
       </nav>
 

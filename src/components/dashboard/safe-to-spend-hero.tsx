@@ -37,7 +37,7 @@ export function SafeToSpendHero() {
         <span className="font-mono text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
           Safe to Spend Today
         </span>
-        <span className="inline-flex h-6 items-center rounded-lg border-2 border-border bg-muted px-2.5 font-mono text-[10px] font-bold uppercase tracking-wider text-foreground tabular-nums">
+        <span className="inline-flex h-6 items-center rounded-lg border-2 border-border px-2.5 font-mono text-[10px] font-bold uppercase tracking-wider text-foreground tabular-nums">
           {safeToSpend.daysRemainingInCycle}d left
         </span>
       </div>
@@ -59,7 +59,7 @@ export function SafeToSpendHero() {
       </div>
 
       {/* 3. Progress Bar Block */}
-      <div className="space-y-2 rounded-xl border-2 border-border bg-muted/60 p-3">
+      <div className="space-y-2 rounded-xl border-2 border-border bg-background p-3">
         <div className="flex items-center justify-between font-mono text-[11px] font-bold text-foreground tabular-nums">
           <span>Free to spend</span>
           <span>{headroomPercent}% of cash</span>
@@ -70,7 +70,7 @@ export function SafeToSpendHero() {
           aria-valuemin={0}
           aria-valuemax={100}
           aria-label="Free to spend percentage"
-          className="h-2.5 w-full overflow-hidden rounded-full border border-border bg-muted"
+          className="h-2.5 w-full overflow-hidden rounded-full border border-border bg-muted/25"
         >
           <div
             className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out"
