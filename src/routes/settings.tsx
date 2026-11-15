@@ -178,26 +178,48 @@ function SettingsScreen() {
         </p>
       </div>
 
-      <Tabs defaultValue="workspace" className="space-y-6 gap-4">
-        <TabsList className="grid w-full grid-cols-2 gap-1.5 sm:inline-flex sm:w-auto mb-0">
-          <TabsTrigger value="workspace" className="px-4">
-            <UserCog className="size-3.5" />
-            <span>Profile &amp; Wallets</span>
-          </TabsTrigger>
-          <TabsTrigger value="display" className="px-4">
-            <SlidersHorizontal className="size-3.5" />
-            <span>Display &amp; Privacy</span>
-          </TabsTrigger>
-          <TabsTrigger value="payment" className="px-4">
-            <Landmark className="size-3.5" />
-            <span>Invoice Details</span>
-          </TabsTrigger>
-          <TabsTrigger value="backup" className="px-4">
-            <Database className="size-3.5" />
-            <span>Backup &amp; Reset</span>
-          </TabsTrigger>
-        </TabsList>
+      <Tabs
+        defaultValue="workspace"
+        orientation="vertical"
+        className="flex-col gap-6 md:flex-row md:items-start"
+      >
+        <aside
+          aria-label="Settings sections"
+          className="w-full shrink-0 md:sticky md:top-24 md:w-60 lg:w-64"
+        >
+          <TabsList className="flex w-full items-stretch justify-start gap-1.5 p-2">
+            <TabsTrigger
+              value="workspace"
+              className="h-10 justify-start gap-2.5 px-3.5"
+            >
+              <UserCog className="size-4" />
+              <span>Profile &amp; Wallets</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="display"
+              className="h-10 justify-start gap-2.5 px-3.5"
+            >
+              <SlidersHorizontal className="size-4" />
+              <span>Display &amp; Privacy</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="payment"
+              className="h-10 justify-start gap-2.5 px-3.5"
+            >
+              <Landmark className="size-4" />
+              <span>Invoice Details</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="backup"
+              className="h-10 justify-start gap-2.5 px-3.5"
+            >
+              <Database className="size-4" />
+              <span>Backup &amp; Reset</span>
+            </TabsTrigger>
+          </TabsList>
+        </aside>
 
+        <div className="min-w-0 flex-1">
         {/* 1. Profile & Wallets Tab */}
         <TabsContent value="workspace">
           <div className="grid grid-cols-12 items-stretch gap-4">
@@ -942,6 +964,7 @@ function SettingsScreen() {
             </div>
           </div>
         </TabsContent>
+        </div>
       </Tabs>
 
       {/* 2-Step Destructive Reset Dialog */}
