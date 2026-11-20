@@ -16,7 +16,7 @@ export const Route = createFileRoute('/')({
 });
 
 function DashboardScreen() {
-  const { safeToSpend, todayISO, openQuickEntry } = useFinly();
+  const { profile, safeToSpend, todayISO, openQuickEntry } = useFinly();
 
   const showDeficitAlert =
     safeToSpend.totalCashOnHand < 0 || safeToSpend.status === 'deficit';
@@ -26,10 +26,13 @@ function DashboardScreen() {
       {/* Top Workspace Header Row */}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div className="space-y-1">
-          <h1 className="font-mono text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
+          <p className="text-xs font-medium tracking-wide text-muted-foreground sm:text-sm">
             {formatMonthYear(todayISO)} Overview
+          </p>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+            Good Morning, {profile.displayName}
           </h1>
-          <p className="font-mono text-xs text-muted-foreground sm:text-sm">
+          <p className="text-xs text-muted-foreground sm:text-sm">
             See your balance, daily spending limit, and unpaid invoices in one
             place.
           </p>
@@ -39,7 +42,7 @@ function DashboardScreen() {
           type="button"
           size="default"
           onClick={() => openQuickEntry('money_out')}
-          className="hidden md:flex h-10 gap-2 rounded-xl bg-primary px-4 font-mono text-xs font-extrabold uppercase tracking-wider text-primary-foreground"
+          className="hidden md:flex h-10 gap-2 rounded-full bg-primary px-5 text-xs font-bold tracking-wide text-primary-foreground"
         >
           <Plus className="size-4 stroke-[2.5] transition-transform duration-200 group-hover:rotate-90" />
           <span>Add Transaction</span>

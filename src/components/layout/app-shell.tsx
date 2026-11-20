@@ -34,6 +34,11 @@ import {
   DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu';
 import {
+  FloatingDock,
+  type FloatingDockEntry,
+  type FloatingDockItem,
+} from '#/components/ui/floating-dock';
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -59,7 +64,6 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { resolvedTheme, setTheme } = useTheme();
 
   const [searchOpen, setSearchOpen] = useState(false);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
 
   useEffect(() => {
@@ -99,7 +103,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   if (isAuthRoute) {
     return (
-      <div className="relative min-h-screen bg-background">
+      <div className="relative min-h-screen overflow-x-clip bg-background">
         {/* Background Gradient Blur (Primary #C9F31D + Tertiary #6366F1) */}
         <div
           aria-hidden="true"
@@ -112,26 +116,54 @@ export function AppShell({ children }: { children: ReactNode }) {
     );
   }
 
-  const centerNavItems = [
+  const navRouteItems: FloatingDockItem[] = [
     {
-      label: 'Dashboard',
-      to: '/' as const,
-      active: location.pathname === '/',
+      id: 'home',
+      title: 'Dashboard',
+      to: '/',
+      isActive: location.pathname === '/',
+      icon: <LayoutDashboard />,
     },
     {
-      label: 'History',
-      to: '/history' as const,
-      active: location.pathname.startsWith('/history'),
+      id: 'history',
+      title: 'History',
+      to: '/history',
+      isActive: location.pathname.startsWith('/history'),
+      icon: <History />,
     },
     ...(isInvoicingVisible
       ? [
           {
-            label: 'Invoices',
+            id: 'invoices',
+            title: 'Invoices',
             to: '/invoices' as const,
-            active: location.pathname.startsWith('/invoices'),
+            isActive: location.pathname.startsWith('/invoices'),
+            icon: <FileText />,
           },
         ]
       : []),
+    {
+      id: 'settings',
+      title: 'Settings',
+      to: '/settings',
+      isActive: location.pathname.startsWith('/settings'),
+      icon: <Settings />,
+    },
+  ];
+
+  const mobileDockItems: FloatingDockItem[] = [
+    navRouteItems[0],
+    navRouteItems[1],
+    {
+      id: 'add-transaction',
+      title: 'Add Transaction',
+      onClick: () => openQuickEntry('money_out'),
+      variant: 'primary',
+      icon: (
+        <Plus className="stroke-[2.5] transition-transform duration-200 group-hover:rotate-90" />
+      ),
+    },
+    ...navRouteItems.slice(2),
   ];
 
   const initials = profile.displayName
@@ -146,8 +178,150 @@ export function AppShell({ children }: { children: ReactNode }) {
     setTheme(nextTheme);
   };
 
+  const alertDotBadge =
+    alertCount > 0 ? (
+      <span
+        aria-hidden="true"
+        className={cn(
+          'pointer-events-none absolute top-0.5 right-0.5 z-20 size-2.5 rounded-full border-2 border-card',
+          hasUrgentAlert ? 'bg-outflow' : 'bg-primary',
+        )}
+      />
+    ) : null;
+
+  const renderAlertsMenu = (
+    trigger: ReactNode,
+    align: 'center' | 'end' = 'end',
+  ) => (
+    <AlertsPopover
+      trigger={trigger}
+      align={align}
+      todayISO={todayISO}
+      invoiceSummary={invoiceSummary}
+      safeToSpend={safeToSpend}
+    />
+  );
+
+  const renderAccountMenu = (trigger: ReactNode) => (
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="end"
+        sideOffset={12}
+        className="liquid-glass-elevated w-64 rounded-2xl bg-popover/90 p-2"
+      >
+        <DropdownMenuLabel className="flex flex-col gap-0.5 px-2.5 py-2">
+          <p className="truncate font-mono text-xs font-extrabold text-foreground">
+            {profile.displayName}
+          </p>
+          <p className="truncate font-mono text-[11px] font-normal text-muted-foreground">
+            {profile.email}
+          </p>
+        </DropdownMenuLabel>
+
+        <DropdownMenuSeparator className="bg-border" />
+
+        {/* Hide Balances Toggle */}
+        <div className="flex items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-xs">
+          <div className="flex items-center gap-2">
+            <EyeOff className="size-3.5 text-muted-foreground" />
+            <span className="font-semibold text-foreground">Hide Balances</span>
+          </div>
+          <Switch
+            size="sm"
+            checked={profile.privacyBlurEnabled}
+            onCheckedChange={(checked) => togglePrivacyBlur(checked)}
+            aria-label="Toggle privacy balance mask"
+          />
+        </div>
+
+        <DropdownMenuSeparator className="bg-border" />
+
+        <DropdownMenuItem
+          asChild
+          className="rounded-xl px-2.5 py-2 text-xs font-semibold cursor-pointer"
+        >
+          <Link to="/settings">
+            <Settings className="size-3.5" />
+            <span>Settings</span>
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          onClick={exportCsv}
+          className="rounded-xl px-2.5 py-2 text-xs font-semibold cursor-pointer"
+        >
+          <Download className="size-3.5" />
+          <span>Export CSV</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator className="bg-border" />
+
+        <DropdownMenuItem
+          asChild
+          className="rounded-xl px-2.5 py-2 text-xs font-semibold text-outflow focus:text-outflow cursor-pointer"
+        >
+          <Link to="/login">
+            <LogOut className="size-3.5" />
+            <span>Sign Out</span>
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
+  const desktopDockItems: FloatingDockEntry[] = [
+    {
+      id: 'brand',
+      title: 'Finly',
+      to: '/',
+      variant: 'brand',
+      icon: <BrandLogo size={20} className="fill-black" />,
+    },
+    { type: 'divider', id: 'divider-nav' },
+    ...navRouteItems,
+    { type: 'divider', id: 'divider-actions' },
+    {
+      id: 'search',
+      title: 'Search (⌘K)',
+      onClick: () => setSearchOpen(true),
+      icon: <Search />,
+    },
+    {
+      id: 'theme',
+      title: 'Switch between light and dark mode',
+      onClick: handleToggleTheme,
+      icon: (
+        <>
+          <Sun className="dark:hidden" />
+          <Moon className="hidden dark:block" />
+        </>
+      ),
+    },
+    {
+      id: 'notifications',
+      title: 'Alerts',
+      badge: alertDotBadge,
+      icon: <Bell />,
+      renderTrigger: (button) => renderAlertsMenu(button, 'center'),
+    },
+    {
+      id: 'account',
+      title: profile.displayName || 'Account',
+      variant: 'avatar',
+      icon: (
+        <Avatar className="size-full rounded-full">
+          <AvatarFallback className="rounded-full bg-primary font-mono text-[11px] font-extrabold text-primary-foreground">
+            {initials || 'AZ'}
+          </AvatarFallback>
+        </Avatar>
+      ),
+      renderTrigger: (button) => renderAccountMenu(button),
+    },
+  ];
+
   return (
-    <div className="relative flex min-h-screen flex-col bg-background text-foreground">
+    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-background text-foreground">
       {/* Background Gradient Blur (Primary #C9F31D + Tertiary #6366F1) */}
       <div
         aria-hidden="true"
@@ -164,356 +338,215 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       )}
 
-      {/* Top Navigation Bar */}
-      <header className="glass-header no-print sticky top-0 z-40 w-full">
-        <div className="mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto] items-center gap-4 px-4 sm:px-6 md:grid-cols-[1fr_auto_1fr] lg:px-8">
-          {/* 1. Left Zone: Brand Logo */}
-          <div className="flex items-center">
-            <Link
-              to="/"
-              className="group inline-flex items-center gap-2.5 rounded-xl py-1 pr-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <span className="brutal-surface flex size-10 items-center justify-center rounded-xl bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
-                <BrandLogo size={22} className="fill-black" />
-              </span>
-              <span className="font-mono text-lg font-black tracking-tight text-foreground">
-                Finly
-              </span>
-            </Link>
-          </div>
+      {/* Desktop Top Floating Dock (>= 768px) */}
+      <FloatingDock
+        items={desktopDockItems}
+        placement="top"
+        ariaLabel="Main navigation"
+      />
 
-          {/* 2. Center Zone: Navigation Bar */}
-          <nav
-            aria-label="Main navigation"
-            className="brutal-surface hidden items-center justify-center gap-1 rounded-2xl bg-card p-1 md:flex"
+      {/* Mobile Top Header (< 768px) */}
+      <header className="glass-header no-print sticky top-0 z-40 w-full md:hidden">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+          {/* Brand Logo */}
+          <Link
+            to="/"
+            className="group inline-flex items-center gap-2.5 rounded-xl py-1 pr-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            {centerNavItems.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={cn(
-                  'inline-flex h-8 items-center justify-center rounded-xl border-2 px-4 font-mono text-xs tracking-wide transition-all duration-150 active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                  item.active
-                    ? 'border-border bg-primary font-extrabold text-primary-foreground'
-                    : 'border-transparent font-semibold text-muted-foreground hover:bg-accent/80 hover:text-foreground',
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+            <span className="brutal-surface flex size-10 items-center justify-center rounded-xl bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
+              <BrandLogo size={22} className="fill-black" />
+            </span>
+            <span className="font-mono text-lg font-black tracking-tight text-foreground">
+              Finly
+            </span>
+          </Link>
 
-          {/* 3. Right Zone: Action Controls */}
+          {/* Mobile Header Action Controls */}
           <div className="flex items-center justify-end gap-2">
-            {/* Search (⌘K) */}
             <Button
               type="button"
               variant="outline"
-              size="default"
+              size="icon"
               onClick={() => setSearchOpen(true)}
               aria-label="Search transactions and invoices (Cmd+K)"
-              className="h-10 gap-2 rounded-xl border-2 border-border bg-card px-3 font-mono text-xs font-bold text-foreground backdrop-blur-md hover:bg-accent/80"
+              className="size-10 rounded-full border bg-card/75 backdrop-blur-xl hover:bg-accent/80"
             >
-              <Search className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:scale-110 group-hover:text-foreground" />
-              <span className="hidden lg:inline">Search</span>
-              <kbd className="hidden rounded-md border border-border bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] font-bold text-muted-foreground xl:inline-block">
-                ⌘K
-              </kbd>
+              <Search className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:scale-105 group-hover:text-foreground" />
             </Button>
 
-            {/* Theme Switcher */}
             <Button
               type="button"
               variant="outline"
               size="icon"
               onClick={handleToggleTheme}
               aria-label="Switch between light and dark mode"
-              className="size-10 rounded-xl border-2 border-border bg-card backdrop-blur-md hover:bg-accent/80"
+              className="size-10 rounded-full border bg-card/75 backdrop-blur-xl hover:bg-accent/80"
             >
               <Sun className="size-4 transition-transform duration-200 group-hover:rotate-45 dark:hidden" />
               <Moon className="hidden size-4 transition-transform duration-200 dark:block dark:group-hover:-rotate-12" />
             </Button>
 
-            {/* Notifications Popover */}
-            <Popover
-              open={notificationsOpen}
-              onOpenChange={setNotificationsOpen}
-            >
-              <PopoverTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  aria-label="View alerts"
-                  className="relative size-10 rounded-xl border-2 border-border bg-card backdrop-blur-md hover:bg-accent/80"
-                >
-                  <Bell className="size-4 transition-transform duration-200 group-hover:rotate-12" />
-                  {alertCount > 0 && (
-                    <span
-                      className={cn(
-                        'absolute top-1.5 right-1.5 size-2.5 rounded-full border-2 border-card',
-                        hasUrgentAlert ? 'bg-outflow' : 'bg-primary',
-                      )}
-                    />
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                align="end"
-                className="brutal-surface w-80 rounded-2xl border-2 border-border bg-popover p-4"
+            {renderAlertsMenu(
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                aria-label="View alerts"
+                className="relative size-10 rounded-full border bg-card/75 backdrop-blur-xl hover:bg-accent/80"
               >
-                <div className="flex items-center justify-between border-b-2 border-border pb-2.5">
-                  <p className="font-mono text-xs font-extrabold uppercase tracking-wider text-foreground">
-                    Alerts
-                  </p>
-                  <span className="font-mono text-[11px] font-semibold text-muted-foreground">
-                    {formatMonthYear(todayISO)}
-                  </span>
-                </div>
+                <Bell className="size-4 transition-transform duration-200 group-hover:rotate-12" />
+                {alertDotBadge}
+              </Button>,
+              'end',
+            )}
 
-                <div className="mt-3 space-y-2.5 text-xs">
-                  {invoiceSummary.overdueCount > 0 && (
-                    <Link
-                      to="/invoices"
-                      onClick={() => setNotificationsOpen(false)}
-                      className="flex items-start gap-2.5 rounded-xl border-2 border-outflow-border bg-outflow-bg p-3 transition-transform hover:-translate-y-0.5"
-                    >
-                      <TriangleAlert className="mt-0.5 size-4 shrink-0 text-outflow" />
-                      <div>
-                        <p className="font-bold text-foreground">
-                          {invoiceSummary.overdueCount} Overdue Invoice
-                          {invoiceSummary.overdueCount > 1 ? 's' : ''}
-                        </p>
-                        <p className="text-muted-foreground">
-                          <MoneyValue
-                            amount={invoiceSummary.overdueAmount}
-                            className="font-bold text-outflow"
-                          />{' '}
-                          past due — click to view
-                        </p>
-                      </div>
-                    </Link>
-                  )}
-
-                  {invoiceSummary.waitingCount > 0 && (
-                    <Link
-                      to="/invoices"
-                      onClick={() => setNotificationsOpen(false)}
-                      className="flex items-start gap-2.5 rounded-xl border-2 border-border bg-muted/50 p-3 transition-transform hover:-translate-y-0.5 hover:bg-accent"
-                    >
-                      <FileText className="mt-0.5 size-4 shrink-0 text-info" />
-                      <div>
-                        <p className="font-bold text-foreground">
-                          {invoiceSummary.waitingCount} Unpaid{' '}
-                          {invoiceSummary.waitingCount === 1
-                            ? 'Invoice'
-                            : 'Invoices'}
-                        </p>
-                        <p className="text-muted-foreground">
-                          <MoneyValue
-                            amount={invoiceSummary.waitingAmount}
-                            className="font-bold text-foreground"
-                          />{' '}
-                          waiting for payment
-                        </p>
-                      </div>
-                    </Link>
-                  )}
-
-                  <div
-                    className={cn(
-                      'flex items-start gap-2.5 rounded-xl border-2 p-3',
-                      safeToSpend.status === 'deficit'
-                        ? 'border-outflow-border bg-outflow-bg'
-                        : 'border-border bg-muted/40',
-                    )}
-                  >
-                    <ShieldAlert
-                      className={cn(
-                        'mt-0.5 size-4 shrink-0',
-                        safeToSpend.status === 'deficit'
-                          ? 'text-outflow'
-                          : 'text-inflow',
-                      )}
-                    />
-                    <div>
-                      <p className="font-bold text-foreground">
-                        Safe to spend:{' '}
-                        <MoneyValue
-                          amount={safeToSpend.dailySafeToSpend}
-                          className="font-extrabold"
-                        />{' '}
-                        / day
-                      </p>
-                      <p className="text-muted-foreground">
-                        {safeToSpend.daysRemainingInCycle} days left this month
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            {/* User Profile Menu */}
-            <DropdownMenu modal={false}>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  aria-label="Open account menu"
-                  className="size-10 rounded-xl border-2 border-border bg-card p-0 backdrop-blur-md hover:bg-accent/80"
-                >
-                  <Avatar className="size-7 rounded-lg">
-                    <AvatarFallback className="rounded-lg bg-primary font-mono text-[11px] font-extrabold text-primary-foreground">
-                      {initials || 'AZ'}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="brutal-surface w-64 rounded-2xl border-2 border-border bg-popover p-2"
+            {renderAccountMenu(
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                aria-label="Open account menu"
+                className="size-10 rounded-full border bg-card/75 p-0 backdrop-blur-xl hover:bg-accent/80"
               >
-                <DropdownMenuLabel className="flex flex-col gap-0.5 px-2.5 py-2">
-                  <p className="truncate font-mono text-xs font-extrabold text-foreground">
-                    {profile.displayName}
-                  </p>
-                  <p className="truncate font-mono text-[11px] font-normal text-muted-foreground">
-                    {profile.email}
-                  </p>
-                </DropdownMenuLabel>
-
-                <DropdownMenuSeparator className="bg-border" />
-
-                {/* Hide Balances Toggle */}
-                <div className="flex items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-xs">
-                  <div className="flex items-center gap-2">
-                    <EyeOff className="size-3.5 text-muted-foreground" />
-                    <span className="font-semibold text-foreground">
-                      Hide Balances
-                    </span>
-                  </div>
-                  <Switch
-                    size="sm"
-                    checked={profile.privacyBlurEnabled}
-                    onCheckedChange={(checked) => togglePrivacyBlur(checked)}
-                    aria-label="Toggle privacy balance mask"
-                  />
-                </div>
-
-                <DropdownMenuSeparator className="bg-border" />
-
-                <DropdownMenuItem
-                  asChild
-                  className="rounded-xl px-2.5 py-2 text-xs font-semibold cursor-pointer"
-                >
-                  <Link to="/settings">
-                    <Settings className="size-3.5" />
-                    <span>Settings</span>
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem
-                  onClick={exportCsv}
-                  className="rounded-xl px-2.5 py-2 text-xs font-semibold cursor-pointer"
-                >
-                  <Download className="size-3.5" />
-                  <span>Export CSV</span>
-                </DropdownMenuItem>
-
-                <DropdownMenuSeparator className="bg-border" />
-
-                <DropdownMenuItem
-                  asChild
-                  className="rounded-xl px-2.5 py-2 text-xs font-semibold text-outflow focus:text-outflow cursor-pointer"
-                >
-                  <Link to="/login">
-                    <LogOut className="size-3.5" />
-                    <span>Sign Out</span>
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <Avatar className="size-8 rounded-full">
+                  <AvatarFallback className="rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
+                    {initials || 'AZ'}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>,
+            )}
           </div>
         </div>
       </header>
 
       {/* Main Content Container */}
-      <main className="relative z-10 mx-auto mb-20 w-full max-w-7xl flex-1 p-4 sm:mb-0 sm:p-6 lg:p-8">
+      <main className="relative z-10 mx-auto w-full max-w-[1920px] flex-1 p-4 pb-24 sm:p-6 sm:pb-24 md:pt-6 md:pb-8 lg:px-8">
         {children}
       </main>
 
-      {/* Mobile Bottom Navigation (< 768px) */}
-      <nav
-        aria-label="Mobile bottom navigation"
-        className="glass-header no-print fixed inset-x-0 bottom-0 z-40 flex h-18 items-center justify-around border-t-2 border-border px-2 md:hidden"
-      >
-        <Link
-          to="/"
-          aria-label="Home"
-          className={cn(
-            'flex flex-col items-center justify-center gap-0.5 rounded-xl p-3 font-mono text-[10px] font-semibold transition-all active:scale-95',
-            location.pathname === '/'
-              ? 'bg-accent font-extrabold text-foreground'
-              : 'text-muted-foreground hover:text-foreground',
-          )}
-        >
-          <LayoutDashboard className="size-4" />
-        </Link>
-
-        <Link
-          to="/history"
-          aria-label="History"
-          className={cn(
-            'flex flex-col items-center justify-center gap-0.5 rounded-xl p-3 font-mono text-[10px] font-semibold transition-all active:scale-95',
-            location.pathname.startsWith('/history')
-              ? 'bg-accent font-extrabold text-foreground'
-              : 'text-muted-foreground hover:text-foreground',
-          )}
-        >
-          <History className="size-4" />
-        </Link>
-
-        <button
-          type="button"
-          onClick={() => openQuickEntry('money_out')}
-          aria-label="Add transaction"
-          className="brutal-btn flex size-12 -translate-y-2 items-center justify-center rounded-2xl border-border bg-primary text-primary-foreground cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <Plus className="size-6 stroke-[2.5] transition-transform duration-200 hover:rotate-90" />
-        </button>
-
-        <Link
-          to="/invoices"
-          aria-label="Invoices"
-          className={cn(
-            'flex flex-col items-center justify-center gap-0.5 rounded-xl p-3 font-mono text-[10px] font-semibold transition-all active:scale-95',
-            location.pathname.startsWith('/invoices')
-              ? 'bg-accent font-extrabold text-foreground'
-              : 'text-muted-foreground hover:text-foreground',
-          )}
-        >
-          <FileText className="size-4" />
-        </Link>
-
-        <Link
-          to="/settings"
-          aria-label="Settings"
-          className={cn(
-            'flex flex-col items-center justify-center gap-0.5 rounded-xl p-3 font-mono text-[10px] font-semibold transition-all active:scale-95',
-            location.pathname.startsWith('/settings')
-              ? 'bg-accent font-extrabold text-foreground'
-              : 'text-muted-foreground hover:text-foreground',
-          )}
-        >
-          <Settings className="size-4" />
-        </Link>
-      </nav>
+      {/* Mobile Floating Dock Navigation (< 768px) */}
+      <FloatingDock items={mobileDockItems} placement="bottom" />
 
       {/* Global Dialogs */}
       <CommandSearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
       <QuickTransactionModal />
     </div>
+  );
+}
+
+interface AlertsPopoverProps {
+  trigger: ReactNode;
+  align: 'center' | 'end';
+  todayISO: string;
+  invoiceSummary: ReturnType<typeof calculateInvoiceSummary>;
+  safeToSpend: ReturnType<typeof useFinly>['safeToSpend'];
+}
+
+function AlertsPopover({
+  trigger,
+  align,
+  todayISO,
+  invoiceSummary,
+  safeToSpend,
+}: AlertsPopoverProps) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>{trigger}</PopoverTrigger>
+      <PopoverContent
+        align={align}
+        sideOffset={12}
+        className="liquid-glass-elevated w-80 rounded-2xl bg-popover/90 p-4"
+      >
+        <div className="flex items-center justify-between border-b border-border pb-2.5">
+          <p className="text-xs font-bold uppercase tracking-wider text-foreground">
+            Alerts
+          </p>
+          <span className="text-[11px] font-medium text-muted-foreground">
+            {formatMonthYear(todayISO)}
+          </span>
+        </div>
+
+        <div className="mt-3 space-y-2.5 text-xs">
+          {invoiceSummary.overdueCount > 0 && (
+            <Link
+              to="/invoices"
+              onClick={() => setOpen(false)}
+              className="flex items-start gap-2.5 rounded-xl border border-outflow-border bg-outflow-bg p-3 transition-transform hover:-translate-y-0.5"
+            >
+              <TriangleAlert className="mt-0.5 size-4 shrink-0 text-outflow" />
+              <div>
+                <p className="font-bold text-foreground">
+                  {invoiceSummary.overdueCount} Overdue Invoice
+                  {invoiceSummary.overdueCount > 1 ? 's' : ''}
+                </p>
+                <p className="text-muted-foreground">
+                  <MoneyValue
+                    amount={invoiceSummary.overdueAmount}
+                    className="font-bold text-outflow"
+                  />{' '}
+                  past due — click to view
+                </p>
+              </div>
+            </Link>
+          )}
+
+          {invoiceSummary.waitingCount > 0 && (
+            <Link
+              to="/invoices"
+              onClick={() => setOpen(false)}
+              className="flex items-start gap-2.5 rounded-xl border border-border bg-background/50 p-3 transition-transform hover:-translate-y-0.5 hover:bg-accent"
+            >
+              <FileText className="mt-0.5 size-4 shrink-0 text-info" />
+              <div>
+                <p className="font-bold text-foreground">
+                  {invoiceSummary.waitingCount} Unpaid{' '}
+                  {invoiceSummary.waitingCount === 1 ? 'Invoice' : 'Invoices'}
+                </p>
+                <p className="text-muted-foreground">
+                  <MoneyValue
+                    amount={invoiceSummary.waitingAmount}
+                    className="font-bold text-foreground"
+                  />{' '}
+                  waiting for payment
+                </p>
+              </div>
+            </Link>
+          )}
+
+          <div
+            className={cn(
+              'flex items-start gap-2.5 rounded-xl border p-3',
+              safeToSpend.status === 'deficit'
+                ? 'border-outflow-border bg-outflow-bg'
+                : 'border-border bg-background/50',
+            )}
+          >
+            <ShieldAlert
+              className={cn(
+                'mt-0.5 size-4 shrink-0',
+                safeToSpend.status === 'deficit'
+                  ? 'text-outflow'
+                  : 'text-inflow',
+              )}
+            />
+            <div>
+              <p className="font-bold text-foreground">
+                Safe to spend:{' '}
+                <MoneyValue
+                  amount={safeToSpend.dailySafeToSpend}
+                  className="font-extrabold"
+                />{' '}
+                / day
+              </p>
+              <p className="text-muted-foreground">
+                {safeToSpend.daysRemainingInCycle} days left this month
+              </p>
+            </div>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }

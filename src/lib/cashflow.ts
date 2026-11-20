@@ -62,6 +62,15 @@ export function normalizeInvoices(
 	});
 }
 
+const CYCLE_END_FORMATTER = new Intl.DateTimeFormat("en-US", {
+	month: "short",
+	day: "numeric",
+});
+
+const SHORT_MONTH_FORMATTER = new Intl.DateTimeFormat("en-US", {
+	month: "short",
+});
+
 /**
  * Computes days remaining in the current cycle and human-readable target date
  * (days remaining until end of current month, rolling into next month if 0 days left).
@@ -85,19 +94,13 @@ export function getCycleCountdown(
 		).padStart(2, "0")}-${String(nextMonthEnd.getDate()).padStart(2, "0")}`;
 		return {
 			daysRemaining: Math.max(1, diffDaysISO(todayISO, nextISO)),
-			cycleEndDateLabel: new Intl.DateTimeFormat("en-US", {
-				month: "short",
-				day: "numeric",
-			}).format(nextMonthEnd),
+			cycleEndDateLabel: CYCLE_END_FORMATTER.format(nextMonthEnd),
 		};
 	}
 
 	return {
 		daysRemaining: rawDiff,
-		cycleEndDateLabel: new Intl.DateTimeFormat("en-US", {
-			month: "short",
-			day: "numeric",
-		}).format(lastDayOfMonth),
+		cycleEndDateLabel: CYCLE_END_FORMATTER.format(lastDayOfMonth),
 	};
 }
 
@@ -287,40 +290,47 @@ export function buildAreaChartSeries(
 	if (timeRange === "3M" || timeRange === "6M") {
 		const stepDays = timeRange === "3M" ? 7 : 14;
 		const bucketCount = 13;
-		const points: AreaChartDataPoint[] = [];
+		const windowDays = bucketCount * stepDays;
+		const windowStart = addDaysISO(todayISO, -(windowDays - 1));
 
-		for (let idx = bucketCount - 1; idx >= 0; idx--) {
-			const bucketEnd = addDaysISO(todayISO, -(idx * stepDays));
+		const sums = Array.from({ length: bucketCount }, () => ({
+			income: 0,
+			expenses: 0,
+		}));
+
+		for (const tx of filtered) {
+			if (tx.date < windowStart || tx.date > todayISO) continue;
+			const daysAgo = diffDaysISO(tx.date, todayISO);
+			const reverseBucket = Math.floor(daysAgo / stepDays);
+			const bucketIdx = bucketCount - 1 - reverseBucket;
+			if (bucketIdx < 0 || bucketIdx >= bucketCount) continue;
+			if (tx.type === "money_in") sums[bucketIdx].income += tx.amount;
+			else sums[bucketIdx].expenses += tx.amount;
+		}
+
+		return sums.map((bucket, bucketIdx) => {
+			const reverseIdx = bucketCount - 1 - bucketIdx;
+			const bucketEnd = addDaysISO(todayISO, -(reverseIdx * stepDays));
 			const bucketStart = addDaysISO(bucketEnd, -(stepDays - 1));
-
-			let income = 0;
-			let expenses = 0;
-			for (const tx of filtered) {
-				if (tx.date >= bucketStart && tx.date <= bucketEnd) {
-					if (tx.type === "money_in") income += tx.amount;
-					else expenses += tx.amount;
-				}
-			}
-
-			const roundedIn = Math.round(income * 100) / 100;
-			const roundedOut = Math.round(expenses * 100) / 100;
-
-			points.push({
+			const roundedIn = Math.round(bucket.income * 100) / 100;
+			const roundedOut = Math.round(bucket.expenses * 100) / 100;
+			return {
 				date: bucketEnd,
 				label: formatShortAxisDate(bucketEnd),
 				tooltipDate: `${formatShortAxisDate(bucketStart)} – ${formatFullDate(bucketEnd)}`,
 				income: roundedIn,
 				expenses: roundedOut,
 				net: Math.round((roundedIn - roundedOut) * 100) / 100,
-			});
-		}
-
-		return points;
+			};
+		});
 	}
 
-	// 1Y: 12 monthly buckets up to current month
+	// 1Y: 12 monthly buckets up to current month (single-pass aggregation)
 	const [curYear, curMonth] = todayISO.split("-").map(Number);
-	const monthlyPoints: AreaChartDataPoint[] = [];
+	const monthBuckets = new Map<
+		string,
+		{ monthISO: string; label: string; income: number; expenses: number }
+	>();
 
 	for (let mOffset = 11; mOffset >= 0; mOffset--) {
 		const d = new Date(curYear, (curMonth || 1) - 1 - mOffset, 1);
@@ -328,31 +338,34 @@ export function buildAreaChartSeries(
 			2,
 			"0",
 		)}`;
-		const monthISO = `${ymPrefix}-01`;
-
-		let income = 0;
-		let expenses = 0;
-		for (const tx of filtered) {
-			if (tx.date.startsWith(ymPrefix) && tx.date <= todayISO) {
-				if (tx.type === "money_in") income += tx.amount;
-				else expenses += tx.amount;
-			}
-		}
-
-		const roundedIn = Math.round(income * 100) / 100;
-		const roundedOut = Math.round(expenses * 100) / 100;
-
-		monthlyPoints.push({
-			date: monthISO,
-			label: new Intl.DateTimeFormat("en-US", { month: "short" }).format(d),
-			tooltipDate: formatMonthYear(monthISO),
-			income: roundedIn,
-			expenses: roundedOut,
-			net: Math.round((roundedIn - roundedOut) * 100) / 100,
+		monthBuckets.set(ymPrefix, {
+			monthISO: `${ymPrefix}-01`,
+			label: SHORT_MONTH_FORMATTER.format(d),
+			income: 0,
+			expenses: 0,
 		});
 	}
 
-	return monthlyPoints;
+	for (const tx of filtered) {
+		if (tx.date > todayISO) continue;
+		const bucket = monthBuckets.get(tx.date.slice(0, 7));
+		if (!bucket) continue;
+		if (tx.type === "money_in") bucket.income += tx.amount;
+		else bucket.expenses += tx.amount;
+	}
+
+	return Array.from(monthBuckets.values()).map((bucket) => {
+		const roundedIn = Math.round(bucket.income * 100) / 100;
+		const roundedOut = Math.round(bucket.expenses * 100) / 100;
+		return {
+			date: bucket.monthISO,
+			label: bucket.label,
+			tooltipDate: formatMonthYear(bucket.monthISO),
+			income: roundedIn,
+			expenses: roundedOut,
+			net: Math.round((roundedIn - roundedOut) * 100) / 100,
+		};
+	});
 }
 
 /**

@@ -17,6 +17,7 @@ import { CreateInvoiceModal } from '#/components/invoices/create-invoice-modal';
 import {
   buildWhatsAppInvoiceUrl,
   InvoicePreviewDialog,
+  openSafeWhatsAppUrl,
 } from '#/components/invoices/invoice-preview-dialog';
 import { SettleInvoiceDialog } from '#/components/invoices/settle-invoice-dialog';
 import { MoneyValue } from '#/components/money-value';
@@ -160,7 +161,7 @@ function InvoicesScreen() {
       profile.currency,
       profile.businessName || profile.displayName,
     );
-    window.open(url, '_blank', 'noopener,noreferrer');
+    openSafeWhatsAppUrl(url);
   };
 
   const handleCopyInvoiceLink = async (invoice: Invoice) => {
@@ -190,10 +191,10 @@ function InvoicesScreen() {
       {/* Page Header */}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div className="space-y-1">
-          <h1 className="font-mono text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Client Invoices
           </h1>
-          <p className="font-mono text-xs text-muted-foreground sm:text-sm">
+          <p className="text-xs text-muted-foreground sm:text-sm">
             Create invoices, track overdue payments, and mark bills as paid.
           </p>
         </div>

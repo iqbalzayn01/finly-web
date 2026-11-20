@@ -24,12 +24,12 @@ export function ReceivablesBentoTile() {
   return (
     <div className="bento-card col-span-12 flex h-full flex-col justify-between gap-5 bg-card p-6 lg:col-span-4">
       {/* Header Row aligned with Chart Header */}
-      <div className="flex items-center justify-between gap-2 border-b-2 border-border pb-4">
+      <div className="flex items-center justify-between gap-2 border-b border-border pb-4">
         <div className="space-y-0.5">
-          <h2 className="font-mono text-xs font-extrabold uppercase tracking-wider text-foreground sm:text-sm">
+          <h2 className="text-sm font-bold tracking-tight text-foreground sm:text-base">
             {terminology.unpaidBills}
           </h2>
-          <p className="font-mono text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             Money clients owe you
           </p>
         </div>
@@ -38,7 +38,7 @@ export function ReceivablesBentoTile() {
       {/* Primary Pending Figure */}
       <div className="space-y-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-1.5 font-mono text-xs font-semibold text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
             <Clock className="size-3.5 text-info" />
             <span>
               {summary.waitingCount}{' '}
@@ -49,7 +49,7 @@ export function ReceivablesBentoTile() {
           </div>
           <MoneyValue
             amount={summary.waitingAmount}
-            className="block font-mono text-3xl font-black tracking-tight text-foreground tabular-nums sm:text-4xl"
+            className="block text-3xl font-extrabold tracking-tight text-foreground tabular-nums sm:text-4xl"
           />
         </div>
 
@@ -57,13 +57,13 @@ export function ReceivablesBentoTile() {
         <div className="space-y-2.5">
           <div
             className={cn(
-              'flex items-center justify-between gap-2 rounded-xl border-2 px-3.5 py-3 text-xs',
+              'flex items-center justify-between gap-2 rounded-2xl border px-3.5 py-3 text-xs backdrop-blur-md',
               hasOverdue
                 ? 'border-outflow-border bg-outflow-bg'
-                : 'border-border bg-muted/40',
+                : 'border-border bg-background/50',
             )}
           >
-            <span className="inline-flex items-center gap-2 font-mono font-bold text-foreground">
+            <span className="inline-flex items-center gap-2 font-semibold text-foreground">
               <TriangleAlert
                 className={cn(
                   'size-4 shrink-0',
@@ -77,20 +77,20 @@ export function ReceivablesBentoTile() {
             <MoneyValue
               amount={summary.overdueAmount}
               className={cn(
-                'font-mono font-extrabold tabular-nums',
+                'font-bold tabular-nums',
                 hasOverdue ? 'text-outflow' : 'text-muted-foreground',
               )}
             />
           </div>
 
-          <div className="flex items-center justify-between gap-2 rounded-xl border-2 border-inflow-border bg-inflow-bg px-3.5 py-3 text-xs">
-            <span className="inline-flex items-center gap-2 font-mono font-bold text-foreground">
+          <div className="flex items-center justify-between gap-2 rounded-2xl border border-inflow-border bg-inflow-bg px-3.5 py-3 text-xs backdrop-blur-md">
+            <span className="inline-flex items-center gap-2 font-semibold text-foreground">
               <CheckCircle2 className="size-4 shrink-0 text-inflow" />
               <span>Paid This Month</span>
             </span>
             <MoneyValue
               amount={summary.collectedThisMonthAmount}
-              className="font-mono font-extrabold text-inflow tabular-nums"
+              className="font-bold text-inflow tabular-nums"
             />
           </div>
         </div>
@@ -100,7 +100,7 @@ export function ReceivablesBentoTile() {
       <Button
         asChild
         variant="outline"
-        className="group h-10 w-full justify-between rounded-xl border-[#6366F1]/30 bg-[#6366F1]/10 font-mono text-xs font-extrabold uppercase tracking-wider text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/25 hover:text-[#818CF8]"
+        className="group h-10 w-full justify-between rounded-full border-[#6366F1]/30 bg-[#6366F1]/10 px-4 text-xs font-bold text-[#6366F1] hover:border-[#6366F1] hover:bg-[#6366F1]/20 hover:text-[#818CF8]"
       >
         <Link to="/invoices">
           <span>Manage Invoices</span>

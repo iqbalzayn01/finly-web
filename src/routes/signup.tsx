@@ -99,24 +99,24 @@ function SignupOnboardingScreen() {
 	};
 
 	return (
-		<div className="flex min-h-screen flex-col justify-between bg-background p-6 sm:p-10">
+		<div className="flex min-h-screen flex-col justify-between p-6 sm:p-10">
 			{/* Top Header */}
 			<div className="mx-auto flex w-full max-w-2xl items-center justify-between">
 				<Link
 					to="/"
 					className="group inline-flex items-center gap-2.5 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
 				>
-					<span className="brutal-surface flex size-9 items-center justify-center rounded-xl bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
+					<span className="liquid-glass-elevated flex size-9 items-center justify-center rounded-full bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
 						<BrandLogo size={20} className="fill-black" />
 					</span>
-					<span className="font-mono text-lg font-black tracking-tight text-foreground">
+					<span className="text-lg font-bold tracking-tight text-foreground">
 						Finly
 					</span>
 				</Link>
 
 				<Link
 					to="/login"
-					className="font-mono text-xs font-semibold text-muted-foreground hover:text-foreground"
+					className="text-xs font-medium text-muted-foreground hover:text-foreground"
 				>
 					Already have an account?{" "}
 					<span className="font-bold text-foreground underline decoration-primary decoration-2 underline-offset-4">
@@ -125,11 +125,11 @@ function SignupOnboardingScreen() {
 				</Link>
 			</div>
 
-			{/* Centered 2-Step Onboarding Bento Card */}
+			{/* Centered 2-Step Onboarding Liquid Glass Card */}
 			<div className="mx-auto my-8 w-full max-w-xl space-y-5">
 				<div className="space-y-2">
-					<div className="flex items-center justify-between font-mono text-xs font-semibold">
-						<span className="inline-flex items-center gap-1.5 rounded-lg border-2 border-border bg-primary px-2.5 py-0.5 text-[11px] font-extrabold uppercase text-primary-foreground">
+					<div className="flex items-center justify-between text-xs font-semibold">
+						<span className="inline-flex items-center gap-1.5 rounded-full border border-white/40 bg-primary px-3 py-0.5 text-[11px] font-bold text-primary-foreground shadow-sm">
 							<Sparkles className="size-3" />
 							<span>Step {step} of 2</span>
 						</span>
@@ -137,17 +137,17 @@ function SignupOnboardingScreen() {
 							{step === 1 ? "Your Details" : "Starting Balance"}
 						</span>
 					</div>
-					<Progress value={step === 1 ? 50 : 100} className="h-2.5 border border-border" />
+					<Progress value={step === 1 ? 50 : 100} className="h-2 border border-border" />
 				</div>
 
 				<div className="bento-card bento-card-static bg-card p-6 sm:p-8">
 					{step === 1 ? (
 						<form onSubmit={handleStep1Submit} className="space-y-5">
-							<div className="space-y-1 border-b-2 border-border pb-4">
-								<h1 className="font-mono text-2xl font-black tracking-tight text-foreground">
+							<div className="space-y-1 border-b border-border pb-4">
+								<h1 className="text-2xl font-bold tracking-tight text-foreground">
 									Create your account
 								</h1>
-								<p className="font-mono text-xs text-muted-foreground">
+								<p className="text-xs text-muted-foreground">
 									Get started in under a minute — no bank connection needed.
 								</p>
 							</div>

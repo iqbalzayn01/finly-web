@@ -34,10 +34,10 @@ export function SafeToSpendHero() {
     <div className="bento-card col-span-12 flex h-full flex-col justify-between gap-5 bg-card p-6 text-foreground md:col-span-4">
       {/* 1. Header Row */}
       <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
+        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
           Safe to Spend Today
         </span>
-        <span className="inline-flex h-6 items-center rounded-lg border-2 border-border px-2.5 font-mono text-[10px] font-bold uppercase tracking-wider text-foreground tabular-nums">
+        <span className="inline-flex h-6 items-center rounded-full border border-border bg-background/50 px-2.5 text-[11px] font-semibold text-foreground backdrop-blur-md tabular-nums">
           {safeToSpend.daysRemainingInCycle}d left
         </span>
       </div>
@@ -47,20 +47,20 @@ export function SafeToSpendHero() {
         <div className="flex flex-wrap items-baseline gap-1.5">
           <MoneyValue
             amount={safeToSpend.dailySafeToSpend}
-            className="font-mono text-3xl font-black tracking-tight text-foreground tabular-nums sm:text-4xl"
+            className="text-3xl font-extrabold tracking-tight text-foreground tabular-nums sm:text-4xl"
           />
-          <span className="font-mono text-xs font-extrabold uppercase text-muted-foreground">
+          <span className="text-xs font-semibold text-muted-foreground">
             / day
           </span>
         </div>
-        <p className="font-mono text-xs font-medium text-muted-foreground">
+        <p className="text-xs font-medium text-muted-foreground">
           {statusCopy}
         </p>
       </div>
 
       {/* 3. Progress Bar Block */}
-      <div className="space-y-2 rounded-xl border-2 border-border bg-background p-3">
-        <div className="flex items-center justify-between font-mono text-[11px] font-bold text-foreground tabular-nums">
+      <div className="space-y-2 rounded-2xl border border-border bg-background/50 p-3.5 backdrop-blur-md">
+        <div className="flex items-center justify-between text-xs font-semibold text-foreground tabular-nums">
           <span>Free to spend</span>
           <span>{headroomPercent}% of cash</span>
         </div>
@@ -70,7 +70,7 @@ export function SafeToSpendHero() {
           aria-valuemin={0}
           aria-valuemax={100}
           aria-label="Free to spend percentage"
-          className="h-2.5 w-full overflow-hidden rounded-full border border-border bg-muted/25"
+          className="h-2.5 w-full overflow-hidden rounded-full border border-border/60 bg-muted/50"
         >
           <div
             className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out"
@@ -80,13 +80,13 @@ export function SafeToSpendHero() {
       </div>
 
       {/* 4. Aligned Footer */}
-      <div className="flex items-center justify-between border-t-2 border-border pt-3 font-mono text-xs">
+      <div className="flex items-center justify-between border-t border-border pt-3 text-xs">
         <span className="font-medium text-muted-foreground">
           Available this month
         </span>
         <MoneyValue
           amount={discretionaryPool}
-          className="font-extrabold text-foreground tabular-nums"
+          className="font-bold text-foreground tabular-nums"
         />
       </div>
     </div>

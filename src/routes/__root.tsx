@@ -1,4 +1,4 @@
-import "@fontsource-variable/geist-mono";
+import "@fontsource-variable/dm-sans";
 import "@fontsource-variable/material-symbols-rounded/full.css";
 import type { QueryClient } from "@tanstack/react-query";
 import {

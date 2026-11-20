@@ -56,30 +56,30 @@ function LoginScreen() {
 	};
 
 	return (
-		<div className="grid min-h-screen bg-background lg:grid-cols-2">
-			{/* Left Brand & Editorial Bento Column */}
-			<div className="hidden flex-col justify-between border-r-2 border-border bg-card p-10 text-foreground xl:p-14 lg:flex">
+		<div className="grid min-h-screen lg:grid-cols-2">
+			{/* Left Brand & Editorial Liquid Glass Column */}
+			<div className="hidden flex-col justify-between border-r border-border bg-card/55 p-10 text-foreground backdrop-blur-2xl xl:p-14 lg:flex">
 				<div className="space-y-10">
 					<Link
 						to="/"
 						className="group inline-flex items-center gap-3 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
 					>
-						<span className="brutal-surface flex size-10 items-center justify-center rounded-xl bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
+						<span className="liquid-glass-elevated flex size-10 items-center justify-center rounded-full bg-primary transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-105">
 							<BrandLogo size={22} className="fill-black" />
 						</span>
-						<span className="font-mono text-xl font-black tracking-tight text-foreground">
+						<span className="text-xl font-bold tracking-tight text-foreground">
 							Finly
 						</span>
 					</Link>
 
 					<div className="max-w-md space-y-5">
-						<span className="inline-block rounded-lg border-2 border-border bg-primary px-3 py-1 font-mono text-[10px] font-extrabold uppercase tracking-wider text-primary-foreground">
+						<span className="inline-block rounded-full border border-white/40 bg-primary px-3.5 py-1 text-[11px] font-bold tracking-wide text-primary-foreground shadow-sm">
 							Simple Money Tracker
 						</span>
-						<h1 className="font-mono text-4xl font-black leading-tight tracking-tight text-foreground">
+						<h1 className="text-4xl font-extrabold leading-tight tracking-tight text-foreground">
 							Know what is safe to spend today.
 						</h1>
-						<p className="font-mono text-xs leading-relaxed text-muted-foreground sm:text-sm">
+						<p className="text-sm leading-relaxed text-muted-foreground">
 							Simple, everyday money tracking built for freelancers, creators,
 							and small businesses.
 						</p>

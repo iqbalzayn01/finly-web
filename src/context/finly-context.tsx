@@ -117,6 +117,27 @@ interface FinlyContextValue {
 
 const FinlyContext = createContext<FinlyContextValue | null>(null);
 
+function createUniqueId(prefix: string): string {
+	if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+		return `${prefix}_${crypto.randomUUID().slice(0, 12)}`;
+	}
+	return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function getNextInvoiceNumber(invoices: Invoice[]): string {
+	let maxSeq = 0;
+	for (const inv of invoices) {
+		const match = /^INV-(\d+)$/i.exec(inv.invoiceNumber.trim());
+		if (match) {
+			const seq = Number.parseInt(match[1], 10);
+			if (Number.isFinite(seq) && seq > maxSeq) {
+				maxSeq = seq;
+			}
+		}
+	}
+	return `INV-${String(maxSeq + 1).padStart(3, "0")}`;
+}
+
 function normalizeWorkspace(
 	raw: FinlyPersistedState,
 	todayISO: string,
@@ -285,12 +306,15 @@ export function FinlyProvider({ children }: { children: ReactNode }) {
 	const addTransaction = useCallback(
 		(input: AddTransactionInput): Transaction => {
 			const fallbackWalletId = workspace.wallets[0]?.id ?? "wal_business";
+			const safeAmount = Number.isFinite(input.amount)
+				? Math.round(Math.abs(input.amount) * 100) / 100
+				: 0;
 			const newTx: Transaction = {
-				id: `tx_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+				id: createUniqueId("tx"),
 				date: input.date || todayISO,
-				amount: Math.round(Math.abs(input.amount) * 100) / 100,
+				amount: safeAmount,
 				type: input.type,
-				category: input.category,
+				category: input.category.trim() || "Other",
 				walletId: input.walletId || fallbackWalletId,
 				note: input.note?.trim() || undefined,
 				isBusiness: input.isBusiness ?? true,
@@ -335,16 +359,24 @@ export function FinlyProvider({ children }: { children: ReactNode }) {
 
 	const createInvoice = useCallback(
 		(input: CreateInvoiceInput): Invoice => {
-			const nextSequence = workspace.invoices.length + 1;
-			const invoiceNumber = `INV-${String(nextSequence).padStart(3, "0")}`;
+			const invoiceNumber = getNextInvoiceNumber(workspace.invoices);
+			const clampedTaxRate = Number.isFinite(input.taxRatePercent)
+				? Math.min(100, Math.max(0, input.taxRatePercent))
+				: 0;
 
-			const items: InvoiceItem[] = input.items.map((item, idx) => {
-				const total = Math.round(item.quantity * item.unitPrice * 100) / 100;
+			const items: InvoiceItem[] = input.items.map((item) => {
+				const safeQty = Number.isFinite(item.quantity)
+					? Math.max(0, item.quantity)
+					: 0;
+				const safePrice = Number.isFinite(item.unitPrice)
+					? Math.max(0, item.unitPrice)
+					: 0;
+				const total = Math.round(safeQty * safePrice * 100) / 100;
 				return {
-					id: `item_${Date.now()}_${idx}`,
+					id: createUniqueId("item"),
 					description: item.description.trim(),
-					quantity: item.quantity,
-					unitPrice: item.unitPrice,
+					quantity: safeQty,
+					unitPrice: safePrice,
 					total,
 				};
 			});
@@ -352,12 +384,12 @@ export function FinlyProvider({ children }: { children: ReactNode }) {
 			const subtotal =
 				Math.round(items.reduce((sum, i) => sum + i.total, 0) * 100) / 100;
 			const taxAmount =
-				Math.round(subtotal * (input.taxRatePercent / 100) * 100) / 100;
+				Math.round(subtotal * (clampedTaxRate / 100) * 100) / 100;
 			const totalAmount = Math.round((subtotal + taxAmount) * 100) / 100;
 
 			const status: InvoiceStatus = input.status;
 			const createdInvoice: Invoice = {
-				id: `inv_${Date.now()}`,
+				id: createUniqueId("inv"),
 				invoiceNumber,
 				projectTitle: input.projectTitle?.trim() || undefined,
 				clientName: input.clientName.trim(),
@@ -367,7 +399,7 @@ export function FinlyProvider({ children }: { children: ReactNode }) {
 				dueDate: input.dueDate,
 				items,
 				subtotal,
-				taxRatePercent: input.taxRatePercent,
+				taxRatePercent: clampedTaxRate,
 				totalAmount,
 				status,
 				paymentInstructions: input.paymentInstructions?.trim() || undefined,
@@ -385,7 +417,7 @@ export function FinlyProvider({ children }: { children: ReactNode }) {
 			);
 			return createdInvoice;
 		},
-		[commitWorkspace, workspace.invoices.length],
+		[commitWorkspace, workspace.invoices],
 	);
 
 	const deleteInvoice = useCallback(
@@ -407,7 +439,7 @@ export function FinlyProvider({ children }: { children: ReactNode }) {
 			if (!targetInvoice || targetInvoice.status === "paid") return;
 
 			const linkedTxId = input.syncToCashflow
-				? `tx_inv_${Date.now()}`
+				? createUniqueId("tx_inv")
 				: undefined;
 
 			commitWorkspace((prev) => {
@@ -477,11 +509,14 @@ export function FinlyProvider({ children }: { children: ReactNode }) {
 			openingBalance: number;
 			isBusinessWallet: boolean;
 		}) => {
+			const safeOpeningBalance = Number.isFinite(input.openingBalance)
+				? Math.round(input.openingBalance * 100) / 100
+				: 0;
 			const wallet: Wallet = {
-				id: `wal_${Date.now()}`,
+				id: createUniqueId("wal"),
 				name: input.name.trim(),
-				openingBalance: input.openingBalance,
-				balance: input.openingBalance,
+				openingBalance: safeOpeningBalance,
+				balance: safeOpeningBalance,
 				isBusinessWallet: input.isBusinessWallet,
 			};
 			commitWorkspace((prev) => ({

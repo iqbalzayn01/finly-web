@@ -207,14 +207,14 @@ export function CreateInvoiceModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="brutal-surface max-h-[92vh] overflow-y-auto rounded-3xl border-2 border-border bg-popover/80 p-6 sm:max-w-2xl"
+        className="liquid-glass-elevated max-h-[92vh] overflow-y-auto rounded-3xl bg-popover/90 p-6 sm:max-w-2xl"
       >
         <div className="flex justify-between">
           <DialogHeader>
-            <DialogTitle className="font-mono text-lg font-black uppercase tracking-tight">
+            <DialogTitle className="text-lg font-bold tracking-tight">
               New Invoice
             </DialogTitle>
-            <DialogDescription className="font-mono text-xs">
+            <DialogDescription className="text-xs">
               Fill in your client details and items. When marked paid, the
               amount is added to your balance.
             </DialogDescription>

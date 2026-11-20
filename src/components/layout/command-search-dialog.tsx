@@ -91,7 +91,7 @@ export function CommandSearchDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="brutal-surface overflow-hidden rounded-3xl border-2 border-border bg-popover/80 p-6 sm:max-w-lg"
+        className="liquid-glass-elevated overflow-hidden rounded-3xl bg-popover/90 p-6 sm:max-w-lg"
       >
         <DialogHeader className="sr-only">
           <DialogTitle>Search</DialogTitle>
