@@ -78,37 +78,44 @@ function ChartContainer({
 	);
 }
 
+const SAFE_CSS_IDENT_PATTERN = /^[a-zA-Z0-9_-]+$/;
+const SAFE_CSS_COLOR_PATTERN =
+	/^(#[0-9a-fA-F]{3,8}|(?:rgb|rgba|hsl|hsla|oklch)\([0-9.,%\s/+-]+\)|var\(--[a-zA-Z0-9_-]+\)|[a-zA-Z]+)$/;
+
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 	const colorConfig = Object.entries(config).filter(
-		([, config]) => config.theme ?? config.color,
+		([, itemConfig]) => itemConfig.theme ?? itemConfig.color,
 	);
 
-	if (!colorConfig.length) {
+	if (!colorConfig.length || !SAFE_CSS_IDENT_PATTERN.test(id)) {
 		return null;
 	}
 
-	return (
-		<style
-			dangerouslySetInnerHTML={{
-				__html: Object.entries(THEMES)
-					.map(
-						([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
-${colorConfig
-	.map(([key, itemConfig]) => {
-		const color =
-			itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ??
-			itemConfig.color;
-		return color ? `  --color-${key}: ${color};` : null;
-	})
-	.join("\n")}
-}
-`,
-					)
-					.join("\n"),
-			}}
-		/>
-	);
+	const cssRules = Object.entries(THEMES)
+		.map(([theme, prefix]) => {
+			const declarations = colorConfig
+				.map(([key, itemConfig]) => {
+					if (!SAFE_CSS_IDENT_PATTERN.test(key)) return null;
+					const color =
+						itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ??
+						itemConfig.color;
+					if (!color || !SAFE_CSS_COLOR_PATTERN.test(color.trim())) return null;
+					return `  --color-${key}: ${color.trim()};`;
+				})
+				.filter(Boolean)
+				.join("\n");
+			return declarations
+				? `${prefix} [data-chart=${id}] {\n${declarations}\n}`
+				: null;
+		})
+		.filter(Boolean)
+		.join("\n");
+
+	if (!cssRules) {
+		return null;
+	}
+
+	return <style>{cssRules}</style>;
 };
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
@@ -203,7 +210,7 @@ function ChartTooltipContent({
 
 						return (
 							<div
-								key={index}
+								key={`${key}-${String(item.dataKey ?? item.name ?? index)}`}
 								className={cn(
 									"flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
 									indicator === "dot" && "items-center",
@@ -301,7 +308,7 @@ function ChartLegendContent({
 
 					return (
 						<div
-							key={index}
+							key={`${key}-${String(item.value ?? item.dataKey ?? index)}`}
 							className={cn(
 								"flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground",
 							)}

@@ -21,7 +21,9 @@ export function buildWhatsAppInvoiceUrl(
   currency: SupportedCurrency,
   businessName?: string,
 ): string {
-  const cleanPhone = (invoice.clientPhone ?? '').replace(/[^0-9]/g, '');
+  const cleanPhone = (invoice.clientPhone ?? '')
+    .replace(/[^0-9]/g, '')
+    .slice(0, 15);
   const formattedAmount = formatCurrency(invoice.totalAmount, currency);
   const sender = businessName || 'Finly Workspace';
 
@@ -34,6 +36,11 @@ export function buildWhatsAppInvoiceUrl(
   return cleanPhone
     ? `https://wa.me/${cleanPhone}?text=${encoded}`
     : `https://wa.me/?text=${encoded}`;
+}
+
+export function openSafeWhatsAppUrl(url: string): void {
+  if (!url.startsWith('https://wa.me/')) return;
+  window.open(url, '_blank', 'noopener,noreferrer');
 }
 
 interface InvoicePreviewDialogProps {
@@ -67,21 +74,21 @@ export function InvoicePreviewDialog({
       profile.currency,
       profile.businessName || profile.displayName,
     );
-    window.open(url, '_blank', 'noopener,noreferrer');
+    openSafeWhatsAppUrl(url);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="brutal-surface max-h-[92vh] overflow-y-auto rounded-3xl border-2 border-border bg-popover/80 p-6 sm:max-w-xl"
+        className="liquid-glass-elevated max-h-[92vh] overflow-y-auto rounded-3xl bg-popover/90 p-6 sm:max-w-xl"
       >
         <div className="no-print flex justify-between">
           <DialogHeader>
-            <DialogTitle className="font-mono text-base font-black uppercase tracking-tight">
+            <DialogTitle className="text-base font-bold tracking-tight">
               Invoice #{invoice.invoiceNumber}
             </DialogTitle>
-            <DialogDescription className="font-mono text-xs">
+            <DialogDescription className="text-xs">
               Preview, print, or share this invoice with your client.
             </DialogDescription>
           </DialogHeader>
@@ -92,8 +99,8 @@ export function InvoicePreviewDialog({
           </DialogClose>
         </div>
 
-        <div className="space-y-6 rounded-2xl border-2 border-border bg-background p-5 font-mono sm:p-6">
-          <div className="flex items-start justify-between gap-4 border-b-2 border-border pb-4">
+        <div className="space-y-6 rounded-2xl border border-border bg-background/75 p-5 backdrop-blur-md sm:p-6">
+          <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
             <div className="flex items-center gap-2.5">
               <span className="brutal-surface flex size-9 items-center justify-center rounded-xl bg-primary">
                 <BrandLogo size={20} className="fill-black" />

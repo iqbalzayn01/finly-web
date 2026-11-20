@@ -93,7 +93,7 @@ export function FloatingDock({
 				}}
 				onPointerLeave={() => mouseX.set(Infinity)}
 				className={cn(
-					"brutal-surface pointer-events-auto flex max-w-full rounded-2xl bg-card/90 backdrop-blur-xl",
+					"liquid-glass-elevated pointer-events-auto flex max-w-full rounded-full bg-card/75 backdrop-blur-2xl",
 					isTop
 						? "h-14 items-start gap-2 px-3 pt-1.5"
 						: "h-16 items-end gap-2.5 px-3 pb-2",
@@ -106,8 +106,8 @@ export function FloatingDock({
 							key={entry.id}
 							aria-hidden="true"
 							className={cn(
-								"mx-0.5 w-px shrink-0 self-center bg-border",
-								isTop ? "h-6" : "h-7",
+								"mx-0.5 w-px shrink-0 self-center bg-border/80",
+								isTop ? "h-5" : "h-6",
 							)}
 						/>
 					) : (
@@ -139,9 +139,9 @@ function IconContainer({
 
 	const isTop = placement === "top";
 	const baseSize = isTop ? 40 : 44;
-	const maxSize = isTop ? 56 : 58;
+	const maxSize = isTop ? 54 : 58;
 	const baseIconSize = 18;
-	const maxIconSize = 26;
+	const maxIconSize = 25;
 
 	const distance = useTransform(mouseX, (val) => {
 		const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
@@ -172,15 +172,16 @@ function IconContainer({
 	const isActive = Boolean(item.isActive) && variant === "default";
 
 	const itemClassName = cn(
-		"group relative flex size-full items-center justify-center rounded-full border-2 transition-[color,background-color,border-color,transform] duration-150 outline-none cursor-pointer active:scale-90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+		"group relative flex size-full items-center justify-center rounded-full border transition-[color,background-color,border-color,box-shadow,transform] duration-150 outline-none cursor-pointer active:scale-90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
 		(variant === "primary" || variant === "brand") &&
-			"border-border bg-primary text-primary-foreground shadow-[2px_2px_0px_0px_var(--border)] hover:bg-[var(--primary-hover)]",
+			"border-white/50 bg-primary text-primary-foreground shadow-[0_6px_18px_-6px_rgba(201,243,29,0.55),inset_0_1px_1px_rgba(255,255,255,0.65)] hover:bg-[var(--primary-hover)]",
 		variant === "avatar" &&
-			"overflow-hidden border-border bg-primary p-0 text-primary-foreground shadow-[2px_2px_0px_0px_var(--border)]",
-		isActive && "border-foreground text-background shadow-sm",
+			"overflow-hidden border-white/40 bg-primary p-0 text-primary-foreground shadow-[0_4px_14px_-4px_rgba(0,0,0,0.28)]",
+		isActive &&
+			"border-transparent text-background shadow-[0_6px_16px_-6px_rgba(0,0,0,0.35)]",
 		variant === "default" &&
 			!isActive &&
-			"border-border/80 bg-muted/80 text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground",
+			"border-white/45 bg-background/55 text-muted-foreground shadow-[inset_0_1px_1px_rgba(255,255,255,0.55)] hover:bg-background/85 hover:text-foreground dark:border-white/12 dark:bg-white/[0.06] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.16)] dark:hover:bg-white/[0.14]",
 	);
 
 	const innerContent = (
@@ -193,7 +194,9 @@ function IconContainer({
 								? { opacity: 0 }
 								: { opacity: 0, y: isTop ? -6 : 6 }
 						}
-						animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+						animate={
+							shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }
+						}
 						exit={
 							shouldReduceMotion
 								? { opacity: 0 }
@@ -201,7 +204,7 @@ function IconContainer({
 						}
 						transition={{ duration: 0.14 }}
 						className={cn(
-							"brutal-surface pointer-events-none absolute left-1/2 z-30 -translate-x-1/2 whitespace-nowrap rounded-lg bg-popover px-2 py-0.5 font-mono text-[10px] font-bold text-popover-foreground",
+							"liquid-glass-elevated pointer-events-none absolute left-1/2 z-30 -translate-x-1/2 whitespace-nowrap rounded-full bg-popover/90 px-2.5 py-1 text-[11px] font-semibold tracking-tight text-popover-foreground",
 							isTop ? "-bottom-9" : "-top-9",
 						)}
 					>
@@ -219,7 +222,7 @@ function IconContainer({
 							: { type: "spring", stiffness: 500, damping: 35 }
 					}
 					aria-hidden="true"
-					className="absolute inset-0 z-0 rounded-full bg-foreground"
+					className="absolute inset-0 z-0 rounded-full bg-foreground shadow-[inset_0_1px_1px_rgba(255,255,255,0.28)]"
 				/>
 			)}
 

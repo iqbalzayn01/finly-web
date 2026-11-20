@@ -206,14 +206,14 @@ export function QuickTransactionModal() {
     >
       <DialogContent
         showCloseButton={false}
-        className="brutal-surface rounded-3xl border-2 border-border bg-popover/80 p-6 sm:max-w-lg"
+        className="liquid-glass-elevated rounded-3xl bg-popover/90 p-6 sm:max-w-lg"
       >
         <div className="flex justify-between">
           <DialogHeader>
-            <DialogTitle className="font-mono text-lg font-black uppercase tracking-tight">
+            <DialogTitle className="text-lg font-bold tracking-tight">
               Add Transaction
             </DialogTitle>
-            <DialogDescription className="font-mono text-xs">
+            <DialogDescription className="text-xs">
               Record income or an expense in seconds.
             </DialogDescription>
           </DialogHeader>

@@ -236,12 +236,12 @@ export function RecentTransactionsCard() {
 
   return (
     <div className="bento-card bento-card-static col-span-12 overflow-hidden bg-card">
-      <div className="flex flex-col justify-between gap-4 border-b-2 border-border p-6 sm:flex-row sm:items-center">
+      <div className="flex flex-col justify-between gap-4 border-b border-border p-6 sm:flex-row sm:items-center">
         <div className="space-y-0.5">
-          <h2 className="font-mono text-xs font-extrabold uppercase tracking-wider text-foreground sm:text-sm">
+          <h2 className="text-sm font-bold tracking-tight text-foreground sm:text-base">
             Recent Activity
           </h2>
-          <p className="font-mono text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             Your latest income and expenses
           </p>
         </div>
@@ -249,7 +249,7 @@ export function RecentTransactionsCard() {
         <div
           role="tablist"
           aria-label="Filter recent transactions"
-          className="brutal-surface flex flex-wrap items-center gap-1 rounded-xl bg-muted/50 p-1"
+          className="liquid-glass-elevated flex flex-wrap items-center gap-1 rounded-full bg-background/60 p-1"
         >
           <button
             type="button"
@@ -260,10 +260,10 @@ export function RecentTransactionsCard() {
               setPage(1);
             }}
             className={cn(
-              'inline-flex h-8 items-center gap-1.5 rounded-lg border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'inline-flex h-8 items-center gap-1.5 rounded-full border px-3.5 text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
               filterTab === 'all'
-                ? 'border-border bg-primary font-extrabold text-primary-foreground'
-                : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
+                ? 'border-white/40 bg-primary font-bold text-primary-foreground shadow-sm'
+                : 'border-transparent font-medium text-muted-foreground hover:bg-accent hover:text-foreground',
             )}
           >
             <span>All ({tabCounts.all})</span>
@@ -278,10 +278,10 @@ export function RecentTransactionsCard() {
               setPage(1);
             }}
             className={cn(
-              'inline-flex h-8 items-center gap-1.5 rounded-lg border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'inline-flex h-8 items-center gap-1.5 rounded-full border px-3.5 text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
               filterTab === 'income'
-                ? 'border-border bg-inflow font-extrabold text-primary-foreground'
-                : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
+                ? 'border-white/30 bg-inflow font-bold text-primary-foreground shadow-sm'
+                : 'border-transparent font-medium text-muted-foreground hover:bg-accent hover:text-foreground',
             )}
           >
             <span
@@ -304,10 +304,10 @@ export function RecentTransactionsCard() {
               setPage(1);
             }}
             className={cn(
-              'inline-flex h-8 items-center gap-1.5 rounded-lg border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'inline-flex h-8 items-center gap-1.5 rounded-full border px-3.5 text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
               filterTab === 'expenses'
-                ? 'border-border bg-outflow font-extrabold text-primary-foreground'
-                : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
+                ? 'border-white/30 bg-outflow font-bold text-primary-foreground shadow-sm'
+                : 'border-transparent font-medium text-muted-foreground hover:bg-accent hover:text-foreground',
             )}
           >
             <span

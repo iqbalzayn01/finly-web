@@ -20,17 +20,46 @@ export const CURRENCIES: Record<SupportedCurrency, CurrencyMeta> = {
 	},
 };
 
-/**
- * Global strict USD currency helper (PRD §7.3).
- */
+const USD_FORMATTER = new Intl.NumberFormat("en-US", {
+	style: "currency",
+	currency: "USD",
+	minimumFractionDigits: 2,
+	maximumFractionDigits: 2,
+});
+
+const USD_COMPACT_FORMATTER = new Intl.NumberFormat("en-US", {
+	style: "currency",
+	currency: "USD",
+	notation: "compact",
+	minimumFractionDigits: 0,
+	maximumFractionDigits: 1,
+});
+
+const SHORT_DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+	month: "short",
+	day: "2-digit",
+});
+
+const SHORT_DATE_WITH_YEAR_FORMATTER = new Intl.DateTimeFormat("en-US", {
+	month: "short",
+	day: "2-digit",
+	year: "numeric",
+});
+
+const FULL_DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+	month: "long",
+	day: "numeric",
+	year: "numeric",
+});
+
+const MONTH_YEAR_FORMATTER = new Intl.DateTimeFormat("en-US", {
+	month: "long",
+	year: "numeric",
+});
+
 export const formatUSD = (val: number): string => {
 	const safeAmount = Number.isFinite(val) ? val : 0;
-	return new Intl.NumberFormat("en-US", {
-		style: "currency",
-		currency: "USD",
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2,
-	}).format(safeAmount);
+	return USD_FORMATTER.format(safeAmount);
 };
 
 export function formatCurrency(
@@ -40,16 +69,9 @@ export function formatCurrency(
 ): string {
 	const safeAmount = Number.isFinite(amount) ? amount : 0;
 	if (!options?.compact) {
-		return formatUSD(safeAmount);
+		return USD_FORMATTER.format(safeAmount);
 	}
-
-	return new Intl.NumberFormat("en-US", {
-		style: "currency",
-		currency: "USD",
-		notation: "compact",
-		minimumFractionDigits: 0,
-		maximumFractionDigits: 1,
-	}).format(safeAmount);
+	return USD_COMPACT_FORMATTER.format(safeAmount);
 }
 
 export function formatSignedCurrency(
@@ -61,10 +83,6 @@ export function formatSignedCurrency(
 	return type === "money_in" ? `+${formatted}` : `-${formatted}`;
 }
 
-/**
- * Dynamically formats numeric user input with thousands separators in real time
- * while preserving trailing decimal points during active typing.
- */
 export function formatLiveNumericInput(
 	rawValue: string,
 	_currency: SupportedCurrency = "USD",
@@ -124,39 +142,27 @@ export function formatFriendlyDate(dateISO: string, todayISO: string): string {
 
 	const [y, m, d] = dateISO.split("-").map(Number);
 	const date = new Date(y, (m || 1) - 1, d || 1);
-	return new Intl.DateTimeFormat("en-US", {
-		month: "short",
-		day: "2-digit",
-		year: y !== Number(todayISO.slice(0, 4)) ? "numeric" : undefined,
-	}).format(date);
+	return y !== Number(todayISO.slice(0, 4))
+		? SHORT_DATE_WITH_YEAR_FORMATTER.format(date)
+		: SHORT_DATE_FORMATTER.format(date);
 }
 
 export function formatShortAxisDate(dateISO: string): string {
 	const [y, m, d] = dateISO.split("-").map(Number);
 	const date = new Date(y, (m || 1) - 1, d || 1);
-	return new Intl.DateTimeFormat("en-US", {
-		month: "short",
-		day: "2-digit",
-	}).format(date);
+	return SHORT_DATE_FORMATTER.format(date);
 }
 
 export function formatFullDate(dateISO: string): string {
 	const [y, m, d] = dateISO.split("-").map(Number);
 	const date = new Date(y, (m || 1) - 1, d || 1);
-	return new Intl.DateTimeFormat("en-US", {
-		month: "long",
-		day: "numeric",
-		year: "numeric",
-	}).format(date);
+	return FULL_DATE_FORMATTER.format(date);
 }
 
 export function formatMonthYear(dateISO: string): string {
 	const [y, m] = dateISO.split("-").map(Number);
 	const date = new Date(y, (m || 1) - 1, 1);
-	return new Intl.DateTimeFormat("en-US", {
-		month: "long",
-		year: "numeric",
-	}).format(date);
+	return MONTH_YEAR_FORMATTER.format(date);
 }
 
 export function formatRelativeDueDate(

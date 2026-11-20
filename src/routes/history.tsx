@@ -213,10 +213,10 @@ function HistoryScreen() {
       {/* Page Header */}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div className="space-y-1">
-          <h1 className="font-mono text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Activity History
           </h1>
-          <p className="font-mono text-xs text-muted-foreground sm:text-sm">
+          <p className="text-xs text-muted-foreground sm:text-sm">
             Search, filter, and download all your{' '}
             {terminology.inflow.toLowerCase()} and{' '}
             {terminology.outflow.toLowerCase()}.
@@ -403,12 +403,11 @@ function HistoryScreen() {
           </div>
 
           {/* Account & Sub-Wallet Filter Chips */}
-          <div
-            role="group"
+          <fieldset
             aria-label="Filter by account or sub-wallet"
-            className="flex flex-wrap items-center gap-2 border-t-2 border-border pt-4"
+            className="m-0 flex flex-wrap items-center gap-2 border-0 border-t border-border p-0 pt-4"
           >
-            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+            <span className="text-xs font-semibold text-muted-foreground">
               Accounts:
             </span>
             <button
@@ -419,10 +418,10 @@ function HistoryScreen() {
                 setPage(1);
               }}
               className={cn(
-                'inline-flex h-8 items-center gap-1.5 rounded-xl border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]',
+                'inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]',
                 walletFilter === 'all'
-                  ? 'border-[#6366F1] bg-[#6366F1]/15 font-extrabold text-[#6366F1]'
-                  : 'border-border bg-background font-semibold text-muted-foreground hover:border-[#6366F1]/60 hover:bg-[#6366F1]/10 hover:text-[#6366F1]',
+                  ? 'border-[#6366F1]/50 bg-[#6366F1]/15 font-bold text-[#6366F1]'
+                  : 'border-border bg-background/50 font-medium text-muted-foreground hover:border-[#6366F1]/50 hover:bg-[#6366F1]/10 hover:text-[#6366F1]',
               )}
             >
               <Wallet className="size-3.5" />
@@ -441,21 +440,21 @@ function HistoryScreen() {
                     setPage(1);
                   }}
                   className={cn(
-                    'inline-flex h-8 items-center gap-1.5 rounded-xl border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]',
+                    'inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] focus-visible:border-[#6366F1]',
                     active
-                      ? 'border-[#6366F1] bg-[#6366F1]/15 font-extrabold text-[#6366F1]'
-                      : 'border-border bg-background font-semibold text-muted-foreground hover:border-[#6366F1]/60 hover:bg-[#6366F1]/10 hover:text-[#6366F1]',
+                      ? 'border-[#6366F1]/50 bg-[#6366F1]/15 font-bold text-[#6366F1]'
+                      : 'border-border bg-background/50 font-medium text-muted-foreground hover:border-[#6366F1]/50 hover:bg-[#6366F1]/10 hover:text-[#6366F1]',
                   )}
                 >
                   <span>{w.name}</span>
                 </button>
               );
             })}
-          </div>
+          </fieldset>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t-2 border-border pt-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
             <div className="flex flex-wrap items-center gap-2">
-              <div className="brutal-surface flex flex-wrap items-center gap-1 rounded-xl bg-muted/50 p-1">
+              <div className="liquid-glass-elevated flex flex-wrap items-center gap-1 rounded-full bg-background/60 p-1">
                 <button
                   type="button"
                   onClick={() => {
@@ -463,10 +462,10 @@ function HistoryScreen() {
                     setPage(1);
                   }}
                   className={cn(
-                    'inline-flex h-8 items-center rounded-lg border-2 px-3 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                    'inline-flex h-8 items-center rounded-full border px-3.5 text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
                     typeFilter === 'all'
-                      ? 'border-border bg-primary font-extrabold text-primary-foreground'
-                      : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
+                      ? 'border-white/40 bg-primary font-bold text-primary-foreground shadow-sm'
+                      : 'border-transparent font-medium text-muted-foreground hover:bg-accent hover:text-foreground',
                   )}
                 >
                   All

@@ -53,19 +53,19 @@ export function CashflowTrendChart() {
   return (
     <div className="bento-card bento-card-static col-span-12 flex h-full flex-col justify-between bg-card p-6 lg:col-span-8">
       {/* Header & Interactive Time Range Pills */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b-2 border-border pb-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
         <div className="space-y-0.5">
-          <h2 className="font-mono text-xs font-extrabold uppercase tracking-wider text-foreground sm:text-sm">
+          <h2 className="text-sm font-bold tracking-tight text-foreground sm:text-base">
             {terminology.inflow} vs. {terminology.outflow}
           </h2>
-          <p className="font-mono text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             Compare what came in and what went out over time
           </p>
         </div>
 
         <fieldset
           aria-label="Select chart time range"
-          className="brutal-surface m-0 flex min-w-0 items-center gap-1 rounded-xl bg-background p-1"
+          className="liquid-glass-elevated m-0 flex min-w-0 items-center gap-1 rounded-full bg-background/60 p-1"
         >
           {TIME_RANGES.map((range) => {
             const active = timeRange === range;
@@ -76,10 +76,10 @@ export function CashflowTrendChart() {
                 aria-pressed={active}
                 onClick={() => setTimeRange(range)}
                 className={cn(
-                  'h-7 rounded-lg border-2 px-2.5 font-mono text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  'h-7 rounded-full border px-3 text-xs transition-all duration-150 active:scale-95 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring',
                   active
-                    ? 'border-border bg-primary font-extrabold text-primary-foreground'
-                    : 'border-transparent font-semibold text-muted-foreground hover:bg-accent hover:text-foreground',
+                    ? 'border-white/40 bg-primary font-bold text-primary-foreground shadow-sm'
+                    : 'border-transparent font-medium text-muted-foreground hover:bg-accent hover:text-foreground',
                 )}
               >
                 {range}
@@ -169,8 +169,8 @@ export function CashflowTrendChart() {
                 const isPositiveNet = point.net >= 0;
 
                 return (
-                  <div className="brutal-surface min-w-52 rounded-2xl border-2 border-border bg-popover p-3.5 font-mono text-xs text-foreground">
-                    <div className="mb-2 flex items-center gap-2 border-b-2 border-border pb-1.5">
+                  <div className="liquid-glass-elevated min-w-52 rounded-2xl bg-popover/90 p-3.5 text-xs text-foreground">
+                    <div className="mb-2 flex items-center gap-2 border-b border-border pb-1.5">
                       <span className="size-2 rounded-full bg-info" />
                       <span className="text-[11px] font-bold text-info">
                         {point.tooltipDate}
@@ -202,7 +202,7 @@ export function CashflowTrendChart() {
                         </span>
                       </div>
 
-                      <div className="flex items-center justify-between gap-4 border-t-2 border-border pt-1.5">
+                      <div className="flex items-center justify-between gap-4 border-t border-border pt-1.5">
                         <span className="font-semibold text-muted-foreground">
                           Net
                         </span>

@@ -74,15 +74,15 @@ export function SettleInvoiceDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="brutal-surface rounded-3xl border-2 border-border bg-popover/80 p-6 sm:max-w-lg"
+        className="liquid-glass-elevated rounded-3xl bg-popover/90 p-6 sm:max-w-lg"
       >
         <div className="flex justify-between">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 font-mono text-lg font-black uppercase tracking-tight">
+            <DialogTitle className="flex items-center gap-2 text-lg font-bold tracking-tight">
               <CheckCircle2 className="size-5 text-inflow" />
               <span>Mark Invoice as Paid</span>
             </DialogTitle>
-            <DialogDescription className="font-mono text-xs">
+            <DialogDescription className="text-xs">
               Add{' '}
               <strong className="font-bold text-foreground tabular-nums">
                 {formatUSD(invoice.totalAmount)}

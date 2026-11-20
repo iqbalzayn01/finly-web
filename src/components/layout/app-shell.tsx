@@ -103,7 +103,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   if (isAuthRoute) {
     return (
-      <div className="relative min-h-screen bg-background">
+      <div className="relative min-h-screen overflow-x-clip bg-background">
         {/* Background Gradient Blur (Primary #C9F31D + Tertiary #6366F1) */}
         <div
           aria-hidden="true"
@@ -208,7 +208,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <DropdownMenuContent
         align="end"
         sideOffset={12}
-        className="brutal-surface w-64 rounded-2xl border-2 border-border bg-popover p-2"
+        className="liquid-glass-elevated w-64 rounded-2xl bg-popover/90 p-2"
       >
         <DropdownMenuLabel className="flex flex-col gap-0.5 px-2.5 py-2">
           <p className="truncate font-mono text-xs font-extrabold text-foreground">
@@ -321,7 +321,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   ];
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-background text-foreground">
+    <div className="relative flex min-h-screen flex-col overflow-x-clip bg-background text-foreground">
       {/* Background Gradient Blur (Primary #C9F31D + Tertiary #6366F1) */}
       <div
         aria-hidden="true"
@@ -369,9 +369,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               size="icon"
               onClick={() => setSearchOpen(true)}
               aria-label="Search transactions and invoices (Cmd+K)"
-              className="size-10 rounded-xl border-2 border-border bg-card backdrop-blur-md hover:bg-accent/80"
+              className="size-10 rounded-full border bg-card/75 backdrop-blur-xl hover:bg-accent/80"
             >
-              <Search className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:scale-110 group-hover:text-foreground" />
+              <Search className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:scale-105 group-hover:text-foreground" />
             </Button>
 
             <Button
@@ -380,7 +380,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               size="icon"
               onClick={handleToggleTheme}
               aria-label="Switch between light and dark mode"
-              className="size-10 rounded-xl border-2 border-border bg-card backdrop-blur-md hover:bg-accent/80"
+              className="size-10 rounded-full border bg-card/75 backdrop-blur-xl hover:bg-accent/80"
             >
               <Sun className="size-4 transition-transform duration-200 group-hover:rotate-45 dark:hidden" />
               <Moon className="hidden size-4 transition-transform duration-200 dark:block dark:group-hover:-rotate-12" />
@@ -392,7 +392,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 variant="outline"
                 size="icon"
                 aria-label="View alerts"
-                className="relative size-10 rounded-xl border-2 border-border bg-card backdrop-blur-md hover:bg-accent/80"
+                className="relative size-10 rounded-full border bg-card/75 backdrop-blur-xl hover:bg-accent/80"
               >
                 <Bell className="size-4 transition-transform duration-200 group-hover:rotate-12" />
                 {alertDotBadge}
@@ -406,10 +406,10 @@ export function AppShell({ children }: { children: ReactNode }) {
                 variant="outline"
                 size="icon"
                 aria-label="Open account menu"
-                className="size-10 rounded-xl border-2 border-border bg-card p-0 backdrop-blur-md hover:bg-accent/80"
+                className="size-10 rounded-full border bg-card/75 p-0 backdrop-blur-xl hover:bg-accent/80"
               >
-                <Avatar className="size-7 rounded-lg">
-                  <AvatarFallback className="rounded-lg bg-primary font-mono text-[11px] font-extrabold text-primary-foreground">
+                <Avatar className="size-8 rounded-full">
+                  <AvatarFallback className="rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
                     {initials || 'AZ'}
                   </AvatarFallback>
                 </Avatar>
@@ -420,7 +420,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </header>
 
       {/* Main Content Container */}
-      <main className="relative z-10 mx-auto w-full max-w-7xl flex-1 p-4 pb-24 sm:p-6 sm:pb-24 md:pt-6 md:pb-8 lg:px-8">
+      <main className="relative z-10 mx-auto w-full max-w-[1920px] flex-1 p-4 pb-24 sm:p-6 sm:pb-24 md:pt-6 md:pb-8 lg:px-8">
         {children}
       </main>
 
@@ -457,13 +457,13 @@ function AlertsPopover({
       <PopoverContent
         align={align}
         sideOffset={12}
-        className="brutal-surface w-80 rounded-2xl border-2 border-border bg-popover p-4"
+        className="liquid-glass-elevated w-80 rounded-2xl bg-popover/90 p-4"
       >
-        <div className="flex items-center justify-between border-b-2 border-border pb-2.5">
-          <p className="font-mono text-xs font-extrabold uppercase tracking-wider text-foreground">
+        <div className="flex items-center justify-between border-b border-border pb-2.5">
+          <p className="text-xs font-bold uppercase tracking-wider text-foreground">
             Alerts
           </p>
-          <span className="font-mono text-[11px] font-semibold text-muted-foreground">
+          <span className="text-[11px] font-medium text-muted-foreground">
             {formatMonthYear(todayISO)}
           </span>
         </div>
@@ -473,7 +473,7 @@ function AlertsPopover({
             <Link
               to="/invoices"
               onClick={() => setOpen(false)}
-              className="flex items-start gap-2.5 rounded-xl border-2 border-outflow-border bg-outflow-bg p-3 transition-transform hover:-translate-y-0.5"
+              className="flex items-start gap-2.5 rounded-xl border border-outflow-border bg-outflow-bg p-3 transition-transform hover:-translate-y-0.5"
             >
               <TriangleAlert className="mt-0.5 size-4 shrink-0 text-outflow" />
               <div>
@@ -496,7 +496,7 @@ function AlertsPopover({
             <Link
               to="/invoices"
               onClick={() => setOpen(false)}
-              className="flex items-start gap-2.5 rounded-xl border-2 border-border bg-muted/50 p-3 transition-transform hover:-translate-y-0.5 hover:bg-accent"
+              className="flex items-start gap-2.5 rounded-xl border border-border bg-background/50 p-3 transition-transform hover:-translate-y-0.5 hover:bg-accent"
             >
               <FileText className="mt-0.5 size-4 shrink-0 text-info" />
               <div>
@@ -517,10 +517,10 @@ function AlertsPopover({
 
           <div
             className={cn(
-              'flex items-start gap-2.5 rounded-xl border-2 p-3',
+              'flex items-start gap-2.5 rounded-xl border p-3',
               safeToSpend.status === 'deficit'
                 ? 'border-outflow-border bg-outflow-bg'
-                : 'border-border bg-muted/40',
+                : 'border-border bg-background/50',
             )}
           >
             <ShieldAlert

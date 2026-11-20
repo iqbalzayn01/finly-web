@@ -170,10 +170,10 @@ function SettingsScreen() {
     <div className="space-y-6">
       {/* Page Header */}
       <div className="space-y-1">
-        <h1 className="font-mono text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           Settings
         </h1>
-        <p className="font-mono text-xs text-muted-foreground sm:text-sm">
+        <p className="text-xs text-muted-foreground sm:text-sm">
           Manage your profile, wallets, display preferences, and data backups.
         </p>
       </div>
@@ -971,7 +971,7 @@ function SettingsScreen() {
       <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
         <DialogContent
           showCloseButton={false}
-          className="brutal-surface rounded-3xl border-2 border-border bg-popover/80 p-6 sm:max-w-md"
+          className="liquid-glass-elevated rounded-3xl bg-popover/90 p-6 sm:max-w-md"
         >
           <div className="flex justify-between">
             <DialogHeader>
